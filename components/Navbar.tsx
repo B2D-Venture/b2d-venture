@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoPeopleCircleOutline } from "react-icons/io5";
@@ -9,7 +10,16 @@ const Navbar = () => {
       <div className="w-full h-[100px] bg-black shadow flex items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/">
-            <div className="text-navbarTitle text-lg">B2D Venture</div>
+            <div className="flex items-center">
+              <Image
+                src="/logo/b2d-logo.png"
+                width={60}
+                height={60}
+                alt="b2d logo"
+                className="rounded-full m-3"
+              />
+              <div className="text-navbarTitle text-xl font-bold">B2D Venture</div>
+            </div>
           </Link>
         </div>
         <div className="flex items-center gap-6">
@@ -31,7 +41,7 @@ const Navbar = () => {
               Sign in with Google
             </div>
             <div className="flex justify-center text-yellow-500 text-2xl">
-                <IoPeopleCircleOutline />
+              <IoPeopleCircleOutline />
             </div>
           </button>
         </div>
