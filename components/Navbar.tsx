@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { navbarLinks } from "@/constants";
 import { FaSearch } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoPeopleCircleOutline } from "react-icons/io5";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
+  const pathname = usePathname();
   return (
     <nav>
       <div className="w-full h-[100px] bg-black shadow flex items-center justify-between px-4">
@@ -18,17 +24,29 @@ const Navbar = () => {
                 alt="b2d logo"
                 className="rounded-full m-3"
               />
-              <div className="text-navbarTitle text-xl font-bold">B2D Venture</div>
+              <div className="text-navbarTitle text-xl font-bold">
+                B2D Venture
+              </div>
             </div>
           </Link>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="/register-company">
-            <div className="text-navbarTitle text-lg">Register as Company</div>
-          </Link>
-          <Link href="/investment">
-            <div className="text-navbarTitle text-lg">Investment</div>
-          </Link>
+          {navbarLinks.map((link) => {
+            const isActive =
+              pathname === link.route || pathname.startsWith(`${link.route}/`);
+            return (
+              <Link key={link.route} href={link.route}>
+                <div
+                  className={cn(
+                    "navbar-link",
+                    isActive && "navbar-link-active"
+                  )}
+                >
+                  {link.label}
+                </div>
+              </Link>
+            );
+          })}
           <div className="w-[350px] h-[45px] pl-6 pr-[166.50px] pt-[7px] pb-[6.50px] bg-white rounded-[60px] border-2 border-black flex items-center justify-between">
             <span className="flex items-center text-placeholder">
               <FaSearch className="mr-3" />

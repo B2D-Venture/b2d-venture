@@ -26,8 +26,21 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .navbar-link {
+    @apply text-lg text-navbarTitle p-3;
+  }
+
+  .navbar-link:hover {
+    @apply text-black bg-navbarTitle rounded-full p-3;
+  }
+
+  .navbar-link-active {
+    @apply text-black bg-navbarTitle rounded-full p-3;
   }
 }
