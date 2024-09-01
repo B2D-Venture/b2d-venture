@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { FaSearch } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { IoPeopleCircleOutline } from "react-icons/io5";
 
 const Navbar = () => {
   return (
     <nav>
-      <div className="w-[1440px] h-[100px] bg-black shadow flex items-center justify-between px-4">
+      <div className="w-full h-[100px] bg-black shadow flex items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/">
             <div className="text-navbarTitle text-lg">B2D Venture</div>
@@ -17,17 +20,20 @@ const Navbar = () => {
             <div className="text-navbarTitle text-lg">Investment</div>
           </Link>
           <div className="w-[350px] h-[45px] pl-6 pr-[166.50px] pt-[7px] pb-[6.50px] bg-white rounded-[60px] border-2 border-black flex items-center justify-between">
-            <span className="text-placeholder">Search</span>
+            <span className="flex items-center text-placeholder">
+              <FaSearch className="mr-3" />
+              Search
+            </span>
           </div>
-          <div className="w-[206px] h-[35px] bg-white rounded-[58px] flex items-center justify-center gap-[14.50px]">
-            <div className="w-[21.75px] h-[21.75px] relative" />
-            <div className="text-center text-black text-xs font-normal font-['Inter']">
+          <button className="w-[206px] h-[35px] bg-white rounded-[58px] flex items-center justify-center gap-[14.50px]">
+            <div className="flex items-center text-center text-black text-xs font-normal font-['Inter']">
+              <FcGoogle className="mr-3 text-lg" />
               Sign in with Google
             </div>
-            <div className="w-[29px] h-[29px] relative">
-              <div className="w-[24.17px] h-[24.17px] left-[2.42px] top-[2.42px] absolute"></div>
+            <div className="flex justify-center text-yellow-500 text-2xl">
+                <IoPeopleCircleOutline />
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </nav>
