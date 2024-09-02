@@ -8,6 +8,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+body {
+  background-color: #181a20;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -26,11 +30,11 @@
   }
 
   .b2d-logo {
-    @apply rounded-full m-3
+    @apply rounded-full m-3;
   }
 
   .search-bar {
-    @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden
+    @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
   }
 
   .google-button {
@@ -46,7 +50,7 @@
   }
 
   .mobile-nav:hover {
-    @apply text-xl text-black bg-navbarTitle rounded-full p-3 
+    @apply text-xl text-black bg-navbarTitle rounded-full p-3;
   }
 
   .mobilenav-sheet {
@@ -67,6 +71,22 @@
 
   .navbar-link-active {
     @apply text-black bg-navbarTitle rounded-full p-3;
+  }
+
+  .card {
+    @apply w-[270px] h-[378px] relative bg-black border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-lg transform transition duration-200 hover:shadow-xl;
+  }
+
+  .card-name {
+    @apply text-[#181a20] text-left text-2xl font-bold flex flex-col ml-5 mt-6 mb-1;
+  }
+
+  .card-description {
+    @apply left-[27px] w-[216px] text-[#181a20] text-xs font-normal overflow-hidden text-ellipsis line-clamp-3 ml-5;
+  }
+
+  .card-inside {
+    @apply w-full h-full text-lg top-[194.66px] absolute bg-[#ecd986] rounded-[20px];
   }
 }
 
