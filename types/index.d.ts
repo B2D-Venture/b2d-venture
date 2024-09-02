@@ -5,4 +5,5 @@ interface CompanyCardProps {
     shortDescription: string;
     investmentGoal: number;
     investorCount: number;
+    minInvest: number;
 };

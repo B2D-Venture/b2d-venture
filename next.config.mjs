@@ -7,6 +7,8 @@ const nextConfig = {
       "images.workpointtoday.com",
       "static.wixstatic.com",
       "ichef.bbci.co.uk",
+      "imgproxy.republic.com",
+      "uploads.republic.com",
     ],
   },
 };
