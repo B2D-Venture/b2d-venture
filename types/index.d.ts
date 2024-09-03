@@ -7,3 +7,9 @@ interface CompanyCardProps {
     investorCount: number;
     minInvest: number;
 };
+
+interface CompanyLogoBoxProps {
+    logoUrl: string;
+    companyAbbr: string;
+    companyName: string;
+};
