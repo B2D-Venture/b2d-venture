@@ -37,6 +37,10 @@ body {
     @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
   }
 
+  .search-filter {
+    @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
+  }
+
   .google-button {
     @apply w-[206px] h-[35px] bg-white rounded-[58px] flex items-center justify-center gap-[14.50px] max-md:hidden;
   }
@@ -58,7 +62,7 @@ body {
   }
 
   .navbar {
-    @apply sticky top-0 right-0 flex flex-col justify-between;
+    @apply sticky top-0 right-0 flex flex-col justify-between z-50;
   }
 
   .navbar-link {
@@ -74,7 +78,12 @@ body {
   }
 
   .card {
-    @apply relative w-[270px] h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+    @apply relative h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+    @apply w-[390px];
+    @apply sm:w-[500px];
+    @apply md:w-[750px];
+    @apply lg:w-[350px];
+    @apply xl:w-[270px];
   }
 
   .card-logo {
