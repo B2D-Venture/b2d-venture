@@ -1,3 +1,13 @@
+# B2D Venture
+
+## Overview
+B2D Venture aims to create a robust online platform designed to connect investors with companies seeking funding. The platform will facilitate seamless transactions, offer detailed company profiles, and provide administrative oversight. The project is expected to last approximately four months, with a budget of 1 million baht.
+
+## Documentation
+Project wiki documents [Click Here](https://github.com/B2D-Venture/b2d-venture/wiki).
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
