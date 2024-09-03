@@ -58,7 +58,7 @@ body {
   }
 
   .navbar {
-    @apply sticky top-0 right-0 flex flex-col justify-between;
+    @apply sticky top-0 right-0 flex flex-col justify-between z-50;
   }
 
   .navbar-link {
