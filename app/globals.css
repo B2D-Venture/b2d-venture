@@ -38,7 +38,7 @@ body {
   }
 
   .search-filter {
-    @apply h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-xl:hidden;
+    @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
   }
 
   .google-button {
@@ -78,7 +78,12 @@ body {
   }
 
   .card {
-    @apply relative w-[270px] h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50 max-xl:w-[300px] max-lg:w-[400px];
+    @apply relative h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+    @apply w-[390px];
+    @apply sm:w-[500px];
+    @apply md:w-[750px];
+    @apply lg:w-[350px];
+    @apply xl:w-[270px];
   }
 
   .card-logo {
