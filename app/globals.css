@@ -8,6 +8,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+body {
+  background-color: #181a20;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -26,11 +30,11 @@
   }
 
   .b2d-logo {
-    @apply rounded-full m-3
+    @apply rounded-full m-3;
   }
 
   .search-bar {
-    @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden
+    @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
   }
 
   .google-button {
@@ -46,7 +50,7 @@
   }
 
   .mobile-nav:hover {
-    @apply text-xl text-black bg-navbarTitle rounded-full p-3 
+    @apply text-xl text-black bg-navbarTitle rounded-full p-3;
   }
 
   .mobilenav-sheet {
@@ -67,6 +71,34 @@
 
   .navbar-link-active {
     @apply text-black bg-navbarTitle rounded-full p-3;
+  }
+
+  .card {
+    @apply relative w-[270px] h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+  }
+
+  .card-logo {
+    @apply absolute left-[27px] top-[160px] rounded-lg shadow-md border-solid border-white border-2 group-hover:top-[50px] z-10;
+  }
+
+  .card-inside {
+    @apply absolute h-full w-full bg-[#f6ecc0] rounded-[20px] transform translate-y-48 group-hover:translate-y-20;
+  }
+
+  .card-below {
+    @apply hidden flex-col ml-5 mr-5 mt-2 text-black divide-y divide-black group-hover:flex;
+  }
+
+  .card-below > * {
+    @apply py-2;
+  }
+
+  .card-name {
+    @apply text-[#181a20] text-left text-2xl font-bold flex flex-col ml-5 mt-8 mb-1 group-hover:visible;
+  }
+
+  .card-description {
+    @apply text-[#181a20] text-xs font-normal ml-5 mr-5 line-clamp-3 group-hover:line-clamp-none;
   }
 }
 
