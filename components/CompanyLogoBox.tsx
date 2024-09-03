@@ -16,10 +16,10 @@ const CompanyLogoBox = ({
         className="rounded-lg shadow-md border-solid border-white border-2 group-hover:top-[50px] z-10 transition-all ease-in-out duration-300"
       />
       <div className="ml-4 flex flex-col">
-        <div className="text-white text-xl font-bold font-['Inter']">
+        <div className="text-white text-xl font-bold">
           {companyAbbr}
         </div>
-        <div className="text-white text-base font-bold font-['Inter']">
+        <div className="text-white text-base font-bold">
           {companyName}
         </div>
       </div>

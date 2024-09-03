@@ -42,7 +42,7 @@ body {
   }
 
   .google-label {
-    @apply flex items-center text-center text-black text-xs font-normal font-['Inter'];
+    @apply flex items-center text-center text-black text-xs font-normal;
   }
 
   .mobile-nav {
