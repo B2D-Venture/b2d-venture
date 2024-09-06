@@ -4,11 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { navbarLinks } from "@/constants";
 import { FaSearch } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { IoPeopleCircleOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import MobileNav from "@/components/MobileNav";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -56,15 +55,7 @@ const Navbar = () => {
                 Search
               </span>
             </div>
-            <button className="google-button">
-              <div className="google-label">
-                <FcGoogle className="mr-3 text-lg" />
-                Sign in with Google
-              </div>
-              <div className="flex justify-center text-yellow-500 text-2xl">
-                <IoPeopleCircleOutline />
-              </div>
-            </button>
+            <GoogleSignInButton />
           </div>
           <div className="text-xl p-3 lg:hidden">
             <MobileNav />
