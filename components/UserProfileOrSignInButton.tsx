@@ -4,9 +4,14 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { IoPeopleCircleOutline } from "react-icons/io5";
 import Image from "next/image";
+import Avatar from "./Avatar";
+import AvatarDropdown from "./AvatarDropdown";
 
 const UserProfileOrSignInButton = () => {
   const { data: session, status } = useSession();
+  const signInClick = () => {
+    signIn("google", { callbackUrl: "/role-register" });
+  };
 
   if (status === "loading") {
     return <div>Loading...</div>;
@@ -16,17 +21,7 @@ const UserProfileOrSignInButton = () => {
     return (
       <div className="profile">
         <div className="profile-info flex items-center">
-          <Image
-            src={session.user?.image || "/default-avatar.png"}
-            alt="User Avatar"
-            width={50}
-            height={50}
-            className="avatar"
-          />
-          <span className="ml-2">Welcome, {session.user?.name}</span>
-          <button onClick={() => signOut()} className="ml-4 sign-out-button">
-            Sign Out
-          </button>
+          <AvatarDropdown session={session} />
         </div>
       </div>
     );
@@ -34,7 +29,7 @@ const UserProfileOrSignInButton = () => {
 
   return (
     <div>
-      <button onClick={() => signIn("google")} className="google-button">
+      <button onClick={signInClick} className="google-button">
         <div className="google-label flex items-center">
           <FcGoogle className="mr-3 text-lg" />
           Sign in with Google
