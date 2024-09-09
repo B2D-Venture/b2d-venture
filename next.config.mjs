@@ -9,6 +9,7 @@ const nextConfig = {
       "ichef.bbci.co.uk",
       "imgproxy.republic.com",
       "uploads.republic.com",
+      "lh3.googleusercontent.com",
     ],
   },
 };

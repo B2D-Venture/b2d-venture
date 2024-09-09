@@ -1,14 +1,15 @@
-import Navbar from "@/components/Navbar";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <main>
-      <Navbar />
-      <div className="flex-1 w-full overflow-auto">{children}</div>
-    </main>
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }
