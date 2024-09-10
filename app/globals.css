@@ -40,15 +40,15 @@ body {
   .sub-menu-wrap {
     @apply absolute top-full right-0 w-64 mt-2;
   }
-  
+
   .sub-menu {
     @apply bg-[#fef5e2] rounded-lg shadow-lg;
   }
-  
+
   .user-info {
     @apply flex flex-col p-3 items-center;
   }
-  
+
   .search-bar {
     @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
   }
@@ -91,6 +91,30 @@ body {
 
   .navbar-link-active {
     @apply text-black bg-navbarTitle rounded-full p-3;
+  }
+
+  .text-container-on-image {
+    @apply w-full mt-10 pl-20 absolute;
+    @apply max-xl:pl-16;
+    @apply max-lg:pl-14;
+    @apply max-md:pl-10;
+    @apply max-sm:pl-8;
+  }
+
+  .text-on-image-white {
+    @apply text-white text-[60px] w-full font-bold;
+    @apply max-xl:text-[50px];
+    @apply max-lg:text-[40px];
+    @apply max-md:text-[30px];
+    @apply max-sm:text-[20px];
+  }
+
+  .text-on-image-orange {
+    @apply text-[#e49012] text-[64px] font-bold;
+    @apply max-xl:text-[50px];
+    @apply max-lg:text-[40px];
+    @apply max-md:text-[30px];
+    @apply max-sm:text-[20px];
   }
 
   .card {

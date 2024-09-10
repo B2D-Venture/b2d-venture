@@ -4,28 +4,12 @@ import CompanyAllStatistics from "@/components/CompanyAllStatistics";
 import CompanyLogoBoxList from "@/components/CompanyLogoBoxList";
 import CompanyCardSlide from "@/components/CompanyCardSlide";
 import Link from "next/link";
+import TextOnImage from "@/components/TextOnImage";
 
 const Home = () => {
   return (
-    <div className="w-[1440px] h-[1967px] relative bg-[#181a20]">
-      <Image
-        className="max-w-full h-auto left-0 top absolute"
-        src="/img-main/background-img-main.png"
-        alt="Background"
-        width={1440}
-        height={630}
-      />
-      <div className="w-[731px] h-[479px] left-[71px] top-[58px] absolute">
-        <span className="text-white text-[64px] font-bold">
-          Invest for Future in
-          <br></br>
-          Stable Platform and
-        </span>
-        <br></br>
-        <span className="text-[#e49012] text-[64px] font-bold">
-          Make Fast Money
-        </span>
-      </div>
+    <div className="relative bg-[#181a20]">
+      <TextOnImage />
       <div className="w-[1458px] h-[254px] left-[-18px] top-[630px] absolute bg-[#121212]/80" />
       <CompanyAllStatistics />
       <div className="left-[41px] top-[916px] absolute text-white text-4xl font-bold">
