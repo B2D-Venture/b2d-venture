@@ -10,7 +10,6 @@ const Home = () => {
   return (
     <div className="relative bg-[#181a20]">
       <TextOnImage />
-      <div className="w-[1458px] h-[254px] left-[-18px] top-[630px] absolute bg-[#121212]/80" />
       <CompanyAllStatistics />
       <div className="left-[41px] top-[916px] absolute text-white text-4xl font-bold">
         2,500+ businesses funded and served
