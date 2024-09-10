@@ -13,3 +13,12 @@ interface CompanyLogoBoxProps {
     companyAbbr: string;
     companyName: string;
 };
+
+type InvestorFormFieldProps = {
+  label: string;
+  type: string;
+};
+
+type InvestorFormButtonProps = {
+  label: string;
+};
