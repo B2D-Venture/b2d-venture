@@ -5,23 +5,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { ImageForm } from "@/components/UploadImageForm";
+import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
-import { ImageForm } from "@/components/UploadImageForm";
-import { DatePickerForm } from "@/components/CalendarForm";
-
-const formSchema = z.object({
+// Combine schemas
+const formSchema = CalendarFormSchema.extend({
   CompanyName: z.string(),
   Abbreviation: z.string(),
   Description: z.string(),
@@ -31,7 +29,6 @@ const formSchema = z.object({
 });
 
 export function ProfileForm() {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,13 +38,11 @@ export function ProfileForm() {
       Funding_Goal: "",
       Minimum_Investment: "",
       Maximum_Investment: "",
+      dob: undefined,
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
   }
 
@@ -59,6 +54,7 @@ export function ProfileForm() {
             <ImageForm />
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
+            {/* Company Name */}
             <div className="col-span-2">
               <FormField
                 control={form.control}
@@ -73,6 +69,7 @@ export function ProfileForm() {
                 )}
               />
             </div>
+            {/* Abbreviation */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
@@ -87,6 +84,7 @@ export function ProfileForm() {
                 )}
               />
             </div>
+            {/* Description */}
             <div className="col-span-3">
               <FormField
                 control={form.control}
@@ -101,6 +99,7 @@ export function ProfileForm() {
                 )}
               />
             </div>
+            {/* Funding Goal */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
@@ -115,6 +114,7 @@ export function ProfileForm() {
                 )}
               />
             </div>
+            {/* Minimum Investment */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
@@ -129,6 +129,7 @@ export function ProfileForm() {
                 )}
               />
             </div>
+            {/* Maximum Investment */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
@@ -140,6 +141,16 @@ export function ProfileForm() {
                       <Input placeholder="$" {...field} />
                     </FormControl>
                   </FormItem>
+                )}
+              />
+            </div>
+            {/* Date of Birth (using CalendarForm) */}
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <CalendarForm field={field} />
                 )}
               />
             </div>
