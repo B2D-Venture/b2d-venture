@@ -9,42 +9,58 @@ import "../styles/RoleRegister.css";
 
 interface RoleButtonProps {
   role: string;
+  focusedRole: string | null;
+  onClick: (role: string) => void;
 }
 
-const RoleButton = ({ role = "Investor" }: RoleButtonProps) => {
+const RoleButton = ({ role, focusedRole, onClick }: RoleButtonProps) => {
   return (
     <div>
-      <button className="role-button group">
+      <button
+        className={`role-button group ${
+          role === focusedRole ? "bg-[#f2efd6]" : "bg-white"
+        }`}
+        onClick={() => onClick(role)}
+      >
         {role === "Investor" ? (
           <div>
-            <PiUserListBold
-              size={100}
-              color="#181a20"
-              className="block group-hover:hidden"
-            />
-            <PiUserListFill
-              size={100}
-              color="#181a20"
-              className="hidden group-hover:block"
-            />
+            {focusedRole === "Investor" ? (
+              <div>
+                <div className="flex justify-center">
+                  <PiUserListFill size={100} />
+                </div>
+                <span className="role-text-click">{role}</span>
+              </div>
+            ) : (
+              <div>
+                <div className="flex justify-center">
+                  <PiUserListBold
+                    size={100}
+                  />
+                </div>
+                <span className="role-text-unclick">{role}</span>
+              </div>
+            )}
           </div>
         ) : (
           <div>
-            <PiBuildingsBold
-              size={100}
-              color="#181a20"
-              className="block group-hover:hidden"
-            />
-            <PiBuildingsFill
-              size={100}
-              color="#181a20"
-              className="hidden group-hover:block"
-            />
+            {focusedRole === "Company" ? (
+              <div>
+                <div className="flex justify-center">
+                  <PiBuildingsFill size={100} />
+                </div>
+                <span className="role-text-click">{role}</span>
+              </div>
+            ) : (
+              <div>
+                <div className="flex justify-center">
+                  <PiBuildingsBold size={100} />
+                </div>
+                <span className="role-text-unclick">{role}</span>
+              </div>
+            )}
           </div>
         )}
-        <div className="role-text">
-          {role}
-        </div>
       </button>
     </div>
   );
