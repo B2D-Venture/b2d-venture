@@ -33,6 +33,22 @@ body {
     @apply rounded-full m-3;
   }
 
+  .avatar {
+    @apply w-[50px] h-[50px] rounded-full border-2 border-yellow-500;
+  }
+
+  .sub-menu-wrap {
+    @apply absolute top-full right-0 w-64 mt-2;
+  }
+  
+  .sub-menu {
+    @apply bg-[#fef5e2] rounded-lg shadow-lg;
+  }
+  
+  .user-info {
+    @apply flex flex-col p-3 items-center;
+  }
+  
   .search-bar {
     @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
   }

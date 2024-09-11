@@ -4,14 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { navbarLinks } from "@/constants";
 import { FaSearch } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { IoPeopleCircleOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import MobileNav from "@/components/MobileNav";
+import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton"; // Import the component
+import { SessionProvider } from "next-auth/react";
 
 const Navbar = () => {
   const pathname = usePathname();
+
   return (
     <section className="navbar">
       <nav className="flex flex-col gap-4">
@@ -26,7 +27,7 @@ const Navbar = () => {
                   alt="b2d logo"
                   className="b2d-logo"
                 />
-                <div className="text-navbarTitle text-xl font-bold text-">
+                <div className="text-navbarTitle text-xl font-bold">
                   B2D Venture
                 </div>
               </div>
@@ -56,15 +57,9 @@ const Navbar = () => {
                 Search
               </span>
             </div>
-            <button className="google-button">
-              <div className="google-label">
-                <FcGoogle className="mr-3 text-lg" />
-                Sign in with Google
-              </div>
-              <div className="flex justify-center text-yellow-500 text-2xl">
-                <IoPeopleCircleOutline />
-              </div>
-            </button>
+            <SessionProvider>
+              <UserProfileOrSignInButton />
+            </SessionProvider>
           </div>
           <div className="text-xl p-3 lg:hidden">
             <MobileNav />

@@ -1,9 +1,12 @@
-import React from 'react'
+import { ProfileForm } from "@/components/CompanyRegisterForm"
 
-const CompanyRegister = () => {
+export default function CompanyRegister() {
   return (
-    <div>CompanyRegister</div>
-  )
-}
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="flex w-[903px] h-[625px] bg-[#bfbfbf] rounded-[10px] justify-center items-center">
+        <ProfileForm />
+      </div>
+    </div>
+  );
+};
 
-export default CompanyRegister
