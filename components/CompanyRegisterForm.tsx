@@ -55,8 +55,17 @@ export function CompanyRegisterForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-4 gap-4">
-          <div className="flex col-span-1 justify-center">
-            <ImageForm />
+          <div className="col-span-1 flex flex-col items-center">
+            <div>
+              <ImageForm />
+            </div>
+            <div className="text-[12px] text-[#949191] mt-5">
+              <p>
+                Please upload only a profile image of a real person. Do not
+                upload images of cartoons, animals, objects, or any other type
+                of image. Non-compliant uploads may be rejected.
+              </p>
+            </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
             {/* Company Name */}
@@ -87,7 +96,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Abbreviation</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="XXXX" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="XXXX"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -117,7 +130,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Funding Goal</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -132,7 +149,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Minimum Investment</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -147,7 +168,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Maximum Investment</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -170,7 +195,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Security Type</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder=""
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -185,7 +214,11 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel>Price per Share</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -198,7 +231,11 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="Documentations"></Label>
-                <Input className="bg-[#bfbfbf]" id="Documentations" type="file" />
+                <Input
+                  className="bg-[#bfbfbf]"
+                  id="Documentations"
+                  type="file"
+                />
               </div>
             </div>
           </div>
