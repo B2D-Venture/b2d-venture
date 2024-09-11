@@ -11,10 +11,12 @@ const Home = () => {
     <div className="relative bg-[#181a20]">
       <TextOnImage />
       <CompanyAllStatistics />
-      <div className="left-[41px] top-[916px] absolute text-white text-4xl font-bold">
+
+      <div className="p-10 text-white text-4xl font-bold max-lg:text-3xl max-md:text-2xl max-sm:text-xl">
         2,500+ businesses funded and served
         <CompanyLogoBoxList />
       </div>
+
       <div className="left-[41px] top-[1378px] absolute text-white text-4xl font-bold">
         TOP 10 Companies
       </div>

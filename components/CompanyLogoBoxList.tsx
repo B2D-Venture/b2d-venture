@@ -4,7 +4,7 @@ import { companyExample } from "@/constants";
 
 const CompanyLogoBoxList = () => {
   return (
-    <div className="w-[1367px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 pt-14 pl-7">
+    <div className="company-logo-boxlist">
       {Array.from({ length: 4 }, () => companyExample)
         .flat()
         .map((company) => (
