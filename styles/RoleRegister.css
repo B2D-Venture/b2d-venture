@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.role-button {
+    @apply w-[353px] h-[359px] bg-white rounded-[30px] shadow-md relative flex flex-col items-center justify-center border border-gray-300;
+    @apply hover:bg-[#c5c5c5] hover:shadow-xl;
+    @apply hover:border-gray-400 hover:border-b-2;
+    @apply focus:ring-yellow-400 focus:ring-4 focus:bg-[#f2efd6]; 
+}
+
+.role-text {
+    @apply text-center text-[#707070] text-[40px] font-bold mt-5 group-hover:text-black;
+    @apply group-focus:text-black;
+}
