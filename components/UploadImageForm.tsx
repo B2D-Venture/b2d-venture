@@ -22,7 +22,7 @@ export function ImageForm() {
             }
           }}
         />
-        <div className="w-40 h-40 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
+        <div className="w-40 h-40 max-sm:w-10 max-sm:h-10 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
           <img
             id="preview-image"
             src=""

@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ImageForm } from "@/components/UploadImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
 
@@ -20,25 +21,29 @@ import {
 
 // Combine schemas
 const formSchema = CalendarFormSchema.extend({
-  CompanyName: z.string(),
-  Abbreviation: z.string(),
-  Description: z.string(),
-  Funding_Goal: z.string(),
-  Minimum_Investment: z.string(),
-  Maximum_Investment: z.string(),
+  companyName: z.string(),
+  abbreviation: z.string(),
+  description: z.string(),
+  fundingGoal: z.string(),
+  minimumInvestment: z.string(),
+  maximumInvestment: z.string(),
+  pricePerShare: z.string(),
+  securityType: z.string(),
 });
 
-export function ProfileForm() {
+export function CompanyRegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      CompanyName: "",
-      Abbreviation: "",
-      Description: "",
-      Funding_Goal: "",
-      Minimum_Investment: "",
-      Maximum_Investment: "",
+      companyName: "",
+      abbreviation: "",
+      description: "",
+      fundingGoal: "",
+      minimumInvestment: "",
+      maximumInvestment: "",
       dob: undefined,
+      pricePerShare: "",
+      securityType: "",
     },
   });
 
@@ -50,7 +55,7 @@ export function ProfileForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-4 gap-4">
-          <div className="col-span-1">
+          <div className="flex col-span-1 justify-center">
             <ImageForm />
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
@@ -58,42 +63,46 @@ export function ProfileForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="CompanyName"
+                name="companyName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Fullname" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="companyName"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
-            {/* Abbreviation */}
+            {/* abbreviation */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="Abbreviation"
+                name="abbreviation"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Abbreviation</FormLabel>
                     <FormControl>
-                      <Input placeholder="GOOG" {...field} />
+                      <Input className="bg-[#bfbfbf]" placeholder="XXXX" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
-            {/* Description */}
+            {/* description */}
             <div className="col-span-3">
               <FormField
                 control={form.control}
-                name="Description"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -103,12 +112,12 @@ export function ProfileForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="Funding_Goal"
+                name="fundingGoal"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Funding Goal</FormLabel>
                     <FormControl>
-                      <Input placeholder="$" {...field} />
+                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -118,12 +127,12 @@ export function ProfileForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="Minimum_Investment"
+                name="minimumInvestment"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Minimum Investment</FormLabel>
                     <FormControl>
-                      <Input placeholder="$" {...field} />
+                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -133,26 +142,64 @@ export function ProfileForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="Maximum_Investment"
+                name="maximumInvestment"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Maximum Investment</FormLabel>
                     <FormControl>
-                      <Input placeholder="$" {...field} />
+                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
-            {/* Date of Birth (using CalendarForm) */}
+            {/* Date (using CalendarForm) */}
             <div className="col-span-1">
               <FormField
                 control={form.control}
                 name="dob"
+                render={({ field }) => <CalendarForm field={field} />}
+              />
+            </div>
+            {/* Security Type */}
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="securityType"
                 render={({ field }) => (
-                  <CalendarForm field={field} />
+                  <FormItem>
+                    <FormLabel>Security Type</FormLabel>
+                    <FormControl>
+                      <Input className="bg-[#bfbfbf]" placeholder="" {...field} />
+                    </FormControl>
+                  </FormItem>
                 )}
               />
+            </div>
+            {/* Price per Share */}
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="pricePerShare"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price per Share</FormLabel>
+                    <FormControl>
+                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-3 flex items-center">
+              <h2 className="text-2xl text-gray-700">Documentations</h2>
+              <p className="text-sm text-gray-500 ml-2">(optional)</p>
+            </div>
+            <div className="col-span-1">
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="Documentations"></Label>
+                <Input className="bg-[#bfbfbf]" id="Documentations" type="file" />
+              </div>
             </div>
           </div>
         </div>
