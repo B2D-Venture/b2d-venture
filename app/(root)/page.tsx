@@ -17,20 +17,22 @@ const Home = () => {
         <CompanyLogoBoxList />
       </div>
 
-      <div className="left-[41px] top-[1378px] absolute text-white text-4xl font-bold">
+      <div className="px-10 pt-8 text-white text-4xl font-bold">
         TOP 10 Companies
       </div>
-      <div className="left-[30px] top-[1430px] absolute w-full">
+      <div className="px-10 pt-5 w-full">
         <CompanyCardSlide />
       </div>
+
       <Link
         href="/company-list"
-        className="absolute bottom-[50px] left-[50px] w-[120px] h-[38px] px-[15px] py-1.5 bg-[#d9d9d9] rounded-[30px] flex justify-center items-center"
+        className="bottom-[50px] w-[120px] h-[38px] mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-[30px] flex justify-center items-center "
       >
-        <div className="text-center text-[#363324] text-xl font-bold">
+        <div className="text-center text-[#363324] text-xl font-bold hover:text-[#d9d9d9]">
           View All
         </div>
       </Link>
+
       <div className="w-[235px] h-[17px] left-[604px] top-[2025px] absolute justify-center items-center inline-flex">
         <div className="w-[235px] h-[17px] text-white text-sm font-normal">
           copyright ©2024. All rights reserve
