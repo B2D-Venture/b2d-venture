@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+
 import {
   Form,
   FormControl,
@@ -18,10 +19,15 @@ import {
 } from "@/components/ui/form";
 
 import { ImageForm } from "@/components/UploadImageForm";
+import { DatePickerForm } from "@/components/CalendarForm";
 
 const formSchema = z.object({
   CompanyName: z.string(),
   Abbreviation: z.string(),
+  Description: z.string(),
+  Funding_Goal: z.string(),
+  Minimum_Investment: z.string(),
+  Maximum_Investment: z.string(),
 });
 
 export function ProfileForm() {
@@ -31,6 +37,10 @@ export function ProfileForm() {
     defaultValues: {
       CompanyName: "",
       Abbreviation: "",
+      Description: "",
+      Funding_Goal: "",
+      Minimum_Investment: "",
+      Maximum_Investment: "",
     },
   });
 
@@ -43,35 +53,101 @@ export function ProfileForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-        <div className="flex gap-4">
-          <ImageForm/>
-          <FormField
-            control={form.control}
-            name="CompanyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Fullname" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="Abbreviation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Abbreviation</FormLabel>
-                <FormControl>
-                  <Input placeholder="GOOG" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="grid grid-cols-4 gap-4">
+          <div className="col-span-1">
+            <ImageForm />
+          </div>
+          <div className="grid grid-cols-3 gap-4 col-span-3">
+            <div className="col-span-2">
+              <FormField
+                control={form.control}
+                name="CompanyName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Fullname" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="Abbreviation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Abbreviation</FormLabel>
+                    <FormControl>
+                      <Input placeholder="GOOG" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-3">
+              <FormField
+                control={form.control}
+                name="Description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="Funding_Goal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Funding Goal</FormLabel>
+                    <FormControl>
+                      <Input placeholder="$" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="Minimum_Investment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Minimum Investment</FormLabel>
+                    <FormControl>
+                      <Input placeholder="$" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="Maximum_Investment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Maximum Investment</FormLabel>
+                    <FormControl>
+                      <Input placeholder="$" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
         </div>
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-end">
+          <Button type="submit">Submit</Button>
+        </div>
       </form>
     </Form>
   );
