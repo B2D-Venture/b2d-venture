@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 export const CalendarFormSchema = z.object({
   dob: z.date({
-    required_error: "A date of birth is required.",
+    required_error: "A date is required.",
   }),
 });
 
@@ -31,19 +31,19 @@ interface CalendarFormProps {
 export function CalendarForm({ field }: CalendarFormProps) {
   return (
     <FormItem className="flex flex-col">
-      <FormLabel>Date of birth</FormLabel>
+      <FormLabel className="mb-[10px]">Date</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
               variant={"outline"}
               className={cn(
-                "w-[240px] pl-3 text-left font-normal",
-                !field.value && "text-muted-foreground"
+                "w-full pl-3 text-left font-normal bg-[#bfbfbf]",
+                !field.value && "text-muted-foreground text-black"
               )}
             >
               {field.value ? format(field.value, "PPP") : "Pick a date"}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              <CalendarIcon className="ml-auto h-4 w-4 opacity-100 text-black" />
             </Button>
           </FormControl>
         </PopoverTrigger>
