@@ -4,6 +4,7 @@ import RoleButton from "@/components/RoleButton";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFormState } from "./FormContext";
+import ShowStep from "@/components/ShowStepForm";
 
 type TFormValues = {
   username: string;
@@ -35,8 +36,11 @@ const RoleSelectForm = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[rgb(24,26,32)] mt-12">
-      <div className="w-[1085px] h-[847px] bg-[#d9d9d9] rounded-[30px] relative p-10">
+    <div className="w-full min-h-screen flex flex-col items-center">
+      <div className="h-[847px] bg-[#d9d9d9] rounded-[30px] relative p-10 mt-5 w-full max-w-7xl">
+        <div className="w-full flex justify-center mb-8">
+          <ShowStep step={1} />
+        </div>
         <div className="text-center text-black text-5xl font-bold">
           Please select your role
         </div>
@@ -68,14 +72,6 @@ const RoleSelectForm = () => {
           >
             Confirm
           </button>
-        </div>
-        <div className="flex justify-center items-center mt-10 space-x-4">
-          <div className="w-[21px] h-[21px] bg-[#d7c20b] rounded-full"></div>
-          <div className="w-[21px] h-[21px] bg-[#bdbdbb] rounded-full"></div>
-          <div className="w-[21px] h-[21px] bg-[#bdbdbb] rounded-full"></div>
-        </div>
-        <div className="text-center text-white text-sm font-normal font-['Inter'] mt-10">
-          copyright ©2024. All rights reserved
         </div>
       </div>
     </div>

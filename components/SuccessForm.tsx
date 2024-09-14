@@ -2,6 +2,7 @@ import React from "react";
 import { motion, useMotionValue } from "framer-motion";
 import VerifyAnimation from "./VerifyAnimation";
 import Link from "next/link";
+import ShowStep from "@/components/ShowStepForm";
 
 const SuccessForm = ({ role }: {role: string}) => {
   const progress = useMotionValue(90);
@@ -12,7 +13,10 @@ const SuccessForm = ({ role }: {role: string}) => {
         {role} Profile
       </div>
 
-      <div className="bg-[#D9D9D9] rounded-lg shadow-lg p-8 max-w-7xl w-full max-h-7xl h-full">
+      <div className="bg-[#D9D9D9] rounded-[30px] shadow-lg p-8 max-w-7xl w-full max-h-7xl h-full">
+        <div className="w-full flex justify-center mb-8">
+          <ShowStep step={3} />
+        </div>
         <div className="flex justify-center items-center mb-8">
           <motion.div
             initial={{ x: 0 }}

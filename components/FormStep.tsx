@@ -6,7 +6,7 @@ import CompanyFormExample from "./CompanyFormExample";
 import SuccessForm from "./SuccessForm";
 
 const FormStep = () => {
-  const [roleSelected, setRoleSelected] = useState(null);
+  const [roleSelected, setRoleSelected] = useState<string | null>("");
   const { step } = useFormState();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const FormStep = () => {
     return <CompanyFormExample />;
   }
   if (step === 4) {
-    return <SuccessForm role={roleSelected} />;
+    return <SuccessForm role={roleSelected || ""} />;
   }
 
   return null;
