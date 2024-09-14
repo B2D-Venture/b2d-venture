@@ -3,6 +3,7 @@ import { useFormState } from "./FormContext";
 import RoleSelectForm from "./RoleSelectForm";
 import InvestorFormExample from "./InvestorFormExample";
 import CompanyFormExample from "./CompanyFormExample";
+import SuccessForm from "./SuccessForm";
 
 const FormStep = () => {
   const { step } = useFormState();
@@ -15,7 +16,7 @@ const FormStep = () => {
     case 3:
         return <CompanyFormExample />
     case 4:
-        return <div>Success Form</div>
+        return <SuccessForm />
     default:
       return null;
   }
