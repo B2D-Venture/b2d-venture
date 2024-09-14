@@ -44,9 +44,7 @@ export function FormProvider({ children }: IProps) {
   });
 
   function handleStepChange(stepChange: number) {
-    console.log("step 1", step);
     setStep((prevStep) => prevStep + stepChange);
-    console.log("step 2", step);
   }
 
   return (
