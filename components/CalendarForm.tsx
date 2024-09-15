@@ -31,7 +31,7 @@ interface CalendarFormProps {
 export function CalendarForm({ field }: CalendarFormProps) {
   return (
     <FormItem className="flex flex-col">
-      <FormLabel className="mb-[10px]">Date</FormLabel>
+      <FormLabel className="text-[20px]">Date</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
@@ -47,7 +47,7 @@ export function CalendarForm({ field }: CalendarFormProps) {
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto" align="start">
           <Calendar
             mode="single"
             selected={field.value}
