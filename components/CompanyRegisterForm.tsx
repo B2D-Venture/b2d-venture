@@ -55,8 +55,17 @@ export function CompanyRegisterForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-4 gap-4">
-          <div className="flex col-span-1 justify-center">
-            <ImageForm />
+          <div className="col-span-1 flex flex-col items-center">
+            <div>
+              <ImageForm />
+            </div>
+            <div className="text-[12px] text-[#949191] mt-5">
+              <p>
+                Please upload only a profile image of a real person. Do not
+                upload images of cartoons, animals, objects, or any other type
+                of image. Non-compliant uploads may be rejected.
+              </p>
+            </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
             {/* Company Name */}
@@ -66,7 +75,7 @@ export function CompanyRegisterForm() {
                 name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="text-[20px]">Name</FormLabel>
                     <FormControl>
                       <Input
                         className="bg-[#bfbfbf]"
@@ -85,9 +94,13 @@ export function CompanyRegisterForm() {
                 name="abbreviation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Abbreviation</FormLabel>
+                    <FormLabel className="text-[20px]">Abbreviation</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="XXXX" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="XXXX"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -100,7 +113,7 @@ export function CompanyRegisterForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel className="text-[20px]">Description</FormLabel>
                     <FormControl>
                       <Input className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
@@ -115,9 +128,13 @@ export function CompanyRegisterForm() {
                 name="fundingGoal"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Funding Goal</FormLabel>
+                    <FormLabel className="text-[20px]">Funding Goal</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -130,9 +147,15 @@ export function CompanyRegisterForm() {
                 name="minimumInvestment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Minimum Investment</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Minimum Investment
+                    </FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -145,9 +168,15 @@ export function CompanyRegisterForm() {
                 name="maximumInvestment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Maximum Investment</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Maximum Investment
+                    </FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -158,7 +187,9 @@ export function CompanyRegisterForm() {
               <FormField
                 control={form.control}
                 name="dob"
-                render={({ field }) => <CalendarForm field={field} />}
+                render={({ field }) => (
+                  <CalendarForm label={"Date"} field={field} />
+                )}
               />
             </div>
             {/* Security Type */}
@@ -168,9 +199,13 @@ export function CompanyRegisterForm() {
                 name="securityType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Security Type</FormLabel>
+                    <FormLabel className="text-[20px]">Security Type</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder=""
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -183,22 +218,32 @@ export function CompanyRegisterForm() {
                 name="pricePerShare"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price per Share</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Price per Share
+                    </FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" placeholder="$" {...field} />
+                      <Input
+                        className="bg-[#bfbfbf]"
+                        placeholder="$"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
             <div className="col-span-3 flex items-center">
-              <h2 className="text-2xl text-gray-700">Documentations</h2>
-              <p className="text-sm text-gray-500 ml-2">(optional)</p>
+              <h2 className="text-3xl text-gray-700">Documentations</h2>
+              <p className="text-[12px] text-gray-500 ml-2">(optional)</p>
             </div>
             <div className="col-span-1">
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="Documentations"></Label>
-                <Input className="bg-[#bfbfbf]" id="Documentations" type="file" />
+                <Input
+                  className="bg-[#bfbfbf]"
+                  id="Documentations"
+                  type="file"
+                />
               </div>
             </div>
           </div>

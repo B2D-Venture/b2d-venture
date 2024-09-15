@@ -25,13 +25,14 @@ export const CalendarFormSchema = z.object({
 });
 
 interface CalendarFormProps {
+  label: string;
   field: any;
 }
 
-export function CalendarForm({ field }: CalendarFormProps) {
+export function CalendarForm({ label, field }: CalendarFormProps) {
   return (
     <FormItem className="flex flex-col">
-      <FormLabel className="mb-[10px]">Date</FormLabel>
+      <FormLabel className="text-[20px]">{ label }</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
@@ -42,12 +43,12 @@ export function CalendarForm({ field }: CalendarFormProps) {
                 !field.value && "text-muted-foreground text-black"
               )}
             >
-              {field.value ? format(field.value, "PPP") : "Pick a date"}
+              {field.value ? format(field.value, "PPP") : "--/--/--"}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-100 text-black" />
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto" align="start">
           <Calendar
             mode="single"
             selected={field.value}

@@ -7,7 +7,7 @@ export function ImageForm() {
         <input
           id="picture"
           type="file"
-          className="absolute inset-0 opacity-0 cursor-pointer"
+          className="w-40 h-40 max-sm:w-20 max-sm:h-20 rounded-full overflow-hidden flex items-center justify-center text-center absolute inset-0 opacity-0 cursor-pointer bg-black"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) {
@@ -22,7 +22,7 @@ export function ImageForm() {
             }
           }}
         />
-        <div className="w-40 h-40 max-sm:w-10 max-sm:h-10 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
+        <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
           <img
             id="preview-image"
             src=""
