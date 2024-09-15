@@ -1,4 +1,5 @@
 interface CompanyCardProps {
+import PitchDescription from '../components/PitchDescription';
     logoUrl: string;
     backgroundUrl: string;
     companyName: string;
@@ -6,4 +7,9 @@ interface CompanyCardProps {
     investmentGoal: number;
     investorCount: number;
     minInvest: number;
+};
+
+interface PitchDescriptionProps {
+    label: string;
+    desc: string;
 };
