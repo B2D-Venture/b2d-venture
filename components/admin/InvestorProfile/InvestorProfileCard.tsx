@@ -10,26 +10,22 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import CompanyProfileBadge from "@/components/admin/CompanyProfile/CompanyProfileBadge";
+import InvestorProfileBadge from "@/components/admin/InvestorProfile/InvestorProfileBadge";
 
-export function CompanyProfileCard({
+export function InvestorProfileCard({
   logo,
-  companyName,
+  investorName,
   description,
-  ceoName,
-  valuation,
-  income,
-  profit,
-  employees,
+  age,
+  netWorth,
+  moneyReadyForInvestment,
 }: {
   logo: string;
-  companyName: string;
+  investorName: string;
   description: string;
-  ceoName: string;
-  valuation: number;
-  income: number;
-  profit: number;
-  employees: number;
+  age: number;
+  netWorth: number;
+  moneyReadyForInvestment: number;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
@@ -38,11 +34,11 @@ export function CompanyProfileCard({
           <div className="flex flex-row space-x-10">
             <img
               src={logo}
-              alt="Company Logo"
+              alt="Investor Profile"
               className="w-14 h-14 rounded-full"
             />
             <AccordionTrigger className="text-lg text-black flex w-full justify-between">
-              <span className="flex-1">{companyName}</span>
+              <span className="flex-1">{investorName}</span>
               {/* <ChevronDownIcon
                 className="AccordionChevron text-muted-foreground transition-transform duration-200 text-black"
                 aria-hidden
@@ -50,45 +46,38 @@ export function CompanyProfileCard({
             </AccordionTrigger>
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
-          <CompanyProfileBadge />
+          <InvestorProfileBadge />
           <p className="w-full overflow-hidden text-black pt-2">
             {description}
           </p>
           <AccordionContent>
-            <div className="flex flex-row items-center justify-center space-x-5">
-              <Label>Valuation</Label>
+            <div className="flex flex-row items-center justify-between">
+              <Label>Age</Label>
               <div className="flex flex-row items-center space-x-1">
-                <span>$</span>
                 <Input
-                  value={valuation}
+                  value={age}
                   disabled
                   className="border-2 border-black w-auto"
                 />
               </div>
-              <Label>Income</Label>
+              <Label>netWorth</Label>
               <div className="flex flex-row items-center space-x-1">
                 <span>$</span>
                 <Input
-                  value={income}
+                  value={netWorth}
                   disabled
                   className="border-2 border-black w-auto"
                 />
               </div>
-              <Label>Profit</Label>
+              <Label>Money Ready For Investment</Label>
               <div className="flex flex-row items-center space-x-1">
                 <span>$</span>
                 <Input
-                  value={profit}
+                  value={moneyReadyForInvestment}
                   disabled
                   className="border-2 border-black w-auto"
                 />
               </div>
-              <Label>Employees</Label>
-              <Input
-                value={employees}
-                disabled
-                className="border-2 border-black"
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
