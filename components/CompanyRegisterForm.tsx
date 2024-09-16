@@ -7,17 +7,20 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ImageForm } from "@/components/UploadImageForm";
+import { ProfileImageForm } from "@/components/UploadImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { BannerImageForm } from "@/components/BannerImageForm";
 
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Description } from "@radix-ui/react-dialog";
 
 // Combine schemas
 const formSchema = CalendarFormSchema.extend({
@@ -57,7 +60,7 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ImageForm />
+              <ProfileImageForm />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -68,7 +71,6 @@ export function CompanyRegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
-            {/* Company Name */}
             <div className="col-span-2">
               <FormField
                 control={form.control}
@@ -147,7 +149,9 @@ export function CompanyRegisterForm() {
                 name="minimumInvestment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[20px]">Minimum Investment</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Minimum Investment
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="bg-[#bfbfbf]"
@@ -166,7 +170,9 @@ export function CompanyRegisterForm() {
                 name="maximumInvestment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[20px]">Maximum Investment</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Maximum Investment
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="bg-[#bfbfbf]"
@@ -212,7 +218,9 @@ export function CompanyRegisterForm() {
                 name="pricePerShare"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[20px]">Price per Share</FormLabel>
+                    <FormLabel className="text-[20px]">
+                      Price per Share
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="bg-[#bfbfbf]"
@@ -236,12 +244,17 @@ export function CompanyRegisterForm() {
                   id="Documentations"
                   type="file"
                 />
+                <FormDescription>Please upload PDF files only.</FormDescription>
               </div>
             </div>
+            <div className="col-span-2">
+            </div>
+            <div className="col-start-3">
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
         </div>
       </form>
     </Form>
