@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/Pitch";
+import DealTerm from "@/components/DealTerm";
 
 const CompanyProfile = () => {
   return (
@@ -46,65 +47,10 @@ const CompanyProfile = () => {
           </div>
         </div>
       </div>
-      <div className="grid mt-10 grid-cols-2 h-full w-full text-white">
+
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
         <Pitch />
-        <div className="flex items-center justify-center h-full">
-          <div className="Rectangle48 mt-10 w-[307px] h-[1000px] left-3/4 top-[817px] absolute bg-[#d9d9d9] rounded-[15px]" />
-          <div className="absolute mt-8 left-3/4 top-[850px] ml-3">
-            <div className="text-black text-5xl">22</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">Investors</div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="text-black text-5xl">10 Days</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">
-              Left to investment
-            </div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="text-black text-5xl">1,000 $</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">
-              Minimum Investment
-            </div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="text-black text-5xl">2,000 $</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">
-              Maximum Investment
-            </div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="text-black text-5xl">100,000 $</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">Funding Goal</div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="text-black text-5xl">10.23 $</div>
-            <div className="mb-2 text-[#423f3f] text-2xl">
-              Price per Security
-            </div>
-            <div className="Line4 w-[268.01px] h-[0px] border border-black mb-8"></div>
-            <div className="flex flex-col items-center space-y-4">
-              <button
-                type="button"
-                className="w-full max-w-[268px] text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5"
-              >
-                Question
-              </button>
-              <button
-                type="button"
-                className="w-full max-w-[268px] text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5"
-              >
-                Invest
-              </button>
-              <button
-                type="button"
-                className="w-full max-w-[268px] text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5"
-              >
-                Raise Funding
-              </button>
-              <button
-                type="button"
-                className="w-full max-w-[268px] text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5"
-              >
-                Edit Details
-              </button>
-            </div>
-          </div>
-        </div>
+        <DealTerm />
       </div>
     </div>
   );
