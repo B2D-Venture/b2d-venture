@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 
-export function ImageForm() {
+export function ProfileImageForm() {
   return (
     <>
       <div className="relative">

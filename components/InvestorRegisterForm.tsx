@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ImageForm } from "@/components/UploadImageForm";
+import { ProfileImageForm } from "@/components/UploadImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
 
 import {
@@ -53,7 +53,7 @@ export function InvestorRegisterForm() {
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ImageForm />
+              <ProfileImageForm />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -170,8 +170,8 @@ export function InvestorRegisterForm() {
                 )}
               />
             </div>
-            <div className="flex justify-end items-end col-span-2">
-              <Button type="submit">Create Profile</Button>
+            <div className="flex justify-end items-end col-span-1 col-start-4">
+              <Button type="submit" className="w-full">Create Profile</Button>
             </div>
           </div>
         </div>
