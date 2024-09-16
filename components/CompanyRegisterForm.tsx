@@ -246,6 +246,7 @@ export function CompanyRegisterForm() {
                   className="bg-[#bfbfbf]"
                   id="Documentations"
                   type="file"
+                  accept="application/pdf"
                 />
                 <FormDescription>Please upload PDF files only.</FormDescription>
               </div>
