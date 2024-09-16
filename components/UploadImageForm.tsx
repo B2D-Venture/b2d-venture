@@ -26,7 +26,7 @@ export function ImageForm() {
           <img
             id="preview-image"
             src=""
-            alt="Logo"
+            alt="Profile Image"
             className="w-full h-full object-cover"
           />
         </div>

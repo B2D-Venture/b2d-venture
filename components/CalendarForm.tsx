@@ -43,7 +43,7 @@ export function CalendarForm({ label, field }: CalendarFormProps) {
                 !field.value && "text-muted-foreground text-black"
               )}
             >
-              {field.value ? format(field.value, "PPP") : "--/--/--"}
+              {field.value ? format(field.value, "PPP") : "Pick a Date"}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-100 text-black" />
             </Button>
           </FormControl>
