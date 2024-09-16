@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ProfileImageForm } from "@/components/UploadImageForm";
+import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 
