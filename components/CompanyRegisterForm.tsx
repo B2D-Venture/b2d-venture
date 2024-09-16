@@ -192,7 +192,9 @@ export function CompanyRegisterForm() {
               <FormField
                 control={form.control}
                 name="dob"
-                render={({ field }) => <CalendarForm field={field} />}
+                render={({ field }) => (
+                  <CalendarForm label={"Date"} field={field} />
+                )}
               />
             </div>
             {/* Security Type */}
