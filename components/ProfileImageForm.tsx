@@ -8,7 +8,7 @@ export function ProfileImageForm() {
           id="picture"
           type="file"
           className="w-40 h-40 max-sm:w-20 max-sm:h-20 rounded-full overflow-hidden absolute inset-0 opacity-0 cursor-pointer bg-red-600"
-          
+          accept="image/png, image/jpeg"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) {
