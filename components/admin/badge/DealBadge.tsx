@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge"
 
-const Dealbadge = () => {
+const DealBadge = () => {
   return (
     <>
-    <Badge>Deal</Badge>
+    <Badge className="bg-[#e38229] text-black">Deal</Badge>
     </>
   );
 }
+
+export default DealBadge;
