@@ -71,6 +71,9 @@ export function CompanyRegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
+          <div className="col-span-3">
+              <BannerImageForm />
+            </div>
             <div className="col-span-2">
               <FormField
                 control={form.control}
