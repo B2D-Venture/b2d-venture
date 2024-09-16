@@ -1,6 +1,7 @@
 import React from "react";
 import { CompanyProfileCard } from "@/components/admin/CompanyProfile/CompanyProfileCard";
 import { InvestorProfileCard } from "@/components/admin/InvestorProfile/InvestorProfileCard";
+import { Dealcard } from "@/components/admin/Deal/DealCard";
 
 const AdminPage = () => {
   return (
@@ -25,6 +26,18 @@ const AdminPage = () => {
           age={50}
           netWorth={50000000}
           moneyReadyForInvestment={10000000}
+        />
+      </div>
+      <div className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]">
+        <Dealcard
+          investorName="Bossy kupaikon"
+          moneyReadyForInvestment={10000000}
+          investAmount={10000000}
+          stockPercentage={10}
+          companyName="Amazon"
+          raiseTarget={10000000}
+          raisePercentage={10}
+          valuaiton={10000000}
         />
       </div>
     </div>
