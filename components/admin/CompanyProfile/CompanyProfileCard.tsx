@@ -55,9 +55,17 @@ export function CompanyProfileCard({
             {description}
           </p>
           <AccordionContent>
+            <div className="flex flex-row items-center space-x-5 mb-1">
+              <Label className="flex-shrink-0 p-[1px]">CEO Name</Label>
+              <Input
+                value={ceoName}
+                disabled
+                className="border-2 border-black w-auto"
+              />
+            </div>
             <div className="flex flex-row items-center justify-center space-x-5">
               <Label>Valuation</Label>
-              <div className="flex flex-row items-center space-x-1">
+              <div className="flex fle  x-row items-center space-x-1">
                 <span>$</span>
                 <Input
                   value={valuation}
