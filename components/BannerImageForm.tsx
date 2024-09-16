@@ -26,7 +26,7 @@ export function BannerImageForm() {
           }
         }}
       />
-      <div className="h-52 overflow-hidden flex items-center justify-center text-center rounded-md bg-[#bfbfbf] object-cover w-full h-full">
+      <div className="h-52 overflow-hidden flex items-center justify-center text-center rounded-md bg-[#bfbfbf]">
         <img
           id="banner-image"
           src=""
