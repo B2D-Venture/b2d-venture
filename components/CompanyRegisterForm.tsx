@@ -9,15 +9,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { BannerImageForm } from "@/components/BannerImageForm";
 
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Description } from "@radix-ui/react-dialog";
 
 // Combine schemas
 const formSchema = CalendarFormSchema.extend({
@@ -68,7 +71,9 @@ export function CompanyRegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
-            {/* Company Name */}
+          <div className="col-span-3">
+              <BannerImageForm />
+            </div>
             <div className="col-span-2">
               <FormField
                 control={form.control}
@@ -243,13 +248,19 @@ export function CompanyRegisterForm() {
                   className="bg-[#bfbfbf]"
                   id="Documentations"
                   type="file"
+                  accept="application/pdf"
                 />
+                <FormDescription>Please upload PDF files only.</FormDescription>
               </div>
             </div>
+            <div className="col-span-2">
+            </div>
+            <div className="col-start-3">
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
         </div>
       </form>
     </Form>
