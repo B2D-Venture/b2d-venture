@@ -17,7 +17,14 @@ interface CompanyLogoBoxProps {
 }
 
 interface OutputTextBoxProps {
-  label: string | number;
+  label: string;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
+}
+
+interface OutputTextBoxPropsDollar {
+  label: string;
   value: string | number;
   classNameLabel?: string;
   classNameValue?: string;
