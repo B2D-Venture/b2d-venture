@@ -7,15 +7,14 @@ import {
 
 import * as React from "react";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
+import { Button } from "@/components/ui/button";
 import CompanyProfileBadge from "@/components/admin/CompanyProfile/CompanyProfileBadge";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { OutputTextBox } from "@/components/admin/OutputTextBox";
 import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
-import { OutputTextBoxPercentage } from "@/components/admin/OutputTextBoxPercentage";
-import { Target } from "lucide-react";
+
+import { CheckIcon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export function CompanyProfileCard({
   logo,
@@ -99,6 +98,14 @@ export function CompanyProfileCard({
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+      <div className="flex flex-row space-x-2 justify-end">
+        <Button variant="ghost" size="icon" className="bg-green-500">
+          <CheckIcon className="h-4 w-4" />
+        </Button>
+        <Button variant="ghost" size="icon" className="bg-red-500">
+          <Cross2Icon className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }
