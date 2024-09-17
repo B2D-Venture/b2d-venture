@@ -141,11 +141,6 @@ body {
 
   .card {
     @apply relative h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
-    @apply w-[390px];
-    @apply sm:w-[500px];
-    @apply md:w-[750px];
-    @apply lg:w-[350px];
-    @apply xl:w-[270px];
   }
 
   .card-logo {
