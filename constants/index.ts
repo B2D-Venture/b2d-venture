@@ -1,7 +1,7 @@
 export const navbarLinks = [
   {
-    route: "/company-register",
-    label: "Register as Company",
+    route: "/role-register",
+    label: "Register",
   },
   {
     route: "/investment",
@@ -16,6 +16,7 @@ export const companyExample = [
     backgroundUrl:
       "https://images.workpointtoday.com/workpointnews/2022/11/15081905/1668475141_74922_52345681_10156606559473124_7930833184248299520_n.jpeg",
     companyName: "Amazon",
+    companyAbbr: "AMZ",
     shortDescription:
       "Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence.",
     investmentGoal: 1000000,
@@ -28,6 +29,7 @@ export const companyExample = [
     backgroundUrl:
       "https://ichef.bbci.co.uk/news/976/cpsprodpb/1766/production/_99709950_english.jpg",
     companyName: "Netflix",
+    companyAbbr: "NF",
     shortDescription:
       "Netflix, Inc. is an American over-the-top content platform and production company headquartered in Los Gatos, California.",
     investmentGoal: 1000,
@@ -38,6 +40,7 @@ export const companyExample = [
     logoUrl: "https://uploads.republic.com/p/offerings/logos/small_2x/000/008/680/8680-1711124916-5ccba562ac84711b0cf4ba3a8244b14b5d44bdf6.png",
     backgroundUrl: "https://imgproxy.republic.com/-_bAEE96Go5EGbUhkwPHODCB4pBZa9kTv9LU3dCZFAo/rs:::/aHR0cHM6Ly91cGxv/YWRzLnJlcHVibGlj/LmNvbS9wL29mZmVy/aW5ncy9jYXJkX2lt/YWdlcy9vcmlnaW5h/bC8wMDAvMDA4LzY4/MC84NjgwLTE3MjIw/MDY3ODAtNDdkYzZh/ZWZmMGJjMGExNDk2/MjY0YWYxZTg1Nzlk/M2RmZmIyMjNjNy5q/cGVn",
     companyName: "StartGlobal",
+    companyAbbr: "SG",
     shortDescription:
       "Operating system for small businesses",
     investmentGoal: 50000,

@@ -33,8 +33,28 @@ body {
     @apply rounded-full m-3;
   }
 
+  .avatar {
+    @apply w-[50px] h-[50px] rounded-full border-2 border-yellow-500;
+  }
+
+  .sub-menu-wrap {
+    @apply absolute top-full right-0 w-64 mt-2;
+  }
+
+  .sub-menu {
+    @apply bg-[#fef5e2] rounded-lg shadow-lg;
+  }
+
+  .user-info {
+    @apply flex flex-col p-3 items-center;
+  }
+
   .search-bar {
     @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
+  }
+
+  .search-filter {
+    @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
   }
 
   .google-button {
@@ -42,7 +62,7 @@ body {
   }
 
   .google-label {
-    @apply flex items-center text-center text-black text-xs font-normal font-['Inter'];
+    @apply flex items-center text-center text-black text-xs font-normal;
   }
 
   .mobile-nav {
@@ -73,8 +93,54 @@ body {
     @apply text-black bg-navbarTitle rounded-full p-3;
   }
 
+  .text-container-on-image {
+    @apply absolute left-0 top-0 w-full pl-20 mt-10;
+    @apply max-xl:pl-16;
+    @apply max-lg:pl-14;
+    @apply max-md:pl-10;
+    @apply max-sm:pl-8;
+  }
+
+  .text-on-image-white {
+    @apply text-white text-[60px] w-full font-bold;
+    @apply max-xl:text-[50px];
+    @apply max-lg:text-[40px];
+    @apply max-md:text-[30px];
+    @apply max-sm:text-[20px];
+  }
+
+  .text-on-image-orange {
+    @apply text-[#e49012] text-[64px] font-bold;
+    @apply max-xl:text-[50px];
+    @apply max-lg:text-[40px];
+    @apply max-md:text-[30px];
+    @apply max-sm:text-[20px];
+  }
+
+  .text-company-statistic-desc {
+    @apply text-[25px] font-bold;
+    @apply max-xl:text-[23px];
+    @apply max-lg:text-[20px];
+    @apply max-md:text-[15px];
+    @apply max-sm:text-[10px];
+  }
+
+  .text-company-statistic-num {
+    @apply text-[#fffefe] text-[32px] font-bold;
+    @apply max-xl:text-[30px];
+    @apply max-lg:text-[28px];
+    @apply max-md:text-[26px];
+    @apply max-sm:text-[23px];
+  }
+
+  .company-logo-boxlist {
+    @apply w-full pt-14 pl-7 grid grid-cols-4 gap-10;
+    @apply max-md:grid-cols-3;
+    @apply max-sm:grid-cols-2;
+  }
+
   .card {
-    @apply relative w-[270px] h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+    @apply relative h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
   }
 
   .card-logo {
