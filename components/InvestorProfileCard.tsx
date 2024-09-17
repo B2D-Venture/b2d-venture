@@ -30,7 +30,7 @@ export function InvestorProfileCard() {
   return (
     <div className="w-full space-y-8">
       <div className="grid grid-cols-5 gap-4">
-        <div className="col-span-1 flex flex-col items-center">
+        <div className="cor-span-1 flex flex-col justify-center items-center">
           <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
             <Image
               id="example-profile-image"
