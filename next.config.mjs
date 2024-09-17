@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: [
       "placehold.co",
+      "picsum.photos",
       "via.placeholder.com",
       "images.workpointtoday.com",
       "static.wixstatic.com",
