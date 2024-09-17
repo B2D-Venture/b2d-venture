@@ -23,6 +23,10 @@ export function InvestorProfileCard() {
     "*",
   );
 
+  const formattedNetWorth = new Intl.NumberFormat().format(
+    investorData.netWorth,
+  );
+
   return (
     <div className="w-full space-y-8">
       <div className="grid grid-cols-5 gap-4">
@@ -72,7 +76,7 @@ export function InvestorProfileCard() {
               />
               <button
                 onClick={toggleNationalIdVisibility}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
               >
                 {showNationalId ? <IoEyeOutline /> : <IoEyeOffOutline />}{" "}
               </button>
@@ -102,17 +106,22 @@ export function InvestorProfileCard() {
             <Input
               className="bg-[#bfbfbf]"
               disabled
-              value={investorData.lastName}
+              value={investorData.nationality}
             />
           </div>
           {/* Net Worth */}
           <div className="col-span-1 space-y-2">
             <Label className="text-[20px]">Net Worth</Label>
-            <Input
-              className="bg-[#bfbfbf]"
-              disabled
-              value={investorData.lastName}
-            />
+            <div className="relative">
+              <Input
+                className="bg-[#bfbfbf]"
+                disabled
+                value={formattedNetWorth}
+              />
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white">
+                {"$"}{" "}
+              </div>
+            </div>
           </div>
         </div>
       </div>
