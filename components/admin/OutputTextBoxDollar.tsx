@@ -1,13 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { OutputTextBoxPropsDollar } from "@/types";
+import { OutputTextBoxDollarProps } from "@/types";
 
 export function OutputTextBoxDollar({
   label,
   value,
   classNameLabel,
   classNameValue,
-}: OutputTextBoxPropsDollar) {
+}: OutputTextBoxDollarProps) {
   return (
     <>
       <Label>{label}</Label>
