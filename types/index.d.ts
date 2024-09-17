@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 interface CompanyCardProps {
   logoUrl: string;
   backgroundUrl: string;
@@ -12,6 +14,13 @@ interface CompanyLogoBoxProps {
   logoUrl: string;
   companyAbbr: string;
   companyName: string;
+}
+
+interface OutputTextBoxProps {
+  label: string | number;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
 }
 
 declare namespace NodeJS {
