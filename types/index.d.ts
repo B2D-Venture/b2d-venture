@@ -25,6 +25,15 @@ interface InvestorProfileCardProps {
   netWorth: number;
 }
 
+interface InvestmentItemProps {
+  logoUrl: string;
+  companyAbbr: string;
+  companyName: string;
+  amount: number;
+  status: string;
+  date: string;
+}
+
 declare namespace NodeJS {
   interface ProcessEnv {
     DATABASE_URL: string;
