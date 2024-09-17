@@ -23,7 +23,14 @@ interface OutputTextBoxProps {
   classNameValue?: string;
 }
 
-interface OutputTextBoxPropsDollar {
+interface OutputTextBoxDollarProps {
+  label: string;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
+}
+
+interface OutputTextBoxPercentageProps {
   label: string;
   value: string | number;
   classNameLabel?: string;
