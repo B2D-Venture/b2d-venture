@@ -11,6 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import DealBadge from "@/components/admin/Deal/DealBadge";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { OutputTextBox } from "@/components/admin/OutputTextBox";
+import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
+import { OutputTextBoxPercentage } from "@/components/admin/OutputTextBoxPercentage";
 
 export function Dealcard({
   investorName,
@@ -35,60 +39,48 @@ export function Dealcard({
     <div className="flex flex-col w-full space-y-5">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
-          <div className="flex flex-row space-x-10">
-            <AccordionTrigger className="text-lg text-black flex w-full justify-between">
-              <span className="flex-1">
-                {investorName} invest in {companyName}
-              </span>
-              {/* <ChevronDownIcon
-                className="AccordionChevron text-muted-foreground transition-transform duration-200 text-black"
-                aria-hidden
-              /> */}
-            </AccordionTrigger>
+          <div className="grid grid-cols-10">
+            <div className="col-span-10">
+              <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
+                <span className="flex-1">
+                  {investorName} invest in {companyName}
+                </span>
+                <ChevronDownIcon
+                  className="text-muted-foreground transition-transform duration-200"
+                  aria-hidden
+                  color="black"
+                  scale={1.5}
+                />
+              </AccordionTrigger>
+            </div>
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <DealBadge />
           <div className="grid grid-cols-2 gap-4 text-black justify-between w-full">
             <div className="flex flex-col space-y-2">
               <div className="flex flex-row items-center space-x-5">
-                <Label className="flex-shrink-0 ">Investor Name</Label>
-                <Input
-                  value={investorName}
-                  disabled
-                  className="border-2 border-black w-auto"
-                />
+                <OutputTextBox label="Investor Name" value={investorName} />
               </div>
               <div className="flex flex-row items-center space-x-2">
-                <Label>Invest Amount</Label>
-                <div className="flex flex-row items-center space-x-1">
-                  <span>$</span>
-                  <Input
-                    value={investAmount}
-                    disabled
-                    className="border-2 border-black w-auto"
-                  />
-                </div>
+                <OutputTextBoxDollar
+                  label="Invest Amount"
+                  value={investAmount}
+                  classNameLabel="space-x-1"
+                  classNameValue="pl-[5px]"
+                />
               </div>
             </div>
             <div className="flex flex-col space-y-2">
               <div className="flex flex-row items-center space-x-3 pl-[2px]">
-                <Label className="flex-shrink-0 ">Company Name</Label>
-                <Input
-                  value={companyName}
-                  disabled
-                  className="border-2 border-black w-auto"
-                />
+                <OutputTextBox label="Company Name" value={companyName} />
               </div>
               <div className="flex flex-row items-center space-x-6">
-                <Label>Raise Target</Label>
-                <div className="flex flex-row items-center space-x-1">
-                  <span>$</span>
-                  <Input
-                    value={raiseTarget}
-                    disabled
-                    className="border-2 border-black w-auto"
-                  />
-                </div>
+                <OutputTextBoxDollar
+                  label="Raise Target"
+                  value={raiseTarget}
+                  classNameLabel="space-x-1"
+                  classNameValue="pl-[5px]"
+                />
               </div>
             </div>
           </div>
@@ -96,50 +88,31 @@ export function Dealcard({
             <div className="grid grid-cols-2 gap-4 text-black justify-between w-full mt-2">
               <div className="flex flex-col space-y-2">
                 <div className="flex flex-row items-center space-x-12">
-                  <Label>Get Stock</Label>
-                  <div className="flex flex-row items-center space-x-1  pl-[4px]">
-                    <Input
-                      value={stockPercentage}
-                      disabled
-                      className="border-2 border-black w-auto"
-                    />
-                    <span>%</span>
-                  </div>
+                  <OutputTextBoxPercentage
+                    label="Get Stock"
+                    value={stockPercentage}
+                    classNameLabel="space-x-1"
+                    classNameValue="pl-[5px]"
+                  />
                 </div>
                 <div className="flex flex-row items-center space-x-2">
-                  <Label>Money Ready For Investment</Label>
-                  <div className="flex flex-row items-center space-x-1">
-                    <span>$</span>
-                    <Input
-                      value={moneyReadyForInvestment}
-                      disabled
-                      className="border-2 border-black w-auto"
-                    />
-                  </div>
+                  <OutputTextBoxDollar
+                    label="Money Ready For Investment"
+                    value={moneyReadyForInvestment}
+                    classNameLabel="space-x-1"
+                    classNameValue="pl-[5px]"
+                  />
                 </div>
               </div>
-              <div className="flex flex-col space-y-2">
-                <div className="flex flex-row items-center space-x-1">
-                  <Label>Raise Percentage</Label>
-                  <div className="flex flex-row items-center space-x-1">
-                    <Input
-                      value={raisePercentage}
-                      disabled
-                      className="border-2 border-black w-auto"
-                    />
-                    <span>%</span>
-                  </div>
-                </div>
+              <div className="flex flex-col">
+                <div className="flex flex-row items-center space-x-1"></div>
                 <div className="flex flex-row items-center space-x-10">
-                  <Label>Valuation</Label>
-                  <div className="flex flex-row items-center space-x-1 pl-[5px]">
-                    <span>$</span>
-                    <Input
-                      value={valuaiton}
-                      disabled
-                      className="border-2 border-black w-auto"
-                    />
-                  </div>
+                <OutputTextBoxDollar
+                  label="Valuation"
+                  value={valuaiton}
+                  classNameLabel="space-x-1 pl-[5px]"
+                  classNameValue=""
+                />
                 </div>
               </div>
             </div>
