@@ -10,8 +10,8 @@ export function OutputTextBoxPercentage ({
 }: OutputTextBoxPercentageProps) {
   return (
     <>
-      <Label>{label}</Label>
-      <div className={`flex flex-row items-center ${classNameLabel}`}>
+      <Label className={`flex-shrink-0 ${classNameLabel}`}>{label}</Label>
+      <div className={`flex flex-row items-center`}>
         <Input
           value={value}
           disabled

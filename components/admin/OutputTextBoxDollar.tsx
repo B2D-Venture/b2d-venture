@@ -10,7 +10,7 @@ export function OutputTextBoxDollar({
 }: OutputTextBoxDollarProps) {
   return (
     <>
-      <Label>{label}</Label>
+      <Label className={`flex-shrink-0 ${classNameLabel}`}>{label}</Label>
       <div className={`flex flex-row items-center ${classNameLabel}`}>
         <span>$</span>
         <Input
