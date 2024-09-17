@@ -8,6 +8,7 @@ interface CompanyCardProps {
   investmentGoal: number;
   investorCount: number;
   minInvest: number;
+  className: string;
 }
 
 interface CompanyLogoBoxProps {

@@ -20,6 +20,7 @@ const CompanyCardSlide = () => {
                 investmentGoal={company.investmentGoal}
                 investorCount={company.investorCount}
                 minInvest={company.minInvest}
+                className="w-[270px]"
               />
             ))}
         </div>

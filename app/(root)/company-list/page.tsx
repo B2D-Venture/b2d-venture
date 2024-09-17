@@ -4,8 +4,18 @@ import { companyExample } from "@/constants";
 import { FaSearch } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 
+interface Company {
+  logoUrl: string;
+  backgroundUrl: string;
+  companyName: string;
+  shortDescription: string;
+  investmentGoal: number;
+  investorCount: number;
+  minInvest: number;
+}
+
 const CompanyList = () => {
-  const repeatedCompanies = [].concat(
+  const repeatedCompanies: Company[] = [].concat(
     companyExample,
     companyExample,
     companyExample
@@ -33,6 +43,7 @@ const CompanyList = () => {
               investmentGoal={company.investmentGoal}
               investorCount={company.investorCount}
               minInvest={company.minInvest}
+              className="w-[390px] sm:w-[500px] md:w-[750px] lg:w-[350px] xl:w-[270px]"
             />
           </div>
         ))}

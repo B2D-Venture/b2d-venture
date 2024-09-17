@@ -11,11 +11,17 @@ const CompanyCard = ({
   investmentGoal,
   investorCount,
   minInvest,
+  className,
 }: CompanyCardProps) => {
   return (
     <div className="p-4">
       <Link href="/">
-        <div className="card group">
+      {/* \    /* @apply w-[390px]; */
+    /* @apply sm:w-[500px];
+    @apply md:w-[750px];
+    @apply lg:w-[350px];
+    @apply xl:w-[270px]; */}
+        <div className={`card ${className} group`}>
           <div className="relative w-full h-full">
             {/* Background Image */}
             <Image
