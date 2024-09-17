@@ -104,15 +104,22 @@ export function Dealcard({
                   />
                 </div>
               </div>
-              <div className="flex flex-col">
-                <div className="flex flex-row items-center space-x-1"></div>
+              <div className="flex flex-col space-y-2">
+                <div className="flex flex-row items-center space-x-1">
+                  <OutputTextBoxPercentage
+                    label="Raise Percentage"
+                    value={raisePercentage}
+                    classNameLabel="space-x-1"
+                    classNameValue="pl-[5px]"
+                  />
+                </div>
                 <div className="flex flex-row items-center space-x-10">
-                <OutputTextBoxDollar
-                  label="Valuation"
-                  value={valuaiton}
-                  classNameLabel="space-x-1 pl-[5px]"
-                  classNameValue=""
-                />
+                  <OutputTextBoxDollar
+                    label="Valuation"
+                    value={valuaiton}
+                    classNameLabel="space-x-1 pl-[5px]"
+                    classNameValue=""
+                  />
                 </div>
               </div>
             </div>
