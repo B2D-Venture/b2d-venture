@@ -37,14 +37,26 @@ export const companyExample = [
     minInvest: 213,
   },
   {
-    logoUrl: "https://uploads.republic.com/p/offerings/logos/small_2x/000/008/680/8680-1711124916-5ccba562ac84711b0cf4ba3a8244b14b5d44bdf6.png",
-    backgroundUrl: "https://imgproxy.republic.com/-_bAEE96Go5EGbUhkwPHODCB4pBZa9kTv9LU3dCZFAo/rs:::/aHR0cHM6Ly91cGxv/YWRzLnJlcHVibGlj/LmNvbS9wL29mZmVy/aW5ncy9jYXJkX2lt/YWdlcy9vcmlnaW5h/bC8wMDAvMDA4LzY4/MC84NjgwLTE3MjIw/MDY3ODAtNDdkYzZh/ZWZmMGJjMGExNDk2/MjY0YWYxZTg1Nzlk/M2RmZmIyMjNjNy5q/cGVn",
+    logoUrl:
+      "https://uploads.republic.com/p/offerings/logos/small_2x/000/008/680/8680-1711124916-5ccba562ac84711b0cf4ba3a8244b14b5d44bdf6.png",
+    backgroundUrl:
+      "https://imgproxy.republic.com/-_bAEE96Go5EGbUhkwPHODCB4pBZa9kTv9LU3dCZFAo/rs:::/aHR0cHM6Ly91cGxv/YWRzLnJlcHVibGlj/LmNvbS9wL29mZmVy/aW5ncy9jYXJkX2lt/YWdlcy9vcmlnaW5h/bC8wMDAvMDA4LzY4/MC84NjgwLTE3MjIw/MDY3ODAtNDdkYzZh/ZWZmMGJjMGExNDk2/MjY0YWYxZTg1Nzlk/M2RmZmIyMjNjNy5q/cGVn",
     companyName: "StartGlobal",
     companyAbbr: "SG",
-    shortDescription:
-      "Operating system for small businesses",
+    shortDescription: "Operating system for small businesses",
     investmentGoal: 50000,
     investorCount: 27,
     minInvest: 100,
-  }
+  },
 ];
+
+export const investorProfileExample = {
+  profileImage: "https://picsum.photos/id/64/200/250",
+  firstName: "Steven",
+  lastName: "Jothan",
+  nationalIdCard: "1122334455667",
+  birthdate: "12/04/2003",
+  emailAddress: "stevenjothan01@gmail.com",
+  nationality: "United State",
+  netWorth: 1000000,
+};
