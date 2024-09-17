@@ -11,92 +11,90 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import CompanyProfileBadge from "@/components/admin/CompanyProfile/CompanyProfileBadge";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { OutputTextBox } from "@/components/admin/OutputTextBox";
+import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
+import { OutputTextBoxPercentage } from "@/components/admin/OutputTextBoxPercentage";
+import { Target } from "lucide-react";
 
 export function CompanyProfileCard({
   logo,
   companyName,
   description,
-  ceoName,
+  abbreviation,
   valuation,
-  income,
-  profit,
-  employees,
+  minimumInvestment,
+  maximumInvestment,
+  securityType,
+  target,
 }: {
   logo: string;
   companyName: string;
   description: string;
-  ceoName: string;
+  abbreviation: string;
   valuation: number;
-  income: number;
-  profit: number;
-  employees: number;
+  minimumInvestment: number;
+  maximumInvestment: number;
+  securityType: string;
+  target: number;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
-          <div className="flex flex-row space-x-10">
+          <div className="grid grid-cols-10">
             <img
               src={logo}
               alt="Company Logo"
-              className="w-14 h-14 rounded-full"
+              className="w-14 h-14 rounded-full col-span-1"
             />
-            <AccordionTrigger className="text-lg text-black flex w-full justify-between">
-              <span className="flex-1">{companyName}</span>
-              {/* <ChevronDownIcon
-                className="AccordionChevron text-muted-foreground transition-transform duration-200 text-black"
-                aria-hidden
-              /> */}
-            </AccordionTrigger>
+            <div className="col-span-9">
+              <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
+                <span className="flex-1">{companyName}</span>
+                <ChevronDownIcon
+                  className="AccordionChevron text-muted-foreground transition-transform duration-200"
+                  aria-hidden
+                  color="black"
+                  scale={1.5}
+                />
+              </AccordionTrigger>
+            </div>
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <CompanyProfileBadge />
-          <p className="w-full overflow-hidden text-black pt-2">
+          <p className="w-full text-black pt-2">
             {description}
           </p>
           <AccordionContent>
-            <div className="flex flex-row items-center space-x-5 mb-1">
-              <Label className="flex-shrink-0 p-[1px]">CEO Name</Label>
-              <Input
-                value={ceoName}
-                disabled
-                className="border-2 border-black w-auto"
-              />
-            </div>
-            <div className="flex flex-row items-center justify-center space-x-5">
-              <Label>Valuation</Label>
-              <div className="flex fle  x-row items-center space-x-1">
-                <span>$</span>
-                <Input
+            <div className="grid grid-cols-3 text-black justify-start w-full space-y-2">
+              <div className="flex flex-row items-center space-x-5">
+                <OutputTextBox label="Abbreviation" value={abbreviation} />
+              </div>
+              <div className="flex flex-row items-center space-x-[60px]">
+                <OutputTextBox label="Security Type" value={securityType} />
+              </div>
+              <div className="flex flex-row items-center space-x-[47px]">
+                <OutputTextBoxDollar label="Funding Target" value={target} />
+              </div>
+              <div className="flex flex-row items-center space-x-[33px]">
+                <OutputTextBoxDollar
+                  label="Valuation"
                   value={valuation}
-                  disabled
-                  className="border-2 border-black w-auto"
                 />
               </div>
-              <Label>Income</Label>
               <div className="flex flex-row items-center space-x-1">
-                <span>$</span>
-                <Input
-                  value={income}
-                  disabled
-                  className="border-2 border-black w-auto"
+                <OutputTextBoxDollar
+                  label="Minimum Investment"
+                  value={minimumInvestment}
                 />
               </div>
-              <Label>Profit</Label>
               <div className="flex flex-row items-center space-x-1">
-                <span>$</span>
-                <Input
-                  value={profit}
-                  disabled
-                  className="border-2 border-black w-auto"
+                <OutputTextBoxDollar
+                  label="Maximum Investment"
+                  value={maximumInvestment}
+                  classNameLabel=""
                 />
               </div>
-              <Label>Employees</Label>
-              <Input
-                value={employees}
-                disabled
-                className="border-2 border-black"
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
