@@ -1,4 +1,5 @@
 import InvestableAmount from "@/components/InvestableAmount";
+import InvestmentItemList from "@/components/InvestmentItemList";
 import { InvestorProfileCard } from "@/components/InvestorProfileCard";
 
 export default function InvestorProfile() {
@@ -13,6 +14,9 @@ export default function InvestorProfile() {
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#FCD535] bg-opacity-65 rounded-[10px] justify-center items-center p-[27px]">
           <InvestorProfileCard />
+        </div>
+        <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
+          <InvestmentItemList />
         </div>
       </div>
     </div>
