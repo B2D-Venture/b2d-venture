@@ -2,8 +2,9 @@
 
 import React from "react";
 
-const InvestableAmount = ({ amount }: { amount: number }) => {
-  const formattedAmount = new Intl.NumberFormat().format(amount);
+const InvestableAmount = () => {
+  const amountExample = 1500;
+  const formattedAmount = new Intl.NumberFormat().format(amountExample);
   return (
     <div className="text-white p-4 rounded-lg text-right">
       <h3 className="text-xl">You can Invest</h3>
