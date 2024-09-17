@@ -47,7 +47,7 @@ export function InvestorProfileCard() {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">First Name</Label>
             <Input
-              className="bg-[#bfbfbf]"
+              className="font-bold border-white disabled:opacity-100"
               disabled
               value={investorData.firstName}
             />
@@ -56,7 +56,7 @@ export function InvestorProfileCard() {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Last Name</Label>
             <Input
-              className="bg-[#bfbfbf]"
+              className="font-bold border-white disabled:opacity-100"
               disabled
               value={investorData.lastName}
             />
@@ -66,7 +66,7 @@ export function InvestorProfileCard() {
             <Label className="text-[20px]">National ID Card</Label>
             <div className="relative">
               <Input
-                className="bg-[#bfbfbf] w-full"
+                className="font-bold border-white disabled:opacity-100"
                 disabled
                 value={
                   showNationalId
@@ -86,7 +86,7 @@ export function InvestorProfileCard() {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Birthdate</Label>
             <Input
-              className="bg-[#bfbfbf]"
+              className="font-bold border-white disabled:opacity-100"
               disabled
               value={investorData.birthdate}
             />
@@ -95,7 +95,7 @@ export function InvestorProfileCard() {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Email Address</Label>
             <Input
-              className="bg-[#bfbfbf]"
+              className="font-bold border-white disabled:opacity-100"
               disabled
               value={investorData.emailAddress}
             />
@@ -104,7 +104,7 @@ export function InvestorProfileCard() {
           <div className="col-span-1 space-y-2">
             <Label className="text-[20px]">Nationality</Label>
             <Input
-              className="bg-[#bfbfbf]"
+              className="font-bold border-white disabled:opacity-100"
               disabled
               value={investorData.nationality}
             />
@@ -114,7 +114,7 @@ export function InvestorProfileCard() {
             <Label className="text-[20px]">Net Worth</Label>
             <div className="relative">
               <Input
-                className="bg-[#bfbfbf]"
+                className="font-bold border-white disabled:opacity-100"
                 disabled
                 value={formattedNetWorth}
               />
