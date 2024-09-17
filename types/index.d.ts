@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 interface CompanyCardProps {
   logoUrl: string;
   backgroundUrl: string;
@@ -6,6 +8,27 @@ interface CompanyCardProps {
   investmentGoal: number;
   investorCount: number;
   minInvest: number;
+}
+
+interface PitchDescriptionProps {
+  label: string;
+  desc: string;
+}
+
+interface DealTermElementProps {
+  data: string;
+  label: string;
+}
+
+interface DealTermBtnProps {
+  text: string;
+  textColor: string;
+  hoverTextColor: string;
+  bgColor: string;
+  hoverBgColor: string;
+  borderColor: string;
+  hoverBorderColor: string;
+  className: string;
 }
 
 interface CompanyLogoBoxProps {
@@ -32,6 +55,27 @@ interface InvestmentItemProps {
   amount: number;
   status: string;
   date: string;
+
+interface OutputTextBoxProps {
+  label: string;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
+}
+
+interface OutputTextBoxDollarProps {
+  label: string;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
+}
+
+interface OutputTextBoxPercentageProps {
+  label: string;
+  value: string | number;
+  classNameLabel?: string;
+  classNameValue?: string;
+
 }
 
 declare namespace NodeJS {
