@@ -55,6 +55,7 @@ interface InvestmentItemProps {
   amount: number;
   status: string;
   date: string;
+}
 
 interface OutputTextBoxProps {
   label: string;
