@@ -10,6 +10,8 @@ import {
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
+import { Button } from "@/components/ui/button"
+
 export function BannerCarousel({
   bannerData,
   length_banners,
@@ -37,6 +39,7 @@ export function BannerCarousel({
           ))}
         </CarouselContent>
         {/* Optionally uncomment these for navigation */}
+        <Button className="absolute bottom-4 left-4 transform translate-y-0 border border-input bg-[#E8A117] shadow-sm hover:bg-accent hover:text-accent-foreground text-black">Register</Button>
         <CarouselPrevious className="left-4 top-1/2 transform -translate-y-1/2" />
         <CarouselNext className="right-4 top-1/2 transform -translate-y-1/2" />
       </Carousel>
