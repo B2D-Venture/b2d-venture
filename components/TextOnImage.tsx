@@ -16,7 +16,7 @@
 //         bannerData={[1, 2, 3, 4, 5]}
 //         length_banners={5}
 //       />
-//       {/* <div className="text-container-on-image">
+//       <div className="text-container-on-image">
 //         <span className="text-on-image-white">
 //           Invest for Future in
 //           <br></br>
@@ -24,7 +24,7 @@
 //         </span>
 //         <br></br>
 //         <span className="text-on-image-orange">Make Fast Money</span>
-//       </div> */}
+//       </div>
 //     </div>
 //   );
 // };
@@ -36,6 +36,10 @@ import { BannerCarousel } from "./main/banner";
 
 const TextOnImage = () => {
   const bannerData = [
+    {
+      backgroundUrl:
+      "/img-main/background-img-main.png"
+    },
     {
       backgroundUrl:
         "https://images.workpointtoday.com/workpointnews/2022/11/15081905/1668475141_74922_52345681_10156606559473124_7930833184248299520_n.jpeg",
