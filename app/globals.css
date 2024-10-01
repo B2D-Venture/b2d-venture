@@ -102,19 +102,19 @@ body {
   }
 
   .text-on-image-white {
-    @apply text-white text-[60px] w-full font-bold;
-    @apply max-xl:text-[50px];
-    @apply max-lg:text-[40px];
-    @apply max-md:text-[30px];
-    @apply max-sm:text-[20px];
+    @apply text-white text-[50px] w-full font-bold;
+    @apply max-xl:text-[40px];
+    @apply max-lg:text-[30px];
+    @apply max-md:text-[20px];
+    @apply max-sm:text-[10px];
   }
 
   .text-on-image-orange {
-    @apply text-[#e49012] text-[64px] font-bold;
-    @apply max-xl:text-[50px];
-    @apply max-lg:text-[40px];
-    @apply max-md:text-[30px];
-    @apply max-sm:text-[20px];
+    @apply text-[#e49012] text-[50px] font-bold;
+    @apply max-xl:text-[40px];
+    @apply max-lg:text-[30px];
+    @apply max-md:text-[20px];
+    @apply max-sm:text-[10px];
   }
 
   .text-company-statistic-desc {
