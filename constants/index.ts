@@ -70,6 +70,11 @@ export const investmentItemExample = [
     status: "Finalized",
     date: "December 13, 2023",
     amount: 1000,
+    marketPrice: 1100,
+    priceChange: 10.0,
+    stockPercentage: 0.5,
+    valuationAtInvest: 200000,
+    valuationMarket: 220000,
   },
   {
     logoUrl:
@@ -79,6 +84,11 @@ export const investmentItemExample = [
     status: "Finalized",
     date: "December 20, 2023",
     amount: 900,
+    marketPrice: 2000,
+    priceChange: 30.0,
+    stockPercentage: 1.7,
+    valuationAtInvest: 940000,
+    valuationMarket: 330000,
   },
   {
     logoUrl:
@@ -88,5 +98,10 @@ export const investmentItemExample = [
     status: "Waitlisted",
     date: "December 10, 2024",
     amount: 1500,
+    marketPrice: 4000,
+    priceChange: 12.0,
+    stockPercentage: 2.5,
+    valuationAtInvest: 600000,
+    valuationMarket: 820000,
   },
 ];

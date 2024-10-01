@@ -55,6 +55,11 @@ interface InvestmentItemProps {
   amount: number;
   status: string;
   date: string;
+  marketPrice: number;
+  priceChange: number;
+  stockPercentage: number;
+  valuationAtInvest: number;
+  valuationMarket: number;
 }
 
 interface OutputTextBoxProps {

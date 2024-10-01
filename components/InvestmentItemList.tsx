@@ -22,6 +22,11 @@ const InvestmentItemList = () => {
             status={company.status}
             date={company.date}
             amount={company.amount}
+            marketPrice={company.marketPrice}
+            priceChange={company.priceChange}
+            stockPercentage={company.stockPercentage}
+            valuationAtInvest={company.valuationAtInvest}
+            valuationMarket={company.valuationMarket}
           />
         ))}
     </div>
