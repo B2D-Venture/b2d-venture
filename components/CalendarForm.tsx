@@ -37,6 +37,7 @@ export function CalendarForm({ label, field }: CalendarFormProps) {
         <PopoverTrigger asChild>
           <FormControl>
             <Button
+              data-id="birthdate"
               variant={"outline"}
               className={cn(
                 "w-full pl-3 text-left font-normal bg-[#bfbfbf]",

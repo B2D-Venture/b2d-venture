@@ -17,9 +17,9 @@ const RoleButton = ({ role, focusedRole, onClick }: RoleButtonProps) => {
   return (
     <div>
       <button
-        className={`role-button group ${
-          role === focusedRole ? "bg-[#f2efd6]" : "bg-white"
-        }`}
+        data-id={`${role}-role`}
+        className={`role-button group ${role === focusedRole ? "bg-[#f2efd6]" : "bg-white"
+          }`}
         onClick={() => onClick(role)}
       >
         {role === "Investor" ? (

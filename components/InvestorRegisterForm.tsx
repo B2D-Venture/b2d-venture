@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { useFormState } from "./FormContext"
 
 import {
   Form,
@@ -30,6 +31,7 @@ const formSchema = CalendarFormSchema.extend({
 });
 
 export function InvestorRegisterForm() {
+  const { handleStepChange } = useFormState();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,7 +75,7 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">First Name</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="firstname-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -88,7 +90,7 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Last Name</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="lastname-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -105,7 +107,7 @@ export function InvestorRegisterForm() {
                       National ID Card
                     </FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="nid-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -130,7 +132,7 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Email Address</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="email-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -145,7 +147,7 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Nationality</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="national-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -161,6 +163,7 @@ export function InvestorRegisterForm() {
                     <FormLabel className="text-[20px]">Net Worth</FormLabel>
                     <FormControl>
                       <Input
+                        data-id="net-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
                         {...field}
@@ -171,7 +174,7 @@ export function InvestorRegisterForm() {
               />
             </div>
             <div className="flex justify-end items-end col-span-1 col-start-4">
-              <Button type="submit" className="w-full">Create Profile</Button>
+              <Button onClick={() => handleStepChange(2)} type="submit" className="w-full">Create Profile</Button>
             </div>
           </div>
         </div>

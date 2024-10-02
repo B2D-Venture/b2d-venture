@@ -5,6 +5,7 @@ export function ProfileImageForm() {
     <>
       <div className="relative">
         <input
+          data-id="profile-input"
           id="picture"
           type="file"
           className="w-40 h-40 max-sm:w-20 max-sm:h-20 rounded-full overflow-hidden absolute inset-0 opacity-0 cursor-pointer bg-red-600"
