@@ -173,8 +173,28 @@ export function InvestorRegisterForm() {
                 )}
               />
             </div>
-            <div className="flex justify-end items-end col-span-1 col-start-4">
-              <Button onClick={() => handleStepChange(2)} type="submit" className="w-full">Create Profile</Button>
+            <div className="flex justify-between items-center col-span-4 mt-4">
+              <Button
+                onClick={() => handleStepChange(-1)}
+                className="
+                  w-[211px] h-[45px] 
+                  bg-gray-200 text-gray-700 
+                  rounded-lg shadow-md 
+                  hover:bg-gray-300 hover:text-gray-900 
+                  font-bold text-base 
+                  transition duration-200 ease-in-out
+                "
+              >
+                Back
+              </Button>
+
+              <Button
+                onClick={() => handleStepChange(2)}
+                type="submit"
+                className="w-[211px] h-[45px] bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 ease-in-out font-bold"
+              >
+                Create Profile
+              </Button>
             </div>
           </div>
         </div>
