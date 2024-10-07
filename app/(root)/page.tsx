@@ -9,7 +9,9 @@ import TextOnImage from "@/components/TextOnImage";
 const Home = () => {
   return (
     <div className="relative bg-[#181a20]">
-      <TextOnImage />
+      <div className="flex justify-center items-center w-full h-full overflow-hidden">
+        <TextOnImage />
+      </div>
       <CompanyAllStatistics />
 
       <div className="p-10 text-white text-4xl font-bold max-lg:text-3xl max-md:text-2xl max-sm:text-xl">

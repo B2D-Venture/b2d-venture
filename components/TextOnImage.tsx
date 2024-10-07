@@ -1,26 +1,24 @@
 import React from "react";
-import Image from "next/image";
+import { BannerCarousel } from "./main/banner";
 
 const TextOnImage = () => {
+  const bannerData = [
+    {
+      backgroundUrl:
+      "/img-main/background-img-main.png"
+    },
+    {
+      backgroundUrl:
+        "https://images.workpointtoday.com/workpointnews/2022/11/15081905/1668475141_74922_52345681_10156606559473124_7930833184248299520_n.jpeg",
+    },
+    {
+      backgroundUrl:
+        "https://ichef.bbci.co.uk/news/976/cpsprodpb/1766/production/_99709950_english.jpg",
+    },
+  ];
+
   return (
-    <div className="relative w-full h-auto">
-      <Image
-        className="w-full h-auto"
-        src="/img-main/background-img-main.png"
-        alt="Background"
-        width={1440}
-        height={630}
-      />
-      <div className="text-container-on-image">
-        <span className="text-on-image-white">
-          Invest for Future in
-          <br></br>
-          Stable Platform and
-        </span>
-        <br></br>
-        <span className="text-on-image-orange">Make Fast Money</span>
-      </div>
-    </div>
+      <BannerCarousel bannerData={bannerData} length_banners={bannerData.length} />
   );
 };
 

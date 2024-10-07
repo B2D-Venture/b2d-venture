@@ -37,6 +37,31 @@ interface CompanyLogoBoxProps {
   companyName: string;
 }
 
+interface InvestorProfileCardProps {
+  profileImage: string;
+  firstName: string;
+  lastName: string;
+  nationalIdCard: string;
+  birthdate: string;
+  emailAddress: string;
+  nationality: string;
+  netWorth: number;
+}
+
+interface InvestmentItemProps {
+  logoUrl: string;
+  companyAbbr: string;
+  companyName: string;
+  amount: number;
+  status: string;
+  date: string;
+  marketPrice: number;
+  priceChange: number;
+  stockPercentage: number;
+  valuationAtInvest: number;
+  valuationMarket: number;
+}
+
 interface OutputTextBoxProps {
   label: string;
   value: string | number;
@@ -56,6 +81,7 @@ interface OutputTextBoxPercentageProps {
   value: string | number;
   classNameLabel?: string;
   classNameValue?: string;
+
 }
 
 declare namespace NodeJS {

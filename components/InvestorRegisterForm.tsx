@@ -136,7 +136,7 @@ export function InvestorRegisterForm() {
                 )}
               />
             </div>
-            {/* Nationality Type */}
+            {/* Nationality */}
             <div className="col-span-2">
               <FormField
                 control={form.control}
