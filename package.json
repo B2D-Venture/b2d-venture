@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cypress:open": "cypress open"
+    "test": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -27,7 +27,7 @@
     "framer-motion": "^11.5.4",
     "lucide-react": "^0.437.0",
     "next": "^14.2.13",
-    "next-auth": "^4.24.7",
+    "next-auth": "^3.29.10",
     "pg": "^8.12.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",
