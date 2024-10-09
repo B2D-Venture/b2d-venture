@@ -1,6 +1,7 @@
 import React from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
+import { RaiseFunding } from "./RaiseFunding";
 
 const DealTerm = () => {
   return (
@@ -32,15 +33,7 @@ const DealTerm = () => {
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
           />
-          <DealTermBtn
-            text="Raise Funding"
-            textColor="text-[#423F3F]"
-            hoverTextColor="hover:text-white"
-            bgColor="bg-[#AFAB9A]"
-            hoverBgColor="hover:bg-[#807D71]"
-            borderColor="border-transparent"
-            hoverBorderColor="border-transparent"
-          />
+          <RaiseFunding />
           <DealTermBtn
             text="Edit Details"
             textColor="text-[#423F3F]"
