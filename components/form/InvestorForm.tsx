@@ -1,12 +1,10 @@
 "use client";
 
-import { useFormState } from "../FormContext";
 import ShowStep from "@/components/ShowStepForm";
 
 import { InvestorRegisterForm } from "@/components/InvestorRegisterForm";
 
 export default function InvestorForm() {
-  const { handleStepChange } = useFormState();
   return (
     <div>
       <div className="text-white">

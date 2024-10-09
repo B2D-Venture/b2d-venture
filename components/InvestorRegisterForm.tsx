@@ -22,12 +22,12 @@ import {
 
 // Combine schemas
 const formSchema = CalendarFormSchema.extend({
-  firstName: z.string(),
-  lastName: z.string(),
-  nationalIdCard: z.string(),
-  emailAddress: z.string(),
-  nationality: z.string(),
-  netWorth: z.string(),
+  firstName: z.string().min(1, "First name is required").max(255, "First name is too long"),
+  lastName: z.string().min(1, "Last name is required").max(255, "Last name is too long"),
+  nationalIdCard: z.string().regex(/^\d+$/, "National ID card must be numeric").max(15, "National ID Card is too long"),
+  emailAddress: z.string().email("Invalid email address").min(1, "Email is required"),
+  nationality: z.string().min(1, "Nationality is required").max(60, "Nationality is too long"),
+  netWorth: z.string().regex(/^\d+$/, "Net worth must be a valid number").min(1, "Net worth is required"),
 });
 
 export function InvestorRegisterForm() {
@@ -47,6 +47,7 @@ export function InvestorRegisterForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    handleStepChange(2)
   }
 
   return (
@@ -77,6 +78,7 @@ export function InvestorRegisterForm() {
                     <FormControl>
                       <Input data-id="firstname-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -92,6 +94,7 @@ export function InvestorRegisterForm() {
                     <FormControl>
                       <Input data-id="lastname-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -109,6 +112,7 @@ export function InvestorRegisterForm() {
                     <FormControl>
                       <Input data-id="nid-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -134,6 +138,7 @@ export function InvestorRegisterForm() {
                     <FormControl>
                       <Input data-id="email-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -149,6 +154,7 @@ export function InvestorRegisterForm() {
                     <FormControl>
                       <Input data-id="national-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -169,6 +175,7 @@ export function InvestorRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -189,7 +196,6 @@ export function InvestorRegisterForm() {
               </Button>
 
               <Button
-                onClick={() => handleStepChange(2)}
                 type="submit"
                 className="w-[211px] h-[45px] bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 ease-in-out font-bold"
               >
