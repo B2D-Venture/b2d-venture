@@ -34,7 +34,7 @@ export function CalendarForm({ label, field, classNameLabel }: CalendarFormProps
   return (
     <FormItem className="flex flex-col">
       <FormLabel className={`${classNameLabel}`}>{ label }</FormLabel>
-      <Popover>
+      <Popover modal={true} >
         <PopoverTrigger asChild>
           <FormControl>
             <Button
