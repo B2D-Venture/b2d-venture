@@ -193,7 +193,7 @@ export function CompanyRegisterForm() {
                 control={form.control}
                 name="dob"
                 render={({ field }) => (
-                  <CalendarForm label={"Date"} field={field} />
+                  <CalendarForm label={"Date"} field={field} classNameLabel={"text-[20px]"} />
                 )}
               />
             </div>

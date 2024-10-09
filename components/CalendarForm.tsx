@@ -27,12 +27,13 @@ export const CalendarFormSchema = z.object({
 interface CalendarFormProps {
   label: string;
   field: any;
+  classNameLabel: string;
 }
 
-export function CalendarForm({ label, field }: CalendarFormProps) {
+export function CalendarForm({ label, field, classNameLabel }: CalendarFormProps) {
   return (
     <FormItem className="flex flex-col">
-      <FormLabel className="text-[20px]">{ label }</FormLabel>
+      <FormLabel className={`${classNameLabel}`}>{ label }</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
