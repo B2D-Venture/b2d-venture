@@ -14,6 +14,9 @@ const nextConfig = {
       "lh3.googleusercontent.com",
     ],
   },
+  env: {
+    DATABASE_URL: process.env.DATABASE_URL,
+  }
 };
 
 export default nextConfig;
