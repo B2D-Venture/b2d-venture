@@ -15,8 +15,8 @@ export const InvestorTable = pgTable("investor", {
     email: varchar('email').notNull(),
     nationality: varchar('nationality').notNull(),
     networth: integer('networth').notNull(),
-    investableAmount: real('investable_amount').notNull(),
-    status: boolean('status').notNull(),
+    investableAmount: real('investable_amount').default(0),
+    status: boolean('status').default(false),
 });
 
 export const CompanyTable = pgTable("company", {

@@ -15,6 +15,13 @@
       "when": 1728317167639,
       "tag": "0001_slim_ken_ellis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728482124298,
+      "tag": "0002_lean_madame_web",
+      "breakpoints": true
     }
   ]
 }
