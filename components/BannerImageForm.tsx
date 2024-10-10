@@ -4,6 +4,7 @@ export function BannerImageForm() {
   return (
     <div className="relative">
       <input
+        data-id="banner-input"
         id="banner"
         type="file"
         className="absolute inset-0 cursor-pointer opacity-0"

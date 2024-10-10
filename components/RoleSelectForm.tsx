@@ -62,12 +62,12 @@ const RoleSelectForm = () => {
         </div>
         <div className="grid justify-items-center">
           <button
+            data-id="submit-role"
             onClick={handleSubmit(handleClickSubmitRole)}
-            className={`submit-role-btn ${
-              hasClickRole
-                ? "cursor-pointer bg-[#878788]"
-                : "cursor-not-allowed bg-[#adafb4] hover:bg-[#8a8b8f]"
-            }`}
+            className={`submit-role-btn ${hasClickRole
+              ? "cursor-pointer bg-[#878788]"
+              : "cursor-not-allowed bg-[#adafb4] hover:bg-[#8a8b8f]"
+              }`}
             disabled={!hasClickRole}
           >
             Confirm

@@ -2,14 +2,14 @@
 
 import React from "react";
 import { FormProvider } from "@/components/FormContext";
-import FormStep from "@/components/FormStep";
+import FormStep from "@/components/form/FormStep";
 
 const RoleRegister = () => {
   return (
     <div className="flex justify-center items-center min-h-scree p-6">
-        <FormProvider>
-          <FormStep />
-        </FormProvider>
+      <FormProvider>
+        <FormStep />
+      </FormProvider>
     </div>
   );
 };

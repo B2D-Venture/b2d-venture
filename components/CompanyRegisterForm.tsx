@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/CalendarForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
+import { useFormState } from "./FormContext"
 
 import {
   Form,
@@ -21,9 +22,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Description } from "@radix-ui/react-dialog";
+import data from '../node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d';
 
 // Combine schemas
-const formSchema = CalendarFormSchema.extend({
+const formSchema = z.object({
   companyName: z.string(),
   abbreviation: z.string(),
   description: z.string(),
@@ -35,6 +37,7 @@ const formSchema = CalendarFormSchema.extend({
 });
 
 export function CompanyRegisterForm() {
+  const { handleStepChange } = useFormState();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +63,7 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -83,6 +86,7 @@ export function CompanyRegisterForm() {
                     <FormLabel className="text-[20px]">Name</FormLabel>
                     <FormControl>
                       <Input
+                        data-id="company-input"
                         className="bg-[#bfbfbf]"
                         placeholder="companyName"
                         {...field}
@@ -102,6 +106,7 @@ export function CompanyRegisterForm() {
                     <FormLabel className="text-[20px]">Abbreviation</FormLabel>
                     <FormControl>
                       <Input
+                        data-id="abbr-input"
                         className="bg-[#bfbfbf]"
                         placeholder="XXXX"
                         {...field}
@@ -120,7 +125,7 @@ export function CompanyRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Description</FormLabel>
                     <FormControl>
-                      <Input className="bg-[#bfbfbf]" {...field} />
+                      <Input data-id="desc-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -136,6 +141,7 @@ export function CompanyRegisterForm() {
                     <FormLabel className="text-[20px]">Funding Goal</FormLabel>
                     <FormControl>
                       <Input
+                        data-id="funding-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
                         {...field}
@@ -157,6 +163,7 @@ export function CompanyRegisterForm() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        data-id="min-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
                         {...field}
@@ -178,6 +185,7 @@ export function CompanyRegisterForm() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        data-id="max-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
                         {...field}
@@ -193,7 +201,7 @@ export function CompanyRegisterForm() {
                 control={form.control}
                 name="dob"
                 render={({ field }) => (
-                  <CalendarForm label={"Date"} field={field} classNameLabel={"text-[20px]"} />
+                  <CalendarForm label={"Deadline"} field={field} />
                 )}
               />
             </div>
@@ -207,6 +215,7 @@ export function CompanyRegisterForm() {
                     <FormLabel className="text-[20px]">Security Type</FormLabel>
                     <FormControl>
                       <Input
+                        data-id="sec-input"
                         className="bg-[#bfbfbf]"
                         placeholder=""
                         {...field}
@@ -228,6 +237,7 @@ export function CompanyRegisterForm() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        data-id="share-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
                         {...field}
@@ -256,7 +266,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-2">
             </div>
             <div className="col-start-3">
-              <Button type="submit" className="w-full">
+              <Button onClick={() => handleStepChange(1)} type="submit" className="w-full">
                 Submit
               </Button>
             </div>

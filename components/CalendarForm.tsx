@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
 
 export const CalendarFormSchema = z.object({
   dob: z.date({
@@ -26,18 +26,25 @@ export const CalendarFormSchema = z.object({
 
 interface CalendarFormProps {
   label: string;
-  field: any;
-  classNameLabel: string;
+  field: {
+    onChange: (date: Date | undefined) => void;
+    value: Date | undefined;
+  };
 }
 
-export function CalendarForm({ label, field, classNameLabel }: CalendarFormProps) {
+export function CalendarForm({ label, field }: CalendarFormProps) {
+  const handleDateChange = (date: Date | undefined) => {
+    field.onChange(date);
+  };
+
   return (
     <FormItem className="flex flex-col">
-      <FormLabel className={`${classNameLabel}`}>{ label }</FormLabel>
+      <FormLabel className="text-[20px]">{ label }</FormLabel>
       <Popover modal={true} >
         <PopoverTrigger asChild>
           <FormControl>
             <Button
+              data-id="date"
               variant={"outline"}
               className={cn(
                 "w-full pl-3 text-left font-normal bg-[#bfbfbf]",
@@ -53,7 +60,7 @@ export function CalendarForm({ label, field, classNameLabel }: CalendarFormProps
           <Calendar
             mode="single"
             selected={field.value}
-            onSelect={field.onChange}
+            onSelect={handleDateChange}
             disabled={(date) =>
               date > new Date() || date < new Date("1900-01-01")
             }
