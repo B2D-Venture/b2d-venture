@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { InvestorFormData } from "../types/index";
-import { InvestorTable } from "./schema";
+import { InvestorFormData, InvestorRequestData } from "../types/index";
+import { InvestorTable, InvestorRequestTable } from "./schema";
 import {neon} from "@neondatabase/serverless";
 import dotenv from 'dotenv';
 import path from 'path';
@@ -24,7 +24,17 @@ export async function addInvestor(investor: InvestorFormData) {
     birthDate: investor.birthDate ? new Date(investor.birthDate).toISOString() : '',
   };
 
-  return await db.insert(InvestorTable).values(investorData).execute();
+  const insertedInvestor = await db
+    .insert(InvestorTable)
+    .values(investorData)
+    .returning({ investorId: InvestorTable.id })
+    .execute();
+
+  return insertedInvestor[0]?.investorId;
+}
+
+export async function addInvestorRequest(request: InvestorRequestData) {
+  return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
 

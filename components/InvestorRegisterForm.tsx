@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
 import { useFormState } from "./FormContext"
-import { addInvestor } from "@/lib/db";
+import { addInvestor, addInvestorRequest } from "@/lib/db";
 
 import {
   Form,
@@ -59,8 +59,12 @@ export function InvestorRegisterForm() {
     console.log("Form Values After Formatting:", values);
   
     addInvestor(values)
-      .then(() => handleStepChange(2))
-      .catch((err) => console.error("Error adding investor:", err));
+    .then((investorId) => {
+      console.log("Investor ID:", investorId);
+      handleStepChange(2);
+      addInvestorRequest({ investorId, approval: false });
+    })
+    .catch((err) => console.error("Error adding investor:", err));
   };
 
   return (

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { CompanyLogoBoxProps } from "@/types";
 
 const CompanyLogoBox = ({
   logoUrl,

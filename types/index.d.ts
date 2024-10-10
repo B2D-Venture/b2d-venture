@@ -59,6 +59,11 @@ type InvestorFormData = {
   birthDate: Date;
 }
 
+type InvestorRequestData = {
+  investorId: number;
+  approval: boolean;
+}
+
 
 interface InvestmentItemProps {
   logoUrl: string;
