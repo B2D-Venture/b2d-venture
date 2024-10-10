@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
@@ -35,6 +35,10 @@ const formSchema = z.object({
 
 export function InvestorRegisterForm() {
   const { handleStepChange } = useFormState();
+
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email ?? "";
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,7 +46,7 @@ export function InvestorRegisterForm() {
       firstName: "",
       lastName: "",
       nationalId: "",
-      email: "",
+      email: userEmail,
       nationality: "",
       networth: 0,
       birthDate: undefined,
@@ -51,20 +55,20 @@ export function InvestorRegisterForm() {
 
   const onSubmit = (values: any) => {
     console.log("Form Values Before Submit:", values);
-  
+
     if (values.birthDate) {
       values.birthDate = new Date(values.birthDate).toISOString();
     }
-  
+
     console.log("Form Values After Formatting:", values);
-  
+
     addInvestor(values)
-    .then((investorId) => {
-      console.log("Investor ID:", investorId);
-      handleStepChange(2);
-      addInvestorRequest({ investorId, approval: false });
-    })
-    .catch((err) => console.error("Error adding investor:", err));
+      .then((investorId) => {
+        console.log("Investor ID:", investorId);
+        handleStepChange(2);
+        addInvestorRequest({ investorId, approval: false });
+      })
+      .catch((err) => console.error("Error adding investor:", err));
   };
 
   return (
@@ -160,7 +164,12 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Email Address</FormLabel>
                     <FormControl>
-                      <Input data-id="email-input" className="bg-[#bfbfbf]" {...field} />
+                      <Input
+                        data-id="email-input"
+                        className="bg-[#bfbfbf] cursor-not-allowed"
+                        {...field}
+                        disabled
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

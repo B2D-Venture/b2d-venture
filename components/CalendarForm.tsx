@@ -28,15 +28,12 @@ interface CalendarFormProps {
 
 export function CalendarForm({ label, field }: CalendarFormProps) {
   const handleDateChange = (date: Date | undefined) => {
-    console.log("Selected Date:", date);
     field.onChange(date);
   };
 
-  console.log("Field Value:", field.value);
-
   return (
     <FormItem className="flex flex-col">
-      <FormLabel>{ label }</FormLabel>
+      <FormLabel className="text-[20px]">{ label }</FormLabel>
       <Popover modal={true} >
         <PopoverTrigger asChild>
           <FormControl>
