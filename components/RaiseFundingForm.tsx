@@ -117,7 +117,7 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
               control={form.control}
               name="dob"
               render={({ field }) => (
-                <CalendarForm label={"Date"} field={field} classNameLabel={"text-[17px]"} />
+                <CalendarForm label={"Date"} field={field} />
               )}
             />
           </div>

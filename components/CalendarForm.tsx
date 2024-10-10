@@ -16,7 +16,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
 
+export const CalendarFormSchema = z.object({
+  dob: z.date({
+    required_error: "A date is required.",
+  }),
+});
 
 interface CalendarFormProps {
   label: string;
