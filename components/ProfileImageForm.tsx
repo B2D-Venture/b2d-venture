@@ -1,49 +1,37 @@
-import { Label } from "@/components/ui/label";
+import { UploadButton } from '@/src/utils/uploadthing';
+import React, { useState } from 'react';
 
 export function ProfileImageForm({ setProfileImage }: { setProfileImage: (image: string) => void }) {
+  const [imageSrc, setImageSrc] = useState("");
+
+  const defaultImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd5avdba8EiOZH8lmV3XshrXx7dKRZvhx-A&s";
+
   return (
-    <>
-      <div className="relative">
-        <input
-          data-id="profile-input"
-          id="picture"
-          type="file"
-          className="w-40 h-40 max-sm:w-20 max-sm:h-20 rounded-full overflow-hidden absolute inset-0 opacity-0 cursor-pointer bg-red-600"
-          accept="image/png, image/jpeg"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                const imgElement = document.getElementById(
-                  "preview-image"
-                ) as HTMLImageElement;
-                if (imgElement) imgElement.src = reader.result as string;
-              };
-              reader.readAsDataURL(file);
-              setProfileImage(file.name);
-              const profileText = document.getElementById("profile-text");
-              if (profileText) {
-                profileText.innerText = "";
-              }
-            }
-          }}
-        />
-        <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
-          <img
-            id="preview-image"
-            src=""
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <label
-          htmlFor="picture"
-          className="absolute inset-0 flex items-center justify-center text-center cursor-pointer text-gray-600"
-        >
-          <p id="profile-text">Upload Image</p>
-        </label>
+    <div className="relative flex flex-col items-center">
+      <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+        {imageSrc ? (
+          <img src={imageSrc} alt="Uploaded" className="w-full h-full object-cover" />
+        ) : (
+          <img src={defaultImage} alt="Default" className="w-full h-full object-cover opacity-50" />
+        )}
       </div>
-    </>
+
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          if (res && res.length > 0) {
+            const uploadedFile = res[0];
+            setImageSrc(uploadedFile.url);
+            setProfileImage(uploadedFile.url);
+          }
+        }}
+        onUploadError={(error: Error) => {
+          alert(`ERROR! ${error.message}`);
+        }}
+          className="mt-4 bg-[#F5F5F7] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#B7B7B7] transition duration-200 ease-in-out"
+      />
+
+      <p className="mt-2 text-xs text-gray-500">Upload a clear image of yourself.</p>
+    </div>
   );
 }
