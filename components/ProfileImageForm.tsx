@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 
-export function ProfileImageForm() {
+export function ProfileImageForm({ setProfileImage }: { setProfileImage: (image: string) => void }) {
   return (
     <>
       <div className="relative">
@@ -21,6 +21,7 @@ export function ProfileImageForm() {
                 if (imgElement) imgElement.src = reader.result as string;
               };
               reader.readAsDataURL(file);
+              setProfileImage(file.name);
               const profileText = document.getElementById("profile-text");
               if (profileText) {
                 profileText.innerText = "";

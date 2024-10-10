@@ -6,10 +6,10 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/CalendarForm";
 import { useFormState } from "./FormContext"
+import { addInvestor } from "@/lib/db";
 
 import {
   Form,
@@ -21,34 +21,47 @@ import {
 } from "@/components/ui/form";
 
 // Combine schemas
-const formSchema = CalendarFormSchema.extend({
+const formSchema = z.object({
+  profileImage: z.string().min(1, "Profile image is required"),
   firstName: z.string().min(1, "First name is required").max(255, "First name is too long"),
   lastName: z.string().min(1, "Last name is required").max(255, "Last name is too long"),
-  nationalIdCard: z.string().regex(/^\d+$/, "National ID card must be numeric").max(15, "National ID Card is too long"),
-  emailAddress: z.string().email("Invalid email address").min(1, "Email is required"),
+  nationalId: z.string().regex(/^\d+$/, "National ID card must be numeric").max(15, "National ID Card is too long"),
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
   nationality: z.string().min(1, "Nationality is required").max(60, "Nationality is too long"),
-  netWorth: z.string().regex(/^\d+$/, "Net worth must be a valid number").min(1, "Net worth is required"),
+  networth: z.number().min(0, "Net worth cannot be negative"),
+  birthDate: z.date({ required_error: "Birth date is required." }),
 });
+
 
 export function InvestorRegisterForm() {
   const { handleStepChange } = useFormState();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      profileImage: "",
       firstName: "",
       lastName: "",
-      nationalIdCard: "",
-      emailAddress: "",
+      nationalId: "",
+      email: "",
       nationality: "",
-      netWorth: "",
-      dob: undefined,
+      networth: 0,
+      birthDate: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    handleStepChange(2)
-  }
+  const onSubmit = (values: any) => {
+    console.log("Form Values Before Submit:", values);
+  
+    if (values.birthDate) {
+      values.birthDate = new Date(values.birthDate).toISOString();
+    }
+  
+    console.log("Form Values After Formatting:", values);
+  
+    addInvestor(values)
+      .then(() => handleStepChange(2))
+      .catch((err) => console.error("Error adding investor:", err));
+  };
 
   return (
     <Form {...form}>
@@ -56,8 +69,15 @@ export function InvestorRegisterForm() {
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
             </div>
+            <FormField
+              control={form.control}
+              name="profileImage"
+              render={() => (
+                <FormMessage />
+              )}
+            />
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
                 Please upload only a profile image of a real person. Do not
@@ -103,7 +123,7 @@ export function InvestorRegisterForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="nationalIdCard"
+                name="nationalId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">
@@ -121,7 +141,7 @@ export function InvestorRegisterForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="dob"
+                name="birthDate"
                 render={({ field }) => (
                   <CalendarForm label={"Birthdate"} field={field} />
                 )}
@@ -131,7 +151,7 @@ export function InvestorRegisterForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="emailAddress"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">Email Address</FormLabel>
@@ -163,7 +183,7 @@ export function InvestorRegisterForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="netWorth"
+                name="networth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">Net Worth</FormLabel>
@@ -172,7 +192,12 @@ export function InvestorRegisterForm() {
                         data-id="net-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
-                        {...field}
+                        type="number"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          field.onChange(value ? parseFloat(value) : 0);
+                        }}
+                        value={field.value || 0}
                       />
                     </FormControl>
                     <FormMessage />

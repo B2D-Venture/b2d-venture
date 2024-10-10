@@ -48,6 +48,18 @@ interface InvestorProfileCardProps {
   netWorth: number;
 }
 
+type InvestorFormData = {
+  profileImage: string;
+  firstName: string;
+  lastName: string;
+  nationalId: string;
+  email: string;
+  nationality: string;
+  networth: number;
+  birthDate: Date;
+}
+
+
 interface InvestmentItemProps {
   logoUrl: string;
   companyAbbr: string;

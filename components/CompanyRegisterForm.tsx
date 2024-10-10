@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/CalendarForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
 
@@ -25,7 +25,7 @@ import { Description } from "@radix-ui/react-dialog";
 import data from '../node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d';
 
 // Combine schemas
-const formSchema = CalendarFormSchema.extend({
+const formSchema = z.object({
   companyName: z.string(),
   abbreviation: z.string(),
   description: z.string(),
@@ -63,7 +63,7 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>

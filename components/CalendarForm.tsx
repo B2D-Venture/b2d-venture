@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,18 +17,23 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-export const CalendarFormSchema = z.object({
-  dob: z.date({
-    required_error: "A date is required.",
-  }),
-});
 
 interface CalendarFormProps {
   label: string;
-  field: any;
+  field: {
+    onChange: (date: Date | undefined) => void;
+    value: Date | undefined;
+  };
 }
 
 export function CalendarForm({ label, field }: CalendarFormProps) {
+  const handleDateChange = (date: Date | undefined) => {
+    console.log("Selected Date:", date);
+    field.onChange(date);
+  };
+
+  console.log("Field Value:", field.value);
+
   return (
     <FormItem className="flex flex-col">
       <FormLabel className="text-[20px]">{ label }</FormLabel>
@@ -53,7 +57,7 @@ export function CalendarForm({ label, field }: CalendarFormProps) {
           <Calendar
             mode="single"
             selected={field.value}
-            onSelect={field.onChange}
+            onSelect={handleDateChange}
             disabled={(date) =>
               date > new Date() || date < new Date("1900-01-01")
             }
