@@ -28,7 +28,6 @@ interface DealTermBtnProps {
   hoverBgColor: string;
   borderColor: string;
   hoverBorderColor: string;
-  className: string;
 }
 
 interface CompanyLogoBoxProps {
@@ -98,7 +97,6 @@ interface OutputTextBoxPercentageProps {
   value: string | number;
   classNameLabel?: string;
   classNameValue?: string;
-
 }
 
 declare namespace NodeJS {
