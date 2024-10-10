@@ -65,5 +65,5 @@ export const InvestorRequestTable = pgTable("investor_request", {
     id: serial('id').primaryKey().notNull(),
     investorId: integer('investor_id').references(() => InvestorTable.id).notNull(),
     approval: boolean('approval').notNull(),
-    requestDate: timestamp('request_date').notNull(),
+    requestDate: timestamp('request_date').defaultNow().notNull(),
 });
