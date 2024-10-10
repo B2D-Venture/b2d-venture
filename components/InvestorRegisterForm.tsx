@@ -86,11 +86,9 @@ export function InvestorRegisterForm() {
                 <FormMessage />
               )}
             />
-            <div className="text-[12px] text-[#949191] mt-5">
-              <p>
-                Please upload only a profile image of a real person. Do not
-                upload images of cartoons, animals, objects, or any other type
-                of image. Non-compliant uploads may be rejected.
+            <div className="text-sm bg-[#c4c4c3d2] text-gray-600 mt-4 text-center px-4 rounded-md">
+              <p className="font-medium leading-relaxed">
+                Please upload a profile image of a real person. Non-compliant uploads, including images of cartoons, animals, or objects, may be rejected.
               </p>
             </div>
           </div>

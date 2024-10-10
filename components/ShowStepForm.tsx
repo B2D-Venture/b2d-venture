@@ -22,7 +22,7 @@ const ShowStep = ({ step }: { step: number }) => {
             <p className="text-sm">Fill Out Information</p>
           </span>
         </li>
-        <li className={`flex items-center space-x-2.5 rtl:space-x-reverse ${step >= 3 ? 'text-blue-600' : 'text-gray-400'}`}>
+        <li className={`flex items-center space-x-2.5 rtl:space-x-reverse ${step >= 3 ? 'text-black' : 'text-gray-400'}`}>
           <span className={`flex items-center justify-center w-8 h-8 border rounded-full shrink-0 ${step >= 3 ? 'bg-black border-black' : 'border-gray-500'}`}>
             <span className={`${step >= 3 ? 'text-white' : 'text-gray-400'}`}>3</span>
           </span>

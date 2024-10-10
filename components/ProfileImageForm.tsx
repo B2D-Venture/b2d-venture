@@ -30,8 +30,6 @@ export function ProfileImageForm({ setProfileImage }: { setProfileImage: (image:
         }}
           className="mt-4 bg-[#F5F5F7] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#B7B7B7] transition duration-200 ease-in-out"
       />
-
-      <p className="mt-2 text-xs text-gray-500">Upload a clear image of yourself.</p>
     </div>
   );
 }
