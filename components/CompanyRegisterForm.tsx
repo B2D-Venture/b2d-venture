@@ -81,7 +81,7 @@ export function CompanyRegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
-          <div className="col-span-3">
+            <div className="col-span-3">
               <BannerImageForm />
             </div>
             <div className="col-span-2">
@@ -271,6 +271,21 @@ export function CompanyRegisterForm() {
               </div>
             </div>
             <div className="col-span-2">
+            </div>
+            <div className="col-start-1">
+              <Button
+                onClick={() => handleStepChange(-2)}
+                className="
+                  w-[211px] h-[45px] 
+                  bg-gray-200 text-gray-700 
+                  rounded-lg shadow-md 
+                  hover:bg-gray-300 hover:text-gray-900 
+                  font-bold text-base 
+                  transition duration-200 ease-in-out
+                "
+              >
+                Back
+              </Button>
             </div>
             <div className="col-start-3">
               <Button onClick={() => handleStepChange(1)} type="submit" className="w-full">

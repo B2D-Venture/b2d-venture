@@ -1,12 +1,10 @@
 "use client";
 
-import { useFormState } from "../FormContext";
 import ShowStep from "@/components/ShowStepForm";
 
 import { CompanyRegisterForm } from "@/components/CompanyRegisterForm";
 
 export default function CompanyForm() {
-  const { handleStepChange } = useFormState();
   return (
     <div>
       <div className="flex flex-col justify-center items-center min-h-screen">
@@ -20,12 +18,6 @@ export default function CompanyForm() {
           <CompanyRegisterForm />
         </div>
       </div>
-      {/* <button
-        onClick={() => handleStepChange(-2)}
-        className="w-[211px] h-[51px] text-center bg-white text-black text-base font-bold"
-      >
-        Back
-      </button> */}
     </div>
   );
 }
