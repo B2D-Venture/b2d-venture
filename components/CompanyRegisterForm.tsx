@@ -38,7 +38,22 @@ const formSchema = z.object({
   priceShare: z.number().min(0, "Price per share cannot be negative"),
   // pitch: z.string().min(1, "Pitch is required"),
   status: z.boolean().default(false),
-});
+}).refine((data) => data.minInvest <= data.maxInvest, {
+  message: "Minimum investment cannot be greater than maximum investment.",
+  path: ["minInvest"],
+})
+  .refine((data) => data.minInvest <= data.fundingTarget, {
+    message: "Minimum investment cannot be greater than the funding target.",
+    path: ["minInvest"],
+  })
+  .refine((data) => data.maxInvest <= data.fundingTarget, {
+    message: "Maximum investment cannot be greater than the funding target.",
+    path: ["maxInvest"],
+  })
+  .refine((data) => data.priceShare <= data.fundingTarget, {
+    message: "Price per share cannot be more than the funding target",
+    path: ["priceShare"]
+  });
 
 export function CompanyRegisterForm() {
   const { handleStepChange } = useFormState();
