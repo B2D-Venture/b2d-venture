@@ -77,6 +77,7 @@ export function CompanyRegisterForm() {
 
   const setBannerImage = (fileName: string) => {
     form.setValue("banner", fileName);
+    form.trigger("banner");
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {

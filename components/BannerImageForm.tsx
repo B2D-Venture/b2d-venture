@@ -1,44 +1,55 @@
+"use client";
+import React, { useState } from 'react';
+import { UploadDropzone } from '@/src/utils/uploadthing';
+
 export function BannerImageForm({ setBannerImage }: { setBannerImage: (image: string) => void }) {
+  const [imageSrc, setImageSrc] = useState<string>("");
+
   return (
     <div className="relative">
-      <input
-        data-id="banner-input"
-        id="banner"
-        type="file"
-        className="absolute inset-0 cursor-pointer opacity-0"
-        accept="image/png, image/jpeg"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const imgElement = document.getElementById(
-                "banner-image"
-              ) as HTMLImageElement;
-              if (imgElement) imgElement.src = reader.result as string;
-            };
-            reader.readAsDataURL(file);
-
-            setBannerImage(file.name);
-            const bannerText = document.querySelector(".banner-text");
-            if (bannerText) {
-              bannerText.textContent = "";
-            }
-          }
-        }}
-      />
-      <div className="h-52 overflow-hidden flex items-center justify-center text-center rounded-md bg-[#bfbfbf]">
+      {imageSrc ? (
         <img
-          id="banner-image"
-          src=""
+          src={imageSrc}
+          alt="Uploaded Banner"
+          className="w-full h-52 object-cover rounded-md shadow-md"
         />
-      </div>
-      <label
-        htmlFor="banner"
-        className="absolute inset-0 flex items-center justify-center text-center cursor-pointer text-gray-600 bg-transparent"
-      >
-        <p className="banner-text">Upload Banner</p>
-      </label>
+      ) : (
+        <div className="h-52 flex items-center justify-center text-center rounded-md bg-[#BFBFBF] border border-dashed border-gray-300 shadow-md">
+          <label
+            htmlFor="banner"
+            className="absolute inset-0 flex flex-col items-center justify-center text-center cursor-pointer bg-transparent"
+          >
+            <UploadDropzone
+              endpoint="imageUploader"
+              className="border-none"
+              onClientUploadComplete={(res) => {
+                if (res && res.length > 0) {
+                  const uploadedFile = res[0];
+                  setImageSrc(uploadedFile.url);
+                  setBannerImage(uploadedFile.url);
+                }
+              }}
+              onUploadError={(error: Error) => {
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
+          </label>
+        </div>
+      )}
+
+      {imageSrc && (
+        <div className="mt-4 flex justify-center">
+          <button
+            className="px-6 py-2 bg-[#d9b834] text-white font-semibold rounded-lg shadow-lg hover:bg-[#c6a329] hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-yellow-400"
+            onClick={() => {
+              setImageSrc("");
+              setBannerImage("");
+            }}
+          >
+            Remove Banner
+          </button>
+        </div>
+      )}
     </div>
   );
 }
