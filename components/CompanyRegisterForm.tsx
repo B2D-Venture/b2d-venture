@@ -21,19 +21,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Description } from "@radix-ui/react-dialog";
-import data from '../node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d';
+import Pitch from "./Pitch";
 
 // Combine schemas
 const formSchema = z.object({
-  companyName: z.string(),
-  abbreviation: z.string(),
-  description: z.string(),
-  fundingGoal: z.string(),
-  minimumInvestment: z.string(),
-  maximumInvestment: z.string(),
-  pricePerShare: z.string(),
-  securityType: z.string(),
+  logo: z.string().min(1, "Logo is required"),
+  banner: z.string().min(1, "Banner is required"),
+  name: z.string().min(1, "Company name is required"),
+  abbr: z.string().min(1, "Abbreviation is required"),
+  description: z.string().min(1, "Description is required"),
+  fundingTarget: z.number().min(0, "Funding target cannot be negative"),
+  minInvest: z.number().min(0, "Minimum investment cannot be negative"),
+  maxInvest: z.number().min(0, "Maximum investment cannot be negative"),
+  deadline: z.date({ required_error: "Deadline is required." }),
+  securityType: z.string().min(1, "Security type is required"),
+  priceShare: z.number().min(0, "Price per share cannot be negative"),
+  pitch: z.string().min(1, "Pitch is required"),
+  status: z.boolean().default(false),
 });
 
 export function CompanyRegisterForm() {
@@ -41,15 +45,18 @@ export function CompanyRegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
-      abbreviation: "",
+      logo: "",
+      banner: "",
+      name: "",
+      abbr: "",
       description: "",
-      fundingGoal: "",
-      minimumInvestment: "",
-      maximumInvestment: "",
-      dob: undefined,
-      pricePerShare: "",
+      fundingTarget: 0,
+      minInvest: 0,
+      maxInvest: 0,
+      deadline: undefined,
       securityType: "",
+      priceShare: 0,
+      pitch: "",
     },
   });
 
@@ -63,7 +70,7 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("logo", file)} />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -80,7 +87,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-2">
               <FormField
                 control={form.control}
-                name="companyName"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">Name</FormLabel>
@@ -100,7 +107,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="abbreviation"
+                name="abbr"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">Abbreviation</FormLabel>
@@ -135,7 +142,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="fundingGoal"
+                name="fundingTarget"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">Funding Goal</FormLabel>
@@ -155,7 +162,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="minimumInvestment"
+                name="minInvest"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">
@@ -177,7 +184,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="maximumInvestment"
+                name="maxInvest"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">
@@ -199,7 +206,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="dob"
+                name="deadline"
                 render={({ field }) => (
                   <CalendarForm label={"Deadline"} field={field} />
                 )}
@@ -229,7 +236,7 @@ export function CompanyRegisterForm() {
             <div className="col-span-1">
               <FormField
                 control={form.control}
-                name="pricePerShare"
+                name="priceShare"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[20px]">
