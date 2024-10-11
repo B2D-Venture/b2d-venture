@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Pitch from "./Pitch";
+import Tiptap from "./form/company/Tiptap";
 
 // Combine schemas
 const formSchema = z.object({
@@ -36,7 +36,7 @@ const formSchema = z.object({
   deadline: z.date({ required_error: "Deadline is required." }),
   securityType: z.string().min(1, "Security type is required"),
   priceShare: z.number().min(0, "Price per share cannot be negative"),
-  // pitch: z.string().min(1, "Pitch is required"),
+  pitch: z.string().min(1, "Pitch is required"),
   status: z.boolean().default(false),
 }).refine((data) => data.minInvest <= data.maxInvest, {
   message: "Minimum investment cannot be greater than maximum investment.",
@@ -71,7 +71,7 @@ export function CompanyRegisterForm() {
       deadline: undefined,
       securityType: "",
       priceShare: 0,
-      // pitch: "",
+      pitch: "",
     },
   });
 
@@ -335,6 +335,22 @@ export function CompanyRegisterForm() {
               </div>
             </div>
             <div className="col-span-2">
+            </div>
+
+            <div className="col-start-1 col-span-3">
+              <h2 className="text-3xl text-gray-700">Pitch</h2>
+              <FormField
+                control={form.control}
+                name="pitch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Tiptap pitch={field.value} onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="col-start-1">
               <Button
