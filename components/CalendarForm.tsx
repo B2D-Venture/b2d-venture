@@ -30,12 +30,22 @@ interface CalendarFormProps {
     onChange: (date: Date | undefined) => void;
     value: Date | undefined;
   };
+  canSetMoreThanToday?: boolean;
 }
 
-export function CalendarForm({ label, field }: CalendarFormProps) {
+export function CalendarForm({ label, field, canSetMoreThanToday = false }: CalendarFormProps) {
   const handleDateChange = (date: Date | undefined) => {
     field.onChange(date);
   };
+  
+  // Get today's date
+  const today = new Date();
+  // Set time to 00:00:00 for comparison purposes
+  today.setHours(0, 0, 0, 0);
+  
+  // Get yesterday's date
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
 
   return (
     <FormItem className="flex flex-col">
@@ -62,7 +72,9 @@ export function CalendarForm({ label, field }: CalendarFormProps) {
             selected={field.value}
             onSelect={handleDateChange}
             disabled={(date) =>
-              date > new Date() || date < new Date("1900-01-01")
+              canSetMoreThanToday
+                ? date <= today
+                : date > today || date < new Date("1900-01-01") // Disable future dates and dates before 1900
             }
             initialFocus
           />
