@@ -173,7 +173,11 @@ export function CompanyRegisterForm() {
                         data-id="funding-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
-                        {...field}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          field.onChange(value ? parseFloat(value) : 0);
+                        }}
+                        value={field.value || 0}
                       />
                     </FormControl>
                     <FormMessage />
@@ -196,7 +200,11 @@ export function CompanyRegisterForm() {
                         data-id="min-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
-                        {...field}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          field.onChange(value ? parseFloat(value) : 0);
+                        }}
+                        value={field.value || 0}
                       />
                     </FormControl>
                     <FormMessage />
@@ -219,7 +227,11 @@ export function CompanyRegisterForm() {
                         data-id="max-input"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
-                        {...field}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          field.onChange(value ? parseFloat(value) : 0);
+                        }}
+                        value={field.value || 0}
                       />
                     </FormControl>
                     <FormMessage />
