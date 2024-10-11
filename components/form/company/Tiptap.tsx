@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Heading } from "@tiptap/extension-heading";
+import { Toolbar } from "./Toolbar";
 
 export default function Tiptap({
     pitch,
@@ -30,6 +31,7 @@ export default function Tiptap({
 
     return (
         <div className="flex flex-col justify-stretch min-h-[300px]">
+            <Toolbar editor={editor} />
             <EditorContent editor={editor} />
         </div>
     );
