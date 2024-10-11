@@ -36,7 +36,7 @@ const formSchema = z.object({
   deadline: z.date({ required_error: "Deadline is required." }),
   securityType: z.string().min(1, "Security type is required"),
   priceShare: z.number().min(0, "Price per share cannot be negative"),
-  pitch: z.string().min(1, "Pitch is required"),
+  // pitch: z.string().min(1, "Pitch is required"),
   status: z.boolean().default(false),
 });
 
@@ -56,14 +56,18 @@ export function CompanyRegisterForm() {
       deadline: undefined,
       securityType: "",
       priceShare: 0,
-      pitch: "",
+      // pitch: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const setBannerImage = (fileName: string) => {
+    form.setValue("banner", fileName);
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("Submitting form with values:", values);
     handleStepChange(1);
-  }
+  };
 
   return (
     <Form {...form}>
@@ -92,7 +96,7 @@ export function CompanyRegisterForm() {
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
             <div className="col-span-3">
-              <BannerImageForm />
+              <BannerImageForm setBannerImage={setBannerImage} />
               <div className="mt-3">
                 <FormField
                   control={form.control}
@@ -245,7 +249,7 @@ export function CompanyRegisterForm() {
                 control={form.control}
                 name="deadline"
                 render={({ field }) => (
-                  <CalendarForm label={"Deadline"} field={field} />
+                  <CalendarForm label={"Deadline"} field={field} canSetMoreThanToday={true} />
                 )}
               />
             </div>

@@ -1,6 +1,4 @@
-import { Label } from "@/components/ui/label";
-
-export function BannerImageForm() {
+export function BannerImageForm({ setBannerImage }: { setBannerImage: (image: string) => void }) {
   return (
     <div className="relative">
       <input
@@ -20,6 +18,8 @@ export function BannerImageForm() {
               if (imgElement) imgElement.src = reader.result as string;
             };
             reader.readAsDataURL(file);
+
+            setBannerImage(file.name);
             const bannerText = document.querySelector(".banner-text");
             if (bannerText) {
               bannerText.textContent = "";
@@ -37,7 +37,7 @@ export function BannerImageForm() {
         htmlFor="banner"
         className="absolute inset-0 flex items-center justify-center text-center cursor-pointer text-gray-600 bg-transparent"
       >
-        <p className="banner-text">Upload Image</p>
+        <p className="banner-text">Upload Banner</p>
       </label>
     </div>
   );
