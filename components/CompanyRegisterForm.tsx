@@ -62,6 +62,7 @@ export function CompanyRegisterForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    handleStepChange(1);
   }
 
   return (
@@ -71,6 +72,15 @@ export function CompanyRegisterForm() {
           <div className="col-span-1 flex flex-col items-center">
             <div>
               <ProfileImageForm setProfileImage={(file) => form.setValue("logo", file)} />
+            </div>
+            <div className="mt-3">
+              <FormField
+                control={form.control}
+                name="logo"
+                render={() => (
+                  <FormMessage />
+                )}
+              />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -83,6 +93,15 @@ export function CompanyRegisterForm() {
           <div className="grid grid-cols-3 gap-4 col-span-3">
             <div className="col-span-3">
               <BannerImageForm />
+              <div className="mt-3">
+                <FormField
+                  control={form.control}
+                  name="banner"
+                  render={() => (
+                    <FormMessage />
+                  )}
+                />
+              </div>
             </div>
             <div className="col-span-2">
               <FormField
@@ -90,7 +109,7 @@ export function CompanyRegisterForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[20px]">Name</FormLabel>
+                    <FormLabel className="text-[20px]">Company Name</FormLabel>
                     <FormControl>
                       <Input
                         data-id="company-input"
@@ -99,6 +118,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -110,7 +130,7 @@ export function CompanyRegisterForm() {
                 name="abbr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[20px]">Abbreviation</FormLabel>
+                    <FormLabel className="text-[20px]">Company Abbreviation</FormLabel>
                     <FormControl>
                       <Input
                         data-id="abbr-input"
@@ -119,6 +139,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -134,6 +155,7 @@ export function CompanyRegisterForm() {
                     <FormControl>
                       <Input data-id="desc-input" className="bg-[#bfbfbf]" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -154,6 +176,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -176,6 +199,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -198,6 +222,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -228,6 +253,7 @@ export function CompanyRegisterForm() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -245,11 +271,17 @@ export function CompanyRegisterForm() {
                     <FormControl>
                       <Input
                         data-id="share-input"
+                        type="number"
                         className="bg-[#bfbfbf]"
                         placeholder="$"
-                        {...field}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          field.onChange(value ? parseFloat(value) : 0);
+                        }}
+                        value={field.value || 0}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -288,7 +320,7 @@ export function CompanyRegisterForm() {
               </Button>
             </div>
             <div className="col-start-3">
-              <Button onClick={() => handleStepChange(1)} type="submit" className="w-full">
+              <Button type="submit" className="w-full">
                 Submit
               </Button>
             </div>
