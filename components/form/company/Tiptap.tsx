@@ -6,6 +6,7 @@ import ToolBar from "./Toolbar";
 import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
+import TextAlign from "@tiptap/extension-text-align";
 
 
 export default function Tiptap({
@@ -15,16 +16,14 @@ export default function Tiptap({
     pitch: string;
     onChange: (richText: string) => void;
 }) {
-
-    const handleChange = (richText: string) => {
-        onChange(richText);
-    }
-
     const editor = useEditor({
         extensions: [
             StarterKit.configure(),
+            TextAlign.configure({
+                types: ["heading", "paragraph"],
+            }),
             Heading.configure({
-              levels: [1, 2, 3],
+                levels: [1, 2, 3],
             }),
             OrderedList.configure({
               HTMLAttributes: {
@@ -32,11 +31,11 @@ export default function Tiptap({
               },
             }),
             BulletList.configure({
-              HTMLAttributes: {
-                class: "list-disc ml-3",
-              },
+                HTMLAttributes: {
+                    class: "list-disc ml-3",
+                },
             }),
-          ],
+        ],
         content: pitch,
         editorProps: {
             attributes: {

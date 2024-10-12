@@ -8,6 +8,9 @@ import {
     Bold,
     Italic,
     Strikethrough,
+    AlignCenter,
+    AlignLeft,
+    AlignRight,
 } from "lucide-react";
 import { ListOrdered } from "lucide-react";
 
@@ -54,6 +57,21 @@ export default function ToolBar({ editor }: { editor: any }) {
             icon: <ListOrdered className="size-4" />,
             onClick: () => editor.chain().focus().toggleOrderedList().run(),
             preesed: editor.isActive("orderedList"),
+        },
+        {
+            icon: <AlignLeft className="size-4" />,
+            onClick: () => editor.chain().focus().setTextAlign("left").run(),
+            preesed: editor.isActive({ textAlign: "left" }),
+        },
+        {
+            icon: <AlignCenter className="size-4" />,
+            onClick: () => editor.chain().focus().setTextAlign("center").run(),
+            preesed: editor.isActive({ textAlign: "center" }),
+        },
+        {
+            icon: <AlignRight className="size-4" />,
+            onClick: () => editor.chain().focus().setTextAlign("right").run(),
+            preesed: editor.isActive({ textAlign: "right" }),
         },
     ];
 
