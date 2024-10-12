@@ -13,6 +13,6 @@ export type HeadingToolProps = {
 export type StarterKitToolProps = {
     editor: Editor | null;
     size: "default" | "sm" | "lg" | null | undefined;
-    type: "bold" | "italic" | "strike" | "bulletList" | "orderedList";
+    type: "bold" | "italic" | "strike" | "bulletList" | "orderedList" | "undo" | "redo";
 };
 

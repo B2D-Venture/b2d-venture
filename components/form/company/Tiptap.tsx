@@ -12,11 +12,21 @@ export default function Tiptap({
     pitch: string;
     onChange: (richText: string) => void;
 }) {
+
+    const handleChange = (richText: string) => {
+        onChange(richText);
+    }
+
     const editor = useEditor({
-        extensions: [StarterKit.configure({
-        }), Heading.configure({
-            levels: [1, 2, 3, 4, 5, 6],
-        })],
+        extensions: [
+            StarterKit.configure({}),
+            Heading.configure({
+                HTMLAttributes: {
+                    1: { class: "text-3xl font-bold" }, // Custom CSS for h1
+                    2: { class: "text-2xl font-bold" }, // Custom CSS for h2
+                    3: { class: "text-xl font-bold" },  // Custom CSS for h3
+                },
+            })],
         content: pitch,
         editorProps: {
             attributes: {

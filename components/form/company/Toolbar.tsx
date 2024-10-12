@@ -22,6 +22,8 @@ export function Toolbar({ editor }: ToolbarProps) {
             <StarterKitTool editor={editor} size="lg" type="strike" />
             <StarterKitTool editor={editor} size="lg" type="bulletList" />
             <StarterKitTool editor={editor} size="lg" type="orderedList" />
+            <StarterKitTool editor={editor} size="lg" type="undo" />
+            <StarterKitTool editor={editor} size="lg" type="redo" />
         </div>
     )
 }

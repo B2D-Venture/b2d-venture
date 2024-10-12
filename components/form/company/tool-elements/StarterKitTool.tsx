@@ -7,6 +7,8 @@ import {
     Italic,
     List,
     ListOrdered,
+    Undo,
+    Redo,
 } from "lucide-react"
 
 const StarterKitTool = ({ editor, size, type }: StarterKitToolProps ) => {
@@ -19,6 +21,8 @@ const StarterKitTool = ({ editor, size, type }: StarterKitToolProps ) => {
         else if (type === "strike") editor.chain().toggleStrike().run();
         else if (type === "bulletList") editor.chain().toggleBulletList().run();
         else if (type === "orderedList") editor.chain().toggleOrderedList().run();
+        else if (type === "undo") editor.chain().undo().run();
+        else if (type === "redo") editor.chain().redo().run();
     };
 
     return (
@@ -32,6 +36,8 @@ const StarterKitTool = ({ editor, size, type }: StarterKitToolProps ) => {
             {type === "strike" && <Strikethrough className="h-4 w-4" />}
             {type === "bulletList" && <List className="h-4 w-4" />}
             {type === "orderedList" && <ListOrdered className="h-4 w-4" />}
+            {type === "undo" && <Undo className="h-4 w-4" />}
+            {type === "redo" && <Redo className="h-4 w-4" />}
         </Toggle>
     )
 }
