@@ -6,6 +6,7 @@ import {
     Bold,
     Italic,
     Strikethrough,
+    Underline,
     AlignCenter,
     AlignLeft,
     AlignRight,
@@ -78,6 +79,11 @@ export default function ToolBar({ editor }: ToolbarProps) {
             preesed: editor.isActive("bold"),
         },
         {
+            icon: <Underline className="size-4" />,
+            onClick: () => editor.chain().focus().toggleUnderline().run(),
+            preesed: editor.isActive("underline"),
+        },
+        {
             icon: <Italic className="size-4" />,
             onClick: () => editor.chain().focus().toggleItalic().run(),
             preesed: editor.isActive("italic"),
@@ -136,7 +142,7 @@ export default function ToolBar({ editor }: ToolbarProps) {
 
     return (
         <div className="px-2 py-1 rounded-md flex justify-between items-start gap-5 w-full flex-wrap border border-gray-700">
-            <div className="flex justify-start items-center gap-5 w-full lg:w-10/12 flex-wrap ">
+            <div className="flex justify-start items-center gap-5 w-full flex-wrap ">
                 {Options.map((option, i) => (
                     <Toggle
                         key={i}
