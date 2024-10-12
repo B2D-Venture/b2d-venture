@@ -10,11 +10,20 @@ import {
     AlignCenter,
     AlignLeft,
     AlignRight,
+    Upload,
 } from "lucide-react";
 import { ListOrdered } from "lucide-react";
+import React, { useCallback } from 'react'
 
 export default function ToolBar({ editor }: ToolbarProps) {
     if (!editor) return null;
+
+    const addImage = useCallback(() => {
+        const url = window.prompt('URL')
+        if (url) {
+            editor.chain().focus().setImage({ src: url }).run()
+        }
+    }, [editor])
 
     const Options = [
         {
@@ -61,6 +70,11 @@ export default function ToolBar({ editor }: ToolbarProps) {
             icon: <AlignRight className="size-4" />,
             onClick: () => editor.chain().focus().setTextAlign("right").run(),
             preesed: editor.isActive({ textAlign: "right" }),
+        },
+        {
+            icon: <Upload className="size-4" />,
+            onClick: () => addImage(),
+            preesed: editor.isActive("image"),
         },
     ];
 

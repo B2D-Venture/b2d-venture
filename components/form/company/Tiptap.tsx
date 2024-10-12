@@ -7,6 +7,8 @@ import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
+import ImageResize from "tiptap-extension-resize-image";
 
 
 export default function Tiptap({
@@ -29,20 +31,22 @@ export default function Tiptap({
                 },
             }),
             OrderedList.configure({
-              HTMLAttributes: {
-                class: "list-decimal ml-3",
-              },
+                HTMLAttributes: {
+                    class: "list-decimal ml-3",
+                },
             }),
             BulletList.configure({
                 HTMLAttributes: {
                     class: "list-disc ml-3",
                 },
             }),
+            Image,
+            ImageResize,
         ],
         content: pitch,
         editorProps: {
             attributes: {
-                class: "rounded-md border min-h-[300px] border-input bg-white opacity-70 disabled:cursor-not-allowed disabled:opacity-50 my-2 py-2 px-3",
+                class: "rounded-md border min-h-[300px] border-input bg-white disabled:cursor-not-allowed disabled:opacity-50 my-2 py-2 px-3",
             }
         },
         onUpdate({ editor }) {
