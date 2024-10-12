@@ -1,15 +1,15 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../types/index";
-import { InvestorTable, InvestorRequestTable } from "./schema";
-import {neon} from "@neondatabase/serverless";
-import dotenv from 'dotenv';
-import path from 'path';
+import { InvestorTable, InvestorRequestTable, CompanyTable } from "./schema";
+import { neon } from "@neondatabase/serverless";
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, './.env.local') });
+dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
-  console
+  console;
   throw new Error("DATABASE_URL is not defined");
 }
 
@@ -21,7 +21,9 @@ export async function addInvestor(investor: InvestorFormData) {
 
   const investorData = {
     ...investor,
-    birthDate: investor.birthDate ? new Date(investor.birthDate).toISOString() : '',
+    birthDate: investor.birthDate
+      ? new Date(investor.birthDate).toISOString()
+      : "",
   };
 
   const insertedInvestor = await db
@@ -37,5 +39,13 @@ export async function addInvestorRequest(request: InvestorRequestData) {
   return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
-
-
+export async function getAllCompanies() {
+  try {
+    const companies = await db.select().from(CompanyTable).execute();
+    console.log("Retrieved Companies:", companies);
+    return companies;
+  } catch (error) {
+    console.error("Error retrieving companies:", error);
+    throw error;
+  }
+}
