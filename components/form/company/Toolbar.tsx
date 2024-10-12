@@ -1,7 +1,6 @@
 "use client";
 import { Toggle } from "@/components/ui/toggle";
 import { ToolbarProps } from "@/types/pitch";
-import { List } from "lucide-react";
 import {
     Heading,
     Bold,
@@ -10,9 +9,13 @@ import {
     AlignCenter,
     AlignLeft,
     AlignRight,
-    Upload,
+    List,
+    ListOrdered,
+    Image,
+    Redo,
+    Undo,
+    Youtube,
 } from "lucide-react";
-import { ListOrdered } from "lucide-react";
 import React, { useCallback } from 'react'
 
 export default function ToolBar({ editor }: ToolbarProps) {
@@ -24,6 +27,44 @@ export default function ToolBar({ editor }: ToolbarProps) {
             editor.chain().focus().setImage({ src: url }).run()
         }
     }, [editor])
+
+    const addYoutube = useCallback(() => {
+        const url = window.prompt('URL');
+        if (!url) return;
+
+        let width;
+        let height;
+
+        do {
+            width = window.prompt('Width (max 700)');
+            if (width) {
+                const widthValue = parseInt(width, 10);
+                if (widthValue > 700) {
+                    alert('Width must be 700 or less. Please enter again.');
+                }
+            }
+        } while (width && parseInt(width, 10) > 700);
+
+        do {
+            height = window.prompt('Height (max 400)');
+            if (height) {
+                const heightValue = parseInt(height, 10);
+                if (heightValue > 400) {
+                    alert('Height must be 400 or less. Please enter again.');
+                }
+            }
+        } while (height && parseInt(height, 10) > 400);
+
+        const finalWidth = width ? Math.max(320, parseInt(width, 10)) : 700;
+        const finalHeight = height ? Math.max(180, parseInt(height, 10)) : 400;
+
+        editor.commands.setYoutubeVideo({
+            src: url,
+            width: finalWidth,
+            height: finalHeight,
+        });
+    }, [editor]);
+
 
     const Options = [
         {
@@ -72,9 +113,24 @@ export default function ToolBar({ editor }: ToolbarProps) {
             preesed: editor.isActive({ textAlign: "right" }),
         },
         {
-            icon: <Upload className="size-4" />,
+            icon: <Image className="size-4" />,
             onClick: () => addImage(),
             preesed: editor.isActive("image"),
+        },
+        {
+            icon: <Youtube className="size-4" />,
+            onClick: () => addYoutube(),
+            preesed: editor.isActive("youtube"),
+        },
+        {
+            icon: <Undo className="size-4" />,
+            onClick: () => editor.chain().focus().undo().run(),
+            preesed: false,
+        },
+        {
+            icon: <Redo className="size-4" />,
+            onClick: () => editor.chain().focus().redo().run(),
+            preesed: false,
         },
     ];
 

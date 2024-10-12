@@ -9,6 +9,7 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
 import Image from "@tiptap/extension-image";
 import ImageResize from "tiptap-extension-resize-image";
+import Youtube from '@tiptap/extension-youtube'
 
 
 export default function Tiptap({
@@ -42,6 +43,10 @@ export default function Tiptap({
             }),
             Image,
             ImageResize,
+            Youtube.configure({
+                controls: false,
+                nocookie: true,
+            }),
         ],
         content: pitch,
         editorProps: {
