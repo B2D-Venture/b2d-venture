@@ -1,10 +1,9 @@
 "use client";
 import { Toggle } from "@/components/ui/toggle";
+import { ToolbarProps } from "@/types/pitch";
 import { List } from "lucide-react";
 import {
-    Heading1,
-    Heading2,
-    Heading3,
+    Heading,
     Bold,
     Italic,
     Strikethrough,
@@ -14,24 +13,14 @@ import {
 } from "lucide-react";
 import { ListOrdered } from "lucide-react";
 
-export default function ToolBar({ editor }: { editor: any }) {
+export default function ToolBar({ editor }: ToolbarProps) {
     if (!editor) return null;
 
     const Options = [
         {
-            icon: <Heading1 className="size-4" />,
+            icon: <Heading className="size-4" />,
             onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
             preesed: editor.isActive("heading", { level: 1 }),
-        },
-        {
-            icon: <Heading2 className="size-4" />,
-            onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-            preesed: editor.isActive("heading", { level: 2 }),
-        },
-        {
-            icon: <Heading3 className="size-4" />,
-            onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-            preesed: editor.isActive("heading", { level: 3 }),
         },
         {
             icon: <Bold className="size-4" />,

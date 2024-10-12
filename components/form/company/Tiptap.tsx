@@ -23,7 +23,10 @@ export default function Tiptap({
                 types: ["heading", "paragraph"],
             }),
             Heading.configure({
-                levels: [1, 2, 3],
+                levels: [1],
+                HTMLAttributes: {
+                    class: "font-bold text-2xl",
+                },
             }),
             OrderedList.configure({
               HTMLAttributes: {
