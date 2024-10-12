@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdPeopleAlt } from "react-icons/md";
+import { CompanyCardProps } from "@/types";
 
 const CompanyCard = ({
   logoUrl,
@@ -9,7 +10,7 @@ const CompanyCard = ({
   companyName,
   shortDescription,
   investmentGoal,
-  investorCount,
+  investorCount = 0, // default value = 0
   minInvest,
   className,
 }: CompanyCardProps) => {
