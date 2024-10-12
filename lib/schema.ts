@@ -31,9 +31,9 @@ export const CompanyTable = pgTable("company", {
     maxInvest: integer('max_invest').notNull(),
     deadline: date('deadline').notNull(),
     securityType: varchar('security_type').notNull(),
-    princeShare: real('prince_share').notNull(),
+    priceShare: real('price_share').notNull(),
     pitch: text('pitch').notNull(),
-    status: boolean('status').notNull(),
+    status: boolean('status').default(false),
 });
 
 export const DataRoomTable = pgTable("data_room", {
@@ -41,7 +41,7 @@ export const DataRoomTable = pgTable("data_room", {
     companyId: integer('company_id').references(() => CompanyTable.id).notNull(),
     documentName: varchar('document_name').notNull(),
     documentUrl: varchar('document_url').notNull(),
-    uploadDate: timestamp('upload_date').notNull(),
+    uploadDate: timestamp('upload_date').defaultNow().notNull(),
 });
 
 export const InvestmentRequestTable = pgTable("investment_request", {
@@ -51,19 +51,19 @@ export const InvestmentRequestTable = pgTable("investment_request", {
     amount: real('amount').notNull(),
     getStock: real('get_stock').notNull(),
     requestDate: timestamp('request_date').notNull(),
-    approval: boolean('approval').notNull(),
+    approval: boolean('approval').default(false),
 });
 
 export const CompanyRequestTable = pgTable("company_request", {
     id: serial('id').primaryKey().notNull(),
     companyId: integer('company_id').references(() => CompanyTable.id).notNull(),
-    approval: boolean('approval').notNull(),
-    requestDate: timestamp('request_date').notNull(),
+    approval: boolean('approval').default(false),
+    requestDate: timestamp('request_date').defaultNow().notNull(),
 });
 
 export const InvestorRequestTable = pgTable("investor_request", {
     id: serial('id').primaryKey().notNull(),
     investorId: integer('investor_id').references(() => InvestorTable.id).notNull(),
-    approval: boolean('approval').notNull(),
+    approval: boolean('approval').default(false),
     requestDate: timestamp('request_date').defaultNow().notNull(),
 });

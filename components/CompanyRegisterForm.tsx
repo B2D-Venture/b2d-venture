@@ -23,6 +23,19 @@ import {
 } from "@/components/ui/form";
 import Tiptap from "./form/company/Tiptap";
 import Document from "./form/company/Document";
+import { addCompany, addCompanyRequest, addDataRoom } from "@/lib/db/company";
+
+const documentSchema = z.object({
+  pdfs: z.array(z.object({
+    lastModified: z.number(),
+    name: z.string(),
+    key: z.string(),
+    serverData: z.any(),
+    size: z.number(),
+    url: z.string(),
+  })).optional(),
+});
+
 
 // Combine schemas
 const formSchema = z.object({
@@ -39,6 +52,7 @@ const formSchema = z.object({
   priceShare: z.number().min(0, "Price per share cannot be negative"),
   pitch: z.string().min(1, "Pitch is required"),
   status: z.boolean().default(false),
+  document: documentSchema.optional(),
 }).refine((data) => data.minInvest <= data.maxInvest, {
   message: "Minimum investment cannot be greater than maximum investment.",
   path: ["minInvest"],
@@ -82,8 +96,28 @@ export function CompanyRegisterForm() {
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("Submitting form with values:", values);
-    handleStepChange(1);
+    const { document, ...companyData } = values;
+
+    addCompany(companyData)
+      .then((companyId) => {
+        addCompanyRequest({ companyId });
+
+        if (document && document.pdfs) {
+          document.pdfs.forEach((pdf) => {
+            const dataRoomEntry = {
+              companyId: companyId,
+              documentName: pdf.name,
+              documentUrl: pdf.url,
+            };
+
+            addDataRoom(dataRoomEntry);
+            
+          });
+        }
+
+        handleStepChange(1);
+      })
+      .catch((err) => console.error("Error adding company:", err));
   };
 
   return (

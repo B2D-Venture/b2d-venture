@@ -4,9 +4,11 @@ import { UploadDropzone } from '@/src/utils/uploadthing';
 import { useState } from 'react';
 import { FaRegFileLines, FaEye } from "react-icons/fa6";
 import { CiCircleRemove } from "react-icons/ci";
+import { useFormContext } from "react-hook-form";
 
 const Document = () => {
-    const [pdfSrc, setPdfSrc] = useState<Array<{ name: string; size: number; key: string; lastModified: number; serverData: any }>>([]);
+    const { setValue } = useFormContext();
+    const [pdfSrc, setPdfSrc] = useState([]);
 
     const handleRemovePdf = (key: string) => {
         setPdfSrc((prev) => prev.filter(pdf => pdf.key !== key));
@@ -39,15 +41,15 @@ const Document = () => {
                                 <FaEye />
                             </a>
                             <div className="flex items-center justify-center mx-5">
-                                <CiCircleRemove 
-                                    className="text-3xl cursor-pointer" 
+                                <CiCircleRemove
+                                    className="text-3xl cursor-pointer"
                                     onClick={() => handleRemovePdf(pdf.key)}
                                 />
                             </div>
                         </div>
                     ))
                 ) : (
-                    <p>No PDF files uploaded</p> 
+                    <p>No PDF files uploaded</p>
                 )}
             </div>
 
@@ -56,11 +58,20 @@ const Document = () => {
                     endpoint="pdfUploader"
                     onClientUploadComplete={(res) => {
                         if (res && res.length > 0) {
-                            const uploadedFile = res[0];
-                            setPdfSrc(prev => [...prev, ...res]);
+                            const uploadedFiles = res.map(file => ({
+                                name: file.name,
+                                size: file.size,
+                                key: file.key,
+                                lastModified: file.lastModified,
+                                serverData: file.serverData,
+                                url: file.url,
+                            }));
+                            setPdfSrc(prev => [...prev, ...uploadedFiles]);
+                            setValue("document", { pdfs: uploadedFiles });
                         }
                     }}
                     onUploadError={(error: Error) => {
+                        console.log("error", error);
                         alert(`ERROR! ${error.message}`);
                     }}
                 />
