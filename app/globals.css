@@ -164,7 +164,7 @@ body {
   }
 
   .card-description {
-    @apply text-[#181a20] text-xs font-normal ml-5 mr-5 line-clamp-3 group-hover:line-clamp-none;
+    @apply text-[#181a20] text-xs font-normal ml-5 mr-5 line-clamp-5 group-hover:line-clamp-none break-words whitespace-normal;
   }
 }
 
