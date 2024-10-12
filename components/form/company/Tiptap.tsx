@@ -2,8 +2,11 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Heading } from "@tiptap/extension-heading";
-import { Toolbar } from "./Toolbar";
+import ToolBar from "./Toolbar";
+import Heading from "@tiptap/extension-heading";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+
 
 export default function Tiptap({
     pitch,
@@ -19,18 +22,25 @@ export default function Tiptap({
 
     const editor = useEditor({
         extensions: [
-            StarterKit.configure({}),
+            StarterKit.configure(),
             Heading.configure({
-                HTMLAttributes: {
-                    1: { class: "text-3xl font-bold" }, // Custom CSS for h1
-                    2: { class: "text-2xl font-bold" }, // Custom CSS for h2
-                    3: { class: "text-xl font-bold" },  // Custom CSS for h3
-                },
-            })],
+              levels: [1, 2, 3],
+            }),
+            OrderedList.configure({
+              HTMLAttributes: {
+                class: "list-decimal ml-3",
+              },
+            }),
+            BulletList.configure({
+              HTMLAttributes: {
+                class: "list-disc ml-3",
+              },
+            }),
+          ],
         content: pitch,
         editorProps: {
             attributes: {
-                class: "rounded-md border min-h-[300px] border-input bg-white opacity-70 disabled:cursor-not-allowed disabled:opacity-50 my-2",
+                class: "rounded-md border min-h-[300px] border-input bg-white opacity-70 disabled:cursor-not-allowed disabled:opacity-50 my-2 py-2 px-3",
             }
         },
         onUpdate({ editor }) {
@@ -41,7 +51,7 @@ export default function Tiptap({
 
     return (
         <div className="flex flex-col justify-stretch min-h-[300px]">
-            <Toolbar editor={editor} />
+            <ToolBar editor={editor} />
             <EditorContent editor={editor} />
         </div>
     );
