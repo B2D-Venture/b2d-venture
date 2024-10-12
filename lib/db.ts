@@ -39,9 +39,15 @@ export async function addInvestorRequest(request: InvestorRequestData) {
   return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
-export async function getAllCompanies() {
+export async function getAllCompanies(limit?: number) {
   try {
-    const companies = await db.select().from(CompanyTable).execute();
+    const query = db.select().from(CompanyTable);
+
+    if (limit) {
+      query.limit(limit);
+    }
+
+    const companies = await query.execute();
     console.log("Retrieved Companies:", companies);
     return companies;
   } catch (error) {
