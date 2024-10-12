@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Tiptap from "./form/company/Tiptap";
+import Document from "./form/company/Document";
 
 // Combine schemas
 const formSchema = z.object({
@@ -134,7 +135,6 @@ export function CompanyRegisterForm() {
                       <Input
                         data-id="company-input"
                         className="bg-[#bfbfbf]"
-                        placeholder="companyName"
                         {...field}
                       />
                     </FormControl>
@@ -319,20 +319,7 @@ export function CompanyRegisterForm() {
               />
             </div>
             <div className="col-span-3 flex items-center">
-              <h2 className="text-3xl text-gray-700">Documentations</h2>
-              <p className="text-[12px] text-gray-500 ml-2">(optional)</p>
-            </div>
-            <div className="col-span-1">
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="Documentations"></Label>
-                <Input
-                  className="bg-[#bfbfbf]"
-                  id="Documentations"
-                  type="file"
-                  accept="application/pdf"
-                />
-                <FormDescription>Please upload PDF files only.</FormDescription>
-              </div>
+              <Document />
             </div>
             <div className="col-span-2">
             </div>
