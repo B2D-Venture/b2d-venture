@@ -26,7 +26,7 @@ export function Dealcard({
   companyName,
   raiseTarget,
   raisePercentage,
-  valuaiton,
+  valuation,
 }: {
   investorName: string;
   moneyReadyForInvestment: number;
@@ -35,7 +35,7 @@ export function Dealcard({
   companyName: string;
   raiseTarget: number;
   raisePercentage: number;
-  valuaiton: number;
+  valuation: number;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
@@ -116,7 +116,7 @@ export function Dealcard({
                 <div className="flex flex-row items-center space-x-12">
                   <OutputTextBoxDollar
                     label="Valuation"
-                    value={valuaiton}
+                    value={valuation}
                     classNameLabel="space-x-1"
                     classNameValue=""
                   />
