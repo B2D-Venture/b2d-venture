@@ -3,6 +3,7 @@ import InvestmentItemList from "@/components/InvestmentItemList";
 import { InvestorProfileCard } from "@/components/InvestorProfileCard";
 
 export default function InvestorProfile() {
+  // const investorProfile = 
   return (
     <div>
       <div className="flex flex-col items-center min-h-screen">
