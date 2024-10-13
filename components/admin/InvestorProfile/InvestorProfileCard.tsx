@@ -24,6 +24,8 @@ export function InvestorProfileCard({
   netWorth,
   moneyReadyForInvestment,
   Nationality,
+  handleApprove,
+  handleReject,
 }: {
   logo: string;
   investorName: string;
@@ -32,6 +34,8 @@ export function InvestorProfileCard({
   age: number;
   netWorth: number;
   moneyReadyForInvestment: number;
+  handleApprove: () => void;
+  handleReject: () => void;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
@@ -96,10 +100,10 @@ export function InvestorProfileCard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500">
+        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500">
+        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>

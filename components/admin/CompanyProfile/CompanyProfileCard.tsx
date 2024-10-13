@@ -26,6 +26,8 @@ export function CompanyProfileCard({
   maximumInvestment,
   securityType,
   target,
+  handleApprove,
+  handleReject,
 }: {
   logo: string;
   companyName: string;
@@ -36,6 +38,8 @@ export function CompanyProfileCard({
   maximumInvestment: number;
   securityType: string;
   target: number;
+  handleApprove: () => void;
+  handleReject: () => void;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
@@ -99,10 +103,10 @@ export function CompanyProfileCard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500">
+        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500">
+        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>
