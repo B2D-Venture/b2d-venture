@@ -1,10 +1,10 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../types/index";
-import { InvestorTable, InvestorRequestTable, CompanyRequestTable, InvestmentRequestTable } from "../schema";
+import { InvestorTable, InvestorRequestTable, CompanyRequestTable, InvestmentRequestTable, CompanyTable } from "./schema";
 import {neon} from "@neondatabase/serverless";
 import dotenv from 'dotenv';
 import path from 'path';
-import { eq, lt, gte, ne } from 'drizzle-orm';
+import { eq, lt, gte, ne, isNull } from 'drizzle-orm';
 
 dotenv.config({ path: path.resolve(__dirname, './.env.local') });
 
@@ -39,13 +39,34 @@ export async function addInvestorRequest(request: InvestorRequestData) {
 }
 
 export async function getInvestorRequest() {
-  return await db.select().from(InvestorRequestTable).where(eq(InvestorRequestTable.approval, false)).execute();
+  return await db
+    .select()
+    .from(InvestorRequestTable)
+    .where(isNull(InvestorRequestTable.approval))
+    .execute();
 }
 
 export async function getCompanyRequest() {
-  return await db.select().from(CompanyRequestTable).where(eq(CompanyRequestTable.approval, false)).execute();
+  return await db
+    .select()
+    .from(CompanyRequestTable)
+    .where(isNull(CompanyRequestTable.approval))
+    .execute();
 }
 
 export async function getInvestmentRequest() {
-  return await db.select().from(InvestmentRequestTable).where(eq(InvestmentRequestTable.approval, false)).execute();
+  return await db
+    .select()
+    .from(InvestmentRequestTable)
+    .where(isNull(InvestmentRequestTable.approval))
+    .execute();
+}
+
+
+export async function getCompanyById(companyId: number) {
+  return await db.select().from(CompanyTable).where(eq(CompanyTable.id, companyId)).execute();
+}
+
+export async function getInvestorById(investorId: number) {
+  return await db.select().from(InvestorTable).where(eq(InvestorTable.id, investorId)).execute();
 }
