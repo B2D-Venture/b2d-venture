@@ -1,9 +1,10 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../types/index";
-import { InvestorTable, InvestorRequestTable } from "./schema";
+import { InvestorTable, InvestorRequestTable, CompanyRequestTable, InvestmentRequestTable } from "../schema";
 import {neon} from "@neondatabase/serverless";
 import dotenv from 'dotenv';
 import path from 'path';
+import { eq, lt, gte, ne } from 'drizzle-orm';
 
 dotenv.config({ path: path.resolve(__dirname, './.env.local') });
 
@@ -37,5 +38,14 @@ export async function addInvestorRequest(request: InvestorRequestData) {
   return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
+export async function getInvestorRequest() {
+  return await db.select().from(InvestorRequestTable).where(eq(InvestorRequestTable.approval, false)).execute();
+}
 
+export async function getCompanyRequest() {
+  return await db.select().from(CompanyRequestTable).where(eq(CompanyRequestTable.approval, false)).execute();
+}
 
+export async function getInvestmentRequest() {
+  return await db.select().from(InvestmentRequestTable).where(eq(InvestmentRequestTable.approval, false)).execute();
+}
