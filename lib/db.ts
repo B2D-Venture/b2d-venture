@@ -6,11 +6,11 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { eq, lt, gte, ne, isNull } from 'drizzle-orm';
 
-dotenv.config({ path: path.resolve(__dirname, './.env.local') });
+dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
-  console
+  console;
   throw new Error("DATABASE_URL is not defined");
 }
 
@@ -22,7 +22,9 @@ export async function addInvestor(investor: InvestorFormData) {
 
   const investorData = {
     ...investor,
-    birthDate: investor.birthDate ? new Date(investor.birthDate).toISOString() : '',
+    birthDate: investor.birthDate
+      ? new Date(investor.birthDate).toISOString()
+      : "",
   };
 
   const insertedInvestor = await db
@@ -116,4 +118,21 @@ export async function rejectInvestmentRequest(requestId: number) {
     .set({ approval: false })
     .where(eq(InvestmentRequestTable.id, requestId))
     .execute();
+}
+
+export async function getAllCompanies(limit?: number) {
+  try {
+    const query = db.select().from(CompanyTable);
+
+    if (limit) {
+      query.limit(limit);
+    }
+
+    const companies = await query.execute();
+    console.log("Retrieved Companies:", companies);
+    return companies;
+  } catch (error) {
+    console.error("Error retrieving companies:", error);
+    throw error;
+  }
 }
