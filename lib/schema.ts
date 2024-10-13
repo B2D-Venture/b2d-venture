@@ -1,4 +1,31 @@
-import { timestamp, text, pgTable, serial, varchar, date, integer, real, boolean } from "drizzle-orm/pg-core";
+import { create } from "domain";
+import { 
+    timestamp, 
+    text, 
+    pgTable, 
+    serial, 
+    varchar, 
+    date, 
+    integer, 
+    real, 
+    boolean, 
+    pgEnum 
+} from "drizzle-orm/pg-core";
+
+const roleEnum = pgEnum('role_type', ['viewer', 'investor', 'company']);
+
+export const RoleTable = pgTable("role", {
+    id: serial('id').primaryKey().notNull(),
+    name: roleEnum('name').default('viewer').notNull(),
+});
+
+export const UserTable = pgTable("user", {
+    id: serial('id').primaryKey().notNull(),
+    email: varchar('email').notNull(),
+    roleId: integer('role_id').references(() => RoleTable.id).notNull(),
+    roleIdNumber: integer('role_id_number'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
 
 export const AdminTable = pgTable("admin", {
     id: serial('id').primaryKey().notNull(),
