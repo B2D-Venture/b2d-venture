@@ -62,11 +62,58 @@ export async function getInvestmentRequest() {
     .execute();
 }
 
-
 export async function getCompanyById(companyId: number) {
   return await db.select().from(CompanyTable).where(eq(CompanyTable.id, companyId)).execute();
 }
 
 export async function getInvestorById(investorId: number) {
   return await db.select().from(InvestorTable).where(eq(InvestorTable.id, investorId)).execute();
+}
+
+export async function approveCompanyRequest(requestId: number) {
+  return await db
+    .update(CompanyRequestTable)
+    .set({ approval: true })
+    .where(eq(CompanyRequestTable.id, requestId))
+    .execute();
+} 
+
+export async function approveInvestorRequest(requestId: number) {
+  return await db
+    .update(InvestorRequestTable)
+    .set({ approval: true })
+    .where(eq(InvestorRequestTable.id, requestId))
+    .execute();
+}
+
+export async function approveInvestmentRequest(requestId: number) {
+  return await db
+    .update(InvestmentRequestTable)
+    .set({ approval: true })
+    .where(eq(InvestmentRequestTable.id, requestId))
+    .execute();
+}
+
+export async function rejectCompanyRequest(requestId: number) {
+  return await db
+    .update(CompanyRequestTable)
+    .set({ approval: false })
+    .where(eq(CompanyRequestTable.id, requestId))
+    .execute();
+}
+
+export async function rejectInvestorRequest(requestId: number) {
+  return await db
+    .update(InvestorRequestTable)
+    .set({ approval: false })
+    .where(eq(InvestorRequestTable.id, requestId))
+    .execute();
+}
+
+export async function rejectInvestmentRequest(requestId: number) {
+  return await db
+    .update(InvestmentRequestTable)
+    .set({ approval: false })
+    .where(eq(InvestmentRequestTable.id, requestId))
+    .execute();
 }
