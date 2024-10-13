@@ -3,25 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm } from "@/components/CalendarForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
-
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import Tiptap from "./form/company/Tiptap";
+import FormFields from '@/components/form/elements/FormFields';
+import { Form, FormField, FormMessage } from "@/components/ui/form";
 import Document from "./form/company/Document";
 import { addCompany, addCompanyRequest, addDataRoom } from "@/lib/db/company";
 
@@ -111,7 +99,7 @@ export function CompanyRegisterForm() {
             };
 
             addDataRoom(dataRoomEntry);
-            
+
           });
         }
 
@@ -159,218 +147,110 @@ export function CompanyRegisterForm() {
               </div>
             </div>
             <div className="col-span-2">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Company Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="company-input"
-                        className="bg-[#bfbfbf]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Company Name"
+                dataId="company-input"
               />
             </div>
             {/* abbreviation */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="abbr"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Company Abbreviation</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="abbr-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="XXXX"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Company Abbreviation"
+                dataId="abbr-input"
+                placeholder="XXXX"
               />
             </div>
             {/* description */}
             <div className="col-span-3">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Description</FormLabel>
-                    <FormControl>
-                      <Input data-id="desc-input" className="bg-[#bfbfbf]" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Description"
+                dataId="desc-input"
               />
             </div>
             {/* Funding Goal */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="fundingTarget"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Funding Goal</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="funding-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target.value;
-                          field.onChange(value ? parseFloat(value) : 0);
-                        }}
-                        value={field.value || 0}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Funding Goal"
+                dataId="funding-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Minimum Investment */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="minInvest"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Minimum Investment
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="min-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target.value;
-                          field.onChange(value ? parseFloat(value) : 0);
-                        }}
-                        value={field.value || 0}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Minimum Investment"
+                dataId="min-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Maximum Investment */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="maxInvest"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Maximum Investment
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="max-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target.value;
-                          field.onChange(value ? parseFloat(value) : 0);
-                        }}
-                        value={field.value || 0}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Maximum Investment"
+                dataId="max-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Date (using CalendarForm) */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
+                label="Deadline"
                 name="deadline"
-                render={({ field }) => (
-                  <CalendarForm label={"Deadline"} field={field} canSetMoreThanToday={true} />
-                )}
+                type="calendar"
               />
             </div>
             {/* Security Type */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="securityType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Security Type</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="sec-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder=""
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Security Type"
+                dataId="sec-input"
               />
             </div>
             {/* Price per Share */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="priceShare"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Price per Share
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="share-input"
-                        type="number"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target.value;
-                          field.onChange(value ? parseFloat(value) : 0);
-                        }}
-                        value={field.value || 0}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Price per Share"
+                dataId="share-input"
+                placeholder="$"
+                type="number"
               />
             </div>
+
+            <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
+
             <div className="col-span-3 flex items-center">
               <Document />
             </div>
-            <div className="col-span-2">
-            </div>
+
+            <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
 
             <div className="col-start-1 col-span-3">
               <h2 className="text-3xl text-gray-700">Pitch</h2>
-              <FormField
+              <FormFields
                 control={form.control}
                 name="pitch"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Tiptap pitch={field.value} onChange={field.onChange} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                dataId="pitch-input"
+                type="pitch"
               />
             </div>
             <div className="col-start-1">

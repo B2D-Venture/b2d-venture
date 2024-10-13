@@ -51,19 +51,19 @@ export const InvestmentRequestTable = pgTable("investment_request", {
     amount: real('amount').notNull(),
     getStock: real('get_stock').notNull(),
     requestDate: timestamp('request_date').notNull(),
-    approval: boolean('approval').default(false),
+    approval: boolean('approval'),
 });
 
 export const CompanyRequestTable = pgTable("company_request", {
     id: serial('id').primaryKey().notNull(),
     companyId: integer('company_id').references(() => CompanyTable.id).notNull(),
-    approval: boolean('approval').default(false),
+    approval: boolean('approval'),
     requestDate: timestamp('request_date').defaultNow().notNull(),
 });
 
 export const InvestorRequestTable = pgTable("investor_request", {
     id: serial('id').primaryKey().notNull(),
     investorId: integer('investor_id').references(() => InvestorTable.id).notNull(),
-    approval: boolean('approval').default(false),
+    approval: boolean('approval'),
     requestDate: timestamp('request_date').defaultNow().notNull(),
 });
