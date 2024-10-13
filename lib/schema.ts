@@ -30,20 +30,20 @@ export const InvestorTable = pgTable("investor", {
 });
 
 export const CompanyTable = pgTable("company", {
-  id: serial("id").primaryKey().notNull(),
-  logo: varchar("logo").notNull(),
-  banner: varchar("banner").notNull(),
-  name: varchar("name").notNull(),
-  abbr: varchar("abbr", { length: 10 }).notNull(),
-  description: text("description").notNull(),
-  fundingTarget: integer("funding_target").notNull(),
-  minInvest: integer("min_invest").notNull(),
-  maxInvest: integer("max_invest").notNull(),
-  deadline: date("deadline").notNull(),
-  securityType: varchar("security_type").notNull(),
-  priceShare: real("price_share").notNull(),
-  pitch: text("pitch").notNull(),
-  status: boolean("status").notNull(),
+    id: serial('id').primaryKey().notNull(),
+    logo: varchar('logo').notNull(),
+    banner: varchar('banner').notNull(),
+    name: varchar('name').notNull(),
+    abbr: varchar('abbr', { length: 10 }).notNull(),
+    description: text('description').notNull(),
+    fundingTarget: integer('funding_target').notNull(),
+    minInvest: integer('min_invest').notNull(),
+    maxInvest: integer('max_invest').notNull(),
+    deadline: date('deadline').notNull(),
+    securityType: varchar('security_type').notNull(),
+    priceShare: real('price_share').notNull(),
+    pitch: text('pitch').notNull(),
+    status: boolean('status').default(false),
 });
 
 export const DataRoomTable = pgTable("data_room", {

@@ -3,59 +3,110 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm } from "@/components/CalendarForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
+import FormFields from '@/components/form/elements/FormFields';
+import { Form, FormField, FormMessage } from "@/components/ui/form";
+import Document from "./form/company/Document";
+import { addCompany, addCompanyRequest, addDataRoom } from "@/lib/db/company";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Description } from "@radix-ui/react-dialog";
-import data from '../node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d';
+const documentSchema = z.object({
+  pdfs: z.array(z.object({
+    lastModified: z.number(),
+    name: z.string(),
+    key: z.string(),
+    serverData: z.any(),
+    size: z.number(),
+    url: z.string(),
+  })).optional(),
+});
+
 
 // Combine schemas
 const formSchema = z.object({
-  companyName: z.string(),
-  abbreviation: z.string(),
-  description: z.string(),
-  fundingGoal: z.string(),
-  minimumInvestment: z.string(),
-  maximumInvestment: z.string(),
-  pricePerShare: z.string(),
-  securityType: z.string(),
-});
+  logo: z.string().min(1, "Logo is required"),
+  banner: z.string().min(1, "Banner is required"),
+  name: z.string().min(1, "Company name is required"),
+  abbr: z.string().min(1, "Abbreviation is required"),
+  description: z.string().min(1, "Description is required"),
+  fundingTarget: z.number().min(0, "Funding target cannot be negative"),
+  minInvest: z.number().min(0, "Minimum investment cannot be negative"),
+  maxInvest: z.number().min(0, "Maximum investment cannot be negative"),
+  deadline: z.date({ required_error: "Deadline is required." }),
+  securityType: z.string().min(1, "Security type is required"),
+  priceShare: z.number().min(0, "Price per share cannot be negative"),
+  pitch: z.string().min(1, "Pitch is required"),
+  status: z.boolean().default(false),
+  document: documentSchema.optional(),
+}).refine((data) => data.minInvest <= data.maxInvest, {
+  message: "Minimum investment cannot be greater than maximum investment.",
+  path: ["minInvest"],
+})
+  .refine((data) => data.minInvest <= data.fundingTarget, {
+    message: "Minimum investment cannot be greater than the funding target.",
+    path: ["minInvest"],
+  })
+  .refine((data) => data.maxInvest <= data.fundingTarget, {
+    message: "Maximum investment cannot be greater than the funding target.",
+    path: ["maxInvest"],
+  })
+  .refine((data) => data.priceShare <= data.fundingTarget, {
+    message: "Price per share cannot be more than the funding target",
+    path: ["priceShare"]
+  });
 
 export function CompanyRegisterForm() {
   const { handleStepChange } = useFormState();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
-      abbreviation: "",
+      logo: "",
+      banner: "",
+      name: "",
+      abbr: "",
       description: "",
-      fundingGoal: "",
-      minimumInvestment: "",
-      maximumInvestment: "",
-      dob: undefined,
-      pricePerShare: "",
+      fundingTarget: 0,
+      minInvest: 0,
+      maxInvest: 0,
+      deadline: undefined,
       securityType: "",
+      priceShare: 0,
+      pitch: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const setBannerImage = (fileName: string) => {
+    form.setValue("banner", fileName);
+    form.trigger("banner");
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const { document, ...companyData } = values;
+
+    addCompany(companyData)
+      .then((companyId) => {
+        addCompanyRequest({ companyId });
+
+        if (document && document.pdfs) {
+          document.pdfs.forEach((pdf) => {
+            const dataRoomEntry = {
+              companyId: companyId,
+              documentName: pdf.name,
+              documentUrl: pdf.url,
+            };
+
+            addDataRoom(dataRoomEntry);
+
+          });
+        }
+
+        handleStepChange(1);
+      })
+      .catch((err) => console.error("Error adding company:", err));
+  };
 
   return (
     <Form {...form}>
@@ -63,7 +114,16 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("logo", file)} />
+            </div>
+            <div className="mt-3">
+              <FormField
+                control={form.control}
+                name="logo"
+                render={() => (
+                  <FormMessage />
+                )}
+              />
             </div>
             <div className="text-[12px] text-[#949191] mt-5">
               <p>
@@ -74,199 +134,142 @@ export function CompanyRegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
-          <div className="col-span-3">
-              <BannerImageForm />
+            <div className="col-span-3">
+              <BannerImageForm setBannerImage={setBannerImage} />
+              <div className="mt-3">
+                <FormField
+                  control={form.control}
+                  name="banner"
+                  render={() => (
+                    <FormMessage />
+                  )}
+                />
+              </div>
             </div>
             <div className="col-span-2">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="companyName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="company-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="companyName"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="name"
+                label="Company Name"
+                dataId="company-input"
               />
             </div>
             {/* abbreviation */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="abbreviation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Abbreviation</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="abbr-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="XXXX"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="abbr"
+                label="Company Abbreviation"
+                dataId="abbr-input"
+                placeholder="XXXX"
               />
             </div>
             {/* description */}
             <div className="col-span-3">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Description</FormLabel>
-                    <FormControl>
-                      <Input data-id="desc-input" className="bg-[#bfbfbf]" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Description"
+                dataId="desc-input"
               />
             </div>
             {/* Funding Goal */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="fundingGoal"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Funding Goal</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="funding-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="fundingTarget"
+                label="Funding Goal"
+                dataId="funding-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Minimum Investment */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="minimumInvestment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Minimum Investment
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="min-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="minInvest"
+                label="Minimum Investment"
+                dataId="min-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Maximum Investment */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="maximumInvestment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Maximum Investment
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="max-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="maxInvest"
+                label="Maximum Investment"
+                dataId="max-input"
+                placeholder="$"
+                type="number"
               />
             </div>
             {/* Date (using CalendarForm) */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="dob"
-                render={({ field }) => (
-                  <CalendarForm label={"Deadline"} field={field} />
-                )}
+                label="Deadline"
+                name="deadline"
+                type="calendar"
               />
             </div>
             {/* Security Type */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
                 name="securityType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">Security Type</FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="sec-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder=""
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Security Type"
+                dataId="sec-input"
               />
             </div>
             {/* Price per Share */}
             <div className="col-span-1">
-              <FormField
+              <FormFields
                 control={form.control}
-                name="pricePerShare"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[20px]">
-                      Price per Share
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        data-id="share-input"
-                        className="bg-[#bfbfbf]"
-                        placeholder="$"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                name="priceShare"
+                label="Price per Share"
+                dataId="share-input"
+                placeholder="$"
+                type="number"
               />
             </div>
+
+            <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
+
             <div className="col-span-3 flex items-center">
-              <h2 className="text-3xl text-gray-700">Documentations</h2>
-              <p className="text-[12px] text-gray-500 ml-2">(optional)</p>
+              <Document />
             </div>
-            <div className="col-span-1">
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="Documentations"></Label>
-                <Input
-                  className="bg-[#bfbfbf]"
-                  id="Documentations"
-                  type="file"
-                  accept="application/pdf"
-                />
-                <FormDescription>Please upload PDF files only.</FormDescription>
-              </div>
+
+            <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
+
+            <div className="col-start-1 col-span-3">
+              <h2 className="text-3xl text-gray-700">Pitch</h2>
+              <FormFields
+                control={form.control}
+                name="pitch"
+                dataId="pitch-input"
+                type="pitch"
+              />
             </div>
-            <div className="col-span-2">
+            <div className="col-start-1">
+              <Button
+                onClick={() => handleStepChange(-2)}
+                className="
+                  w-[211px] h-[45px] 
+                  bg-gray-200 text-gray-700 
+                  rounded-lg shadow-md 
+                  hover:bg-gray-300 hover:text-gray-900 
+                  font-bold text-base 
+                  transition duration-200 ease-in-out
+                "
+              >
+                Back
+              </Button>
             </div>
             <div className="col-start-3">
-              <Button onClick={() => handleStepChange(1)} type="submit" className="w-full">
+              <Button type="submit" className="w-full">
                 Submit
               </Button>
             </div>
