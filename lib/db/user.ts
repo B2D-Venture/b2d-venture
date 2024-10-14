@@ -22,3 +22,13 @@ export async function getUserByEmail(roleId: number, email: string) {
   
   return user[0];
 }
+
+export async function getUser(email: string) {
+  const user = await db
+    .select()
+    .from(UserTable)
+    .where(eq(UserTable.email, email))
+    .execute();
+  
+  return user[0];
+}
