@@ -50,17 +50,6 @@ export const companyExample = [
   },
 ];
 
-export const investorProfileExample = {
-  profileImage: "https://picsum.photos/id/64/200/250",
-  firstName: "Emily",
-  lastName: "Millar",
-  nationalIdCard: "1122334455667",
-  birthdate: "19/9/1990",
-  emailAddress: "emilymillar1990@gmail.com",
-  nationality: "Canada",
-  netWorth: 1000000,
-};
-
 export const investmentItemExample = [
   {
     logoUrl:

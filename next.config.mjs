@@ -12,6 +12,7 @@ const nextConfig = {
       "imgproxy.republic.com",
       "uploads.republic.com",
       "lh3.googleusercontent.com",
+      "utfs.io",
     ],
   },
   env: {

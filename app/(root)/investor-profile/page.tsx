@@ -32,10 +32,10 @@ export default async function InvestorProfile() {
           <h1 className="flex flex-col justify-center text-white ml-70 text-[40px] font-bold mt-10">
             My Portfolio
           </h1>
-          <InvestableAmount />
+          <InvestableAmount amount={investor?.investableAmount} />
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#FCD535] bg-opacity-65 rounded-[10px] justify-center items-center p-[27px]">
-          {/* <InvestorProfileCard investor={investor} /> */}
+          <InvestorProfileCard investor={investor} />
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
           <InvestmentItemList />

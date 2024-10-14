@@ -2,16 +2,13 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { investorProfileExample } from "@/constants";
+import { InvestorProfileCardProps } from "@/types/investor/index";
 import Image from "next/image";
 import { useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 
-export function InvestorProfileCard({ investor }: any) {
-  console.log("Investor Profile Card", investor);
-  const investorData = investorProfileExample;
-
+export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
   const [showNationalId, setShowNationalId] = useState(false);
 
   // Function to toggle visibility
@@ -20,13 +17,13 @@ export function InvestorProfileCard({ investor }: any) {
   };
 
   // Mask the National ID
-  const maskedNationalId = investorData.nationalIdCard.replace(
+  const maskedNationalId = investor.nationalId.replace(
     /\d(?=\d{0})/g,
     "*",
   );
 
   const formattedNetWorth = new Intl.NumberFormat().format(
-    investorData.netWorth,
+    investor.networth,
   );
 
   return (
@@ -36,7 +33,7 @@ export function InvestorProfileCard({ investor }: any) {
           <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
             <Image
               id="example-profile-image"
-              src={investorData.profileImage}
+              src={investor.profileImage}
               width={200}
               height={250}
               alt="Example Profile Image"
@@ -51,7 +48,7 @@ export function InvestorProfileCard({ investor }: any) {
             <Input
               className="font-bold border-white disabled:opacity-100"
               disabled
-              value={investorData.firstName}
+              value={investor.firstName}
             />
           </div>
           {/* Last Name */}
@@ -60,7 +57,7 @@ export function InvestorProfileCard({ investor }: any) {
             <Input
               className="font-bold border-white disabled:opacity-100"
               disabled
-              value={investorData.lastName}
+              value={investor.lastName}
             />
           </div>
           {/* National ID Card */}
@@ -72,7 +69,7 @@ export function InvestorProfileCard({ investor }: any) {
                 disabled
                 value={
                   showNationalId
-                    ? investorData.nationalIdCard
+                    ? investor.nationalId
                     : maskedNationalId
                 }
               />
@@ -90,7 +87,7 @@ export function InvestorProfileCard({ investor }: any) {
             <Input
               className="font-bold border-white disabled:opacity-100"
               disabled
-              value={investorData.birthdate}
+              value={investor.birthDate}
             />
           </div>
           {/* Email Address */}
@@ -99,7 +96,7 @@ export function InvestorProfileCard({ investor }: any) {
             <Input
               className="font-bold border-white disabled:opacity-100"
               disabled
-              value={investorData.emailAddress}
+              value={investor.email}
             />
           </div>
           {/* Nationality */}
@@ -108,7 +105,7 @@ export function InvestorProfileCard({ investor }: any) {
             <Input
               className="font-bold border-white disabled:opacity-100"
               disabled
-              value={investorData.nationality}
+              value={investor.nationality}
             />
           </div>
           {/* Net Worth */}

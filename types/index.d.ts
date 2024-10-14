@@ -36,17 +36,6 @@ interface CompanyLogoBoxProps {
   companyName: string;
 }
 
-interface InvestorProfileCardProps {
-  profileImage: string;
-  firstName: string;
-  lastName: string;
-  nationalIdCard: string;
-  birthdate: string;
-  emailAddress: string;
-  nationality: string;
-  netWorth: number;
-}
-
 type InvestorFormData = {
   profileImage: string;
   firstName: string;
