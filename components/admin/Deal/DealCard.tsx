@@ -26,7 +26,9 @@ export function Dealcard({
   companyName,
   raiseTarget,
   raisePercentage,
-  valuaiton,
+  valuation,
+  handleApprove,
+  handleReject,
 }: {
   investorName: string;
   moneyReadyForInvestment: number;
@@ -35,7 +37,9 @@ export function Dealcard({
   companyName: string;
   raiseTarget: number;
   raisePercentage: number;
-  valuaiton: number;
+  valuation: number;
+  handleApprove: () => void;
+  handleReject: () => void;
 }) {
   return (
     <div className="flex flex-col w-full space-y-5">
@@ -116,7 +120,7 @@ export function Dealcard({
                 <div className="flex flex-row items-center space-x-12">
                   <OutputTextBoxDollar
                     label="Valuation"
-                    value={valuaiton}
+                    value={valuation}
                     classNameLabel="space-x-1"
                     classNameValue=""
                   />
@@ -127,10 +131,10 @@ export function Dealcard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500">
+        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500">
+        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>

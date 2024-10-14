@@ -1,20 +1,49 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import CompanyLogoBox from "@/components/CompanyLogoBox";
-import { companyExample } from "@/constants";
+import { getAllCompanies } from "@/lib/db";
+import { Company } from "@/types";
 
 const CompanyLogoBoxList = () => {
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const companies = await getAllCompanies(12);
+        setCompanies(companies);
+      } catch (err) {
+        console.error("Error fetching companies:", err);
+        setError("Failed to load companies.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="company-logo-boxlist">
-      {Array.from({ length: 4 }, () => companyExample)
-        .flat()
-        .map((company) => (
-          <CompanyLogoBox
-            key={company.companyName}
-            logoUrl={company.logoUrl}
-            companyAbbr={company.companyAbbr}
-            companyName={company.companyName}
-          />
-        ))}
+      {companies.map((company) => (
+        <CompanyLogoBox
+          key={company.abbr}
+          logoUrl={company.logo}
+          companyAbbr={company.abbr}
+          companyName={company.name}
+        />
+      ))}
     </div>
   );
 };
