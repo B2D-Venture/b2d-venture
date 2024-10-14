@@ -2,7 +2,8 @@ import { drizzle } from "drizzle-orm/neon-http";
 import {
   CompanyData,
   CompanyRequestData,
-} from "../../types/company/index.d.ts";
+  DataRoomData
+} from "../../types/company/index";
 import { CompanyTable, CompanyRequestTable, DataRoomTable } from "../schema";
 import { neon } from "@neondatabase/serverless";
 

@@ -1,20 +1,19 @@
 import React from "react";
 import Image from "next/image";
-import { Session } from "next-auth";
 
 const Avatar = ({
-  session,
+  imageUrl,
   width,
   height,
 }: {
-  session: Session;
+  imageUrl: string;
   width: number;
   height: number;
 }) => {
   return (
     <div>
       <Image
-        src={session.user?.image || "/default-avatar.png"}
+        src={imageUrl || "/default-avatar.png"}
         alt="User Avatar"
         width={width}
         height={height}

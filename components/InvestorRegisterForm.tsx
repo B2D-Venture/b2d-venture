@@ -9,7 +9,11 @@ import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
 import { useFormState } from "./FormContext"
-import { addInvestor, addInvestorRequest } from "@/lib/db";
+import {
+  addInvestor,
+  addInvestorRequest,
+  changeToInvestorRole
+} from "@/lib/db/index";
 
 import {
   Form,
@@ -54,19 +58,15 @@ export function InvestorRegisterForm() {
   });
 
   const onSubmit = (values: any) => {
-    console.log("Form Values Before Submit:", values);
-
     if (values.birthDate) {
       values.birthDate = new Date(values.birthDate).toISOString();
     }
 
-    console.log("Form Values After Formatting:", values);
-
     addInvestor(values)
       .then((investorId) => {
-        console.log("Investor ID:", investorId);
-        handleStepChange(2);
+        changeToInvestorRole({ email: values.email, investor_id: investorId });
         addInvestorRequest({ investorId, approval: false });
+        handleStepChange(2);
       })
       .catch((err) => console.error("Error adding investor:", err));
   };

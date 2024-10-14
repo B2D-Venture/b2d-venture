@@ -1,7 +1,8 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../types/index";
+import { eq } from "drizzle-orm";
+import { neon } from "@neondatabase/serverless";
 import { InvestorTable, InvestorRequestTable, CompanyRequestTable, InvestmentRequestTable, CompanyTable } from "./schema";
-import {neon} from "@neondatabase/serverless";
 import dotenv from 'dotenv';
 import path from 'path';
 import { eq, lt, gte, ne, isNull } from 'drizzle-orm';
@@ -16,6 +17,7 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
+
 
 export async function addInvestor(investor: InvestorFormData) {
   console.log("Investor Data before submission:", investor);

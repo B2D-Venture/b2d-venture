@@ -9,9 +9,9 @@ export type CompanyData = {
     maxInvest: number;
     deadline: Date;
     securityType: string;
-    princeShare: number;
+    priceShare: number;
     pitch: string;
-    status: boolean;
+    status?: boolean;
 }
 
 export type CompanyRequestData = {

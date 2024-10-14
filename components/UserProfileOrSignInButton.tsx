@@ -1,11 +1,10 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { IoPeopleCircleOutline } from "react-icons/io5";
-import Image from "next/image";
-import Avatar from "./Avatar";
 import AvatarDropdown from "./AvatarDropdown";
+import { Skeleton } from "@/components/ui/skeleton"
 
 const UserProfileOrSignInButton = () => {
   const { data: session, status } = useSession();
@@ -14,7 +13,7 @@ const UserProfileOrSignInButton = () => {
   };
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <Skeleton className="h-14 w-14 rounded-full" />;
   }
 
   if (session) {
