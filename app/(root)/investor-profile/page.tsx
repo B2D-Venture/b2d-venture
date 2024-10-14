@@ -54,7 +54,7 @@ export default async function InvestorProfile() {
           </h1>
           <InvestableAmount amount={investor?.investableAmount} />
         </div>
-        <div className="flex w-11/12 h-9/10 bg-[#FCD535] bg-opacity-65 rounded-[10px] justify-center items-center p-[27px]">
+        <div className="flex w-11/12 h-9/10 bg-[#FFFDF3] bg-opacity-30 rounded-[20px] justify-center items-center p-[27px]">
           <InvestorProfileCard investor={investor} />
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
