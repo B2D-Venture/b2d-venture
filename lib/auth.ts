@@ -4,6 +4,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { UserTable } from "./schema";
 import { eq } from "drizzle-orm";
+import { AdapterUser } from "next-auth/adapters";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -36,7 +37,6 @@ export const authConfig: NextAuthOptions = {
         .where(eq(UserTable.email, profile.email))
         .execute();
 
-      console.log("existingUser", existingUser);
       if (existingUser.length === 0) {
         // If the user does not exist, create a new user
         // Role Id
@@ -54,5 +54,31 @@ export const authConfig: NextAuthOptions = {
 
       return true;
     },
+    // async jwt({ token, account, user }) {
+    //   if (account && user) {
+    //     const typedUser = user as AdapterUser; // กำหนดชนิดให้ user
+
+    //     // ดึงข้อมูลผู้ใช้จากฐานข้อมูลโดยใช้ email
+    //     const userRecord = await db
+    //       .select()
+    //       .from(UserTable)
+    //       .where(eq(UserTable.email, typedUser.email))
+    //       .execute();
+
+    //     // เพิ่ม role ลงใน token (JWT)
+    //     token.role = userRecord[0]?.roleId;
+    //   }
+
+    //   return token;
+    // },
+    // async session({ session, token }) {
+    //   // เพิ่ม role จาก token ลงใน session
+    //   if (token?.role) {
+    //     if (session.user) {
+    //       session.user.role = token.role as number; // กำหนดชนิดข้อมูล role เป็น number
+    //     }
+    //   }
+    //   return session;
+    // },
   },
 };

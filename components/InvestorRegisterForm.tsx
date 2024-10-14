@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
 import { useFormState } from "./FormContext"
-import { 
-  addInvestor, 
-  addInvestorRequest, 
-  changeToInvestorRole 
+import {
+  addInvestor,
+  addInvestorRequest,
+  changeToInvestorRole
 } from "@/lib/db/index";
 
 import {
@@ -64,7 +64,7 @@ export function InvestorRegisterForm() {
 
     addInvestor(values)
       .then((investorId) => {
-        changeToInvestorRole({ email: values.email })
+        changeToInvestorRole({ email: values.email, investor_id: investorId });
         addInvestorRequest({ investorId, approval: false });
         handleStepChange(2);
       })

@@ -1,30 +1,38 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../../types/index";
-import { 
-  InvestorTable, 
-  InvestorRequestTable,
-  UserTable,
-} from "../schema";
-import { eq } from "drizzle-orm";
+import { InvestorTable, InvestorRequestTable, UserTable } from "../schema";
+import { eq, and } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, './.env.local') });
+dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
-  console
+  console;
   throw new Error("DATABASE_URL is not defined");
 }
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
 
+export async function getInvestorById(id: number) {
+  const investor = await db
+    .select()
+    .from(InvestorTable)
+    .where(eq(InvestorTable.id, id))
+    .execute();
+
+  return investor[0];
+}
+
 export async function addInvestor(investor: InvestorFormData) {
   const investorData = {
     ...investor,
-    birthDate: investor.birthDate ? new Date(investor.birthDate).toISOString() : '',
+    birthDate: investor.birthDate
+      ? new Date(investor.birthDate).toISOString()
+      : "",
   };
 
   const insertedInvestor = await db
@@ -40,10 +48,13 @@ export async function addInvestorRequest(request: InvestorRequestData) {
   return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
-export async function changeToInvestorRole({ email }: { email: string }) {
-  const user = await db
-      .update(UserTable)
-      .set({ roleId: 2 })
-      .where(eq(UserTable.email, email))
-      .execute();
+export async function changeToInvestorRole({ email, investor_id }: { email: string, investor_id: number }) {
+  return await db
+    .update(UserTable)
+    .set({ 
+      roleId: 2,
+      roleIdNumber: investor_id
+    })
+    .where(eq(UserTable.email, email))
+    .execute();
 }

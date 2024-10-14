@@ -7,8 +7,10 @@ import Image from "next/image";
 import { useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
-export function InvestorProfileCard() {
-  const investorData: InvestorProfileCardProps = investorProfileExample;
+
+export function InvestorProfileCard({ investor }: any) {
+  console.log("Investor Profile Card", investor);
+  const investorData = investorProfileExample;
 
   const [showNationalId, setShowNationalId] = useState(false);
 
