@@ -77,10 +77,10 @@ export default async function CompanyProfile() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
-        <div className="col-span-2"> {/* เพิ่ม overflow-auto */}
+        <div className="col-span-2">
           <Pitch pitchData={company?.pitch} />
         </div>
-        <div className="overflow-auto"> {/* เพิ่ม overflow-auto */}
+        <div>
           <DealTerm company={company} />
         </div>
       </div>
