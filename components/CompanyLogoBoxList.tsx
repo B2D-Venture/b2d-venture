@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CompanyLogoBox from "@/components/CompanyLogoBox";
-import { getAllCompanies } from "@/lib/db";
+import { getAllCompanies } from "@/lib/db/company";
 import { Company } from "@/types";
 
 const CompanyLogoBoxList = () => {
@@ -13,7 +13,7 @@ const CompanyLogoBoxList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getAllCompanies(12);
+        const companies = await getAllCompanies("", 12);
         setCompanies(companies);
       } catch (err) {
         console.error("Error fetching companies:", err);
@@ -38,7 +38,7 @@ const CompanyLogoBoxList = () => {
     <div className="company-logo-boxlist">
       {companies.map((company) => (
         <CompanyLogoBox
-          key={company.abbr}
+          key={company.id}
           logoUrl={company.logo}
           companyAbbr={company.abbr}
           companyName={company.name}

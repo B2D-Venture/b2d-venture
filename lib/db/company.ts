@@ -2,16 +2,16 @@ import { drizzle } from "drizzle-orm/neon-http";
 import {
   CompanyData,
   CompanyRequestData,
-  DataRoomData
+  DataRoomData,
 } from "../../types/company/index";
-import { 
-  CompanyTable, 
-  CompanyRequestTable, 
-  DataRoomTable, 
-  UserTable 
+import {
+  CompanyTable,
+  CompanyRequestTable,
+  DataRoomTable,
+  UserTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, isNull } from 'drizzle-orm';
+import { eq, ilike, or } from "drizzle-orm";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -40,6 +40,33 @@ export async function addDataRoom(data: DataRoomData) {
   return await db.insert(DataRoomTable).values(data).execute();
 }
 
+export async function getAllCompanies(searchQuery?: string, limit?: number) {
+  try {
+    let query = db.select().from(CompanyTable);
+
+    if (searchQuery) {
+      const searchPattern = `%${searchQuery}%`;
+      query = query.where(
+        or(
+          ilike(CompanyTable.name, searchPattern),
+          ilike(CompanyTable.description, searchPattern),
+        ),
+      );
+    }
+
+    if (limit) {
+      query.limit(limit);
+    }
+
+    const companies = await query.execute();
+
+    return companies;
+  } catch (error) {
+    console.error("Error retrieving companies:", error);
+    throw error;
+  }
+}
+
 export async function getCompanyById(id: number) {
   const company = await db
     .select()
@@ -53,19 +80,25 @@ export async function getCompanyById(id: number) {
 export async function getCompanyRequestById(id: number) {
   return await db
     .select({
-      approval: CompanyRequestTable.approval
+      approval: CompanyRequestTable.approval,
     })
     .from(CompanyRequestTable)
     .where(eq(CompanyRequestTable.companyId, id))
     .execute();
 }
 
-export async function changeToCompanyRole({ email, companyId }: { email: string, companyId: number }) {
+export async function changeToCompanyRole({
+  email,
+  companyId,
+}: {
+  email: string;
+  companyId: number;
+}) {
   return await db
     .update(UserTable)
-    .set({ 
+    .set({
       roleId: 3,
-      roleIdNumber: companyId
+      roleIdNumber: companyId,
     })
     .where(eq(UserTable.email, email))
     .execute();

@@ -1,6 +1,7 @@
 import { number } from "zod";
 
 interface Company {
+  id: number;
   logo: string;
   banner: string;
   name: string;

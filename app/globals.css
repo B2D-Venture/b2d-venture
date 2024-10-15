@@ -50,11 +50,11 @@ body {
   }
 
   .search-bar {
-    @apply h-[45px] pl-6 pr-40 pt-2 pb-2 bg-white rounded-[60px] border-2 border-black flex items-center justify-between max-md:hidden;
+    @apply h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
   }
 
   .search-filter {
-    @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
+    @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between mx-32 my-14;
   }
 
   .google-button {
