@@ -4,9 +4,14 @@ import {
   CompanyRequestData,
   DataRoomData
 } from "../../types/company/index";
-import { CompanyTable, CompanyRequestTable, DataRoomTable, UserTable } from "../schema";
+import { 
+  CompanyTable, 
+  CompanyRequestTable, 
+  DataRoomTable, 
+  UserTable 
+} from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq } from 'drizzle-orm';
+import { eq, isNull } from 'drizzle-orm';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -43,6 +48,16 @@ export async function getCompanyById(id: number) {
     .execute();
 
   return company[0];
+}
+
+export async function getCompanyRequestById(id: number) {
+  return await db
+    .select({
+      approval: CompanyRequestTable.approval
+    })
+    .from(CompanyRequestTable)
+    .where(eq(CompanyRequestTable.companyId, id))
+    .execute();
 }
 
 export async function changeToCompanyRole({ email, companyId }: { email: string, companyId: number }) {

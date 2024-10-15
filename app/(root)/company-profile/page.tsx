@@ -2,10 +2,11 @@ import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/Pitch";
 import DealTerm from "@/components/DealTerm";
-import { getUserByEmail, getCompanyById } from "@/lib/db/index";
+import { getUserByEmail, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import WaitingShow from "@/components/profile/WaitingShow";
 
 export default async function CompanyProfile() {
   const session = await getServerSession(authConfig);
@@ -20,13 +21,20 @@ export default async function CompanyProfile() {
     redirect("/role-register");
   }
 
+  let isApproval = null;
+  if (user.roleIdNumber !== null) {
+    const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
+    isApproval = isApprovalObj[0];
+  }
+
   let company = null;
   if (user.roleIdNumber !== null) {
     company = await getCompanyById(user.roleIdNumber);
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center min-h-screen relative">
+      {isApproval?.approval === null && (<WaitingShow />)}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
           src="https://images.workpointtoday.com/workpointnews/2022/11/15081905/1668475141_74922_52345681_10156606559473124_7930833184248299520_n.jpeg"
@@ -70,6 +78,10 @@ export default async function CompanyProfile() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
+        <Pitch />
+        <Pitch />
+        <Pitch />
+        <Pitch />
         <Pitch />
         <DealTerm />
       </div>
