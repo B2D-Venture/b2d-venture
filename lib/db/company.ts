@@ -2,10 +2,11 @@ import { drizzle } from "drizzle-orm/neon-http";
 import {
   CompanyData,
   CompanyRequestData,
-  DataRoomData
+  DataRoomData,
 } from "../../types/company/index";
 import { CompanyTable, CompanyRequestTable, DataRoomTable } from "../schema";
 import { neon } from "@neondatabase/serverless";
+import { ilike, or } from "drizzle-orm";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -32,4 +33,31 @@ export async function addCompanyRequest(request: CompanyRequestData) {
 
 export async function addDataRoom(data: DataRoomData) {
   return await db.insert(DataRoomTable).values(data).execute();
+}
+
+export async function getAllCompanies(searchQuery?: string, limit?: number) {
+  try {
+    let query = db.select().from(CompanyTable);
+
+    if (searchQuery) {
+      const searchPattern = `%${searchQuery}%`;
+      query = query.where(
+        or(
+          ilike(CompanyTable.name, searchPattern),
+          ilike(CompanyTable.description, searchPattern),
+        ),
+      );
+    }
+
+    if (limit) {
+      query.limit(limit);
+    }
+
+    const companies = await query.execute();
+
+    return companies;
+  } catch (error) {
+    console.error("Error retrieving companies:", error);
+    throw error;
+  }
 }

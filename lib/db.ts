@@ -1,11 +1,16 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../types/index";
-import { eq } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
-import { InvestorTable, InvestorRequestTable, CompanyRequestTable, InvestmentRequestTable, CompanyTable } from "./schema";
-import dotenv from 'dotenv';
-import path from 'path';
-import { eq, lt, gte, ne, isNull } from 'drizzle-orm';
+import {
+  InvestorTable,
+  InvestorRequestTable,
+  CompanyRequestTable,
+  InvestmentRequestTable,
+  CompanyTable,
+} from "./schema";
+import dotenv from "dotenv";
+import path from "path";
+import { eq, isNull } from "drizzle-orm";
 
 dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
@@ -17,7 +22,6 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
-
 
 export async function addInvestor(investor: InvestorFormData) {
   console.log("Investor Data before submission:", investor);
@@ -67,11 +71,19 @@ export async function getInvestmentRequest() {
 }
 
 export async function getCompanyById(companyId: number) {
-  return await db.select().from(CompanyTable).where(eq(CompanyTable.id, companyId)).execute();
+  return await db
+    .select()
+    .from(CompanyTable)
+    .where(eq(CompanyTable.id, companyId))
+    .execute();
 }
 
 export async function getInvestorById(investorId: number) {
-  return await db.select().from(InvestorTable).where(eq(InvestorTable.id, investorId)).execute();
+  return await db
+    .select()
+    .from(InvestorTable)
+    .where(eq(InvestorTable.id, investorId))
+    .execute();
 }
 
 export async function approveCompanyRequest(requestId: number) {
@@ -80,7 +92,7 @@ export async function approveCompanyRequest(requestId: number) {
     .set({ approval: true })
     .where(eq(CompanyRequestTable.id, requestId))
     .execute();
-} 
+}
 
 export async function approveInvestorRequest(requestId: number) {
   return await db
@@ -120,21 +132,4 @@ export async function rejectInvestmentRequest(requestId: number) {
     .set({ approval: false })
     .where(eq(InvestmentRequestTable.id, requestId))
     .execute();
-}
-
-export async function getAllCompanies(limit?: number) {
-  try {
-    const query = db.select().from(CompanyTable);
-
-    if (limit) {
-      query.limit(limit);
-    }
-
-    const companies = await query.execute();
-    console.log("Retrieved Companies:", companies);
-    return companies;
-  } catch (error) {
-    console.error("Error retrieving companies:", error);
-    throw error;
-  }
 }
