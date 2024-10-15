@@ -7,6 +7,17 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import ProgressBar from "@/components/profile/company/ProgressBar";
+
+const calculateDaysLeft = (deadline: string) => {
+  const today: Date = new Date();
+  const endDate: Date = new Date(deadline);
+  
+  const timeDiff = endDate.getTime() - today.getTime();
+  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+
+  return daysLeft >= 0 ? daysLeft : 0;
+};
 
 export default async function CompanyProfile() {
   const session = await getServerSession(authConfig);
@@ -60,28 +71,14 @@ export default async function CompanyProfile() {
       <div className="detail text-center text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>
-      <div className="mx-8 mt-4 md:mx-20">
-        <div className="flex justify-between mb-1">
-          <span className="text-sm md:text-base font-medium text-[#fcd535] dark:text-yellow-500">
-            45% - 30 days left
-          </span>
-          <span className="text-sm md:text-base font-medium text-[#fcd535] dark:text-white">
-            $ {company?.fundingTarget} target
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-8 mb-4 dark:bg-gray-700">
-          <div className="bg-yellow-400 h-8 rounded-full w-[45%] text-black flex items-center">
-            <div className="ml-2 md:ml-5 text-sm md:text-base">$45,000 from 22 investors</div>
-          </div>
-        </div>
-      </div>
+      <ProgressBar dayLeft={calculateDaysLeft(company.deadline)} percentage={62} fundingTarget={company?.fundingTarget} />
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
         <div className="col-span-2">
           <Pitch pitchData={company?.pitch} />
         </div>
         <div>
-          <DealTerm company={company} />
+          <DealTerm company={company} dayLeft={calculateDaysLeft(company.deadline)} />
         </div>
       </div>
     </div>

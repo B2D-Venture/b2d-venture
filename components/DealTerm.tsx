@@ -4,24 +4,15 @@ import DealTermBtn from "./DealTermBtn";
 import { RaiseFunding } from "./RaiseFunding";
 import { CompanyData } from "@/types/company";
 
-const calculateDaysLeft = (deadline: Date) => {
-  const today: Date = new Date();
-  const endDate: Date = new Date(deadline);
-  
-  const timeDiff = endDate.getTime() - today.getTime();
-  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
 
-  return daysLeft >= 0 ? daysLeft : 0;
-};
-
-const DealTerm = ({ company }: { company: CompanyData }) => {
+const DealTerm = ({ company, dayLeft }: { company: CompanyData, dayLeft: number }) => {
   return (
     <div className="sticky top-36 bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
         <h2 className="text-black text-4xl font-bold text-center">Deal Terms</h2>
       </div>
       <div className="space-y-4">
-        <DealTermElement data={calculateDaysLeft(company.deadline)} label="Days Left" type="deadline" />
+        <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
         <DealTermElement data={`${company.minInvest.toLocaleString()} $`} label="Minimum Investment" />
         <DealTermElement data={`${company.maxInvest.toLocaleString()} $`} label="Maximum Investment" />
         <DealTermElement data={`${company.fundingTarget.toLocaleString()} $`} label="Funding Target" />
