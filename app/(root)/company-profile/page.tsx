@@ -2,8 +2,29 @@ import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/Pitch";
 import DealTerm from "@/components/DealTerm";
+import { getUserByEmail, getCompanyById } from "@/lib/db/index";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-const CompanyProfile = () => {
+export default async function CompanyProfile() {
+  const session = await getServerSession(authConfig);
+
+  if (!session || !session.user?.email) {
+    redirect("/"); // Should be redirect to login page, but for now redirect to home page (same as investor-profile)
+  }
+  const userEmail = session.user.email;
+  const user = await getUserByEmail(3, userEmail); // get user role 3 = company
+
+  if (!user) {
+    redirect("/role-register");
+  }
+
+  let company = null;
+  if (user.roleIdNumber !== null) {
+    company = await getCompanyById(user.roleIdNumber);
+  }
+
   return (
     <div>
       <div className="banner relative w-full h-[438px] bg-blue">
@@ -56,4 +77,3 @@ const CompanyProfile = () => {
   );
 };
 
-export default CompanyProfile;
