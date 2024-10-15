@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { navbarLinks } from "@/constants";
-import { FaSearch } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import SearchBar from "@/components/SearchBar";
 import MobileNav from "@/components/MobileNav";
-import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton"; // Import the component
+import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton";
 import { SessionProvider } from "next-auth/react";
 
 const Navbar = () => {
@@ -43,7 +43,7 @@ const Navbar = () => {
                   <div
                     className={cn(
                       "navbar-link",
-                      isActive && "navbar-link-active"
+                      isActive && "navbar-link-active",
                     )}
                   >
                     {link.label}
@@ -51,12 +51,7 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <div className="search-bar">
-              <span className="flex items-center text-placeholder">
-                <FaSearch className="mr-3" />
-                Search
-              </span>
-            </div>
+            <SearchBar initialSearch="" classSearch="search-bar" />
             <SessionProvider>
               <UserProfileOrSignInButton />
             </SessionProvider>
