@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CompanyCard from "@/components/CompanyCard";
-import { getAllCompanies } from "@/lib/db";
+import { getAllCompanies } from "@/lib/db/company";
 import { Company } from "@/types";
 
 const CompanyCardSlide = () => {
@@ -13,7 +13,7 @@ const CompanyCardSlide = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getAllCompanies(10);
+        const companies = await getAllCompanies("", 10);
         setCompanies(companies);
       } catch (err) {
         console.error("Error fetching companies:", err);
@@ -40,7 +40,7 @@ const CompanyCardSlide = () => {
         <div className="inline-flex">
           {companies.map((company) => (
             <CompanyCard
-              key={company.abbr}
+              key={company.id}
               logoUrl={company.logo}
               backgroundUrl={company.banner}
               companyName={company.name}
