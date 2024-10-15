@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Pitch from "@/components/Pitch";
+import Pitch from "@/components/profile/company/Pitch";
 import DealTerm from "@/components/DealTerm";
 import { getUserByEmail, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
@@ -77,12 +77,12 @@ export default async function CompanyProfile() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
-        <Pitch />
-        {/* <Pitch /> */}
-        {/* <Pitch /> */}
-        {/* <Pitch /> */}
-        {/* <Pitch /> */}
-        <DealTerm company={company} />
+        <div className="col-span-2"> {/* เพิ่ม overflow-auto */}
+          <Pitch pitchData={company?.pitch} />
+        </div>
+        <div className="overflow-auto"> {/* เพิ่ม overflow-auto */}
+          <DealTerm company={company} />
+        </div>
       </div>
     </div>
   );

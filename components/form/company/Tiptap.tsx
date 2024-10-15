@@ -29,7 +29,7 @@ export default function Tiptap({
             Heading.configure({
                 levels: [1],
                 HTMLAttributes: {
-                    class: "font-bold text-2xl",
+                    class: "font-bold text-4xl",
                 },
             }),
             OrderedList.configure({
@@ -53,7 +53,7 @@ export default function Tiptap({
         content: pitch,
         editorProps: {
             attributes: {
-                class: "rounded-md border min-h-[300px] border-input bg-white disabled:cursor-not-allowed disabled:opacity-50 my-2 py-2 px-3",
+                class: "text-xl rounded-md border min-h-[300px] border-input bg-white disabled:cursor-not-allowed disabled:opacity-50 my-2 py-2 px-3",
             }
         },
         onUpdate({ editor }) {
