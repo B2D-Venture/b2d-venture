@@ -23,29 +23,6 @@ if (!databaseUrl) {
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
 
-export async function addInvestor(investor: InvestorFormData) {
-  console.log("Investor Data before submission:", investor);
-
-  const investorData = {
-    ...investor,
-    birthDate: investor.birthDate
-      ? new Date(investor.birthDate).toISOString()
-      : "",
-  };
-
-  const insertedInvestor = await db
-    .insert(InvestorTable)
-    .values(investorData)
-    .returning({ investorId: InvestorTable.id })
-    .execute();
-
-  return insertedInvestor[0]?.investorId;
-}
-
-export async function addInvestorRequest(request: InvestorRequestData) {
-  return await db.insert(InvestorRequestTable).values(request).execute();
-}
-
 export async function getInvestorRequest() {
   return await db
     .select()
