@@ -5,7 +5,7 @@ interface DealTermElementProps {
 }
 
 interface ProgressBarProps {
-  percentage: number;
+  currentInvestAmount: number;
   dayLeft: number;
   fundingTarget: number | undefined;
 }

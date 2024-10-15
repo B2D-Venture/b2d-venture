@@ -13,10 +13,12 @@ const DealTerm = ({ company, dayLeft }: { company: CompanyData, dayLeft: number 
       </div>
       <div className="space-y-4">
         <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
+        <DealTermElement data={10} label="Investors" />
         <DealTermElement data={`${company.minInvest.toLocaleString()} $`} label="Minimum Investment" />
         <DealTermElement data={`${company.maxInvest.toLocaleString()} $`} label="Maximum Investment" />
         <DealTermElement data={`${company.fundingTarget.toLocaleString()} $`} label="Funding Target" />
         <DealTermElement data={`${company.priceShare.toLocaleString()} $`} label="Price per Share" />
+        <DealTermElement data={company.securityType} label="Security Type" />
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">

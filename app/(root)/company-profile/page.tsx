@@ -71,7 +71,7 @@ export default async function CompanyProfile() {
       <div className="detail text-center text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>
-      <ProgressBar dayLeft={calculateDaysLeft(company.deadline)} percentage={62} fundingTarget={company?.fundingTarget} />
+      <ProgressBar dayLeft={calculateDaysLeft(company.deadline)} currentInvestAmount={712312} fundingTarget={company?.fundingTarget} />
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
         <div className="col-span-2">
