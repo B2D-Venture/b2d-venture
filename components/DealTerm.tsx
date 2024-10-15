@@ -2,18 +2,29 @@ import React from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
 import { RaiseFunding } from "./RaiseFunding";
+import { CompanyData } from "@/types/company";
 
-const DealTerm = () => {
+const calculateDaysLeft = (deadline: Date) => {
+  const today: Date = new Date();
+  const endDate: Date = new Date(deadline);
+  
+  const timeDiff = endDate.getTime() - today.getTime();
+  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+
+  return daysLeft >= 0 ? daysLeft : 0;
+};
+
+const DealTerm = ({ company }: { company: CompanyData }) => {
   return (
     <div className="bg-[#d9d9d9] md:m-5 md:rounded-xl">
       <div className="mt-5 rounded-[15px]" />
       <div className="mx-4">
         <span className="text-black text-4xl font-bold ml-4">Deal Terms</span>
-        <DealTermElement data="10" label="Days Left to investment" />
-        <DealTermElement data="1,000 $" label="Minimum Investment" />
-        <DealTermElement data="2,000 $" label="Maximum Investment" />
-        <DealTermElement data="100,000 $" label="Funding Goal" />
-        <DealTermElement data="10.23 $" label="Price per Security" />
+        <DealTermElement data={calculateDaysLeft(company.deadline)} label="Days Left" />
+        <DealTermElement data={`${company.minInvest.toLocaleString()} $`} label="Minimum Investment" />
+        <DealTermElement data={`${company.maxInvest.toLocaleString()} $`} label="Maximum Investment" />
+        <DealTermElement data={`${company.fundingTarget.toLocaleString()} $`} label="Funding Target" />
+        <DealTermElement data={`${company.priceShare.toLocaleString()} $`} label="Price per Share" />
         <div className="grid grid-cols-2 items-center">
           <DealTermBtn
             text="Question"

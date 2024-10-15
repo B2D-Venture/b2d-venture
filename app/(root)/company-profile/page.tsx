@@ -37,7 +37,7 @@ export default async function CompanyProfile() {
       {isApproval?.approval === null && (<WaitingShow />)}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
-          src="https://images.workpointtoday.com/workpointnews/2022/11/15081905/1668475141_74922_52345681_10156606559473124_7930833184248299520_n.jpeg"
+          src={company?.banner || "/default-banner.png"}
           alt="banner"
           layout="fill"
           objectFit="cover"
@@ -47,7 +47,7 @@ export default async function CompanyProfile() {
       <div className="w-full h-[70px] md:h-[100px] lg:h-[80px]">
         <div className="logo relative w-[120px] h-[120px] top-40% left-1/2 transform -translate-x-1/2 -translate-y-1/2 xl:w-[200px] xl:h-[200px] lg:w-[170px] lg:h-[170px] md:w-[150px] md:h-[150px]">
           <Image
-            src="https://static.wixstatic.com/media/d2252d_4c1a1bda6a774bd68f789c0770fd16e5~mv2.png"
+            src={company?.logo || "/default-logo.png"}
             alt="logo"
             layout="fill"
             className="rounded-[5px]"
@@ -55,11 +55,10 @@ export default async function CompanyProfile() {
         </div>
       </div>
       <p className="name text-2xl text-white left-1/2 text-center md:mt-8 md:text-5xl">
-        Company name
+        {company?.name}
       </p>
       <div className="detail text-center text-white text-sm mt-3 md:text-xl">
-        is a startup that is developing a new generation of plants that are more
-        sustainable, efficient, and beautiful than ever before.
+        {company?.description}
       </div>
       <div className="mx-8 mt-4 md:mx-20">
         <div className="flex justify-between mb-1">
@@ -67,7 +66,7 @@ export default async function CompanyProfile() {
             45% - 30 days left
           </span>
           <span className="text-sm md:text-base font-medium text-[#fcd535] dark:text-white">
-            $ 100,000 target
+            $ {company?.fundingTarget} target
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-8 mb-4 dark:bg-gray-700">
@@ -79,11 +78,11 @@ export default async function CompanyProfile() {
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
         <Pitch />
-        <Pitch />
-        <Pitch />
-        <Pitch />
-        <Pitch />
-        <DealTerm />
+        {/* <Pitch /> */}
+        {/* <Pitch /> */}
+        {/* <Pitch /> */}
+        {/* <Pitch /> */}
+        <DealTerm company={company} />
       </div>
     </div>
   );
