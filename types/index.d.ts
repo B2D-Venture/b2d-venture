@@ -32,11 +32,6 @@ interface PitchDescriptionProps {
   desc: string;
 }
 
-interface DealTermElementProps {
-  data: string;
-  label: string;
-}
-
 interface DealTermBtnProps {
   text: string;
   textColor: string;

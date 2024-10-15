@@ -4,14 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
 import FormFields from '@/components/form/elements/FormFields';
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import Document from "./form/company/Document";
-import { addCompany, addCompanyRequest, addDataRoom } from "@/lib/db/company";
+import { addCompany, addCompanyRequest, addDataRoom, changeToCompanyRole } from "@/lib/db/company";
+import { useSession } from "next-auth/react";
 
 const documentSchema = z.object({
   pdfs: z.array(z.object({
@@ -83,13 +83,19 @@ export function CompanyRegisterForm() {
     form.trigger("banner");
   };
 
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email ?? "";
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyData } = values;
 
     addCompany(companyData)
       .then((companyId) => {
         addCompanyRequest({ companyId });
-
+        changeToCompanyRole({
+          email: userEmail,
+          companyId: companyId,
+        });
         if (document && document.pdfs) {
           document.pdfs.forEach((pdf) => {
             const dataRoomEntry = {
