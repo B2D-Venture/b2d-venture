@@ -128,3 +128,15 @@ export const RaiseFundingRequestTable = pgTable("raise_funding_request", {
   requestDate: timestamp("request_date").defaultNow().notNull(),
   approval: boolean("approval"),
 });
+
+export const DataRoomRequestTable = pgTable("data_room_request", {
+  id: serial("id").primaryKey().notNull(),
+  companyId: integer("company_id")
+    .references(() => CompanyTable.id)
+    .notNull(),
+  investorId: integer("investor_id")
+    .references(() => InvestorTable.id)
+    .notNull(),
+  requestDate: timestamp("request_date").defaultNow().notNull(),
+  approval: boolean("approval"),
+});
