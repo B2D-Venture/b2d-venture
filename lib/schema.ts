@@ -1,4 +1,3 @@
-import { create } from "domain";
 import {
   timestamp,
   text,
@@ -45,7 +44,6 @@ export const InvestorTable = pgTable("investor", {
   nationality: varchar("nationality").notNull(),
   networth: integer("networth").notNull(),
   investableAmount: real("investable_amount").default(0),
-  status: boolean("status").default(false),
 });
 
 export const CompanyTable = pgTable("company", {
@@ -55,14 +53,7 @@ export const CompanyTable = pgTable("company", {
   name: varchar("name").notNull(),
   abbr: varchar("abbr", { length: 10 }).notNull(),
   description: text("description").notNull(),
-  fundingTarget: integer("funding_target").notNull(),
-  minInvest: integer("min_invest").notNull(),
-  maxInvest: integer("max_invest").notNull(),
-  deadline: date("deadline").notNull(),
-  securityType: varchar("security_type").notNull(),
-  priceShare: real("price_share").notNull(),
   pitch: text("pitch").notNull(),
-  status: boolean("status").default(false),
 });
 
 export const DataRoomTable = pgTable("data_room", {
@@ -86,7 +77,7 @@ export const InvestmentRequestTable = pgTable("investment_request", {
   amount: real("amount").notNull(),
   getStock: real("get_stock").notNull(),
   requestDate: timestamp("request_date").notNull(),
-  approval: boolean("approval").notNull(),
+  approval: boolean("approval"),
 });
 
 export const CompanyRequestTable = pgTable("company_request", {
@@ -94,7 +85,7 @@ export const CompanyRequestTable = pgTable("company_request", {
   companyId: integer("company_id")
     .references(() => CompanyTable.id)
     .notNull(),
-  approval: boolean("approval").notNull(),
+  approval: boolean("approval"),
   requestDate: timestamp("request_date").notNull(),
 });
 
