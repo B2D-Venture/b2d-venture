@@ -20,7 +20,7 @@ export function InvestorProfileCard({
   logo,
   investorName,
   email,
-  age,
+  birthDate,
   netWorth,
   moneyReadyForInvestment,
   Nationality,
@@ -31,7 +31,7 @@ export function InvestorProfileCard({
   investorName: string;
   email: string;
   Nationality: string;
-  age: number;
+  birthDate: string;
   netWorth: number;
   moneyReadyForInvestment: number;
   handleApprove: () => void;
@@ -78,8 +78,8 @@ export function InvestorProfileCard({
           <AccordionContent>
             <div className="flex flex-row items-center justify-between">
               <OutputTextBox
-                label="Age"
-                value={age}
+                label="BirthDate"
+                value={birthDate}
                 classNameLabel=""
                 classNameValue=""
               />
