@@ -7,7 +7,6 @@ interface Company {
     abbr: string;
     description: string;
     pitch: string;
-    raisefunding: RaiseFunding;
   }
 
 export type CompanyRequestData = {
