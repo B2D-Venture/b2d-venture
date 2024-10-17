@@ -44,10 +44,18 @@ export const getRaiseFundingByCompanyId = async (companyId: number) => {
       .where(eq(RaiseFundingTable.companyId, companyId))
       .execute();
       
-    console.log("raiseFundingRecord", raiseFundingRecord);
     return raiseFundingRecord;
   } catch (error) {
     console.error("Error fetching raise funding record:", error);
     throw error;
   }
 };
+
+export async function getRaiseFundingById(raiseFundingId: number) {
+  const raiseFunding = await db
+    .select()
+    .from(RaiseFundingTable)
+    .where(eq(RaiseFundingTable.id, raiseFundingId))
+    .execute();
+  return raiseFunding[0];
+}
