@@ -1,22 +1,5 @@
 import { number } from "zod";
 
-interface Company {
-  id: number;
-  logo: string;
-  banner: string;
-  name: string;
-  abbr: string;
-  description: string;
-  fundingTarget: number;
-  minInvest: number;
-  maxInvest: number;
-  deadline: string;
-  securityType: string;
-  priceShare: number;
-  pitch: string;
-  status: boolean;
-}
-
 interface CompanyCardProps {
   logoUrl: string;
   backgroundUrl: string;

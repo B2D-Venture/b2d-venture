@@ -1,18 +1,14 @@
-export type CompanyData = {
+import { RaiseFunding } from '../raise';
+interface Company {
+    id: number;
     logo: string;
     banner: string;
     name: string;
     abbr: string;
     description: string;
-    fundingTarget: number;
-    minInvest: number;
-    maxInvest: number;
-    deadline: Date;
-    securityType: string;
-    priceShare: number;
     pitch: string;
-    status?: boolean;
-}
+    raisefunding: RaiseFunding;
+  }
 
 export type CompanyRequestData = {
     companyId: number;
