@@ -7,29 +7,33 @@ import {
   getInvestmentRequest,
   getCompanyRequest,
   getInvestorRequest,
-  getCompanyById,
-  getInvestorById,
   approveCompanyRequest,
   approveInvestorRequest,
   approveInvestmentRequest,
   rejectCompanyRequest,
   rejectInvestorRequest,
   rejectInvestmentRequest,
-} from "@/lib/db";
+} from "@/lib/db/admin";
+import { Company } from "@/types/company";
+import { InvestorProps } from "@/types/investor";
+import { getCompanyById } from "@/lib/db/company";
+import { getInvestorById } from "@/lib/db/investor";
+import { getRaiseFundingByCompanyId } from "@/lib/db/raise";
 
-// Define TypeScript interfaces for your data
 interface CompanyRequest {
   id: number;
   companyId: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
+  company: Company;
 }
 
 interface InvestorRequest {
   id: number;
   investorId: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
+  investor: InvestorProps;
 }
 
 interface InvestmentRequest {
@@ -39,7 +43,7 @@ interface InvestmentRequest {
   amount: number;
   getStock: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
 }
 
 const AdminPage = () => {
@@ -50,28 +54,31 @@ const AdminPage = () => {
   const fetchData = async () => {
     try {
       const companyRequests = await getCompanyRequest();
-      console.log("Fetched Company Requests:", companyRequests);
       const investorRequests = await getInvestorRequest();
       const investmentRequests = await getInvestmentRequest();
 
-      // Fetch company details for each request
       const companyDetails = await Promise.all(
         companyRequests.map(async (request) => {
-          const companies = await getCompanyById(request.companyId);
+          const company = await getCompanyById(request.companyId);
+          const raiseFunding = await getRaiseFundingByCompanyId(request.companyId); // Assuming this function exists
+          console.log(raiseFunding);
+      
           return {
             ...request,
-            company: companies[0] || null, // Assuming the response is an array
+            company: {
+              ...company,
+              raise_funding: raiseFunding || null,
+            },
           };
         })
       );
 
-      // Fetch investor details for each request
       const investorDetails = await Promise.all(
         investorRequests.map(async (request) => {
           const investors = await getInvestorById(request.investorId);
           return {
             ...request,
-            investor: investors[0] || null, // Assuming the response is an array
+            investor: investors || null,
           };
         })
       );
@@ -100,6 +107,9 @@ const AdminPage = () => {
             key={index}
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
+            <script>
+              console.log(companyRequest.company?.raise_funding);
+            </script>
             <CompanyProfileCard
               logo={companyRequest.company?.logo || "default_logo_url.png"} // Default logo if none exists
               companyName={
@@ -110,23 +120,31 @@ const AdminPage = () => {
                 companyRequest.company?.description ||
                 `Description for Company ${companyRequest.companyId}`
               }
-              abbreviation={companyRequest.company?.abbr || "CMP"}
-              valuation={companyRequest.company?.fundingTarget || 10000000}
-              minimumInvestment={companyRequest.company?.minInvest || 100000}
-              maximumInvestment={companyRequest.company?.maxInvest || 1000000}
-              securityType={companyRequest.company?.securityType || "Stock"}
-              target={companyRequest.company?.fundingTarget || 10000000}
+              abbreviation={companyRequest.company?.abbr || "AMD"}
+              valuation={companyRequest.company?.raise_funding?.fundingTarget || 9999}
+              minimumInvestment={companyRequest.company?.raise_funding?.minInvest || 9999}
+              maximumInvestment={companyRequest.company?.raise_funding?.maxInvest || 9999}
+              securityType={companyRequest.company?.raise_funding?.deadline || "Stock"}
+              target={companyRequest.company?.raise_funding?.fundingTarget || 9999}              
               handleApprove={async () => {
-                await approveCompanyRequest(companyRequest.id);
-                await delay(100);
-                fetchData();
-                console.log("Approve Company Request");
+                try {
+                  await approveCompanyRequest(companyRequest.id);
+                  await delay(100); // Small delay to ensure smooth UI update
+                  fetchData(); // Re-fetch data after approval
+                  console.log("Approved Company Request");
+                } catch (error) {
+                  console.error("Error approving company request:", error);
+                }
               }}
               handleReject={async () => {
-                await rejectCompanyRequest(companyRequest.id);
-                await delay(100);
-                fetchData();
-                console.log("Reject Company Request");
+                try {
+                  await rejectCompanyRequest(companyRequest.id);
+                  await delay(100); // Small delay to ensure smooth UI update
+                  fetchData(); // Re-fetch data after rejection
+                  console.log("Rejected Company Request");
+                } catch (error) {
+                  console.error("Error rejecting company request:", error);
+                }
               }}
             />
           </div>
@@ -145,7 +163,9 @@ const AdminPage = () => {
                 "https://utfs.io/f/EDwc07VFqTZJz8b9sjIOrtwiWIsCUTmuHpyAX4vVgBK5kdxn"
               } // Default logo if none exists
               investorName={
-                investorRequest.investor?.name ||
+                investorRequest.investor?.firstName +
+                  " " +
+                  investorRequest.investor?.lastName ||
                 `Investor ${investorRequest.investorId}`
               }
               Nationality={investorRequest.investor?.nationality || "Unknown"}
@@ -179,25 +199,25 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <Dealcard
-              investorName={`Investor ${deal.investorId}`} // This could be fetched as well
+              investorName={`Investor ${deal.investorId}`}
               moneyReadyForInvestment={deal.amount}
-              investAmount={deal.amount} // This could be the investment amount
-              stockPercentage={deal.getStock} // This should be the stock percentage offered
-              companyName={`Company ${deal.companyId}`} // This could be the company's name if fetched
-              raiseTarget={10000000} // Fetch this value if applicable
-              raisePercentage={10} // This might need to be calculated based on your logic
-              valuation={10000000} // Fetch this if applicable
+              investAmount={deal.amount}
+              stockPercentage={deal.getStock}
+              companyName={`Company ${deal.companyId}`}
+              raiseTarget={10000000}
+              raisePercentage={10}
+              valuation={10000000}
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);
                 await delay(100);
                 console.log("Approve Investment Request");
-                fetchData(); // Refresh data after approval
+                fetchData();
               }}
               handleReject={async () => {
                 await rejectInvestmentRequest(deal.id);
                 await delay(100);
                 console.log("Reject Investment Request");
-                fetchData(); // Refresh data after rejection
+                fetchData();
               }}
             />
           </div>
@@ -213,7 +233,7 @@ const AdminPage = () => {
 
       <button
         onClick={() => {
-          console.log(companyData, investorData, dealData);
+          // console.log(companyData);
         }}
         className="bg-gray-500 text-white px-4 py-2 rounded"
       >

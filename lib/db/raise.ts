@@ -26,3 +26,19 @@ export async function addRaiseFunding(fundingData: RaiseFunding, companyId: numb
   console.log("insertedFunding", insertedFunding);
   return insertedFunding[0]?.raiseFundingId;
 }
+
+export const getRaiseFundingByCompanyId = async (companyId: number) => {
+  try {
+    const raiseFundingRecord = await db
+      .select()
+      .from(RaiseFundingTable)
+      .where(eq(RaiseFundingTable.companyId, companyId))
+      .execute();
+      
+    console.log("raiseFundingRecord", raiseFundingRecord);
+    return raiseFundingRecord;
+  } catch (error) {
+    console.error("Error fetching raise funding record:", error);
+    throw error;
+  }
+};
