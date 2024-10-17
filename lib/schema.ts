@@ -43,7 +43,7 @@ export const InvestorTable = pgTable("investor", {
   email: varchar("email").notNull(),
   nationality: varchar("nationality").notNull(),
   networth: integer("networth").notNull(),
-  investableAmount: real("investable_amount").default(0),
+  investableAmount: real("investable_amount").default(0).notNull(),
 });
 
 export const CompanyTable = pgTable("company", {
@@ -94,7 +94,7 @@ export const InvestorRequestTable = pgTable("investor_request", {
   investorId: integer("investor_id")
     .references(() => InvestorTable.id)
     .notNull(),
-  approval: boolean("approval").notNull(),
+  approval: boolean("approval"),
   requestDate: timestamp("request_date").defaultNow().notNull(),
 });
 
