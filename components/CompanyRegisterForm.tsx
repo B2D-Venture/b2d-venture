@@ -11,6 +11,7 @@ import FormFields from '@/components/form/elements/FormFields';
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import Document from "./form/company/Document";
 import { addCompany, addCompanyRequest, addDataRoom, changeToCompanyRole } from "@/lib/db/company";
+import { addRaiseFunding, addRaiseFundingRequest } from "@/lib/db/raise";
 import { useSession } from "next-auth/react";
 
 const documentSchema = z.object({
@@ -36,7 +37,6 @@ const formSchema = z.object({
   minInvest: z.number().min(0, "Minimum investment cannot be negative"),
   maxInvest: z.number().min(0, "Maximum investment cannot be negative"),
   deadline: z.date({ required_error: "Deadline is required." }),
-  securityType: z.string().min(1, "Security type is required"),
   priceShare: z.number().min(0, "Price per share cannot be negative"),
   pitch: z.string().min(1, "Pitch is required"),
   status: z.boolean().default(false),
@@ -72,7 +72,6 @@ export function CompanyRegisterForm() {
       minInvest: 0,
       maxInvest: 0,
       deadline: undefined,
-      securityType: "",
       priceShare: 0,
       pitch: "",
     },
@@ -87,11 +86,31 @@ export function CompanyRegisterForm() {
   const userEmail = session?.user?.email ?? "";
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const { document, ...companyData } = values;
+    const { document, ...companyFormData } = values;
+    const companyData = {
+      logo: companyFormData.logo,
+      banner: companyFormData.banner,
+      name: companyFormData.name,
+      abbr: companyFormData.abbr,
+      description: companyFormData.description,
+      pitch: companyFormData.pitch,
+    };
+
+    const raiseFundingData = {
+      fundingTarget: companyFormData.fundingTarget,
+      minInvest: companyFormData.minInvest,
+      maxInvest: companyFormData.maxInvest,
+      deadline: companyFormData.deadline.toISOString(),
+      priceShare: companyFormData.priceShare,
+    }
 
     addCompany(companyData)
       .then((companyId) => {
-        addCompanyRequest({ companyId });
+        console.log("Company ID:", companyId);
+        addCompanyRequest({ companyId: companyId });
+        addRaiseFunding(raiseFundingData, companyId)
+          .then((raiseId) => addRaiseFundingRequest({ raiseFundingId: raiseId }))
+          .catch((err) => console.error("Error adding raise funding:", err));
         changeToCompanyRole({
           email: userEmail,
           companyId: companyId,
@@ -103,9 +122,7 @@ export function CompanyRegisterForm() {
               documentName: pdf.name,
               documentUrl: pdf.url,
             };
-
             addDataRoom(dataRoomEntry);
-
           });
         }
 
@@ -219,15 +236,6 @@ export function CompanyRegisterForm() {
                 label="Deadline"
                 name="deadline"
                 type="calendar"
-              />
-            </div>
-            {/* Security Type */}
-            <div className="col-span-1">
-              <FormFields
-                control={form.control}
-                name="securityType"
-                label="Security Type"
-                dataId="sec-input"
               />
             </div>
             {/* Price per Share */}

@@ -63,7 +63,7 @@ export const DataRoomTable = pgTable("data_room", {
     .notNull(),
   documentName: varchar("document_name").notNull(),
   documentUrl: varchar("document_url").notNull(),
-  uploadDate: timestamp("upload_date").notNull(),
+  uploadDate: timestamp("upload_date").defaultNow().notNull(),
 });
 
 export const InvestmentRequestTable = pgTable("investment_request", {
@@ -76,7 +76,7 @@ export const InvestmentRequestTable = pgTable("investment_request", {
     .notNull(),
   amount: real("amount").notNull(),
   getStock: real("get_stock").notNull(),
-  requestDate: timestamp("request_date").notNull(),
+  requestDate: timestamp("request_date").defaultNow().notNull(),
   approval: boolean("approval"),
 });
 
@@ -86,7 +86,7 @@ export const CompanyRequestTable = pgTable("company_request", {
     .references(() => CompanyTable.id)
     .notNull(),
   approval: boolean("approval"),
-  requestDate: timestamp("request_date").notNull(),
+  requestDate: timestamp("request_date").defaultNow().notNull(),
 });
 
 export const InvestorRequestTable = pgTable("investor_request", {

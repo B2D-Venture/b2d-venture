@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import {
-  CompanyData,
-  CompanyRequestData,
-  DataRoomData,
+  Company,
+  CompanyRequest,
+  DataRoom,
 } from "../../types/company/index";
 import {
   CompanyTable,
@@ -22,7 +22,7 @@ if (!databaseUrl) {
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
 
-export async function addCompany(company: CompanyData) {
+export async function addCompany(company: Company) {
   const insertedCompany = await db
     .insert(CompanyTable)
     .values(company)
@@ -32,11 +32,11 @@ export async function addCompany(company: CompanyData) {
   return insertedCompany[0]?.companyId;
 }
 
-export async function addCompanyRequest(request: CompanyRequestData) {
+export async function addCompanyRequest(request: CompanyRequest) {
   return await db.insert(CompanyRequestTable).values(request).execute();
 }
 
-export async function addDataRoom(data: DataRoomData) {
+export async function addDataRoom(data: DataRoom) {
   return await db.insert(DataRoomTable).values(data).execute();
 }
 

@@ -1,21 +1,21 @@
-import { RaiseFunding } from '../raise';
+import { RaiseFunding } from "../raise";
+
 interface Company {
-    id: number;
-    logo: string;
-    banner: string;
-    name: string;
-    abbr: string;
-    description: string;
-    pitch: string;
-  }
-
-export type CompanyRequestData = {
-    companyId: number;
+  id?: number;
+  logo: string;
+  banner: string;
+  name: string;
+  abbr: string;
+  description: string;
+  pitch: string;
 }
 
-export type DataRoomData = {
-    companyId: number;
-    documentName: string;
-    documentUrl: string;
-}
+export type CompanyRequest = {
+  companyId: number;
+};
 
+export type DataRoom = {
+  companyId: number;
+  documentName: string;
+  documentUrl: string;
+};
