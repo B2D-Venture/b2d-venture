@@ -107,7 +107,6 @@ export const RaiseFundingTable = pgTable("raise_funding", {
   minInvest: integer("min_invest").notNull(),
   maxInvest: integer("max_invest").notNull(),
   deadline: date("deadline").notNull(),
-  securityType: varchar("security_type").notNull(),
   priceShare: real("price_share").notNull(),
 });
 
