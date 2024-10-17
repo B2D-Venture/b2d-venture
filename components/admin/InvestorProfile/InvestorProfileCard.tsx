@@ -61,7 +61,7 @@ export function InvestorProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
-          <div className="flex flex-row items-center space-x-4 mt-2 text-black mb-2">
+          <div className="flex flex-row items-center space-x-4 mt-2 text-black mb-2 justify-between">
             <OutputTextBox
               label="Email"
               value={email}
@@ -74,15 +74,15 @@ export function InvestorProfileCard({
               classNameLabel=""
               classNameValue=""
             />
+            <OutputTextBox
+              label="BirthDate"
+              value={birthDate}
+              classNameLabel=""
+              classNameValue=""
+            />
           </div>
           <AccordionContent>
-            <div className="flex flex-row items-center justify-between">
-              <OutputTextBox
-                label="BirthDate"
-                value={birthDate}
-                classNameLabel=""
-                classNameValue=""
-              />
+            <div className="flex flex-row items-center space-x-10">
               <OutputTextBoxDollar
                 label="Net Worth"
                 value={netWorth}
@@ -90,7 +90,7 @@ export function InvestorProfileCard({
                 classNameValue=""
               />
               <OutputTextBoxDollar
-                label="Money Ready For Investment"
+                label="Investable Money"
                 value={moneyReadyForInvestment}
                 classNameLabel=""
                 classNameValue=""
@@ -100,10 +100,20 @@ export function InvestorProfileCard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-green-500"
+          onClick={handleApprove}
+        >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-red-500"
+          onClick={handleReject}
+        >
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>
