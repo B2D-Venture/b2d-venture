@@ -1,11 +1,10 @@
 import React from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
-import { RaiseFunding } from "./RaiseFunding";
-import { CompanyData } from "@/types/company";
+import { RaiseFundingButton } from "@/components/RaiseFundingButton";
 
 
-const DealTerm = ({ company, dayLeft }: { company: CompanyData, dayLeft: number }) => {
+const DealTerm = ({ recentFunding, dayLeft, totalInvestor }: { recentFunding: RaiseFunding, dayLeft: number, totalInvestor: number }) => {
   return (
     <div className="sticky top-36 bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
@@ -13,12 +12,11 @@ const DealTerm = ({ company, dayLeft }: { company: CompanyData, dayLeft: number 
       </div>
       <div className="space-y-4">
         <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
-        <DealTermElement data={10} label="Investors" />
-        <DealTermElement data={`${company.minInvest.toLocaleString()} $`} label="Minimum Investment" />
-        <DealTermElement data={`${company.maxInvest.toLocaleString()} $`} label="Maximum Investment" />
-        <DealTermElement data={`${company.fundingTarget.toLocaleString()} $`} label="Funding Target" />
-        <DealTermElement data={`${company.priceShare.toLocaleString()} $`} label="Price per Share" />
-        <DealTermElement data={company.securityType} label="Security Type" />
+        <DealTermElement data={totalInvestor} label="Investors" />
+        <DealTermElement data={`${recentFunding.minInvest.toLocaleString()} $`} label="Minimum Investment" />
+        <DealTermElement data={`${recentFunding.maxInvest.toLocaleString()} $`} label="Maximum Investment" />
+        <DealTermElement data={`${recentFunding.fundingTarget.toLocaleString()} $`} label="Funding Target" />
+        <DealTermElement data={`${recentFunding.priceShare.toLocaleString()} $`} label="Price per Share" />
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -49,7 +47,7 @@ const DealTerm = ({ company, dayLeft }: { company: CompanyData, dayLeft: number 
           borderColor="border-transparent"
           hoverBorderColor="border-transparent"
         />
-        <RaiseFunding />
+        <RaiseFundingButton />
       </div>
     </div>
   );

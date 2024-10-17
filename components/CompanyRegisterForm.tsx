@@ -106,7 +106,6 @@ export function CompanyRegisterForm() {
 
     addCompany(companyData)
       .then((companyId) => {
-        console.log("Company ID:", companyId);
         addCompanyRequest({ companyId: companyId });
         addRaiseFunding(raiseFundingData, companyId)
           .then((raiseId) => addRaiseFundingRequest({ raiseFundingId: raiseId }))

@@ -71,8 +71,8 @@ export const InvestmentRequestTable = pgTable("investment_request", {
   investorId: integer("investor_id")
     .references(() => InvestorTable.id)
     .notNull(),
-  companyId: integer("company_id")
-    .references(() => CompanyTable.id)
+  raiseFundingId: integer("raise_funding_id")
+    .references(() => RaiseFundingTable.id)
     .notNull(),
   amount: real("amount").notNull(),
   getStock: real("get_stock").notNull(),

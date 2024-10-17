@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/drawer";
 import { RaiseFundingForm } from "@/components/RaiseFundingForm";
 
-export function RaiseFunding() {
+export function RaiseFundingButton() {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 

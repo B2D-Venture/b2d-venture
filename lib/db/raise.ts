@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { RaiseFundingTable, RaiseFundingRequestTable } from "../schema";
-import { eq, and } from "drizzle-orm";
+import { CompanyTable, RaiseFundingTable, RaiseFundingRequestTable } from "../schema";
+import { eq, and, desc } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -23,8 +23,17 @@ export async function addRaiseFunding(fundingData: RaiseFunding, companyId: numb
     .returning({ raiseFundingId: RaiseFundingTable.id })
     .execute();
 
-  console.log("insertedFunding", insertedFunding);
   return insertedFunding[0]?.raiseFundingId;
+}
+
+export async function getRecentRaiseFundingByCompanyId(companyId: number) {
+  const recentFunding = await db
+    .select()
+    .from(RaiseFundingTable)
+    .where(eq(RaiseFundingTable.companyId, companyId))
+    .orderBy(desc(RaiseFundingTable.id))
+    .execute();
+  return recentFunding[0];
 }
 
 export const getRaiseFundingByCompanyId = async (companyId: number) => {

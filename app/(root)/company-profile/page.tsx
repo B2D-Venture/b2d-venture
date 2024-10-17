@@ -2,7 +2,13 @@ import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/profile/company/Pitch";
 import DealTerm from "@/components/DealTerm";
-import { getUserByEmail, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
+import {
+  getUserByEmail,
+  getCompanyById,
+  getCompanyRequestById,
+  getRecentRaiseFundingByCompanyId,
+  getInvesmentByFundingId
+} from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -12,12 +18,25 @@ import ProgressBar from "@/components/profile/company/ProgressBar";
 const calculateDaysLeft = (deadline: string) => {
   const today: Date = new Date();
   const endDate: Date = new Date(deadline);
-  
+
   const timeDiff = endDate.getTime() - today.getTime();
-  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
   return daysLeft >= 0 ? daysLeft : 0;
 };
+
+const getTotalInvestor = (allInvestmentFunding: any) => {
+  return allInvestmentFunding.length;
+}
+
+const getTotalInvestment = (allInvestmentFunding: any) => {
+  let totalInvestment = 0;
+  allInvestmentFunding.forEach((investment: any) => {
+    totalInvestment += investment.amount;
+  });
+
+  return totalInvestment;
+}
 
 export default async function CompanyProfile() {
   const session = await getServerSession(authConfig);
@@ -39,8 +58,16 @@ export default async function CompanyProfile() {
   }
 
   let company = null;
+  let recentFunding = null;
+  let allInvestmentFunding = null;
+  let totalInvestor = 0;
+  let totalInvestment = 0;
   if (user.roleIdNumber !== null) {
     company = await getCompanyById(user.roleIdNumber);
+    recentFunding = await getRecentRaiseFundingByCompanyId(company.id)
+    allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+    totalInvestor = getTotalInvestor(allInvestmentFunding);
+    totalInvestment = getTotalInvestment(allInvestmentFunding);
   }
 
   return (
@@ -71,14 +98,22 @@ export default async function CompanyProfile() {
       <div className="detail text-center text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>
-      <ProgressBar dayLeft={calculateDaysLeft(company.deadline)} currentInvestAmount={712312} fundingTarget={company?.fundingTarget} />
+      {recentFunding && (
+        <ProgressBar
+          dayLeft={calculateDaysLeft(recentFunding.deadline)}
+          currentInvestAmount={totalInvestment}
+          fundingTarget={recentFunding.fundingTarget}
+        />
+      )}
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
         <div className="col-span-2">
-          <Pitch pitchData={company?.pitch} />
+          <Pitch pitchData={company?.pitch || ""} />
         </div>
         <div>
-          <DealTerm company={company} dayLeft={calculateDaysLeft(company.deadline)} />
+          {recentFunding && (
+            <DealTerm recentFunding={recentFunding} dayLeft={calculateDaysLeft(recentFunding.deadline)} totalInvestor={totalInvestor} />
+          )}
         </div>
       </div>
     </div>
