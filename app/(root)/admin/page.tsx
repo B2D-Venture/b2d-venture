@@ -18,7 +18,7 @@ import { Company } from "@/types/company";
 import { InvestorProps } from "@/types/investor";
 import { getCompanyById } from "@/lib/db/company";
 import { getInvestorById } from "@/lib/db/investor";
-import { getRaiseFundingByCompanyId } from "@/lib/db/raise";
+import { getRaiseFundingByCompanyId, getRaiseFundingById } from "@/lib/db/raise";
 
 interface CompanyRequest {
   id: number;
@@ -39,7 +39,7 @@ interface InvestorRequest {
 interface InvestmentRequest {
   id: number;
   investorId: number;
-  companyId: number;
+  raiseFundingId: number;
   amount: number;
   getStock: number;
   requestDate: Date;
@@ -60,18 +60,21 @@ const AdminPage = () => {
       const companyDetails = await Promise.all(
         companyRequests.map(async (request) => {
           const company = await getCompanyById(request.companyId);
-          const raiseFunding = await getRaiseFundingByCompanyId(request.companyId); // Assuming this function exists
-          console.log(raiseFunding);
-      
+          const raiseFunding = await getRaiseFundingByCompanyId(
+            request.companyId
+          );
+          // console.log(raiseFunding);
+
           return {
             ...request,
             company: {
               ...company,
-              raise_funding: raiseFunding || null,
+              raise_funding: raiseFunding[0] || null,
             },
           };
         })
       );
+      // console.log(companyDetails);
 
       const investorDetails = await Promise.all(
         investorRequests.map(async (request) => {
@@ -83,9 +86,25 @@ const AdminPage = () => {
         })
       );
 
+      const investmentDetails = await Promise.all(
+        investmentRequests.map(async (request) => {
+          const investor = await getInvestorById(request.investorId);
+          const raiseFunding = await getRaiseFundingById(
+            request.raiseFundingId
+          );
+          const company = await getCompanyById(raiseFunding.companyId);
+          return {
+            ...request,
+            investor: investor || null,
+            raiseFunding: raiseFunding || null,
+            company: company || null,
+          };
+        })
+      );
+
       setCompanyData(companyDetails);
       setInvestorData(investorDetails);
-      setDealData(investmentRequests);
+      setDealData(investmentDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -107,9 +126,6 @@ const AdminPage = () => {
             key={index}
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
-            <script>
-              console.log(companyRequest.company?.raise_funding);
-            </script>
             <CompanyProfileCard
               logo={companyRequest.company?.logo || "default_logo_url.png"} // Default logo if none exists
               companyName={
@@ -121,16 +137,26 @@ const AdminPage = () => {
                 `Description for Company ${companyRequest.companyId}`
               }
               abbreviation={companyRequest.company?.abbr || "AMD"}
-              valuation={companyRequest.company?.raise_funding?.fundingTarget || 9999}
-              minimumInvestment={companyRequest.company?.raise_funding?.minInvest || 9999}
-              maximumInvestment={companyRequest.company?.raise_funding?.maxInvest || 9999}
-              securityType={companyRequest.company?.raise_funding?.deadline || "Stock"}
-              target={companyRequest.company?.raise_funding?.fundingTarget || 9999}              
+              valuation={
+                companyRequest.company?.raise_funding?.fundingTarget || 9999
+              }
+              minimumInvestment={
+                companyRequest.company?.raise_funding?.minInvest || 9999
+              }
+              maximumInvestment={
+                companyRequest.company?.raise_funding?.maxInvest || 9999
+              }
+              securityType={
+                companyRequest.company?.raise_funding?.deadline || "Stock"
+              }
+              target={
+                companyRequest.company?.raise_funding?.fundingTarget || 9999
+              }
               handleApprove={async () => {
                 try {
                   await approveCompanyRequest(companyRequest.id);
-                  await delay(100); // Small delay to ensure smooth UI update
-                  fetchData(); // Re-fetch data after approval
+                  await delay(100);
+                  fetchData();
                   console.log("Approved Company Request");
                 } catch (error) {
                   console.error("Error approving company request:", error);
@@ -170,10 +196,10 @@ const AdminPage = () => {
               }
               Nationality={investorRequest.investor?.nationality || "Unknown"}
               email={investorRequest.investor?.email || "email@domain.com"}
-              age={investorRequest.investor?.age || 30} // Default age if not available
-              netWorth={investorRequest.investor?.netWorth || 0} // Default net worth if not available
+              birthDate={investorRequest.investor?.birthDate || "01/01/2000"}
+              netWorth={investorRequest.investor?.networth || 0} // Default net worth if not available
               moneyReadyForInvestment={
-                investorRequest.investor?.invesinvestable_amount || 0
+                investorRequest.investor?.investableAmount || 0
               }
               handleApprove={async () => {
                 await approveInvestorRequest(investorRequest.id);
@@ -199,14 +225,22 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <Dealcard
-              investorName={`Investor ${deal.investorId}`}
-              moneyReadyForInvestment={deal.amount}
-              investAmount={deal.amount}
-              stockPercentage={deal.getStock}
-              companyName={`Company ${deal.companyId}`}
-              raiseTarget={10000000}
-              raisePercentage={10}
-              valuation={10000000}
+              // investorName={`Investor ${deal.investorId}`}
+              // moneyReadyForInvestment={deal.amount}
+              // investAmount={deal.amount}
+              // stockPercentage={deal.getStock}
+              // companyName={`Company ${deal.companyId}`}
+              // raiseTarget={10000000}
+              // raisePercentage={10}
+              // valuation={10000000}
+              investorName={deal.investor?.firstName + " " + deal.investor?.lastName || "Investor"}
+              moneyReadyForInvestment={deal.investor?.investableAmount || 0}
+              investAmount={deal.amount || 0}
+              stockPercentage={deal.getStock || 0}
+              companyName={deal.company?.name || "Company"}
+              raiseTarget={deal.raiseFunding?.fundingTarget || 0}
+              raisePercentage={deal.amount / deal.raiseFunding?.fundingTarget * 100 || 0}
+              valuation={100 / deal.getStock * deal.amount || 0}
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);
                 await delay(100);
@@ -233,7 +267,7 @@ const AdminPage = () => {
 
       <button
         onClick={() => {
-          // console.log(companyData);
+          console.log(companyData, investorData, dealData);
         }}
         className="bg-gray-500 text-white px-4 py-2 rounded"
       >
