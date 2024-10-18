@@ -24,7 +24,7 @@ export function CompanyProfileCard({
   valuation,
   minimumInvestment,
   maximumInvestment,
-  securityType,
+  deadline,
   target,
   handleApprove,
   handleReject,
@@ -36,7 +36,7 @@ export function CompanyProfileCard({
   valuation: number;
   minimumInvestment: number;
   maximumInvestment: number;
-  securityType: string;
+  deadline: string;
   target: number;
   handleApprove: () => void;
   handleReject: () => void;
@@ -74,7 +74,7 @@ export function CompanyProfileCard({
                 <OutputTextBox label="Abbreviation" value={abbreviation} />
               </div>
               <div className="flex flex-row items-center space-x-[60px]">
-                <OutputTextBox label="Security Type" value={securityType} />
+                <OutputTextBox label="Security Type" value={deadline} />
               </div>
               <div className="flex flex-row items-center space-x-[47px]">
                 <OutputTextBoxDollar label="Funding Target" value={target} />

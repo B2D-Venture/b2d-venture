@@ -146,7 +146,7 @@ const AdminPage = () => {
               maximumInvestment={
                 companyRequest.company?.raise_funding?.maxInvest || 9999
               }
-              securityType={
+              deadline={
                 companyRequest.company?.raise_funding?.deadline || "Stock"
               }
               target={
