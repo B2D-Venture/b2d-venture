@@ -4,10 +4,12 @@ import {
   InvestorRequestTable,
   CompanyRequestTable,
   InvestmentRequestTable,
+  RaiseFundingRequestTable,
+  RaiseFundingTable,
 } from "../schema";
 import dotenv from "dotenv";
 import path from "path";
-import { eq, isNull } from "drizzle-orm";
+import { eq, isNull, desc } from "drizzle-orm";
 
 dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
@@ -45,11 +47,38 @@ export async function getInvestmentRequest() {
 }
 
 export async function approveCompanyRequest(requestId: number) {
-  return await db
+  // Update the company request approval status
+  const companyRequest = await db
     .update(CompanyRequestTable)
     .set({ approval: true })
     .where(eq(CompanyRequestTable.id, requestId))
+    .returning({ companyId: CompanyRequestTable.companyId })
     .execute();
+
+  const companyId = companyRequest[0]?.companyId;
+  if (!companyId) {
+    throw new Error("Company ID not found for this request.");
+  }
+
+  const raiseFunding = await db
+    .select()
+    .from(RaiseFundingTable)
+    .where(eq(RaiseFundingTable.companyId, companyId))
+    .orderBy(desc(RaiseFundingTable.id))
+    .limit(1)
+    .execute();
+
+  if (raiseFunding.length === 0) {
+    throw new Error("No RaiseFunding entry found for this company.");
+  }
+
+  await db
+    .update(RaiseFundingRequestTable)
+    .set({ approval: true })
+    .where(eq(RaiseFundingRequestTable.raiseFundingId, raiseFunding[0].id))
+    .execute();
+
+  return;
 }
 
 export async function approveInvestorRequest(requestId: number) {
