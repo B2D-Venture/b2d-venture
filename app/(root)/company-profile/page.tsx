@@ -42,7 +42,7 @@ export default async function CompanyProfile() {
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user?.email) {
-    redirect("/"); // Should be redirect to login page, but for now redirect to home page (same as investor-profile)
+    redirect(`/signup?callbackUrl=/company-profile`);
   }
   const userEmail = session.user.email;
   const user = await getUserByEmail(3, userEmail); // get user role 3 = company
@@ -112,7 +112,7 @@ export default async function CompanyProfile() {
         </div>
         <div>
           {recentFunding && (
-            <DealTerm recentFunding={recentFunding} dayLeft={calculateDaysLeft(recentFunding.deadline)} totalInvestor={totalInvestor} />
+            <DealTerm recentFunding={recentFunding} currentInvestment={totalInvestment} dayLeft={calculateDaysLeft(recentFunding.deadline)} totalInvestor={totalInvestor} />
           )}
         </div>
       </div>

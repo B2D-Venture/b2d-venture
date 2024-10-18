@@ -3,8 +3,14 @@ import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
 import { RaiseFundingButton } from "@/components/RaiseFundingButton";
 
+const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
+  if (dayLeft <= 0 || current >= target) {
+    return true;
+  }
+  return false;
+}
 
-const DealTerm = ({ recentFunding, dayLeft, totalInvestor }: { recentFunding: RaiseFunding, dayLeft: number, totalInvestor: number }) => {
+const DealTerm = ({ recentFunding, dayLeft, totalInvestor, currentInvestment }: { recentFunding: RaiseFunding, dayLeft: number, totalInvestor: number, currentInvestment: number }) => {
   return (
     <div className="sticky top-36 bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
@@ -21,24 +27,6 @@ const DealTerm = ({ recentFunding, dayLeft, totalInvestor }: { recentFunding: Ra
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <DealTermBtn
-          text="Question"
-          textColor="text-[#423F3F]"
-          hoverTextColor="hover:text-black"
-          bgColor="bg-[#CFCBBA]"
-          hoverBgColor="hover:bg-[#AEAA9C]"
-          borderColor="border-transparent"
-          hoverBorderColor="border-transparent"
-        />
-        <DealTermBtn
-          text="Invest"
-          textColor="text-[#423F3F]"
-          hoverTextColor="hover:text-navbarTitle"
-          bgColor="bg-[#AFAB9A]"
-          hoverBgColor="hover:bg-black"
-          borderColor="border-transparent"
-          hoverBorderColor="border-transparent"
-        />
-        <DealTermBtn
           text="Edit Details"
           textColor="text-[#423F3F]"
           hoverTextColor="hover:text-white"
@@ -47,7 +35,7 @@ const DealTerm = ({ recentFunding, dayLeft, totalInvestor }: { recentFunding: Ra
           borderColor="border-transparent"
           hoverBorderColor="border-transparent"
         />
-        <RaiseFundingButton />
+        <RaiseFundingButton canRaiseFunding={canRaiseFunding(dayLeft, currentInvestment, recentFunding.fundingTarget)} />
       </div>
     </div>
   );
