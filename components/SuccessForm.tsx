@@ -4,7 +4,7 @@ import VerifyAnimation from "./VerifyAnimation";
 import Link from "next/link";
 import ShowStep from "@/components/ShowStepForm";
 
-const SuccessForm = ({ role }: {role: string}) => {
+const SuccessForm = ({ role, hasApproval }: { role: string, hasApproval: boolean | null }) => {
   const progress = useMotionValue(90);
 
   return (
@@ -30,13 +30,23 @@ const SuccessForm = ({ role }: {role: string}) => {
           Submit Success
         </div>
 
-        <div className="text-center text-[#939191] text-2xl mb-8">
-          Waiting for admin approval of your information
-        </div>
+        {hasApproval === true ? (
+          <div className="text-center text-[#939191] text-2xl mb-8">
+            Your information has been approved successfully
+          </div>
+        ) : hasApproval === false ? (
+          <div className="text-center text-[#939191] text-2xl mb-8">
+            Your information has been rejected by admin
+          </div>
+        ) : (
+          <div className="text-center text-[#939191] text-2xl mb-8">
+            Waiting for admin approval of your information
+          </div>
+        )}
 
         <div className="w-full flex justify-center">
           <Link
-            href="/profile"
+            href={(role === "Investor") ? "/investor-profile" : (role === "Company") ? "/company-profile" : "/"}
             className="w-[211px] h-[51px] bg-black text-white text-xl font-bold rounded-full text-center transition duration-300 hover:bg-gray-800 flex items-center justify-center"
           >
             Go to Profile

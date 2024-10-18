@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { getInvestorById, getUser } from "@/lib/db/index";
+import { getInvestorById, getUser, getInvestorRequestById } from "@/lib/db/index";
 
 const AvatarDropdown = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +20,11 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
       if (user) {
         if (user.roleId === 2 && user.roleIdNumber !== null) { // Investor
           const investor = await getInvestorById(user.roleIdNumber);
-          if (investor.status) {
+          const investorRequest = await getInvestorRequestById(user.roleIdNumber);
+          if (investorRequest.approval) {
             setName(investor.firstName + " " + investor.lastName);
             setImageUrl(investor.profileImage);
-          } else { // Not Approved Yet
+          } else { // Reject
             setName(session?.user?.name);
             setImageUrl(session?.user?.image);
           }

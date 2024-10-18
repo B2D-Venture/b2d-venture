@@ -59,3 +59,12 @@ export async function getRaiseFundingById(raiseFundingId: number) {
     .execute();
   return raiseFunding[0];
 }
+
+export async function getRaiseFundingRequestById(raiseFundingId: number) {
+  const raiseFundingRequest = await db
+    .select()
+    .from(RaiseFundingRequestTable)
+    .where(eq(RaiseFundingRequestTable.raiseFundingId, raiseFundingId))
+    .execute();
+  return raiseFundingRequest[0];
+}
