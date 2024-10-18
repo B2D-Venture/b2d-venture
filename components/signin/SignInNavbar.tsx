@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import MobileNav from "@/components/MobileNav";
 
 const SignInNavbar = () => {
   return (
