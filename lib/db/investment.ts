@@ -27,3 +27,13 @@ export async function getInvesmentByFundingId(id: number) {
   return funding;
 }
 
+export async function getAllInvestmentRequestByInvestorId(investorId: number) {
+  const investment = await db
+    .select()
+    .from(InvestmentRequestTable)
+    .where(eq(InvestmentRequestTable.investorId, investorId))
+    .execute();
+
+  return investment;
+}
+

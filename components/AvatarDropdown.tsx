@@ -48,21 +48,19 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center focus:outline-none"
       >
-        <Avatar imageUrl={imageUrl} width={50} height={50} />
+        <Avatar imageUrl={imageUrl || ""} width={50} height={50} />
         <FaChevronDown
-          className={`ml-2 text-gray-500 transition-transform ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
+          className={`ml-2 text-gray-500 transition-transform ${isOpen ? "rotate-180" : "rotate-0"
+            }`}
         />
       </button>
       <div
-        className={`sub-menu-wrap transform transition-transform duration-300 ease-out ${
-          isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-        }`}
+        className={`sub-menu-wrap transform transition-transform duration-300 ease-out ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
+          }`}
       >
         <div className="sub-menu shadow-lg rounded-lg">
           <div className="user-info flex items-center p-2">
-            <Avatar imageUrl={imageUrl} width={50} height={50} />
+            <Avatar imageUrl={imageUrl || ""} width={50} height={50} />
             <h2 className="font-bold text-xl text-gray-700 ml-3">{name}</h2>
           </div>
           <hr className="border-0 h-[1px] w-full bg-[#edd54d] mb-2" />

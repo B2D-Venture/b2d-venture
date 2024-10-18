@@ -1,8 +1,23 @@
 import React from "react";
 import InvestmentItem from "@/components/InvestmentItem";
-import { investmentItemExample } from "@/constants";
 
-const InvestmentItemList = () => {
+
+const formatISODate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+  const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const formattedTime = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+  return `${formattedDate}, ${formattedTime}`;
+};
+
+const InvestmentItemList = ({ investments }: {investments: any}) => {
   return (
     <div className="w-full">
       <div className="w-full mt-8 p-4 grid grid-cols-5 gap-5 items-center">
@@ -11,7 +26,7 @@ const InvestmentItemList = () => {
         <div className="col-span-1 text-white text-3xl font-bold">Status</div>
       </div>
       <div className="border-b-2 border-white mb-5" />
-      {Array.from({ length: 1 }, () => investmentItemExample)
+      {Array.from({ length: 1 }, () => investments)
         .flat()
         .map((company) => (
           <InvestmentItem
@@ -20,7 +35,7 @@ const InvestmentItemList = () => {
             companyAbbr={company.companyAbbr}
             companyName={company.companyName}
             status={company.status}
-            date={company.date}
+            date={formatISODate(company.date)}
             amount={company.amount}
             marketPrice={company.marketPrice}
             priceChange={company.priceChange}

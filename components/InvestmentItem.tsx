@@ -42,10 +42,10 @@ const InvestmentItem = (company: InvestmentItemProps) => {
             </div>
             <div className="col-span-1">
               <AccordionTrigger asChild className="hover:no-underline">
-                <Button className="w-full bg-[#D9D9D9] text-black text-base font-bold hover:bg-gray-400 p-6 rounded-[10px]">
-                  <span>View my Investment</span>
+                <Button className="w-full bg-gradient-to-r from-[#D9D9D9] to-[#B0B0B0] text-black text-base font-bold hover:bg-gray-300 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                  <span className="flex-grow transition-transform duration-200 hover:scale-105">View my Investment</span>
                   <ChevronDownIcon
-                    className="AccordionChevron text-muted-foreground transition-transform duration-200"
+                    className="font-bold ml-2 transition-transform duration-200 transform group-hover:rotate-180"
                     aria-hidden
                     color="black"
                     scale={1.5}
@@ -88,7 +88,7 @@ const InvestmentItem = (company: InvestmentItemProps) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </div>
+    </div >
   );
 };
 

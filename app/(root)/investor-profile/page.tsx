@@ -1,11 +1,42 @@
 import InvestableAmount from "@/components/InvestableAmount";
 import InvestmentItemList from "@/components/InvestmentItemList";
 import { InvestorProfileCard } from "@/components/InvestorProfileCard";
-import { getUserByEmail, getInvestorById, getInvestorRequestById } from "@/lib/db/index";
+import {
+  getUserByEmail,
+  getInvestorById,
+  getInvestorRequestById,
+  getAllInvestmentRequestByInvestorId,
+  getRaiseFundingById,
+  getCompanyById,
+} from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import { CgProfile } from "react-icons/cg";
+
+const getAllInvestmentData = async (investmentRequest: any) => {
+  const investmentData = await Promise.all(investmentRequest.map(async (request: any) => {
+    const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
+    const company = await getCompanyById(raiseFunding.companyId);
+    return {
+      logoUrl: company.logo,
+      companyName: company.name,
+      companyAbbr: company.abbr,
+      status: request.approval ? "Finalized" : "Waitlisted",
+      date: request.requestDate,
+      amount: request.amount,
+      stockPercentage: request.getStock,
+      marketPrice: 1000,          // Random
+      priceChange: 10,            // Random
+      valuationAtInvest: 200000,  // Random
+      valuationMarket: 220000,    // Random
+    };
+  }));
+
+  return investmentData;
+}
+
 
 export default async function InvestorProfile() {
   const session = await getServerSession(authConfig);
@@ -23,9 +54,13 @@ export default async function InvestorProfile() {
 
   let investor = null;
   let investorRequest = null;
+  let investmentRequest = null;
+  let investmentData = null;
   if (user.roleIdNumber !== null) {
     investor = await getInvestorById(user.roleIdNumber);
     investorRequest = await getInvestorRequestById(user.roleIdNumber);
+    investmentRequest = await getAllInvestmentRequestByInvestorId(user.roleIdNumber);
+    investmentData = await getAllInvestmentData(investmentRequest);
   }
 
   return (
@@ -35,7 +70,9 @@ export default async function InvestorProfile() {
 
         <div className="flex justify-between w-11/12 h-9/10">
           <h1 className="flex flex-col justify-center text-white ml-70 text-[40px] font-bold mt-10">
-            My Portfolio
+            <div className="flex justify-center items-center">
+              <CgProfile className="mr-2" /> My Portfolio
+            </div>
           </h1>
           <InvestableAmount amount={investor?.investableAmount ?? 0} />
         </div>
@@ -43,7 +80,7 @@ export default async function InvestorProfile() {
           {investor && <InvestorProfileCard investor={investor} />}
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
-          <InvestmentItemList />
+          {investmentData && <InvestmentItemList investments={investmentData} />}
         </div>
       </div>
     </div>
