@@ -268,7 +268,12 @@ export function CompanyRegisterForm() {
             </div>
             <div className="col-start-1">
               <Button
-                onClick={() => handleStepChange(-2)}
+                onClick={() => {
+                  const confirmBack = window.confirm("⚠ The information will be lost when you go back. Are you sure?");
+                  if (confirmBack) {
+                    handleStepChange(-2);
+                  }
+                }}
                 className="
                   w-[211px] h-[45px] 
                   bg-gray-200 text-gray-700 

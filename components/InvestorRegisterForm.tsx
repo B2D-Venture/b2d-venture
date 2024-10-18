@@ -218,7 +218,12 @@ export function InvestorRegisterForm() {
             </div>
             <div className="flex justify-between items-center col-span-4 mt-4">
               <Button
-                onClick={() => handleStepChange(-1)}
+                onClick={() => {
+                  const confirmBack = window.confirm("⚠ The information will be lost when you go back. Are you sure?");
+                  if (confirmBack) {
+                    handleStepChange(-1);
+                  }
+                }}
                 className="
                   w-[211px] h-[45px] 
                   bg-gray-200 text-gray-700 

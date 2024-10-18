@@ -1,6 +1,6 @@
 "use client";
 
-import { FormFieldProps } from '../../types/form/index.d';
+import { FormFieldProps } from '@/types/form/index.d';
 import { Input } from "@/components/ui/input";
 import {
     FormControl,
@@ -30,7 +30,7 @@ const FormFields = ({
 
                     <FormControl>
                         {type === "calendar" ? (
-                            <CalendarForm label={label} field={field} canSetMoreThanToday={true} />
+                            <CalendarForm label={label || ''} field={field} canSetMoreThanToday={true} />
                         ) : type === "pitch" ? (
                             <div>
                                 <FormMessage />

@@ -1,22 +1,13 @@
 "use client";
 
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
-  FormControl,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { z } from "zod";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export const CalendarFormSchema = z.object({
   dob: z.date({
@@ -33,54 +24,103 @@ interface CalendarFormProps {
   canSetMoreThanToday?: boolean;
 }
 
+
 export function CalendarForm({ label, field, canSetMoreThanToday = false }: CalendarFormProps) {
-  const handleDateChange = (date: Date | undefined) => {
-    field.onChange(date);
-  };
-  
-  // Get today's date
+  const [selectedDay, setSelectedDay] = useState<number | undefined>(undefined);
+  const [selectedMonth, setSelectedMonth] = useState<number | undefined>(undefined);
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
+  const [error, setError] = useState<string | null>(null);
+
   const today = new Date();
-  // Set time to 00:00:00 for comparison purposes
   today.setHours(0, 0, 0, 0);
-  
-  // Get yesterday's date
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
+
+  useEffect(() => {
+    if (
+      selectedDay !== undefined &&
+      selectedMonth !== undefined &&
+      selectedYear !== undefined
+    ) {
+      const newDate = new Date(Date.UTC(selectedYear, selectedMonth - 1, selectedDay, 0, 0, 0, 0));
+
+      if (canSetMoreThanToday && newDate.getTime() <= today.getTime()) {
+        setError("(Deadline cannot be today or earlier.)");
+        field.onChange(undefined);
+      } else if (newDate.getTime() !== (field.value?.getTime() || 0)) {
+        field.onChange(newDate);
+        setError("");
+      }
+    } else {
+      field.onChange(undefined);
+      console.log("Date cleared");
+    }
+  }, [selectedDay, selectedMonth, selectedYear, canSetMoreThanToday, field, today]);
+
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+    setSelectedDay(value);
+  };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+    setSelectedMonth(value);
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+    setSelectedYear(value);
+  };
+
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  let years: number[] = [];
+  if (!canSetMoreThanToday) {
+    years = Array.from({ length: 100 }, (_, i) => today.getFullYear() - 18 - i);
+  } else {
+    years = Array.from({ length: 5 }, (_, i) => today.getFullYear() + i);
+  }
 
   return (
     <FormItem className="flex flex-col">
-      <FormLabel className="text-[20px]">{ label }</FormLabel>
-      <Popover modal={true} >
-        <PopoverTrigger asChild>
-          <FormControl>
-            <Button
-              data-id="date"
-              variant={"outline"}
-              className={cn(
-                "w-full pl-3 text-left font-normal bg-[#bfbfbf]",
-                !field.value && "text-muted-foreground text-black"
-              )}
-            >
-              {field.value ? format(field.value, "PPP") : "Pick a Date"}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-100 text-black" />
-            </Button>
-          </FormControl>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto" align="start">
-          <Calendar
-            mode="single"
-            selected={field.value}
-            onSelect={handleDateChange}
-            disabled={(date) =>
-              canSetMoreThanToday
-                ? date <= today
-                : date > today || date < new Date("1900-01-01") // Disable future dates and dates before 1900
-            }
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
+      <FormLabel className="text-[20px]">{label}</FormLabel>
+      <div className="flex gap-4 mb-2">
+        <select
+          value={selectedDay || ""}
+          onChange={handleDayChange}
+          className="border rounded p-2"
+        >
+          <option value="">Day</option>
+          {Array.from({ length: 31 }, (_, i) => (
+            <option key={i} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedMonth || ""}
+          onChange={handleMonthChange}
+          className="border rounded p-2"
+        >
+          <option value="">Month</option>
+          {months.map((month) => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedYear || ""}
+          onChange={handleYearChange}
+          className="border rounded p-2"
+        >
+          <option value="">Year</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}  
+            </option>
+          ))}
+        </select>
+      </div>
       <FormMessage />
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </FormItem>
   );
 }
