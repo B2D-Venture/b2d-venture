@@ -17,11 +17,6 @@ const CompanyCard = ({
   return (
     <div className="p-4">
       <Link href="/">
-      {/* \    /* @apply w-[390px]; */
-    /* @apply sm:w-[500px];
-    @apply md:w-[750px];
-    @apply lg:w-[350px];
-    @apply xl:w-[270px]; */}
         <div className={`card ${className} group`}>
           <div className="relative w-full h-full">
             {/* Background Image */}
@@ -50,7 +45,7 @@ const CompanyCard = ({
 
               <div className="card-below">
                 <div>
-                  $<b>{investmentGoal.toLocaleString()}</b> raised
+                  $<b>{(investmentGoal ?? 0).toLocaleString()}</b> raised
                 </div>
                 <div className="flex items-center space-x-2">
                   <b>{investorCount.toLocaleString()}</b>
@@ -58,7 +53,7 @@ const CompanyCard = ({
                   <MdPeopleAlt />
                 </div>
                 <div>
-                  $<b>{minInvest.toLocaleString()}</b> min. investment
+                  $<b>{minInvest?.toLocaleString() ?? "N/A"}</b> min. investment
                 </div>
               </div>
             </div>
