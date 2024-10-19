@@ -1,14 +1,11 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import {
-  Company,
-  CompanyRequest,
-  DataRoom,
-} from "../../types/company/index";
+import { Company, CompanyRequest, DataRoom } from "../../types/company/index";
 import {
   CompanyTable,
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
+  RaiseFundingTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
 import { eq, ilike, or } from "drizzle-orm";
@@ -42,7 +39,16 @@ export async function addDataRoom(data: DataRoom) {
 
 export async function getAllCompanies(searchQuery?: string, limit?: number) {
   try {
-    let query = db.select().from(CompanyTable);
+    let query = db
+      .select({
+        company: CompanyTable,
+        raiseFunding: RaiseFundingTable,
+      })
+      .from(CompanyTable)
+      .leftJoin(
+        RaiseFundingTable,
+        eq(RaiseFundingTable.companyId, CompanyTable.id),
+      );
 
     if (searchQuery) {
       const searchPattern = `%${searchQuery}%`;
@@ -58,11 +64,11 @@ export async function getAllCompanies(searchQuery?: string, limit?: number) {
       query.limit(limit);
     }
 
-    const companies = await query.execute();
+    const companiesWithFunding = await query.execute();
 
-    return companies;
+    return companiesWithFunding;
   } catch (error) {
-    console.error("Error retrieving companies:", error);
+    console.error("Error retrieving companies with funding details:", error);
     throw error;
   }
 }
