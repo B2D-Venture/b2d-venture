@@ -3,17 +3,27 @@
 import React, { useEffect, useState } from "react";
 import CompanyCard from "@/components/CompanyCard";
 import { getAllCompanies } from "@/lib/db/company";
-import { Company } from "@/types";
+import { CompanyWithRaiseFunding } from "@/types/company";
 
 const CompanyCardSlide = () => {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<CompanyWithRaiseFunding[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getAllCompanies("", 10);
+        const companiesData = await getAllCompanies("", 10);
+
+        const companies = companiesData.map((item) => ({
+          ...item.company,
+          fundingTarget: item.raiseFunding?.fundingTarget ?? null,
+          minInvest: item.raiseFunding?.minInvest ?? null,
+          maxInvest: item.raiseFunding?.maxInvest ?? null,
+          deadline: item.raiseFunding?.deadline ?? null,
+          priceShare: item.raiseFunding?.priceShare ?? null,
+        }));
+
         setCompanies(companies);
       } catch (err) {
         console.error("Error fetching companies:", err);
