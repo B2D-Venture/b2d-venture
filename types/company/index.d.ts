@@ -10,6 +10,8 @@ interface Company {
   pitch: string;
 }
 
+export type CompanyWithRaiseFunding = Company & RaiseFunding;
+
 export type CompanyRequest = {
   companyId: number;
 };
