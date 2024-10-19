@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CompanyLogoBox from "@/components/CompanyLogoBox";
 import { getAllCompanies } from "@/lib/db/company";
-import { Company } from "@/types";
+import { Company } from "@/types/company";
 
 const CompanyLogoBoxList = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -13,7 +13,9 @@ const CompanyLogoBoxList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getAllCompanies("", 12);
+        const companiesData = await getAllCompanies("", 12);
+        const companies = companiesData.map(item => item.company);
+
         setCompanies(companies);
       } catch (err) {
         console.error("Error fetching companies:", err);
