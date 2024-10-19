@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
-import { useFormState } from "./FormContext"
+import { useFormState } from "./FormContext";
 import {
   addInvestor,
   addInvestorRequest,
-  changeToInvestorRole
+  changeToInvestorRole,
 } from "@/lib/db/index";
 
 import {
@@ -27,15 +27,30 @@ import {
 // Combine schemas
 const formSchema = z.object({
   profileImage: z.string().min(1, "Profile image is required"),
-  firstName: z.string().min(1, "First name is required").max(255, "First name is too long"),
-  lastName: z.string().min(1, "Last name is required").max(255, "Last name is too long"),
-  nationalId: z.string().regex(/^\d+$/, "National ID card must be numeric").max(15, "National ID Card is too long"),
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(255, "First name is too long"),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(255, "Last name is too long"),
+  nationalId: z
+    .string()
+    .regex(/^\d+$/, "National ID card must be numeric")
+    .max(15, "National ID Card is too long"),
   email: z.string().email("Invalid email address").min(1, "Email is required"),
-  nationality: z.string().min(1, "Nationality is required").max(60, "Nationality is too long"),
-  networth: z.number().min(0, "Net worth cannot be negative"),
+  nationality: z
+    .string()
+    .min(1, "Nationality is required")
+    .max(60, "Nationality is too long"),
+  networth: z.coerce
+    .number({
+      required_error: "Net worth is required.",
+    })
+    .min(0, { message: "Net worth cannot be negative" }),
   birthDate: z.date({ required_error: "Birth date is required." }),
 });
-
 
 export function InvestorRegisterForm() {
   const { handleStepChange } = useFormState();
@@ -77,18 +92,20 @@ export function InvestorRegisterForm() {
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm setProfileImage={(file) => form.setValue("profileImage", file)} />
+              <ProfileImageForm
+                setProfileImage={(file) => form.setValue("profileImage", file)}
+              />
             </div>
             <FormField
               control={form.control}
               name="profileImage"
-              render={() => (
-                <FormMessage />
-              )}
+              render={() => <FormMessage />}
             />
             <div className="text-sm bg-[#c4c4c3d2] text-gray-600 mt-4 text-center px-4 rounded-md">
               <p className="font-medium leading-relaxed">
-                Please upload a profile image of a real person. Non-compliant uploads, including images of cartoons, animals, or objects, may be rejected.
+                Please upload a profile image of a real person. Non-compliant
+                uploads, including images of cartoons, animals, or objects, may
+                be rejected.
               </p>
             </div>
           </div>
@@ -102,7 +119,11 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">First Name</FormLabel>
                     <FormControl>
-                      <Input data-id="firstname-input" className="bg-[#bfbfbf]" {...field} />
+                      <Input
+                        data-id="firstname-input"
+                        className="bg-[#bfbfbf]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,7 +139,11 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Last Name</FormLabel>
                     <FormControl>
-                      <Input data-id="lastname-input" className="bg-[#bfbfbf]" {...field} />
+                      <Input
+                        data-id="lastname-input"
+                        className="bg-[#bfbfbf]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,7 +161,11 @@ export function InvestorRegisterForm() {
                       National ID Card
                     </FormLabel>
                     <FormControl>
-                      <Input data-id="nid-input" className="bg-[#bfbfbf]" {...field} />
+                      <Input
+                        data-id="nid-input"
+                        className="bg-[#bfbfbf]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -183,7 +212,11 @@ export function InvestorRegisterForm() {
                   <FormItem>
                     <FormLabel className="text-[20px]">Nationality</FormLabel>
                     <FormControl>
-                      <Input data-id="national-input" className="bg-[#bfbfbf]" {...field} />
+                      <Input
+                        data-id="national-input"
+                        className="bg-[#bfbfbf]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -208,7 +241,7 @@ export function InvestorRegisterForm() {
                           const value = e.target.value;
                           field.onChange(value ? parseFloat(value) : 0);
                         }}
-                        value={field.value || 0}
+                        value={field.value || undefined}
                       />
                     </FormControl>
                     <FormMessage />
@@ -219,7 +252,9 @@ export function InvestorRegisterForm() {
             <div className="flex justify-between items-center col-span-4 mt-4">
               <Button
                 onClick={() => {
-                  const confirmBack = window.confirm("⚠ The information will be lost when you go back. Are you sure?");
+                  const confirmBack = window.confirm(
+                    "⚠ The information will be lost when you go back. Are you sure?",
+                  );
                   if (confirmBack) {
                     handleStepChange(-1);
                   }
