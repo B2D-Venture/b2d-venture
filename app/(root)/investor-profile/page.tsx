@@ -69,12 +69,12 @@ export default async function InvestorProfile() {
         {investorRequest?.approval === null && (<WaitingShow />)}
 
         <div className="flex justify-between w-11/12 h-9/10">
-          <h1 className="flex flex-col justify-center text-white ml-70 text-[40px] font-bold mt-10">
-            <div className="flex justify-center items-center">
+          <h1 className="flex flex-col justify-end text-white ml-70 text-[40px] font-bold mt-10">
+            <div className="flex justify-center items-center mb-2">
               <CgProfile className="mr-2" /> My Portfolio
             </div>
           </h1>
-          <InvestableAmount amount={investor?.investableAmount ?? 0} />
+          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} />
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#FFFDF3] bg-opacity-30 rounded-[20px] justify-center items-center p-[27px]">
           {investor && <InvestorProfileCard investor={investor} />}

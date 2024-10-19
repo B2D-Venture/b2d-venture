@@ -68,3 +68,11 @@ export async function changeToInvestorRole({ email, investor_id }: { email: stri
     .where(eq(UserTable.email, email))
     .execute();
 }
+
+export async function UpdateInvestorAmount({ investorId, amount }: { investorId: number, amount: number }) {
+  return await db
+    .update(InvestorTable)
+    .set({ investableAmount: amount })
+    .where(eq(InvestorTable.id, investorId))
+    .execute();
+}
