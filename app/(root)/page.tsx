@@ -27,7 +27,7 @@ const Home = () => {
       </div>
 
       <Link
-        href="/company-list"
+        href="/company"
         className="bottom-[50px] w-[120px] h-[38px] mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-[30px] flex justify-center items-center "
       >
         <div className="text-center text-[#363324] text-xl font-bold hover:text-[#d9d9d9]">
