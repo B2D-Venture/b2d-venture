@@ -80,6 +80,7 @@ const CompanyList = () => {
         {filteredCompanies.map((company) => (
           <div key={company.id} className="flex-1">
             <CompanyCard
+              companyId={company.id}
               logoUrl={company.logo}
               backgroundUrl={company.banner}
               companyName={company.name}

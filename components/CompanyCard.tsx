@@ -5,6 +5,7 @@ import { MdPeopleAlt } from "react-icons/md";
 import { CompanyCardProps } from "@/types";
 
 const CompanyCard = ({
+  companyId,
   logoUrl,
   backgroundUrl,
   companyName,
@@ -16,7 +17,7 @@ const CompanyCard = ({
 }: CompanyCardProps) => {
   return (
     <div className="p-4">
-      <Link href="/">
+      <Link href={`/company/${companyId}`}>
         <div className={`card ${className} group`}>
           <div className="relative w-full h-full">
             {/* Background Image */}

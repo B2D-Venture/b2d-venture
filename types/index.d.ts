@@ -1,6 +1,7 @@
 import { number } from "zod";
 
 interface CompanyCardProps {
+  companyId: number;
   logoUrl: string;
   backgroundUrl: string;
   companyName: string;
