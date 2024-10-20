@@ -28,6 +28,7 @@ interface DealTermBtnProps {
 }
 
 interface CompanyLogoBoxProps {
+  companyId: number;
   logoUrl: string;
   companyAbbr: string;
   companyName: string;
