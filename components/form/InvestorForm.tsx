@@ -6,7 +6,7 @@ export default function InvestorForm() {
   return (
     <FormContent 
       label="Investor Profile"
-      shopStepComponent={<ShowStep step={2} />}
+      showStepComponent={<ShowStep step={2} />}
       formComponent={<InvestorRegisterForm />}
     />
   );

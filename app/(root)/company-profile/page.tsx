@@ -75,7 +75,7 @@ export default async function CompanyProfile() {
       {isApproval?.approval === null && (<WaitingShow />)}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
-          src={company?.banner || "/default-banner.png"}
+          src={company?.banner || ""}
           alt="banner"
           layout="fill"
           objectFit="cover"
@@ -85,7 +85,7 @@ export default async function CompanyProfile() {
       <div className="w-full h-[70px] md:h-[100px] lg:h-[80px]">
         <div className="logo relative w-[120px] h-[120px] top-40% left-1/2 transform -translate-x-1/2 -translate-y-1/2 xl:w-[200px] xl:h-[200px] lg:w-[170px] lg:h-[170px] md:w-[150px] md:h-[150px]">
           <Image
-            src={company?.logo || "/default-logo.png"}
+            src={company?.logo || ""}
             alt="logo"
             layout="fill"
             className="rounded-[5px]"

@@ -34,6 +34,7 @@ const DealTerm = ({ recentFunding, dayLeft, totalInvestor, currentInvestment }: 
           hoverBgColor="hover:bg-[#807D71]"
           borderColor="border-transparent"
           hoverBorderColor="border-transparent"
+          link="/company-profile/edit"
         />
         <RaiseFundingButton canRaiseFunding={canRaiseFunding(dayLeft, currentInvestment, recentFunding.fundingTarget)} />
       </div>

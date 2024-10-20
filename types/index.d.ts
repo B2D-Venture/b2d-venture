@@ -25,6 +25,7 @@ interface DealTermBtnProps {
   hoverBgColor: string;
   borderColor: string;
   hoverBorderColor: string;
+  link: string;
 }
 
 interface CompanyLogoBoxProps {

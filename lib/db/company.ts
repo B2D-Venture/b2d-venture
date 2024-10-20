@@ -33,6 +33,16 @@ export async function addCompanyRequest(request: CompanyRequest) {
   return await db.insert(CompanyRequestTable).values(request).execute();
 }
 
+export async function getDataRoomByCompanyId(companyId: number) {
+  const dataRoom = await db
+    .select()
+    .from(DataRoomTable)
+    .where(eq(DataRoomTable.companyId, companyId))
+    .execute();
+
+  return dataRoom;
+}
+
 export async function addDataRoom(data: DataRoom) {
   return await db.insert(DataRoomTable).values(data).execute();
 }

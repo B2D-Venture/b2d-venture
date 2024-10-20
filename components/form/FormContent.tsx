@@ -1,6 +1,6 @@
 import { FormContentProps } from '../../types/form/index.d';
 
-const FormContent: React.FC<FormContentProps> = ({ label, shopStepComponent, formComponent }) => {
+const FormContent: React.FC<FormContentProps> = ({ label, showStepComponent, formComponent }) => {
     return (
         <div>
             <div className="flex flex-col justify-center items-center min-h-screen">
@@ -11,7 +11,7 @@ const FormContent: React.FC<FormContentProps> = ({ label, shopStepComponent, for
                 </div>
                 <div className="bg-[#d9d9d9] rounded-[30px] relative p-10 mt-5 w-full max-w-7xl">
                     <div className="w-full flex justify-center mb-8">
-                        {shopStepComponent}
+                        {showStepComponent}
                     </div>
                     {formComponent}
                 </div>

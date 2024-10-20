@@ -8,11 +8,24 @@ import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
 import FormFields from '@/components/form/elements/FormFields';
-import { Form, FormField, FormMessage } from "@/components/ui/form";
+import { 
+  Form, 
+  FormField, 
+  FormMessage 
+} from "@/components/ui/form";
 import Document from "./form/company/Document";
-import { addCompany, addCompanyRequest, addDataRoom, changeToCompanyRole } from "@/lib/db/company";
-import { addRaiseFunding, addRaiseFundingRequest } from "@/lib/db/raise";
+import { 
+  addCompany, 
+  addCompanyRequest, 
+  addDataRoom, 
+  changeToCompanyRole, 
+  getRecentRaiseFundingByCompanyId,
+  addRaiseFunding,
+  addRaiseFundingRequest,
+} from "@/lib/db/index";
 import { useSession } from "next-auth/react";
+import React, { useState, useEffect } from "react";
+import { Company } from '@/types/company';
 
 const documentSchema = z.object({
   pdfs: z.array(z.object({
@@ -27,7 +40,7 @@ const documentSchema = z.object({
 
 
 // Combine schemas
-const formSchema = z.object({
+export const formSchema = z.object({
   logo: z.string().min(1, "Logo is required"),
   banner: z.string().min(1, "Banner is required"),
   name: z.string().min(1, "Company name is required"),
@@ -58,24 +71,62 @@ const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm() {
+export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) {
   const { handleStepChange } = useFormState();
+  const [company, setCompany] = useState<Company | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [recentFunding, setRecentFunding] = useState<RaiseFunding | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      logo: "",
-      banner: "",
-      name: "",
-      abbr: "",
-      description: "",
+      logo: company?.logo ?? "",
+      banner: company?.banner ?? "",
+      name: company?.name ?? "",
+      abbr: company?.abbr ?? "",
+      description: company?.description ?? "",
       fundingTarget: 0,
       minInvest: 0,
       maxInvest: 0,
-      deadline: undefined,
+      deadline: undefined, 
       priceShare: 0,
       pitch: "",
     },
   });
+
+  const { reset } = form;
+  if (canEdit) {
+    useEffect(() => {
+        const fetchCompany = async () => {
+            const response = await fetch('/api/company');
+            if (response.ok) {
+                const data = await response.json();
+                const funding = await getRecentRaiseFundingByCompanyId(data.company.id);
+                setCompany(data.company);
+                setRecentFunding(funding);
+                console.log("funding", funding);
+                reset({
+                    logo: data.company.logo ?? "",
+                    banner: data.company.banner ?? "",
+                    name: data.company.name ?? "",
+                    abbr: data.company.abbr ?? "",
+                    description: data.company.description ?? "",
+                    fundingTarget: funding.fundingTarget ?? 0,
+                    minInvest: funding.minInvest ?? 0,
+                    maxInvest: funding.maxInvest ?? 0,
+                    deadline: funding.deadline ? new Date(data.company.deadline) : undefined,
+                    priceShare: funding.priceShare ?? 0,
+                    pitch: data.company.pitch ?? "",
+                });
+            } else {
+                window.location.href = `/signup?callbackUrl=/company-profile`;
+            }
+            setLoading(false);
+        };
+
+        fetchCompany();
+    }, [reset]);
+  }
 
   const setBannerImage = (fileName: string) => {
     form.setValue("banner", fileName);
@@ -87,6 +138,7 @@ export function CompanyRegisterForm() {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
+    console.log("Hello");
     const companyData = {
       logo: companyFormData.logo,
       banner: companyFormData.banner,
@@ -96,15 +148,19 @@ export function CompanyRegisterForm() {
       pitch: companyFormData.pitch,
     };
 
-    const raiseFundingData = {
-      fundingTarget: companyFormData.fundingTarget,
-      minInvest: companyFormData.minInvest,
-      maxInvest: companyFormData.maxInvest,
-      deadline: companyFormData.deadline.toISOString(),
-      priceShare: companyFormData.priceShare,
-    }
-
-    addCompany(companyData)
+    console.log("companyData", companyData);
+    handleStepChange(1);
+    if (!canEdit) {
+      console.log("Add company");
+      const raiseFundingData = {
+        fundingTarget: companyFormData.fundingTarget,
+        minInvest: companyFormData.minInvest,
+        maxInvest: companyFormData.maxInvest,
+        deadline: companyFormData.deadline.toISOString(),
+        priceShare: companyFormData.priceShare,
+      }
+      
+      addCompany(companyData)
       .then((companyId) => {
         addCompanyRequest({ companyId: companyId });
         addRaiseFunding(raiseFundingData, companyId)
@@ -128,6 +184,9 @@ export function CompanyRegisterForm() {
         handleStepChange(1);
       })
       .catch((err) => console.error("Error adding company:", err));
+    } else {
+      console.log("Edit company");
+    }
   };
 
   return (
@@ -136,7 +195,7 @@ export function CompanyRegisterForm() {
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1 flex flex-col items-center">
             <div>
-              <ProfileImageForm setProfileImage={(file) => form.setValue("logo", file)} />
+              <ProfileImageForm setProfileImage={(file) => form.setValue("logo", file)} defaultImage={company?.logo} />
             </div>
             <div className="mt-3">
               <FormField
@@ -157,7 +216,7 @@ export function CompanyRegisterForm() {
           </div>
           <div className="grid grid-cols-3 gap-4 col-span-3">
             <div className="col-span-3">
-              <BannerImageForm setBannerImage={setBannerImage} />
+              <BannerImageForm setBannerImage={setBannerImage} defaultBanner={company?.banner} />
               <div className="mt-3">
                 <FormField
                   control={form.control}
@@ -204,6 +263,7 @@ export function CompanyRegisterForm() {
                 dataId="funding-input"
                 placeholder="$"
                 type="number"
+                disabled={true}
               />
             </div>
             {/* Minimum Investment */}
@@ -215,6 +275,7 @@ export function CompanyRegisterForm() {
                 dataId="min-input"
                 placeholder="$"
                 type="number"
+                disabled={true}
               />
             </div>
             {/* Maximum Investment */}
@@ -226,6 +287,7 @@ export function CompanyRegisterForm() {
                 dataId="max-input"
                 placeholder="$"
                 type="number"
+                disabled={true}
               />
             </div>
             {/* Date (using CalendarForm) */}
@@ -235,6 +297,8 @@ export function CompanyRegisterForm() {
                 label="Deadline"
                 name="deadline"
                 type="calendar"
+                disabled={true}
+                defaultValue={recentFunding?.deadline ? new Date(recentFunding.deadline) : undefined}
               />
             </div>
             {/* Price per Share */}
@@ -246,13 +310,14 @@ export function CompanyRegisterForm() {
                 dataId="share-input"
                 placeholder="$"
                 type="number"
+                disabled={true}
               />
             </div>
 
             <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
 
             <div className="col-span-3 flex items-center">
-              <Document />
+              <Document canEdit={canEdit} />
             </div>
 
             <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>

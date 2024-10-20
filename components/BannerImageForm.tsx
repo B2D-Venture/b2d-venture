@@ -1,9 +1,15 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UploadDropzone } from '@/src/utils/uploadthing';
 
-export function BannerImageForm({ setBannerImage }: { setBannerImage: (image: string) => void }) {
-  const [imageSrc, setImageSrc] = useState<string>("");
+export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBannerImage: (image: string) => void, defaultBanner?: string }) {
+  const [imageSrc, setImageSrc] = useState<string>(defaultBanner);
+
+  useEffect(() => {
+    if (defaultBanner) {
+      setImageSrc(defaultBanner);
+    }
+  }, [defaultBanner]);
 
   return (
     <div className="relative">

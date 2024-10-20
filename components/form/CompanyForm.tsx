@@ -6,7 +6,7 @@ export default function CompanyForm() {
   return (
     <FormContent 
       label="Company Profile"
-      shopStepComponent={<ShowStep step={2} />}
+      showStepComponent={<ShowStep step={2} />}
       formComponent={<CompanyRegisterForm />}
     />
   );

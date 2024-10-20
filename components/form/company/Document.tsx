@@ -1,18 +1,52 @@
 "use client";
 import { Label } from "@/components/ui/label";
 import { UploadDropzone } from '@/src/utils/uploadthing';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaRegFileLines, FaEye } from "react-icons/fa6";
 import { CiCircleRemove } from "react-icons/ci";
 import { useFormContext } from "react-hook-form";
+import { getDataRoomByCompanyId } from "@/lib/db/index";
 
-const Document = () => {
+interface PdfFile {
+    name: string;
+    size: number;
+    key: string;
+    lastModified: number;
+    serverData: any;
+    url: string;
+}
+
+const getDocument = async () => {
+    return await getDataRoomByCompanyId(30);
+};
+
+const Document = ({ canEdit }: { canEdit: boolean }) => {
     const { setValue } = useFormContext();
-    const [pdfSrc, setPdfSrc] = useState([]);
+
+    const [pdfSrc, setPdfSrc] = useState<PdfFile[]>([]);
 
     const handleRemovePdf = (key: string) => {
         setPdfSrc((prev) => prev.filter(pdf => pdf.key !== key));
     };
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            if (canEdit) {
+                const documents = await getDocument();
+                setPdfSrc(documents.map(doc => ({
+                    name: doc.documentName,
+                    size: 0,
+                    key: doc.id.toString(),
+                    lastModified: new Date(doc.uploadDate).getTime(),
+                    serverData: doc,
+                    url: doc.documentUrl,
+                })));
+            } else {
+                setPdfSrc([]);
+            }
+        };
+        fetchDocuments();
+    }, [canEdit]);
 
     return (
         <div>
@@ -31,7 +65,7 @@ const Document = () => {
                             </div>
                             <div className="flex-1 my-2">
                                 <p className="font-semibold">{pdf.name}</p>
-                                <p className="text-gray-500 text-sm">{(pdf.size / 1024).toFixed(2)} KB</p>
+                                {pdf.size > 0 && <p className="text-gray-500 text-sm">{(pdf.size / 1024).toFixed(2)} KB</p>}
                             </div>
                             <a
                                 href={`${pdf.url}`}
@@ -62,7 +96,7 @@ const Document = () => {
                                 name: file.name,
                                 size: file.size,
                                 key: file.key,
-                                lastModified: file.lastModified,
+                                lastModified: file.lastModified ?? Date.now(), // Provide a default value if undefined
                                 serverData: file.serverData,
                                 url: file.url,
                             }));
