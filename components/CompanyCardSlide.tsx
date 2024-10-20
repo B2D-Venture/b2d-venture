@@ -51,6 +51,7 @@ const CompanyCardSlide = () => {
           {companies.map((company) => (
             <CompanyCard
               key={company.id}
+              companyId={company.id}
               logoUrl={company.logo}
               backgroundUrl={company.banner}
               companyName={company.name}
