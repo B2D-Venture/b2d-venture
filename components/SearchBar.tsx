@@ -21,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      router.push(`/company-list?search=${encodeURIComponent(searchInput)}`);
+      router.push(`/company?search=${encodeURIComponent(searchInput)}`);
       if (!showFilter) {
         setSearchInput("");
       }
