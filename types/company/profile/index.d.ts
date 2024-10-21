@@ -5,6 +5,7 @@ interface DealTermProps {
   currentInvestment: number;
   roleId: number | null;
   isOwnCompany: boolean;
+  urlId?: number;
 }
 
 interface DealTermElementProps {

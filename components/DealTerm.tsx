@@ -10,14 +10,14 @@ const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
   return false;
 }
 
-const isOwnCompany = async (urlId: number, user: User) => {
-  if (user.roleIdNumber == urlId) {
-    return true;
-  }
-  return false;
-}
+// const isOwnCompany = async (urlId: number, user: User) => {
+//   if (user.roleIdNumber == urlId) {
+//     return true;
+//   }
+//   return false;
+// }
 
-const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestment, roleId, isOwnCompany }: DealTermProps) => {
+const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestment, roleId, isOwnCompany, urlId }: DealTermProps) => {
   return (
     <div className="sticky top-36 bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
@@ -66,7 +66,7 @@ const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestme
             hoverBgColor="hover:bg-[#807D71]"
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
-            link="/company-profile/edit"
+            link={`/company/${urlId}/edit`}
           />
           <RaiseFundingButton canRaiseFunding={canRaiseFunding(dayLeft, currentInvestment, recentFunding.fundingTarget)} />
         </div>

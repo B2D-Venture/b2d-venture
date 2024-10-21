@@ -14,7 +14,7 @@ const DealTermElement = ({ data, label, type }: DealTermElementProps) => {
         {type !== "deadline" && (
           <div className="text-black text-4xl font-bold">{data}</div>
         )}
-        <div className="text-[#423f3f] text-lg font-semibold">{label}</div>
+        <div className="text-[#423f3f] text-lg font-semibold ml-4">{label}</div>
       </div>
       <div className="w-full border border-[#dcdcdc] my-3" />
     </div>

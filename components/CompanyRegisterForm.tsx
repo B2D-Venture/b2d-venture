@@ -8,17 +8,17 @@ import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { BannerImageForm } from "@/components/BannerImageForm";
 import { useFormState } from "./FormContext"
 import FormFields from '@/components/form/elements/FormFields';
-import { 
-  Form, 
-  FormField, 
-  FormMessage 
+import {
+  Form,
+  FormField,
+  FormMessage
 } from "@/components/ui/form";
 import Document from "./form/company/Document";
-import { 
-  addCompany, 
-  addCompanyRequest, 
-  addDataRoom, 
-  changeToCompanyRole, 
+import {
+  addCompany,
+  addCompanyRequest,
+  addDataRoom,
+  changeToCompanyRole,
   getRecentRaiseFundingByCompanyId,
   addRaiseFunding,
   addRaiseFundingRequest,
@@ -71,7 +71,7 @@ export const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) {
+export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdit?: boolean, companyEditId?: number }) {
   const { handleStepChange } = useFormState();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -88,7 +88,7 @@ export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) 
       fundingTarget: 0,
       minInvest: 0,
       maxInvest: 0,
-      deadline: undefined, 
+      deadline: undefined,
       priceShare: 0,
       pitch: "",
     },
@@ -97,34 +97,36 @@ export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) 
   const { reset } = form;
   if (canEdit) {
     useEffect(() => {
-        const fetchCompany = async () => {
-            const response = await fetch('/api/company');
-            if (response.ok) {
-                const data = await response.json();
-                const funding = await getRecentRaiseFundingByCompanyId(data.company.id);
-                setCompany(data.company);
-                setRecentFunding(funding);
-                console.log("funding", funding);
-                reset({
-                    logo: data.company.logo ?? "",
-                    banner: data.company.banner ?? "",
-                    name: data.company.name ?? "",
-                    abbr: data.company.abbr ?? "",
-                    description: data.company.description ?? "",
-                    fundingTarget: funding.fundingTarget ?? 0,
-                    minInvest: funding.minInvest ?? 0,
-                    maxInvest: funding.maxInvest ?? 0,
-                    deadline: funding.deadline ? new Date(data.company.deadline) : undefined,
-                    priceShare: funding.priceShare ?? 0,
-                    pitch: data.company.pitch ?? "",
-                });
-            } else {
-                window.location.href = `/signup?callbackUrl=/company-profile`;
-            }
-            setLoading(false);
-        };
+      const fetchCompany = async () => {
+        const response = await fetch('/api/company');
+        if (response.ok) {
+          const data = await response.json();
+          if (companyEditId !== undefined) {
+            const funding = await getRecentRaiseFundingByCompanyId(companyEditId);
+            setRecentFunding(funding);
+            setCompany(data.company);
+            setRecentFunding(funding);
+            reset({
+              logo: data.company.logo ?? "",
+              banner: data.company.banner ?? "",
+              name: data.company.name ?? "",
+              abbr: data.company.abbr ?? "",
+              description: data.company.description ?? "",
+              fundingTarget: funding.fundingTarget ?? 0,
+              minInvest: funding.minInvest ?? 0,
+              maxInvest: funding.maxInvest ?? 0,
+              deadline: funding.deadline ? new Date(data.company.deadline) : undefined,
+              priceShare: funding.priceShare ?? 0,
+              pitch: data.company.pitch ?? "",
+            });
+          }
+        } else {
+          window.location.href = `/signup?callbackUrl=/company/${companyEditId}/edit`;
+        }
+        setLoading(false);
+      };
 
-        fetchCompany();
+      fetchCompany();
     }, [reset]);
   }
 
@@ -135,6 +137,10 @@ export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) 
 
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? "";
+
+  if (loading) {
+    return <div className="text-red">Hello</div>
+  }
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
@@ -159,31 +165,31 @@ export function CompanyRegisterForm({ canEdit = false }: { canEdit?: boolean }) 
         deadline: companyFormData.deadline.toISOString(),
         priceShare: companyFormData.priceShare,
       }
-      
-      addCompany(companyData)
-      .then((companyId) => {
-        addCompanyRequest({ companyId: companyId });
-        addRaiseFunding(raiseFundingData, companyId)
-          .then((raiseId) => addRaiseFundingRequest({ raiseFundingId: raiseId }))
-          .catch((err) => console.error("Error adding raise funding:", err));
-        changeToCompanyRole({
-          email: userEmail,
-          companyId: companyId,
-        });
-        if (document && document.pdfs) {
-          document.pdfs.forEach((pdf) => {
-            const dataRoomEntry = {
-              companyId: companyId,
-              documentName: pdf.name,
-              documentUrl: pdf.url,
-            };
-            addDataRoom(dataRoomEntry);
-          });
-        }
 
-        handleStepChange(1);
-      })
-      .catch((err) => console.error("Error adding company:", err));
+      addCompany(companyData)
+        .then((companyId) => {
+          addCompanyRequest({ companyId: companyId });
+          addRaiseFunding(raiseFundingData, companyId)
+            .then((raiseId) => addRaiseFundingRequest({ raiseFundingId: raiseId }))
+            .catch((err) => console.error("Error adding raise funding:", err));
+          changeToCompanyRole({
+            email: userEmail,
+            companyId: companyId,
+          });
+          if (document && document.pdfs) {
+            document.pdfs.forEach((pdf) => {
+              const dataRoomEntry = {
+                companyId: companyId,
+                documentName: pdf.name,
+                documentUrl: pdf.url,
+              };
+              addDataRoom(dataRoomEntry);
+            });
+          }
+
+          handleStepChange(1);
+        })
+        .catch((err) => console.error("Error adding company:", err));
     } else {
       console.log("Edit company");
     }
