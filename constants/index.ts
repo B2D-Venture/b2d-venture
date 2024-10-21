@@ -4,8 +4,8 @@ export const navbarLinks = [
     label: "Register",
   },
   {
-    route: "/investment",
-    label: "Investment",
+    route: "/company-list",
+    label: "Company list",
   },
 ];
 
