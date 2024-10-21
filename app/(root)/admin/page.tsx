@@ -2,23 +2,30 @@
 import React, { useState, useEffect } from "react";
 import { CompanyProfileCard } from "@/components/admin/CompanyProfile/CompanyProfileCard";
 import { InvestorProfileCard } from "@/components/admin/InvestorProfile/InvestorProfileCard";
+import { RaiseFundingCard } from "@/components/admin/Raisefunding/RaisefundingCard";
 import { Dealcard } from "@/components/admin/Deal/DealCard";
 import {
   getInvestmentRequest,
   getCompanyRequest,
   getInvestorRequest,
+  getRaiseFundingRequests,
   approveCompanyRequest,
   approveInvestorRequest,
   approveInvestmentRequest,
+  approveRaiseFundingRequest,
   rejectCompanyRequest,
   rejectInvestorRequest,
   rejectInvestmentRequest,
+  rejectRaiseFundingRequest,
 } from "@/lib/db/admin";
 import { Company } from "@/types/company";
 import { InvestorProps } from "@/types/investor";
 import { getCompanyById } from "@/lib/db/company";
 import { getInvestorById } from "@/lib/db/investor";
-import { getRaiseFundingByCompanyId, getRaiseFundingById } from "@/lib/db/raise";
+import {
+  getRaiseFundingByCompanyId,
+  getRaiseFundingById,
+} from "@/lib/db/raise";
 
 interface CompanyRequest {
   id: number;
@@ -46,16 +53,25 @@ interface InvestmentRequest {
   approval: boolean | null;
 }
 
+interface RaiseFundingRequest {
+  id: number;
+  raiseFundingId: number;
+  requestDate: Date;
+  approval: boolean | null;
+}
+
 const AdminPage = () => {
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
   const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
+  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequest[]>([]);
 
   const fetchData = async () => {
     try {
       const companyRequests = await getCompanyRequest();
       const investorRequests = await getInvestorRequest();
       const investmentRequests = await getInvestmentRequest();
+      const raiseFundingRequests = await getRaiseFundingRequests();
 
       const companyDetails = await Promise.all(
         companyRequests.map(async (request) => {
@@ -63,7 +79,6 @@ const AdminPage = () => {
           const raiseFunding = await getRaiseFundingByCompanyId(
             request.companyId
           );
-          // console.log(raiseFunding);
 
           return {
             ...request,
@@ -74,7 +89,6 @@ const AdminPage = () => {
           };
         })
       );
-      // console.log(companyDetails);
 
       const investorDetails = await Promise.all(
         investorRequests.map(async (request) => {
@@ -102,9 +116,22 @@ const AdminPage = () => {
         })
       );
 
+      const raiseFundingDetails = await Promise.all(
+        raiseFundingRequests.map(async (request) => {
+          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
+          const company = await getCompanyById(raiseFunding.companyId);
+          return {
+            ...request,
+            raiseFunding: raiseFunding || null,
+            company: company || null,
+          };
+        })
+      );
+
       setCompanyData(companyDetails);
       setInvestorData(investorDetails);
       setDealData(investmentDetails);
+      setRaiseFundingData(raiseFundingDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -119,7 +146,6 @@ const AdminPage = () => {
 
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4">
-      {/* Render Company Cards */}
       {companyData.length > 0 &&
         companyData.map((companyRequest, index) => (
           <div
@@ -225,22 +251,19 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <Dealcard
-              // investorName={`Investor ${deal.investorId}`}
-              // moneyReadyForInvestment={deal.amount}
-              // investAmount={deal.amount}
-              // stockPercentage={deal.getStock}
-              // companyName={`Company ${deal.companyId}`}
-              // raiseTarget={10000000}
-              // raisePercentage={10}
-              // valuation={10000000}
-              investorName={deal.investor?.firstName + " " + deal.investor?.lastName || "Investor"}
+              investorName={
+                deal.investor?.firstName + " " + deal.investor?.lastName ||
+                "Investor"
+              }
               moneyReadyForInvestment={deal.investor?.investableAmount || 0}
               investAmount={deal.amount || 0}
               stockPercentage={deal.getStock || 0}
               companyName={deal.company?.name || "Company"}
               raiseTarget={deal.raiseFunding?.fundingTarget || 0}
-              raisePercentage={deal.amount / deal.raiseFunding?.fundingTarget * 100 || 0}
-              valuation={100 / deal.getStock * deal.amount || 0}
+              raisePercentage={
+                (deal.amount / deal.raiseFunding?.fundingTarget) * 100 || 0
+              }
+              valuation={(100 / deal.getStock) * deal.amount || 0}
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);
                 await delay(100);
@@ -256,7 +279,57 @@ const AdminPage = () => {
             />
           </div>
         ))}
-
+      {/* <div className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]">
+        <RaiseFundingCard
+          logo="https://utfs.io/f/EDwc07VFqTZJz8b9sjIOrtwiWIsCUTmuHpyAX4vVgBK5kdxn"
+          companyName="Company Name"
+          description="Company Description"
+          PricePerShare={100}
+          valuation={10000000}
+          minimumInvestment={1000}
+          maximumInvestment={10000}
+          deadline="Stock"
+          target={10000000}
+          handleApprove={async () => {
+            console.log("Approve Raise Funding Request");
+          }}
+          handleReject={async () => {
+            console.log("Reject Raise Funding Request");
+          }}
+        />
+      </div> */}
+      {/* Render Raise Funding Cards */}
+      {raiseFundingData.length > 0 &&
+        raiseFundingData.map((raiseFunding, index) => (
+          <div
+            key={index}
+            className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
+          >
+            <RaiseFundingCard
+              logo={raiseFunding.company?.logo || "default_logo_url.png"}
+              companyName={raiseFunding.company?.name || "Company Name"}
+              description={raiseFunding.company?.description || "Company Description"}
+              PricePerShare={raiseFunding.raiseFunding?.priceShare || 100}
+              valuation={raiseFunding.raiseFunding?.valuation || 10000000}
+              minimumInvestment={raiseFunding.raiseFunding?.minInvest || 1000}
+              maximumInvestment={raiseFunding.raiseFunding?.maxInvest || 10000}
+              deadline={raiseFunding.raiseFunding?.deadline || "Stock"}
+              target={raiseFunding.raiseFunding?.fundingTarget || 10000000}
+              handleApprove={async () => {
+                await approveRaiseFundingRequest(raiseFunding.id);
+                await delay(100);
+                console.log("Approve Raise Funding Request");
+                fetchData();
+              }}
+              handleReject={async () => {
+                await rejectRaiseFundingRequest(raiseFunding.id);
+                await delay(100);
+                console.log("Reject Raise Funding Request");
+                fetchData();
+              }}
+            />
+          </div>
+        ))}
       {/* Refresh Data Button */}
       <button
         onClick={fetchData}
@@ -267,7 +340,7 @@ const AdminPage = () => {
 
       <button
         onClick={() => {
-          console.log(companyData, investorData, dealData);
+          console.log(companyData, investorData, dealData, raiseFundingData);
         }}
         className="bg-gray-500 text-white px-4 py-2 rounded"
       >
