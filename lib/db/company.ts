@@ -9,6 +9,8 @@ import {
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
 import { eq, ilike, or } from "drizzle-orm";
+import { validateIntegerId } from "../utils";
+import { notFound } from "next/navigation";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -34,6 +36,10 @@ export async function addCompanyRequest(request: CompanyRequest) {
 }
 
 export async function getDataRoomByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    return notFound();
+  }
+
   const dataRoom = await db
     .select()
     .from(DataRoomTable)
@@ -84,6 +90,10 @@ export async function getAllCompanies(searchQuery?: string, limit?: number) {
 }
 
 export async function getCompanyById(id: number) {
+  if (!validateIntegerId(id)) {
+    return notFound();
+  }
+
   const company = await db
     .select()
     .from(CompanyTable)
