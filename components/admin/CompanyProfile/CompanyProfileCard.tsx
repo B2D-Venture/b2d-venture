@@ -66,24 +66,21 @@ export function CompanyProfileCard({
           <div className="border-b-2 border-black mt-2 mb-2" />
           <CompanyProfileBadge />
           <p className="w-full text-black pt-2">
-            {description}
+            <b>Description:</b> {description}
           </p>
           <AccordionContent>
             <div className="grid grid-cols-3 text-black justify-start w-full space-y-2">
               <div className="flex flex-row items-center space-x-5">
                 <OutputTextBox label="Abbreviation" value={abbreviation} />
               </div>
-              <div className="flex flex-row items-center space-x-[60px]">
-                <OutputTextBox label="Security Type" value={deadline} />
+              <div className="flex flex-row items-center space-x-[93px]">
+                <OutputTextBox label="Deadline" value={deadline} />
               </div>
               <div className="flex flex-row items-center space-x-[47px]">
                 <OutputTextBoxDollar label="Funding Target" value={target} />
               </div>
               <div className="flex flex-row items-center space-x-[33px]">
-                <OutputTextBoxDollar
-                  label="Valuation"
-                  value={valuation}
-                />
+                <OutputTextBoxDollar label="Valuation" value={valuation} />
               </div>
               <div className="flex flex-row items-center space-x-1">
                 <OutputTextBoxDollar
@@ -103,10 +100,20 @@ export function CompanyProfileCard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-green-500"
+          onClick={handleApprove}
+        >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-red-500"
+          onClick={handleReject}
+        >
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>
