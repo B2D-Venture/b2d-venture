@@ -86,7 +86,7 @@ const FormFields = React.memo(({
                                         field.onChange(value);
                                     }
                                 }}
-                                value={type === "number" ? field.value || 0 : field.value}
+                                value={field.value}
                                 disabled={disabled}
                             />
                         )}

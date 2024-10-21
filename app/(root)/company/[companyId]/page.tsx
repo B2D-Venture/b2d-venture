@@ -39,8 +39,10 @@ const getTotalInvestment = (allInvestmentFunding: any) => {
 };
 
 const isOwnCompany = async (urlId: number, user: User) => {
-  if (user.roleIdNumber == urlId) {
-    return true;
+  if (user) {
+    if (user.roleIdNumber == urlId) {
+      return true;
+    }
   }
   return false;
 };

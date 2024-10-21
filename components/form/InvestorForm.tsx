@@ -1,6 +1,6 @@
 import ShowStep from "@/components/ShowStepForm";
 import FormContent from "@/components/form/FormContent";
-import { InvestorRegisterForm } from "@/components/InvestorRegisterForm";
+import { InvestorRegisterForm } from "@/components/form/InvestorRegisterForm";
 
 export default function InvestorForm() {
   return (

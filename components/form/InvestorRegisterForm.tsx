@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
-import { useFormState } from "./FormContext";
+import { useFormState } from "../FormContext";
 import {
   addInvestor,
   addInvestorRequest,
@@ -44,7 +44,7 @@ const formSchema = z.object({
     .string()
     .min(1, "Nationality is required")
     .max(60, "Nationality is too long"),
-  networth: z.coerce
+  networth: z
     .number({
       required_error: "Net worth is required.",
     })
@@ -67,7 +67,7 @@ export function InvestorRegisterForm() {
       nationalId: "",
       email: userEmail,
       nationality: "",
-      networth: 0,
+      networth: undefined,
       birthDate: undefined,
     },
   });
@@ -241,7 +241,7 @@ export function InvestorRegisterForm() {
                           const value = e.target.value;
                           field.onChange(value ? parseFloat(value) : 0);
                         }}
-                        value={field.value || undefined}
+                        value={field.value}
                       />
                     </FormControl>
                     <FormMessage />
