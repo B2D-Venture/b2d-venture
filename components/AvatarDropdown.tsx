@@ -4,34 +4,49 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { getInvestorById, getUser, getInvestorRequestById } from "@/lib/db/index";
+import { getInvestorById, getUser, getInvestorRequestById, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
+import { MdEmail } from "react-icons/md";
+import { MdOutlineMailOutline } from "react-icons/md";
 
 const AvatarDropdown = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(session?.user?.name);
   const [imageUrl, setImageUrl] = useState(session?.user?.image);
+  const [user, setUser] = useState(session?.user);
   const userEmail = session?.user?.email;
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userEmail) return;
 
-      const user = await getUser(userEmail);
-      if (user) {
-        if (user.roleId === 2 && user.roleIdNumber !== null) { // Investor
-          const investor = await getInvestorById(user.roleIdNumber);
-          const investorRequest = await getInvestorRequestById(user.roleIdNumber);
-          if (investorRequest.approval) {
-            setName(investor.firstName + " " + investor.lastName);
-            setImageUrl(investor.profileImage);
-          } else { // Reject
-            setName(session?.user?.name);
-            setImageUrl(session?.user?.image);
-          }
-        } else {
+      try {
+        const userData = await getUser(userEmail);
+        if (!userData || userData.roleIdNumber === null) {
           setName(session?.user?.name);
           setImageUrl(session?.user?.image);
+          return;
         }
+
+        let fetchedData = null;
+        let requestApproval = null;
+
+        if (userData.roleId === 2) { // Investor
+          fetchedData = await getInvestorById(userData.roleIdNumber);
+          requestApproval = await getInvestorRequestById(userData.roleIdNumber);
+        } else if (userData.roleId === 3) { // Company
+          fetchedData = await getCompanyById(userData.roleIdNumber);
+          const requestList = await getCompanyRequestById(userData.roleIdNumber);
+          requestApproval = requestList ? requestList[0] : null;
+        }
+
+        if (fetchedData && requestApproval?.approval) {
+          setName('firstName' in fetchedData ? `${fetchedData.firstName} ${fetchedData.lastName}` : fetchedData?.name);
+          setImageUrl('profileImage' in fetchedData ? fetchedData.profileImage : fetchedData.logo);
+        }
+        setUser(userData);
+
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
       }
     };
 
@@ -62,16 +77,28 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
           <div className="user-info flex items-center p-2">
             <Avatar imageUrl={imageUrl || ""} width={50} height={50} />
             <h2 className="font-bold text-xl text-gray-700 ml-3">{name}</h2>
+            <div className="flex items-center justify-center">
+              <MdEmail />
+              <h4 className="text-gray-500 text-sm ml-1">{session?.user?.email}</h4>
+            </div>
           </div>
           <hr className="border-0 h-[1px] w-full bg-[#edd54d] mb-2" />
           <ul className="p-2">
             <li className="mb-2 flex items-center">
               <FaUserCircle className="mr-2 text-lg text-gray-700" />
-              <Link href="/profile">
-                <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
-                  Profile
-                </span>
-              </Link>
+              {(user.roleId === 2) ? (
+                <Link href="/investor-profile">
+                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                    Investor Profile
+                  </span>
+                </Link>
+              ) : (
+                <Link href={`/company/${user.roleIdNumber}`}>
+                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                    Company Profile
+                  </span>
+                </Link>
+              )}
             </li>
             <li className="flex items-center">
               <FaSignOutAlt className="mr-2 text-lg text-gray-700" />

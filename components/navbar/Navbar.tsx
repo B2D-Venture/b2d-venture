@@ -6,7 +6,7 @@ import { navbarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import SearchBar from "@/components/SearchBar";
-import MobileNav from "@/components/MobileNav";
+import MobileNav from "@/components/navbar/MobileNav";
 import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton";
 import { SessionProvider } from "next-auth/react";
 
