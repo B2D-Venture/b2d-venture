@@ -46,8 +46,16 @@ export async function getInvestmentRequest() {
     .execute();
 }
 
+export async function getRaiseFundingRequests() {
+  const requests = await db
+    .select()
+    .from(RaiseFundingRequestTable)
+    .where(isNull(RaiseFundingRequestTable.approval))
+    .execute();
+  return requests;
+}
+
 export async function approveCompanyRequest(requestId: number) {
-  // Update the company request approval status
   const companyRequest = await db
     .update(CompanyRequestTable)
     .set({ approval: true })
@@ -97,6 +105,14 @@ export async function approveInvestmentRequest(requestId: number) {
     .execute();
 }
 
+export async function approveRaiseFundingRequest(requestId: number) {
+  return await db
+    .update(RaiseFundingRequestTable)
+    .set({ approval: true })
+    .where(eq(RaiseFundingRequestTable.id, requestId))
+    .execute();
+}
+
 export async function rejectCompanyRequest(requestId: number) {
   return await db
     .update(CompanyRequestTable)
@@ -118,5 +134,13 @@ export async function rejectInvestmentRequest(requestId: number) {
     .update(InvestmentRequestTable)
     .set({ approval: false })
     .where(eq(InvestmentRequestTable.id, requestId))
+    .execute();
+}
+
+export async function rejectRaiseFundingRequest(requestId: number) {
+  return await db
+    .update(RaiseFundingRequestTable)
+    .set({ approval: false })
+    .where(eq(RaiseFundingRequestTable.id, requestId))
     .execute();
 }
