@@ -3,7 +3,7 @@ import Image from "next/image";
 import Pitch from "@/components/profile/company/Pitch";
 import DealTerm from "@/components/DealTerm";
 import {
-  getUserByEmail,
+  getUser,
   getCompanyById,
   getCompanyRequestById,
   getRecentRaiseFundingByCompanyId,
@@ -38,47 +38,46 @@ const getTotalInvestment = (allInvestmentFunding: any) => {
   return totalInvestment;
 };
 
+const isOwnCompany = async (urlId: number, user: User) => {
+  if (user.roleIdNumber == urlId) {
+    return true;
+  }
+  return false;
+}
+
 export default async function CompanyProfile({
   params,
 }: {
-  params: { companyId: string };
+  params: { companyId: number };
 }) {
   console.log("Company ID:", params.companyId);
 
   const session = await getServerSession(authConfig);
 
-  if (!session || !session.user?.email) {
-    redirect(`/signup?callbackUrl=/company-profile`);
-  }
-  const userEmail = session.user.email;
-  const user = await getUserByEmail(3, userEmail); // get user role 3 = company
-
-  if (!user) {
-    redirect("/role-register");
-  }
-
+  let user = null;
+  let roleId = 1;
   let isApproval = null;
-  if (user.roleIdNumber !== null) {
-    const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
-    isApproval = isApprovalObj[0];
+  if (session && session.user?.email) {
+    const userEmail = session.user.email;
+    user = await getUser(userEmail);
+    roleId = user.roleId;
+    if (user.roleIdNumber !== null) {
+      const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
+      isApproval = isApprovalObj[0];
+    }
   }
 
-  let company = null;
-  let recentFunding = null;
-  let allInvestmentFunding = null;
-  let totalInvestor = 0;
-  let totalInvestment = 0;
-  if (user.roleIdNumber !== null) {
-    company = await getCompanyById(user.roleIdNumber);
-    recentFunding = await getRecentRaiseFundingByCompanyId(company.id);
-    allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
-    totalInvestor = getTotalInvestor(allInvestmentFunding);
-    totalInvestment = getTotalInvestment(allInvestmentFunding);
-  }
+  const company = await getCompanyById(params.companyId);
+  const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
+  const allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+  const totalInvestor = getTotalInvestor(allInvestmentFunding);
+  const totalInvestment = getTotalInvestment(allInvestmentFunding);
 
   return (
     <div className="flex flex-col items-center min-h-screen relative">
-      {isApproval?.approval === null && <WaitingShow />}
+      {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
+        <WaitingShow />
+      )}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
           src={company?.banner || "/default-banner.png"}
@@ -123,6 +122,8 @@ export default async function CompanyProfile({
               currentInvestment={totalInvestment}
               dayLeft={calculateDaysLeft(recentFunding.deadline)}
               totalInvestor={totalInvestor}
+              roleId={user?.roleId ?? null}
+              isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
             />
           )}
         </div>
