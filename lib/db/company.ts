@@ -10,7 +10,6 @@ import {
 import { neon } from "@neondatabase/serverless";
 import { eq, ilike, or } from "drizzle-orm";
 import { validateIntegerId } from "../utils";
-import { notFound } from "next/navigation";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -37,7 +36,7 @@ export async function addCompanyRequest(request: CompanyRequest) {
 
 export async function getDataRoomByCompanyId(companyId: number) {
   if (!validateIntegerId(companyId)) {
-    return notFound();
+    return null;
   }
 
   const dataRoom = await db
@@ -91,7 +90,7 @@ export async function getAllCompanies(searchQuery?: string, limit?: number) {
 
 export async function getCompanyById(id: number) {
   if (!validateIntegerId(id)) {
-    return notFound();
+    return null;
   }
 
   const company = await db
@@ -104,6 +103,10 @@ export async function getCompanyById(id: number) {
 }
 
 export async function getCompanyRequestById(id: number) {
+  if (!validateIntegerId(id)) {
+    return null;
+  }
+
   return await db
     .select({
       approval: CompanyRequestTable.approval,
@@ -120,6 +123,10 @@ export async function changeToCompanyRole({
   email: string;
   companyId: number;
 }) {
+  if (!validateIntegerId(companyId)) {
+    return null;
+  }
+
   return await db
     .update(UserTable)
     .set({
