@@ -110,10 +110,10 @@ export default async function CompanyProfile({
           />
         </div>
       </div>
-      <p className="name text-2xl text-white left-1/2 text-center md:mt-8 md:text-5xl">
+      <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
         {company?.name}
       </p>
-      <div className="detail text-center text-white text-sm mt-3 md:text-xl">
+      <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>
       {recentFunding && (
@@ -124,8 +124,8 @@ export default async function CompanyProfile({
         />
       )}
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-white">
-        <div className="col-span-2">
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-black dark:text-white">
+        <div className="col-span-2 bg-[#f7f7f7] dark:bg-[#1a1c22] rounded-sm">
           <Pitch pitchData={company?.pitch || ""} />
         </div>
         <div>

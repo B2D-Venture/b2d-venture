@@ -14,7 +14,7 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 const InvestmentItem = (company: InvestmentItemProps) => {
   const statusColor =
-    company.status === "Finalized" ? "text-[#8AE2A3]" : "text-[#E4DEA8]";
+    company.status === "Finalized" ? "text-[#34ba5a] dark:text-[#8AE2A3]" : "text-[#d5c642] dark:text-[#E4DEA8]";
 
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat().format(amount);
@@ -25,7 +25,7 @@ const InvestmentItem = (company: InvestmentItemProps) => {
       <Accordion type="single" collapsible>
         <AccordionItem value="item-2" className="w-full">
           <div className="grid grid-cols-5 gap-5 p-4 justify-center items-center">
-            <div className="col-span-2 text-white text-xl">
+            <div className="col-span-2 text-black dark:text-white text-xl">
               <CompanyLogoBox
                 key={company.companyName}
                 logoUrl={company.logoUrl}
@@ -33,7 +33,7 @@ const InvestmentItem = (company: InvestmentItemProps) => {
                 companyName={company.companyName}
               />
             </div>
-            <div className="col-span-1 text-white text-3xl font-bold">
+            <div className="col-span-1 text-black dark:text-white text-3xl font-bold">
               $ {formatAmount(company.amount)}
             </div>
             <div className={`col-span-1 ${statusColor} text-3xl font-bold`}>
@@ -57,7 +57,7 @@ const InvestmentItem = (company: InvestmentItemProps) => {
 
           <AccordionContent>
             <div className="grid grid-cols-5 gap-y-1 gap-x-5 justify-center items-center w-full space-y-2 pl-4 pr-4">
-              <div className="flex text-white text-lg font-bold col-span-2">
+              <div className="flex text-black dark:text-white text-lg font-bold col-span-2">
                 <span>Market Price:</span>
                 <span className="mx-1">
                   {formatAmount(company.marketPrice)}$
@@ -66,19 +66,19 @@ const InvestmentItem = (company: InvestmentItemProps) => {
                   (+{company.priceChange.toFixed(1)}$)
                 </p>
               </div>
-              <div className="flex text-white text-lg font-bold col-span-3">
+              <div className="flex text-black dark:text-white text-lg font-bold col-span-3">
                 <span>Valuation at invest:</span>
                 <span className="mx-1">
                   {formatAmount(company.valuationAtInvest)}$
                 </span>
               </div>
-              <div className="flex text-white text-lg font-bold col-span-2">
+              <div className="flex text-black dark:text-white text-lg font-bold col-span-2">
                 <span>Stock:</span>
                 <span className="mx-1">
                   {company.stockPercentage.toFixed(1)}%
                 </span>
               </div>
-              <div className="flex text-white text-lg font-bold col-span-3">
+              <div className="flex text-black dark:text-white text-lg font-bold col-span-3">
                 <span>Valuation Market:</span>
                 <span className="mx-1">
                   {formatAmount(company.valuationMarket)}$

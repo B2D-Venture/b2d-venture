@@ -3,7 +3,7 @@
 import RoleButton from "@/components/RoleButton";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useFormState } from "./FormContext";
+import { useFormState } from "../FormContext";
 import ShowStep from "@/components/ShowStepForm";
 
 type TFormValues = {
@@ -37,7 +37,7 @@ const RoleSelectForm = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
-      <div className="h-[847px] bg-[#d9d9d9] rounded-[30px] relative p-10 mt-5 w-full max-w-7xl">
+      <div className="h-[847px] bg-[#d9d9d9] border-2 border-black rounded-[30px] relative p-10 mt-5 w-full max-w-7xl">
         <div className="w-full flex justify-center mb-8">
           <ShowStep step={1} />
         </div>

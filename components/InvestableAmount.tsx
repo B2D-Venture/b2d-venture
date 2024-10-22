@@ -16,13 +16,13 @@ const InvestableAmount = ({ initialAmount, investorId }: { initialAmount: number
   };
 
   return (
-    <div className="p-4 rounded-xl shadow-lg text-right text-white transition-all duration-300 my-3">
-      <h3 className="text-xl font-semibold text-gray-300">You can Invest</h3>
+    <div className="p-4 rounded-xl bg-[#f7fbfe] dark:bg-[#1a1c22] shadow-lg text-right transition-all duration-300 my-3">
+      <h3 className="text-xl font-semibold text-black dark:text-gray-300">You can Invest</h3>
       <div className="text-4xl flex justify-center items-center font-extrabold my-4 text-[#E4A222]">
         <AnimatedCounter amount={amount} />
         <HiCash className="ml-3 text-[#E4A222] animate-pulse" />
       </div>
-      <p className="text-sm text-gray-400 mb-4">
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
         Based on your income, net worth, <br /> and current investments
       </p>
       <div className="flex justify-end items-center space-x-2">

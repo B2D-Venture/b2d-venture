@@ -10,9 +10,16 @@ const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
   return false;
 }
 
+const isOwnCompany = async (urlId: number, user: User) => {
+  if (user.roleIdNumber == urlId) {
+    return true;
+  }
+  return false;
+}
+
 const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestment, roleId, isOwnCompany, urlId }: DealTermProps) => {
   return (
-    <div className="sticky top-36 bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
+    <div className="sticky top-36 bg-[#e9e9e9] dark:bg-[#f8f8f8] md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
         <h2 className="text-black text-4xl font-bold text-center">Deal Terms</h2>
       </div>
@@ -31,8 +38,8 @@ const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestme
             text="Invest Now"
             textColor="text-white"
             hoverTextColor="hover:text-white"
-            bgColor="bg-[#FF8A00]"
-            hoverBgColor="hover:bg-[#FF8A00]"
+            bgColor="bg-[#76ABAE] dark:bg-[#FF8A00]"
+            hoverBgColor="hover:bg-[#639093] dark:hover:bg-[#FF8A00]"
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
             link="/company"

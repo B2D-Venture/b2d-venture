@@ -31,11 +31,12 @@ const CompanyCard = ({
 
             {/* Logo */}
             <Image
+              id="example-profile-image"
               src={logoUrl}
-              alt={`${companyName} logo`}
-              width={57}
-              height={57}
-              className="card-logo transition-all ease-in-out duration-300"
+              width={60}
+              height={60}
+              alt="Company Logo Image"
+              className="card-logo transition-all ease-in-out duration-300 object-cover w-16 h-16"
             />
 
             {/* Card Inside */}

@@ -30,12 +30,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div
-      className={`${classSearch} group focus-within:border-yellow-500 focus-within:border-4`}
+      className={`${classSearch} group focus-within:border-[#9394a5] dark:focus-within:border-yellow-500 focus-within:border-4`}
     >
-      <FaSearch className="mr-3" />
+      <FaSearch className="mr-3 text-black" />
       <input
         type="text"
-        className="flex-1 focus:outline-none focus:ring-0"
+        className="flex-1 focus:outline-none focus:ring-0 bg-white text-black"
         placeholder="Search for companies"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

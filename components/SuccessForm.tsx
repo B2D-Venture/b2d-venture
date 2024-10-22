@@ -9,7 +9,7 @@ const SuccessForm = ({ role, hasApproval }: { role: string, hasApproval: boolean
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-7xl text-left text-white text-5xl font-bold mb-12 mt-5">
+      <div className="w-full max-w-7xl text-left text-black dark:text-white text-5xl font-bold mb-12 mt-5">
         {role} Profile
       </div>
 

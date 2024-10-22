@@ -6,7 +6,6 @@ import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import { getInvestorById, getUser, getInvestorRequestById, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
 import { MdEmail } from "react-icons/md";
-import { MdOutlineMailOutline } from "react-icons/md";
 
 const AvatarDropdown = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,7 +64,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
       >
         <Avatar imageUrl={imageUrl || ""} width={50} height={50} />
         <FaChevronDown
-          className={`ml-2 text-gray-500 transition-transform ${isOpen ? "rotate-180" : "rotate-0"
+          className={`ml-2 text-gray-500 transition-transform ${isOpen ? "rotate-0" : "rotate-180"
             }`}
         />
       </button>

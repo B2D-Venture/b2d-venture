@@ -41,12 +41,12 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
             />
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4 col-span-4 text-white">
+        <div className="grid grid-cols-4 gap-4 col-span-4 text-black dark:text-white">
           {/* First Name */}
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">First Name</Label>
             <Input
-              className="font-bold border-white disabled:opacity-100"
+              className="font-bold border-black dark:border-white disabled:opacity-100"
               disabled
               value={investor.firstName}
             />
@@ -55,7 +55,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Last Name</Label>
             <Input
-              className="font-bold border-white disabled:opacity-100"
+              className="font-bold border-black dark:border-white disabled:opacity-100"
               disabled
               value={investor.lastName}
             />
@@ -65,7 +65,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
             <Label className="text-[20px]">National ID Card</Label>
             <div className="relative">
               <Input
-                className="font-bold border-white disabled:opacity-100"
+                className="font-bold border-black dark:border-white disabled:opacity-100"
                 disabled
                 value={
                   showNationalId
@@ -75,7 +75,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
               />
               <button
                 onClick={toggleNationalIdVisibility}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black dark:text-white"
               >
                 {showNationalId ? <IoEyeOutline /> : <IoEyeOffOutline />}{" "}
               </button>
@@ -85,7 +85,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Birthdate</Label>
             <Input
-              className="font-bold border-white disabled:opacity-100"
+              className="font-bold border-black dark:border-white disabled:opacity-100"
               disabled
               value={investor.birthDate}
             />
@@ -94,7 +94,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
           <div className="col-span-2 space-y-2">
             <Label className="text-[20px]">Email Address</Label>
             <Input
-              className="font-bold border-white disabled:opacity-100"
+              className="font-bold border-black dark:border-white disabled:opacity-100"
               disabled
               value={investor.email}
             />
@@ -103,7 +103,7 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
           <div className="col-span-1 space-y-2">
             <Label className="text-[20px]">Nationality</Label>
             <Input
-              className="font-bold border-white disabled:opacity-100"
+              className="font-bold border-black dark:border-white disabled:opacity-100"
               disabled
               value={investor.nationality}
             />
@@ -113,11 +113,11 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
             <Label className="text-[20px]">Net Worth</Label>
             <div className="relative">
               <Input
-                className="font-bold border-white disabled:opacity-100"
+                className="font-bold border-black dark:border-white disabled:opacity-100"
                 disabled
                 value={formattedNetWorth}
               />
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white">
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black dark:text-white">
                 {"$"}{" "}
               </div>
             </div>
