@@ -61,40 +61,50 @@ export function InvestorProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
-          <div className="flex flex-row items-center space-x-4 mt-2 text-black mb-2 justify-between">
-            <OutputTextBox
-              label="Email"
-              value={email}
-              classNameLabel=""
-              classNameValue=""
-            />
-            <OutputTextBox
-              label="Nationality"
-              value={Nationality}
-              classNameLabel=""
-              classNameValue=""
-            />
-            <OutputTextBox
-              label="BirthDate"
-              value={birthDate}
-              classNameLabel=""
-              classNameValue=""
-            />
-          </div>
-          <AccordionContent>
-            <div className="flex flex-row items-center space-x-10">
-              <OutputTextBoxDollar
-                label="Net Worth"
-                value={netWorth}
+          <div className="grid grid-cols-3 text-black justify-start w-full my-2">
+            <div className="flex flex-row items-center space-x-[80px]">
+              <OutputTextBox
+                label="Email"
+                value={email}
                 classNameLabel=""
                 classNameValue=""
               />
+            </div>
+            <div className="flex flex-row items-center space-x-[63px]">
+              <OutputTextBox
+                label="Nationality"
+                value={Nationality}
+                classNameLabel=""
+                classNameValue=""
+              />
+            </div>
+            <div className="flex flex-row items-center space-x-5">
+              <OutputTextBox
+                label="BirthDate"
+                value={birthDate}
+                classNameLabel=""
+                classNameValue=""
+              />
+            </div>
+          </div>
+          <AccordionContent>
+            <div className="grid grid-cols-3 text-black justify-start w-full my-2">
+              <div className="flex flex-row items-center space-x-[40px]">
+                <OutputTextBoxDollar
+                  label="Net Worth"
+                  value={netWorth}
+                  classNameLabel=""
+                  classNameValue=""
+                />
+              </div>
+              <div className="flex flex-row items-center space-x-[10px]">
               <OutputTextBoxDollar
                 label="Investable Money"
                 value={moneyReadyForInvestment}
                 classNameLabel=""
                 classNameValue=""
               />
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
