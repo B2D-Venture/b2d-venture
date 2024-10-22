@@ -78,22 +78,6 @@ const DataroomRequestPage = () => {
             />
           </div>
         ))}
-      {/* Refresh Data Button */}
-      <button
-        onClick={fetchData}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Refresh Data
-      </button>
-
-      <button
-        onClick={() => {
-          console.log(dataroomData);
-        }}
-        className="bg-gray-500 text-white px-4 py-2 rounded"
-      >
-        Log Data to Console
-      </button>
     </div>
   );
 };

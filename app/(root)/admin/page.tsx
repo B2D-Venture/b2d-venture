@@ -279,25 +279,6 @@ const AdminPage = () => {
             />
           </div>
         ))}
-      {/* <div className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]">
-        <RaiseFundingCard
-          logo="https://utfs.io/f/EDwc07VFqTZJz8b9sjIOrtwiWIsCUTmuHpyAX4vVgBK5kdxn"
-          companyName="Company Name"
-          description="Company Description"
-          PricePerShare={100}
-          valuation={10000000}
-          minimumInvestment={1000}
-          maximumInvestment={10000}
-          deadline="Stock"
-          target={10000000}
-          handleApprove={async () => {
-            console.log("Approve Raise Funding Request");
-          }}
-          handleReject={async () => {
-            console.log("Reject Raise Funding Request");
-          }}
-        />
-      </div> */}
       {/* Render Raise Funding Cards */}
       {raiseFundingData.length > 0 &&
         raiseFundingData.map((raiseFunding, index) => (
@@ -330,22 +311,7 @@ const AdminPage = () => {
             />
           </div>
         ))}
-      {/* Refresh Data Button */}
-      <button
-        onClick={fetchData}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Refresh Data
-      </button>
 
-      <button
-        onClick={() => {
-          console.log(companyData, investorData, dealData, raiseFundingData);
-        }}
-        className="bg-gray-500 text-white px-4 py-2 rounded"
-      >
-        Log Data to Console
-      </button>
     </div>
   );
 };
