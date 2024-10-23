@@ -35,7 +35,7 @@ const Document = ({ canEdit }: { canEdit: boolean }) => {
                 const documents = await getDocument();
                 setPdfSrc(documents.map(doc => ({
                     name: doc.documentName,
-                    size: 0,
+                    size: doc.documentSize,
                     key: doc.id.toString(),
                     lastModified: new Date(doc.uploadDate).getTime(),
                     serverData: doc,

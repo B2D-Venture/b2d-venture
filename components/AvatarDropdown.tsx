@@ -4,7 +4,13 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { getInvestorById, getUser, getInvestorRequestById, getCompanyById, getCompanyRequestById } from "@/lib/db/index";
+import { 
+  getInvestorById, 
+  getUser, 
+  getInvestorRequestById, 
+  getCompanyById, 
+  getCompanyRequestById 
+} from "@/lib/db/index";
 import { MdEmail } from "react-icons/md";
 
 const AvatarDropdown = ({ session }: { session: Session }) => {
@@ -77,11 +83,11 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
             <Avatar imageUrl={imageUrl || ""} width={50} height={50} />
             <h2 className="font-bold text-xl text-gray-700 ml-3">{name}</h2>
             <div className="flex items-center justify-center">
-              <MdEmail />
+              <MdEmail className="text-black" />
               <h4 className="text-gray-500 text-sm ml-1">{session?.user?.email}</h4>
             </div>
           </div>
-          <hr className="border-0 h-[1px] w-full bg-[#edd54d] mb-2" />
+          <hr className="border-0 h-[1px] w-full bg-gray-800 dark:bg-[#edd54d] mb-2" />
           <ul className="p-2">
             <li className="mb-2 flex items-center">
               <FaUserCircle className="mr-2 text-lg text-gray-700" />

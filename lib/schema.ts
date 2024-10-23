@@ -62,6 +62,7 @@ export const DataRoomTable = pgTable("data_room", {
     .references(() => CompanyTable.id)
     .notNull(),
   documentName: varchar("document_name").notNull(),
+  documentSize: integer("document_size").default(0).notNull(),
   documentUrl: varchar("document_url").notNull(),
   uploadDate: timestamp("upload_date").defaultNow().notNull(),
 });

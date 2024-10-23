@@ -199,6 +199,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
               const dataRoomEntry = {
                 companyId: companyId,
                 documentName: pdf.name,
+                documentSize: pdf.size,
                 documentUrl: pdf.url,
               };
               addDataRoom(dataRoomEntry);

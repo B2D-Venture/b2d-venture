@@ -33,7 +33,7 @@
   }
 
   .sub-menu {
-    @apply bg-[#fef5e2] rounded-lg shadow-lg;
+    @apply bg-[#eeefef] dark:bg-[#fef5e2] rounded-lg shadow-lg;
   }
 
   .user-info {
