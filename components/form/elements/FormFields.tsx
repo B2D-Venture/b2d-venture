@@ -42,7 +42,7 @@ const FormFields = React.memo(({
             control={control}
             name={name}
             render={({ field }) => (
-                <FormItem>
+                <FormItem className='text-black'>
                     {type !== "calendar" && <FormLabel className="text-[20px]">{label}</FormLabel>}
 
                     <FormControl>
@@ -86,7 +86,7 @@ const FormFields = React.memo(({
                                         field.onChange(value);
                                     }
                                 }}
-                                value={field.value}
+                                value={type === "number" ? field.value || 0 : field.value}
                                 disabled={disabled}
                             />
                         )}

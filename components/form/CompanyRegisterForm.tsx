@@ -149,9 +149,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
       }
     };
 
-    console.log("canEdit", canEdit);
     if (canEdit) {
-      console.log("Edit company");
       fetchCompany();
     } else {
       setLoading(false);

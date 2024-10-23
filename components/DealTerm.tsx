@@ -54,6 +54,16 @@ const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestme
             hoverBorderColor="border-transparent"
             link="/company"
           />
+          <DealTermBtn
+            text="Data Room Request"
+            textColor="text-[#423F3F]"
+            hoverTextColor="hover:text-white"
+            bgColor="bg-[#AFAB9A]"
+            hoverBgColor="hover:bg-[#807D71]"
+            borderColor="border-transparent"
+            hoverBorderColor="border-transparent"
+            link={`/company/${urlId}/dataroom-request`}
+          />
         </div>
       )}
       {(roleId === 3 && isOwnCompany) && (
@@ -69,16 +79,6 @@ const DealTerm = async ({ recentFunding, dayLeft, totalInvestor, currentInvestme
             link={`/company/${urlId}/edit`}
           />
           <RaiseFundingButton canRaiseFunding={canRaiseFunding(dayLeft, currentInvestment, recentFunding.fundingTarget)} />
-          <DealTermBtn
-            text="Data Room Request"
-            textColor="text-[#423F3F]"
-            hoverTextColor="hover:text-white"
-            bgColor="bg-[#AFAB9A]"
-            hoverBgColor="hover:bg-[#807D71]"
-            borderColor="border-transparent"
-            hoverBorderColor="border-transparent"
-            link={`/company/${urlId}/dataroom-request`}
-          />
         </div>
       )}
     </div>

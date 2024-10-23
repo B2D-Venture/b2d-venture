@@ -89,6 +89,21 @@ export const CompanyRequestTable = pgTable("company_request", {
   requestDate: timestamp("request_date").defaultNow().notNull(),
 });
 
+export const CompanyEditRequestTable = pgTable("company_edit_request", {
+  id: serial("id").primaryKey().notNull(),
+  companyId: integer("company_id")
+    .references(() => CompanyTable.id)
+    .notNull(),
+  logo: varchar("logo").notNull(),
+  banner: varchar("banner").notNull(),
+  name: varchar("name").notNull(),
+  abbr: varchar("abbr", { length: 10 }).notNull(),
+  description: text("description").notNull(),
+  pitch: text("pitch").notNull(),
+  approval: boolean("approval"),
+  requestDate: timestamp("request_date").defaultNow().notNull(),
+});
+
 export const InvestorRequestTable = pgTable("investor_request", {
   id: serial("id").primaryKey().notNull(),
   investorId: integer("investor_id")

@@ -49,7 +49,7 @@ const Document = ({ canEdit }: { canEdit: boolean }) => {
     }, [canEdit]);
 
     return (
-        <div>
+        <div className="text-black">
             <span className="flex">
                 <h2 className="text-3xl text-gray-700">Documentations</h2>
                 <p className="text-[12px] text-gray-500 ml-2 flex flex-col-reverse">(optional)</p>
