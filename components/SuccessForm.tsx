@@ -6,6 +6,47 @@ import ShowStep from "@/components/ShowStepForm";
 
 const SuccessForm = ({ role, hasApproval }: { role: string, hasApproval: boolean | null }) => {
   const progress = useMotionValue(90);
+  // const [email, setEmail] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [loading, setLoading] = useState(false);
+  // const [message, setMessage] = useState("");
+
+  console.log("hasApproval", hasApproval);
+
+  if (!hasApproval) {
+    console.log("Waiting for admin approval of your information");
+    // Reject Create Information
+
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //   e.preventDefault();
+    //   setLoading(true);
+    //   setMessage("");
+
+    // try {
+
+    //   // const response = await fetch("/api/mail", {
+    //   //   method: "POST",
+    //   //   headers: {
+    //   //     "Content-Type": "application/json",
+    //   //   },
+    //   //   body: JSON.stringify({
+    //   //     email: "email.com",
+    //   //     userFirstname: "firstName",
+    //   //   }),
+    //   // });
+
+    //   // if (response.ok) {
+    //   //   setMessage("Email sent successfully!");
+    //   // } else {
+    //   //   const errorData = await response.json();
+    //   //   setMessage(`Error: ${errorData.message || "Failed to send email"}`);
+    //   // }
+    // }
+    // catch (error) {
+    //   console.error("Error:", error);
+    //   // setMessage("Failed to send email");
+    // }
+  };
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center">

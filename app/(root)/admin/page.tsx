@@ -60,6 +60,36 @@ interface RaiseFundingRequest {
   approval: boolean | null;
 }
 
+// const sendEmailToCompany = async (company: Company) => {
+//   try {
+//     const response = await fetch("/api/mail", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         name: company.name,
+//         abbr: company.abbr,
+//         description: company.description,
+//         pitch: company.pitch,
+//         logo: company.logo,
+//         banner: company.banner,
+//         // email: company.email,
+//         // userFirstname: company.name,
+//       }),
+//     });
+
+//     if (response.ok) {
+//       console.log("Email sent successfully!");
+//     } else {
+//       const errorData = await response.json();
+//       console.error(`Error: ${errorData.message || "Failed to send email"}`);
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
+
 const AdminPage = () => {
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
@@ -194,6 +224,7 @@ const AdminPage = () => {
                   await delay(100); // Small delay to ensure smooth UI update
                   fetchData(); // Re-fetch data after rejection
                   console.log("Rejected Company Request");
+
                 } catch (error) {
                   console.error("Error rejecting company request:", error);
                 }
