@@ -22,6 +22,7 @@ import {
   getRecentRaiseFundingByCompanyId,
   addRaiseFunding,
   addRaiseFundingRequest,
+  addCompanyEditRequest,
 } from "@/lib/db/index";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
@@ -116,8 +117,6 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
         const response = await fetch('/api/company');
         if (response.ok) {
           const data = await response.json();
-          console.log("data", data);
-          console.log("companyEditId", companyEditId);
           if (companyEditId !== undefined) {
             if (companyEditId != data.company.id) {
               window.location.href = `/company/${companyEditId}`;
@@ -167,7 +166,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
-    const companyData = {
+    const companyData: Company = {
       logo: companyFormData.logo,
       banner: companyFormData.banner,
       name: companyFormData.name,
@@ -211,6 +210,10 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
         .catch((err) => console.error("Error adding company:", err));
     } else {
       console.log("Edit company");
+      companyData.id = companyEditId
+      addCompanyEditRequest(companyData);
+      console.log("Edit Success");
+      window.location.href = `/company/${companyEditId}`;
     }
   };
 
