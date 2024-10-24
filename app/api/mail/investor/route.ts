@@ -1,39 +1,43 @@
 import { render } from "@react-email/render";
-import EmailCompanyStatusProps from "@/emails/company";
+import EmailInvestorStatusProps from "@/emails/investor";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-
 export async function POST(request: Request) {
-  const { 
+  const {
     message,
     email,
-    logo, 
-    banner,
-    name,
-    abbr,
-    description,
-    pitch,
     status,
-} = await request.json();
+    profileImage,
+    firstName,
+    lastName,
+    nationalId,
+    birthDate,
+    nationality,
+    networth,
+  } = await request.json();
 
   try {
     const { error } = await resend.emails.send({
       from: "Acme <noreply@resend.dev>",
       to: ["bosskingblack10@gmail.com"],
       subject: "Company Creation",
-      html: await render(EmailCompanyStatusProps({ 
-        message,
-        status,
-        name,
-        logo,
-        banner,
-        abbr,
-        description,
-        pitch,
-        loginDate: new Date(),
-      })),
+      html: await render(
+        EmailInvestorStatusProps({
+          message,
+          status,
+          loginDate: new Date(),
+          profileImage,
+          firstName,
+          lastName,
+          nationalId,
+          birthDate,
+          email,
+          nationality,
+          networth,
+        })
+      ),
     });
 
     if (error) {
@@ -41,9 +45,12 @@ export async function POST(request: Request) {
       return new Response(JSON.stringify({ error }), { status: 500 });
     }
 
-    return new Response(JSON.stringify({ message: "Email sent successfully" }), {
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ message: "Email sent successfully" }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.log("error", error);
     return new Response(JSON.stringify({ error: "Failed to send email" }), {

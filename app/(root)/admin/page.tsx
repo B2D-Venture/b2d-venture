@@ -17,7 +17,8 @@ import {
   rejectInvestorRequest,
   rejectInvestmentRequest,
   rejectRaiseFundingRequest,
-} from "@/lib/db/admin";
+  getUserByCompanyId,
+} from "@/lib/db/index";
 import { Company } from "@/types/company";
 import { InvestorProps } from "@/types/investor";
 import { getCompanyById } from "@/lib/db/company";
@@ -26,6 +27,7 @@ import {
   getRaiseFundingByCompanyId,
   getRaiseFundingById,
 } from "@/lib/db/raise";
+
 
 interface CompanyRequest {
   id: number;
@@ -60,35 +62,78 @@ interface RaiseFundingRequest {
   approval: boolean | null;
 }
 
-// const sendEmailToCompany = async (company: Company) => {
-//   try {
-//     const response = await fetch("/api/mail", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name: company.name,
-//         abbr: company.abbr,
-//         description: company.description,
-//         pitch: company.pitch,
-//         logo: company.logo,
-//         banner: company.banner,
-//         // email: company.email,
-//         // userFirstname: company.name,
-//       }),
-//     });
+const sendEmailCompanyStatus = async (company: Company, email: string, status: "approved" | "rejected") => {
+  const messages = {
+    approved: "Your company profile has been successfully created.",
+    rejected: "Thank you for your request",
+  };
 
-//     if (response.ok) {
-//       console.log("Email sent successfully!");
-//     } else {
-//       const errorData = await response.json();
-//       console.error(`Error: ${errorData.message || "Failed to send email"}`);
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// }
+  try {
+    const response = await fetch("/api/mail/company", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: messages[status],
+        status,
+        email,
+        name: company.name,
+        abbr: company.abbr,
+        description: company.description,
+        pitch: company.pitch,
+        logo: company.logo,
+        banner: company.banner,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Email sent successfully!");
+    } else {
+      const errorData = await response.json();
+      console.error(`Error: ${errorData.message || "Failed to send email"}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approved" | "rejected") => {
+  const messages = {
+    approved: "Your investor profile has been successfully created.",
+    rejected: "Thank you for your request",
+  };
+
+  try {
+    const response = await fetch("/api/mail/investor", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: messages[status],
+        status,
+        email: investor.email,
+        profileImage: investor.profileImage,
+        firstName: investor.firstName,
+        lastName: investor.lastName,
+        nationalId: investor.nationalId,
+        birthDate: investor.birthDate,
+        nationality: investor.nationality,
+        networth: investor.networth,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Email sent successfully!");
+    } else {
+      const errorData = await response.json();
+      console.error(`Error: ${errorData.message || "Failed to send email"}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 const AdminPage = () => {
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
@@ -213,6 +258,8 @@ const AdminPage = () => {
                   await approveCompanyRequest(companyRequest.id);
                   await delay(100);
                   fetchData();
+                  const user = await getUserByCompanyId(companyRequest.companyId);
+                  sendEmailCompanyStatus(companyRequest.company, user.email, "approved");
                   console.log("Approved Company Request");
                 } catch (error) {
                   console.error("Error approving company request:", error);
@@ -223,8 +270,9 @@ const AdminPage = () => {
                   await rejectCompanyRequest(companyRequest.id);
                   await delay(100); // Small delay to ensure smooth UI update
                   fetchData(); // Re-fetch data after rejection
+                  const user = await getUserByCompanyId(companyRequest.companyId);
+                  sendEmailCompanyStatus(companyRequest.company, user.email, "rejected");
                   console.log("Rejected Company Request");
-
                 } catch (error) {
                   console.error("Error rejecting company request:", error);
                 }
@@ -262,12 +310,14 @@ const AdminPage = () => {
                 await approveInvestorRequest(investorRequest.id);
                 await delay(100);
                 fetchData(); // Refresh data after approval
+                sendEmailInvestorStatus(investorRequest.investor, "approved");
                 console.log("Approve Investor Request");
               }}
               handleReject={async () => {
                 await rejectInvestorRequest(investorRequest.id);
                 await delay(100);
                 fetchData(); // Refresh data after rejection
+                sendEmailInvestorStatus(investorRequest.investor, "rejected");
                 console.log("Reject Investor Request");
               }}
             />

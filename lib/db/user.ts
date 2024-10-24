@@ -32,3 +32,13 @@ export async function getUser(email: string) {
   
   return user[0];
 }
+
+export async function getUserByCompanyId(companyId: number) {
+  const user = await db
+    .select()
+    .from(UserTable)
+    .where(and(eq(UserTable.roleIdNumber, companyId), eq(UserTable.roleId, 3)))
+    .execute();
+  
+  return user[0];
+}
