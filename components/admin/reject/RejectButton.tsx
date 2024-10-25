@@ -22,32 +22,20 @@ import {
 } from "@/components/ui/drawer";
 import { RejectMessageForm } from "@/components/admin/reject/RejectMessageForm";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { Company } from "@/types/company";
+
 
 interface RejectButtonProps {
-    // handleReject: () => void;
+    handleReject: () => void;
     type: "investor" | "company" | "funding" | null;
+    request: any;
+    email?: string;
 }
 
-export function RejectButton({ type }: RejectButtonProps) {
+export function RejectButton({ type, request, email, handleReject }: RejectButtonProps) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
     let messagesForm: { id: string; title: string; description: string; }[] = [];
-    if (type === "company") {
-        messagesForm = [
-            { id: "message1", title: "Incorrect Logo", description: "The uploaded logo does not match the official company logo." },
-            { id: "message2", title: "Incorrect Banner", description: "The uploaded banner does not meet branding guidelines." },
-            { id: "message3", title: "Incorrect Company Name", description: "The company name is misspelled or incorrect." },
-            { id: "message4", title: "Incorrect Company Abbreviation", description: "The company abbreviation is incorrect." },
-            { id: "message5", title: "Inaccurate Company Description", description: "The description does not accurately represent the company profile." },
-            { id: "message6", title: "Inaccurate Pitch Information", description: "The pitch does not reflect the correct product details." },
-        ];
-    } else if (type === "investor") {
-        messagesForm = [
-            { id: "message1", title: "Missing Identification", description: "The investor identification is incomplete or incorrect." },
-            { id: "message2", title: "Incorrect Financial Information", description: "The financial information does not match verified records." },
-            { id: "message3", title: "Missing Contact Details", description: "The investor contact details are incomplete." },
-        ];
-    }
 
     if (isDesktop) {
         return (
@@ -71,7 +59,7 @@ export function RejectButton({ type }: RejectButtonProps) {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <RejectMessageForm className="company-form" messages={messagesForm} />
+                    <RejectMessageForm className="company-form" type={type} request={request} email={email} handleReject={handleReject} />
 
                 </DialogContent>
             </Dialog>
@@ -100,7 +88,7 @@ export function RejectButton({ type }: RejectButtonProps) {
                     </DrawerDescription>
                 </DrawerHeader>
 
-                <RejectMessageForm className="px-4" messages={messagesForm} />
+                <RejectMessageForm className="px-4" type={type} request={request} email={email} handleReject={handleReject} />
 
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>

@@ -98,6 +98,7 @@ const sendEmailCompanyStatus = async (company: Company, email: string, status: "
   }
 };
 
+
 const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approved" | "rejected") => {
   const messages = {
     approved: "Your investor profile has been successfully created.",
@@ -228,31 +229,8 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <CompanyProfileCard
-              logo={companyRequest.company?.logo || "default_logo_url.png"} // Default logo if none exists
-              companyName={
-                companyRequest.company?.name ||
-                `Company ${companyRequest.companyId}`
-              }
-              description={
-                companyRequest.company?.description ||
-                `Description for Company ${companyRequest.companyId}`
-              }
-              abbreviation={companyRequest.company?.abbr || "AMD"}
-              valuation={
-                companyRequest.company?.raise_funding?.fundingTarget || 9999
-              }
-              minimumInvestment={
-                companyRequest.company?.raise_funding?.minInvest || 9999
-              }
-              maximumInvestment={
-                companyRequest.company?.raise_funding?.maxInvest || 9999
-              }
-              deadline={
-                companyRequest.company?.raise_funding?.deadline || "Stock"
-              }
-              target={
-                companyRequest.company?.raise_funding?.fundingTarget || 9999
-              }
+              companyRequest={companyRequest}
+              email=""
               handleApprove={async () => {
                 try {
                   await approveCompanyRequest(companyRequest.id);
