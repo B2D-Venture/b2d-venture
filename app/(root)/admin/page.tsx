@@ -248,9 +248,6 @@ const AdminPage = () => {
                   await rejectCompanyRequest(companyRequest.id);
                   await delay(100); // Small delay to ensure smooth UI update
                   fetchData(); // Re-fetch data after rejection
-                  const user = await getUserByCompanyId(companyRequest.companyId);
-                  sendEmailCompanyStatus(companyRequest.company, user.email, "rejected");
-                  console.log("Rejected Company Request");
                 } catch (error) {
                   console.error("Error rejecting company request:", error);
                 }
@@ -267,23 +264,7 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <InvestorProfileCard
-              logo={
-                investorRequest.investor?.profileImage ||
-                "https://utfs.io/f/EDwc07VFqTZJz8b9sjIOrtwiWIsCUTmuHpyAX4vVgBK5kdxn"
-              } // Default logo if none exists
-              investorName={
-                investorRequest.investor?.firstName +
-                  " " +
-                  investorRequest.investor?.lastName ||
-                `Investor ${investorRequest.investorId}`
-              }
-              Nationality={investorRequest.investor?.nationality || "Unknown"}
-              email={investorRequest.investor?.email || "email@domain.com"}
-              birthDate={investorRequest.investor?.birthDate || "01/01/2000"}
-              netWorth={investorRequest.investor?.networth || 0} // Default net worth if not available
-              moneyReadyForInvestment={
-                investorRequest.investor?.investableAmount || 0
-              }
+              investorRequest={investorRequest}
               handleApprove={async () => {
                 await approveInvestorRequest(investorRequest.id);
                 await delay(100);
@@ -295,7 +276,6 @@ const AdminPage = () => {
                 await rejectInvestorRequest(investorRequest.id);
                 await delay(100);
                 fetchData(); // Refresh data after rejection
-                sendEmailInvestorStatus(investorRequest.investor, "rejected");
                 console.log("Reject Investor Request");
               }}
             />

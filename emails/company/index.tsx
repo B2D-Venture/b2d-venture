@@ -59,7 +59,7 @@ export const YelpRecentLoginEmail = ({
               <Img
                 style={image}
                 width={100}
-                src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671b3929&is=6719e7a9&hm=91ab0a3fbfe7afe1f6ffb99549ec3dc1e7fcd5b00448db652cbb5af3ff5b3fa1&"
+                src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671c8aa9&is=671b3929&hm=9a7ad43bb20aa4b1dede9a39d3470ba4253153892ff30cd4e2e8575feda87f44&"
                 alt="B2D Logo Content"
                 className="flex justify-center items-center"
               />
@@ -93,9 +93,29 @@ export const YelpRecentLoginEmail = ({
                 </Row>
                 <Row>
                   <Text style={instructions}>
-                    You can not create because {message}
+                    you cannot create your investor profile due to the following issues:
                   </Text>
                 </Row>
+                {message.map((msg) => (
+                  <Row key={msg.id}>
+                    <ul>
+                      <li>
+                        <Text style={{
+                          fontSize: 16,
+                          color: '#777',
+                          marginBottom: '10px',
+                          textAlign: "left",
+                          lineHeight: '1.5'
+                        }}>
+                          <strong>{msg.title}</strong>
+                          <br />
+                          {msg.description}
+                        </Text>
+                      </li>
+                    </ul>
+                  </Row>
+                ))}
+
                 <Row>
                   <Text style={{ ...paragraph, textAlign: "center", marginTop: "20px" }}>
                     Please make the necessary changes and submit your information for approve.
@@ -216,16 +236,23 @@ export const YelpRecentLoginEmail = ({
 };
 
 YelpRecentLoginEmail.PreviewProps = {
-  message: "your company pitch is not good",
-  status: "approved",
-  // status: "rejected",
+  message: [
+    { id: "message1", title: "Incorrect Logo", description: "The uploaded logo does not match the official company logo." },
+    { id: "message2", title: "Incorrect Banner", description: "The uploaded banner does not meet branding guidelines." },
+    { id: "message3", title: "Incorrect Company Name", description: "The company name is misspelled or incorrect." },
+    { id: "message4", title: "Incorrect Company Abbreviation", description: "The company abbreviation is incorrect." },
+    { id: "message5", title: "Inaccurate Company Description", description: "The description does not accurately represent the company profile." },
+    { id: "message6", title: "Inaccurate Pitch Information", description: "The pitch does not reflect the correct product details." },
+  ],
+  // status: "approved",
+  status: "rejected",
   name: "Alan",
   logo: "https://utfs.io/f/EDwc07VFqTZJhmd9HKMFNCBQjAuL6IGXUMqVeOptDxTdaHyo",
   banner: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/corporate-business-banner-template-design-a1bfc99717878c32d065d97fa71faaf3_screen.jpg?ts=1573704599",
   abbr: "CPL",
   description: "Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses",
   pitch: "Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses",
-} as EmailCompanyStatusProps;
+} as unknown as EmailCompanyStatusProps;
 
 export default YelpRecentLoginEmail;
 

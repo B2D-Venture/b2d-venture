@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: "Acme <noreply@resend.dev>",
       to: ["bosskingblack10@gmail.com"],
-      subject: "Company Creation",
+      subject: "Company Register Creation",
       html: await render(EmailCompanyStatusProps({ 
         message,
         status,

@@ -13,14 +13,8 @@ import {
     FormControl,
     FormItem,
 } from "@/components/ui/form";
-import {
-    getInvestmentRequest,
-    getCompanyRequest,
-    getInvestorRequest,
-    getRaiseFundingRequests,
-    rejectCompanyRequest,
-    getUserByCompanyId,
-} from "@/lib/db/index";
+import { getUserByCompanyId } from "@/lib/db/user";
+import { InvestorProps } from "@/types/investor";
 
 // Define a type for each message to make the form reusable
 type Message = {
@@ -39,44 +33,70 @@ type RejectMessageFormProps = {
     request: any;
     email?: string;
     handleReject: () => void;
-    // messages: Message[];
 };
 
-const sendEmailCompanyStatus = async (company: any, email: string, status: "approved" | "rejected") => {
-    const messages = {
-      approved: "Your company profile has been successfully created.",
-      rejected: "Thank you for your request",
-    };
-  
+const sendEmailCompanyStatus = async (company: any, email: string, status: "approved" | "rejected", message: Message[]) => {
     try {
-      const response = await fetch("/api/mail/company", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: messages[status],
-          status,
-          email,
-          name: company.name,
-          abbr: company.abbr,
-          description: company.description,
-          pitch: company.pitch,
-          logo: company.logo,
-          banner: company.banner,
-        }),
-      });
-  
-      if (response.ok) {
-        console.log("Email sent successfully!");
-      } else {
-        const errorData = await response.json();
-        console.error(`Error: ${errorData.message || "Failed to send email"}`);
-      }
+        const response = await fetch("/api/mail/company", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message: message,
+                status,
+                email,
+                name: company.name,
+                abbr: company.abbr,
+                description: company.description,
+                pitch: company.pitch,
+                logo: company.logo,
+                banner: company.banner,
+            }),
+        });
+
+        if (response.ok) {
+            console.log("Email sent successfully!");
+        } else {
+            const errorData = await response.json();
+            console.error(`Error: ${errorData.message || "Failed to send email"}`);
+        }
     } catch (error) {
-      console.error("Error:", error);
+        console.error("Error:", error);
     }
-  };
+};
+
+const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approved" | "rejected", message: Message[]) => {
+    try {
+        const response = await fetch("/api/mail/investor", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message,
+                status,
+                email: investor.email,
+                profileImage: investor.profileImage,
+                firstName: investor.firstName,
+                lastName: investor.lastName,
+                nationalId: investor.nationalId,
+                birthDate: investor.birthDate,
+                nationality: investor.nationality,
+                networth: investor.networth,
+            }),
+        });
+
+        if (response.ok) {
+            console.log("Email sent successfully!");
+        } else {
+            const errorData = await response.json();
+            console.error(`Error: ${errorData.message || "Failed to send email"}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
 
 const getRejectMessage = (type: string) => {
     if (type === "company") {
@@ -98,10 +118,10 @@ const getRejectMessage = (type: string) => {
     return [];
 }
 
-export function RejectMessageForm({ className, type, request, handleReject }: RejectMessageFormProps) {
+export function RejectMessageForm({ className, type, request, handleReject, email }: RejectMessageFormProps) {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     let messages: Message[] = getRejectMessage(type ?? "");
-    
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -123,24 +143,15 @@ export function RejectMessageForm({ className, type, request, handleReject }: Re
         setErrorMessage(null);
 
         console.log("Checked Messages: ", checkedMessages);
-        checkedMessages.forEach(({ title, description }) => {
-            console.log(`Title: ${title}, Description: ${description}`);
-        });
 
-        handleReject();
-        // if (type === "company") {
-        //     // const companyRequests = await getCompanyRequest();
-        //     // const investorRequests = await getInvestorRequest();
-        //     // const investmentRequests = await getInvestmentRequest();
-        //     // const raiseFundingRequests = await getRaiseFundingRequests();
-        //     rejectCompanyRequest(request.id);
-        //     const user = await getUserByCompanyId(request.companyId);
-        //     // await sendEmailCompanyStatus(request.company, user.email, "rejected");
-        //     console.log("Rejected Company Request");
-
-        // } else if (type === "investor") {
-        //     console.log("Rejected Investor Request");
-        // }
+        if (type === "company") {
+            const user = await getUserByCompanyId(request.companyId);
+            await sendEmailCompanyStatus(request.company, user.email, "rejected", checkedMessages);
+            handleReject();
+        } else if (type === "investor") {
+            await sendEmailInvestorStatus(request, "rejected", checkedMessages);
+            handleReject();
+        }
     }
 
 

@@ -15,7 +15,6 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { CheckIcon } from "@radix-ui/react-icons";
 import { RejectButton } from "@/components/admin/reject/RejectButton";
-import { Company } from "@/types/company";
 
 export function CompanyProfileCard({
   companyRequest,

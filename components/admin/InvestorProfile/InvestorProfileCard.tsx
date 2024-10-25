@@ -14,27 +14,14 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { RejectButton } from "@/components/admin/reject/RejectButton";
 
 export function InvestorProfileCard({
-  logo,
-  investorName,
-  email,
-  birthDate,
-  netWorth,
-  moneyReadyForInvestment,
-  Nationality,
+  investorRequest,
   handleApprove,
   handleReject,
 }: {
-  logo: string;
-  investorName: string;
-  email: string;
-  Nationality: string;
-  birthDate: string;
-  netWorth: number;
-  moneyReadyForInvestment: number;
+  investorRequest: any;
   handleApprove: () => void;
   handleReject: () => void;
 }) {
@@ -44,13 +31,15 @@ export function InvestorProfileCard({
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
             <img
-              src={logo}
+              src={investorRequest.investor?.profileImage}
               alt="Investor Profile"
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{investorName}</span>
+                <span className="flex-1">
+                  {investorRequest.investor?.firstName + " " + investorRequest.investor?.lastName}
+                </span>
                 <ChevronDownIcon
                   className="text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -66,7 +55,7 @@ export function InvestorProfileCard({
             <div className="flex flex-row items-center space-x-[80px]">
               <OutputTextBox
                 label="Email"
-                value={email}
+                value={investorRequest.investor?.email}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -74,7 +63,7 @@ export function InvestorProfileCard({
             <div className="flex flex-row items-center space-x-[63px]">
               <OutputTextBox
                 label="Nationality"
-                value={Nationality}
+                value={investorRequest.investor?.nationality}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -82,7 +71,7 @@ export function InvestorProfileCard({
             <div className="flex flex-row items-center space-x-5">
               <OutputTextBox
                 label="BirthDate"
-                value={birthDate}
+                value={investorRequest.investor?.birthDate}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -93,18 +82,18 @@ export function InvestorProfileCard({
               <div className="flex flex-row items-center space-x-[40px]">
                 <OutputTextBoxDollar
                   label="Net Worth"
-                  value={netWorth}
+                  value={investorRequest.investor?.networth}
                   classNameLabel=""
                   classNameValue=""
                 />
               </div>
               <div className="flex flex-row items-center space-x-[10px]">
-              <OutputTextBoxDollar
-                label="Investable Money"
-                value={moneyReadyForInvestment}
-                classNameLabel=""
-                classNameValue=""
-              />
+                <OutputTextBoxDollar
+                  label="Investable Money"
+                  value={investorRequest.investor?.investableAmount}
+                  classNameLabel=""
+                  classNameValue=""
+                />
               </div>
             </div>
           </AccordionContent>
@@ -119,15 +108,8 @@ export function InvestorProfileCard({
         >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <RejectButton type="investor" />
-        {/* <Button
-          variant="ghost"
-          size="icon"
-          className="bg-red-500"
-          onClick={handleReject}
-        >
-          <Cross2Icon className="h-4 w-4" />
-        </Button> */}
+
+        <RejectButton type="investor" request={investorRequest} email={investorRequest.investor?.email} handleReject={handleReject}  />
       </div>
     </div>
   );
