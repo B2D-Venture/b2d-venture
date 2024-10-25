@@ -14,7 +14,7 @@ import { OutputTextBox } from "@/components/admin/OutputTextBox";
 import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { CheckIcon } from "@radix-ui/react-icons";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { RejectButton } from "@/components/admin/reject/RejectButton";
 
 export function CompanyProfileCard({
   logo,
@@ -108,14 +108,15 @@ export function CompanyProfileCard({
         >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button
+        <RejectButton type="company" />
+        {/* <Button
           variant="ghost"
           size="icon"
           className="bg-red-500"
           onClick={handleReject}
-        >
-          <Cross2Icon className="h-4 w-4" />
-        </Button>
+        > */}
+          {/* <Cross2Icon className="h-4 w-4" /> */}
+        {/* </Button> */}
       </div>
     </div>
   );

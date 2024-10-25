@@ -15,6 +15,7 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { RejectButton } from "@/components/admin/reject/RejectButton";
 
 export function InvestorProfileCard({
   logo,
@@ -118,14 +119,15 @@ export function InvestorProfileCard({
         >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button
+        <RejectButton type="investor" />
+        {/* <Button
           variant="ghost"
           size="icon"
           className="bg-red-500"
           onClick={handleReject}
         >
           <Cross2Icon className="h-4 w-4" />
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
