@@ -11,8 +11,8 @@ const InvestableAmount = ({ initialAmount, investorId }: { initialAmount: number
   let [amount, setAmount] = useState(initialAmount);
 
   const addCash = () => {
-    setAmount((prevAmount) => prevAmount + 25000);
-    UpdateInvestorAmount({ investorId, amount: amount + 25000 });
+    setAmount((prevAmount) => prevAmount + 100000);
+    UpdateInvestorAmount({ investorId, amount: amount + 100000 });
   };
 
   return (
@@ -29,7 +29,7 @@ const InvestableAmount = ({ initialAmount, investorId }: { initialAmount: number
         <button onClick={addCash}>
           <IoAddCircleOutline className="text-[#E4A222] text-2xl hover:text-yellow-400 transition duration-200 ease-in-out transform hover:scale-125" />
         </button>
-        <div className="text-xl text-[#E4A222] font-bold">25,000 $</div>
+        <div className="text-xl text-[#E4A222] font-bold">100,000 $</div>
       </div>
     </div>
   );

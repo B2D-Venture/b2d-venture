@@ -11,7 +11,7 @@ import {
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 
@@ -39,19 +39,19 @@ const getTotalInvestment = (allInvestmentFunding: any) => {
 };
 
 const isOwnCompany = async (urlId: number, user: User) => {
-  if (user) {
-    if (user.roleIdNumber == urlId) {
-      return true;
-    }
+  if (user.roleIdNumber == urlId) {
+    return true;
   }
   return false;
-};
+}
 
 export default async function CompanyProfile({
   params,
 }: {
   params: { companyId: number };
 }) {
+  console.log("Company ID:", params.companyId);
+
   const session = await getServerSession(authConfig);
 
   let user = null;
@@ -68,29 +68,16 @@ export default async function CompanyProfile({
   }
 
   const company = await getCompanyById(params.companyId);
-
-  if (!company) {
-    return notFound();
-  }
-
-  const recentFunding = await getRecentRaiseFundingByCompanyId(
-    params.companyId,
-  );
-
-  if (!recentFunding) {
-    return notFound();
-  }
-
+  const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
   const allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
   const totalInvestor = getTotalInvestor(allInvestmentFunding);
   const totalInvestment = getTotalInvestment(allInvestmentFunding);
 
   return (
     <div className="flex flex-col items-center min-h-screen relative">
-      {roleId === 3 &&
-        isApproval?.approval === null &&
-        user &&
-        (await isOwnCompany(params.companyId ?? 1, user)) && <WaitingShow />}
+      {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
+        <WaitingShow />
+      )}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
           src={company?.banner || "/default-banner.png"}
@@ -138,6 +125,7 @@ export default async function CompanyProfile({
               roleId={user?.roleId ?? null}
               isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
               urlId={params.companyId}
+              investorId={user?.roleIdNumber}
             />
           )}
         </div>

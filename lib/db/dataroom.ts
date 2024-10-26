@@ -1,9 +1,5 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import {
-  Company,
-  CompanyRequest,
-  DataRoom,
-} from "../../types/company/index";
+import { Company, CompanyRequest, DataRoom } from "../../types/company/index";
 import {
   CompanyTable,
   CompanyRequestTable,
@@ -12,7 +8,7 @@ import {
   UserTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, ilike, isNull, or } from "drizzle-orm";
+import { eq, ilike, isNull, or, and } from "drizzle-orm";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -44,5 +40,50 @@ export async function rejectDataRoomRequest(requestId: number) {
     .update(DataRoomRequestTable)
     .set({ approval: false })
     .where(eq(DataRoomRequestTable.id, requestId))
+    .execute();
+}
+
+export async function addDataRoomRequest(
+  companyId: number,
+  investorId: number
+) {
+  return await db
+    .insert(DataRoomRequestTable)
+    .values({
+      companyId,
+      investorId,
+    })
+    .execute();
+}
+
+export async function getCompanyDataRoomRequestsByCompany(companyId: number) {
+  return await db
+    .select()
+    .from(DataRoomRequestTable)
+    .where(eq(DataRoomRequestTable.companyId, companyId))
+    .execute();
+}
+
+export async function getCompanyDataRoomRequestsByInvestor(investorId: number) {
+  return await db
+    .select()
+    .from(DataRoomRequestTable)
+    .where(eq(DataRoomRequestTable.investorId, investorId))
+    .execute();
+}
+
+export async function getCompanyDataRoomRequestsByCompanyAndInvestor(
+  companyId: number,
+  investorId: number
+) {
+  return await db
+    .select()
+    .from(DataRoomRequestTable)
+    .where(
+      and(
+        eq(DataRoomRequestTable.companyId, companyId),
+        eq(DataRoomRequestTable.investorId, investorId)
+      )
+    )
     .execute();
 }
