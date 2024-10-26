@@ -3,26 +3,26 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
-import { IoFilter } from "react-icons/io5";
+import SortCompany from "@/components/SortCompany";
 
 interface SearchBarProps {
   initialSearch: string;
   classSearch: string;
-  showFilter?: boolean;
+  showSort?: boolean;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   initialSearch,
   classSearch,
-  showFilter = false,
+  showSort = false,
 }) => {
   const [searchInput, setSearchInput] = useState<string>(initialSearch);
   const router = useRouter();
 
   const handleSearch = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      router.push(`/company?search=${encodeURIComponent(searchInput)}`);
-      if (!showFilter) {
+      router.push(`/company?search=${searchInput}`);
+      if (!showSort) {
         setSearchInput("");
       }
     }
@@ -41,7 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => setSearchInput(e.target.value)}
         onKeyDown={handleSearch}
       />
-      {showFilter && <IoFilter className="ml-3" />}
+      {showSort && <SortCompany />}
     </div>
   );
 };

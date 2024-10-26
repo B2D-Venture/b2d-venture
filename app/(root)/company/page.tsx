@@ -63,7 +63,7 @@ const CompanyList = () => {
       <SearchBar
         initialSearch={searchParams.get("search") || ""}
         classSearch="search-filter"
-        showFilter={true}
+        showSort={true}
       />
       {loading && (
         <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
