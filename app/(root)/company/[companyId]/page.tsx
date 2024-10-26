@@ -11,7 +11,7 @@ import {
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 import PublishForm from "@/components/profile/company/PublishForm";
