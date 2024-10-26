@@ -122,7 +122,6 @@ const SortCompany = () => {
             </DropdownMenuPortal>
           </DropdownMenuSub>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>
   );
