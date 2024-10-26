@@ -54,7 +54,7 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
               name="fundingGoal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[17px]">Funding Goal</FormLabel>
+                  <FormLabel className="text-[17px]">Funding Target</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#bfbfbf]"
