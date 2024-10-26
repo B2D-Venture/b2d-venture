@@ -8,6 +8,7 @@ import { useFormContext } from "react-hook-form";
 import { getDataRoomByCompanyId } from "@/lib/db/index";
 
 interface PdfFile {
+    id?: number;
     name: string;
     size: number;
     key: string;
@@ -16,31 +17,40 @@ interface PdfFile {
     url: string;
 }
 
-const getDocument = async () => {
-    return await getDataRoomByCompanyId(30);
-};
+interface DocumentProps {
+    canEdit: boolean;
+    companyId: number;
+}
 
-const Document = ({ canEdit }: { canEdit: boolean }) => {
+const Document = ({ canEdit, companyId }: DocumentProps) => {
     const { setValue } = useFormContext();
-
     const [pdfSrc, setPdfSrc] = useState<PdfFile[]>([]);
 
-    const handleRemovePdf = (key: string) => {
-        setPdfSrc((prev) => prev.filter(pdf => pdf.key !== key));
+    const handleRemovePdf = (identifier: string | number) => {
+        console.log("identifier", identifier);
+        setPdfSrc((prev) => {
+            const updatedPdfs = prev.filter((pdf) =>
+                pdf.id ? pdf.id !== identifier : pdf.key !== identifier
+            );
+            setValue("document", { pdfs: updatedPdfs });
+            return updatedPdfs;
+        });
     };
 
     useEffect(() => {
         const fetchDocuments = async () => {
             if (canEdit) {
-                const documents = await getDocument();
-                setPdfSrc(documents.map(doc => ({
+                const documents = await getDataRoomByCompanyId(companyId);
+                const transformedDocuments = documents ? documents.map(doc => ({
                     name: doc.documentName,
                     size: doc.documentSize,
                     key: doc.id.toString(),
                     lastModified: new Date(doc.uploadDate).getTime(),
                     serverData: doc,
                     url: doc.documentUrl,
-                })));
+                })) : [];
+                setPdfSrc(transformedDocuments);
+                setValue("document", { pdfs: transformedDocuments }); 
             } else {
                 setPdfSrc([]);
             }
@@ -100,8 +110,11 @@ const Document = ({ canEdit }: { canEdit: boolean }) => {
                                 serverData: file.serverData,
                                 url: file.url,
                             }));
-                            setPdfSrc(prev => [...prev, ...uploadedFiles]);
-                            setValue("document", { pdfs: uploadedFiles });
+                            setPdfSrc(prev => {
+                                const updatedPdfs = [...prev, ...uploadedFiles];
+                                setValue("document", { pdfs: updatedPdfs });
+                                return updatedPdfs;
+                            });
                         }
                     }}
                     onUploadError={(error: Error) => {

@@ -17,6 +17,7 @@ export type CompanyRequest = {
 };
 
 export type DataRoom = {
+  id?: number;
   companyId: number;
   documentName: string;
   documentSize: number;

@@ -16,3 +16,9 @@ export interface FormFieldProps {
     disabled?: boolean;
     defaultValue?: string | Date;
 };
+
+export interface SuccessFormProps {
+    role: string;
+    hasApproval: boolean | null;
+    roleIdNumber?: number;
+}

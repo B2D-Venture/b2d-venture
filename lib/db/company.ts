@@ -35,20 +35,6 @@ export async function addCompanyRequest(request: CompanyRequest) {
   return await db.insert(CompanyRequestTable).values(request).execute();
 }
 
-export async function getDataRoomByCompanyId(companyId: number) {
-  if (!validateIntegerId(companyId)) {
-    return null;
-  }
-
-  const dataRoom = await db
-    .select()
-    .from(DataRoomTable)
-    .where(eq(DataRoomTable.companyId, companyId))
-    .execute();
-
-  return dataRoom;
-}
-
 export async function addDataRoom(data: DataRoom) {
   return await db.insert(DataRoomTable).values(data).execute();
 }
@@ -154,5 +140,24 @@ export async function addCompanyEditRequest(company: Company) {
       description: company.description,
       pitch: company.pitch,
     })
+    .execute();
+}
+
+export async function updateCompany(company: Company) {
+  if (company.id === undefined) {
+    throw new Error("Company ID is undefined");
+  }
+
+  return await db
+    .update(CompanyTable)
+    .set({
+      name: company.name,
+      logo: company.logo,
+      banner: company.banner,
+      abbr: company.abbr,
+      description: company.description,
+      pitch: company.pitch,
+    })
+    .where(eq(CompanyTable.id, company.id))
     .execute();
 }

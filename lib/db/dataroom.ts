@@ -8,7 +8,8 @@ import {
   UserTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, ilike, isNull, or, and } from "drizzle-orm";
+import { eq, ilike, isNull, or } from "drizzle-orm";
+import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -18,6 +19,20 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
+
+export async function getDataRoomByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    return null;
+  }
+
+  const dataRoom = await db
+    .select()
+    .from(DataRoomTable)
+    .where(eq(DataRoomTable.companyId, companyId))
+    .execute();
+
+  return dataRoom;
+}
 
 export async function getDataRoomRequests() {
   return await db
@@ -40,6 +55,24 @@ export async function rejectDataRoomRequest(requestId: number) {
     .update(DataRoomRequestTable)
     .set({ approval: false })
     .where(eq(DataRoomRequestTable.id, requestId))
+    .execute();
+}
+
+export async function updateDataRoom(data: DataRoom) {
+  if (data.id === undefined) {
+    throw new Error("DataRoom id is undefined");
+  }
+  return await db
+    .update(DataRoomTable)
+    .set(data)
+    .where(eq(DataRoomTable.id, data.id))
+    .execute();
+}
+
+export async function deleteDataRoom(id: number) {
+  return await db
+    .delete(DataRoomTable)
+    .where(eq(DataRoomTable.id, id))
     .execute();
 }
 

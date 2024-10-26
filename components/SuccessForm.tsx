@@ -3,8 +3,10 @@ import { motion, useMotionValue } from "framer-motion";
 import VerifyAnimation from "./VerifyAnimation";
 import Link from "next/link";
 import ShowStep from "@/components/ShowStepForm";
+import { SuccessFormProps } from "@/types/form/index.d";
 
-const SuccessForm = ({ role, hasApproval }: { role: string, hasApproval: boolean | null }) => {
+
+const SuccessForm = ({ role, hasApproval, roleIdNumber }: SuccessFormProps) => {
   const progress = useMotionValue(90);
 
   return (
@@ -27,26 +29,28 @@ const SuccessForm = ({ role, hasApproval }: { role: string, hasApproval: boolean
           <VerifyAnimation progress={progress} />
         </div>
         <div className="text-center text-black text-4xl font-bold mb-4">
-          Submit Success
+          {role === "Investor" ? "Submit Success" : "Created Success"}
         </div>
 
-        {hasApproval === true ? (
-          <div className="text-center text-[#939191] text-2xl mb-8">
-            Your information has been approved successfully
-          </div>
-        ) : hasApproval === false ? (
-          <div className="text-center text-[#939191] text-2xl mb-8">
-            Your information has been rejected by admin
-          </div>
-        ) : (
-          <div className="text-center text-[#939191] text-2xl mb-8">
-            Waiting for admin approval of your information
-          </div>
-        )}
+        {role === "Investor" ? (
+          hasApproval === true ? (
+            <div className="text-center text-[#939191] text-2xl mb-8">
+              Your information has been approved successfully
+            </div>
+          ) : hasApproval === false ? (
+            <div className="text-center text-[#939191] text-2xl mb-8">
+              Your information has been rejected by admin
+            </div>
+          ) : (
+            <div className="text-center text-[#939191] text-2xl mb-8">
+              Waiting for admin approval of your information
+            </div>
+          )
+        ) : null}
 
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center mt-8">
           <Link
-            href={(role === "Investor") ? "/investor-profile" : (role === "Company") ? "/company-profile" : "/"}
+            href={(role === "Investor") ? "/investor-profile" : (role === "Company") ? `/company/${roleIdNumber}` : "/"}
             className="w-[211px] h-[51px] bg-black text-white text-xl font-bold rounded-full text-center transition duration-300 hover:bg-gray-800 flex items-center justify-center"
           >
             Go to Profile

@@ -14,6 +14,7 @@ import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
+import PublishForm from "@/components/profile/company/PublishForm";
 
 const calculateDaysLeft = (deadline: string) => {
   const today: Date = new Date();
@@ -38,9 +39,18 @@ const getTotalInvestment = (allInvestmentFunding: any) => {
   return totalInvestment;
 };
 
-const isOwnCompany = async (urlId: number, user: User) => {
-  if (user.roleIdNumber == urlId) {
-    return true;
+const hasPublish = (request: any) => {
+  if (Array.isArray(request) && request.length === 0) {
+    return false;
+  }
+  return true;
+}
+
+const isOwnCompany = (urlId: number, user: User) => {
+  if (user) {
+    if (user.roleIdNumber == urlId) {
+      return true;
+    }
   }
   return false;
 }
@@ -53,6 +63,7 @@ export default async function CompanyProfile({
   console.log("Company ID:", params.companyId);
 
   const session = await getServerSession(authConfig);
+  const companyRequest = await getCompanyRequestById(params.companyId);  
 
   let user = null;
   let roleId = 1;
@@ -66,6 +77,20 @@ export default async function CompanyProfile({
       isApproval = isApprovalObj[0];
     }
   }
+
+  if (!isOwnCompany(params.companyId ?? 1, user)) {
+    if (!companyRequest || companyRequest[0]?.approval !== true) {
+      console.log("return null");
+      return notFound();
+    }
+  } 
+
+  if (!isOwnCompany(params.companyId ?? 1, user)) {
+    if (!companyRequest || companyRequest[0]?.approval !== true) {
+      console.log("return null");
+      return notFound();
+    }
+  } 
 
   const company = await getCompanyById(params.companyId);
   const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
@@ -117,16 +142,22 @@ export default async function CompanyProfile({
         </div>
         <div>
           {recentFunding && (
-            <DealTerm
-              recentFunding={recentFunding}
-              currentInvestment={totalInvestment}
-              dayLeft={calculateDaysLeft(recentFunding.deadline)}
-              totalInvestor={totalInvestor}
-              roleId={user?.roleId ?? null}
-              isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
-              urlId={params.companyId}
-              investorId={user?.roleIdNumber}
-            />
+            <div className="sticky top-36">
+              {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
+                companyId={params.companyId}
+                raiseId={recentFunding.id}
+              />}
+
+              <DealTerm
+                recentFunding={recentFunding}
+                currentInvestment={totalInvestment}
+                dayLeft={calculateDaysLeft(recentFunding.deadline)}
+                totalInvestor={totalInvestor}
+                roleId={user?.roleId ?? null}
+                isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
+                urlId={params.companyId}
+              />
+            </div>
           )}
         </div>
       </div>
