@@ -9,22 +9,24 @@ interface SearchBarProps {
   initialSearch: string;
   classSearch: string;
   showSort?: boolean;
+  onSortChange: (field: string, order: "asc" | "desc") => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   initialSearch,
   classSearch,
   showSort = false,
+  onSortChange,
 }) => {
   const [searchInput, setSearchInput] = useState<string>(initialSearch);
+
   const router = useRouter();
 
-  const handleSearch = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      router.push(`/company?search=${searchInput}`);
-      if (!showSort) {
-        setSearchInput("");
-      }
+      const url = `/company?search=${searchInput}`;
+      router.push(url);
+      setSearchInput("");
     }
   };
 
@@ -41,7 +43,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => setSearchInput(e.target.value)}
         onKeyDown={handleSearch}
       />
-      {showSort && <SortCompany />}
+      {showSort && <SortCompany onSortChange={onSortChange} />}
     </div>
   );
 };

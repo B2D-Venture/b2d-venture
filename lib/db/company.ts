@@ -39,7 +39,12 @@ export async function addDataRoom(data: DataRoom) {
   return await db.insert(DataRoomTable).values(data).execute();
 }
 
-export async function getAllCompanies(searchQuery?: string, limit?: number) {
+export async function getAllCompanies(
+  searchQuery?: string,
+  limit?: number,
+  sortBy?: string,
+  sortDirection: "asc" | "desc" = "asc",
+) {
   try {
     let query = db
       .select({
@@ -62,12 +67,26 @@ export async function getAllCompanies(searchQuery?: string, limit?: number) {
       );
     }
 
+    if (sortBy) {
+      const sortColumn = {
+        // valuation: RaiseFundingTable.valuation,
+        fundingTarget: RaiseFundingTable.fundingTarget,
+        pricePerShare: RaiseFundingTable.priceShare,
+        investmentDeadline: RaiseFundingTable.deadline,
+        minInvestment: RaiseFundingTable.minInvest,
+        maxInvestment: RaiseFundingTable.maxInvest,
+      }[sortBy];
+
+      if (sortColumn) {
+        query = query.orderBy(sortColumn, sortDirection);
+      }
+    }
+
     if (limit) {
-      query.limit(limit);
+      query = query.limit(limit);
     }
 
     const companiesWithFunding = await query.execute();
-
     return companiesWithFunding;
   } catch (error) {
     console.error("Error retrieving companies with funding details:", error);
@@ -161,3 +180,4 @@ export async function updateCompany(company: Company) {
     .where(eq(CompanyTable.id, company.id))
     .execute();
 }
+

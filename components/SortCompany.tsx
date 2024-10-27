@@ -13,7 +13,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IoFilter } from "react-icons/io5";
 
-const SortCompany = () => {
+interface SortCompanyProps {
+  onSortChange: (field: string, order: "asc" | "desc") => void;
+}
+
+const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
+  const handleSortClick = (field: string, order: "asc" | "desc") => {
+    onSortChange(field, order);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,6 +32,7 @@ const SortCompany = () => {
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Sort By</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
@@ -31,92 +40,115 @@ const SortCompany = () => {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Low to High</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("valuation", "asc")}
+                >
+                  Low to High
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>High to Low</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("valuation", "desc")}
+                >
+                  High to Low
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span>Funding Target</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Low to High</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("fundingTarget", "asc")}
+                >
+                  Low to High
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>High to Low</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("fundingTarget", "desc")}
+                >
+                  High to Low
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span>Price per Share</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Low to High</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("priceShare", "asc")}
+                >
+                  Low to High
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>High to Low</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("priceShare", "desc")}
+                >
+                  High to Low
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span>Investment Deadline</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Sooner to Later</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("deadline", "asc")}
+                >
+                  Sooner to Later
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Later to Sooner</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("deadline", "desc")}
+                >
+                  Later to Sooner
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span>Minimum Investment</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Low to High</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("minInvest", "asc")}
+                >
+                  Low to High
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>High to Low</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("minInvest", "desc")}
+                >
+                  High to Low
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span>Maximum Investment</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <span>Low to High</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("maxInvest", "asc")}
+                >
+                  Low to High
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>High to Low</span>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("maxInvest", "desc")}
+                >
+                  High to Low
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>

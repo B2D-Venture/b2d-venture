@@ -22,7 +22,6 @@ const CompanyList = () => {
     const fetchCompanies = async () => {
       try {
         const companiesData = await getAllCompanies();
-
         const companies = companiesData.map((item) => ({
           ...item.company,
           fundingTarget: item.raiseFunding?.fundingTarget ?? null,
@@ -47,16 +46,31 @@ const CompanyList = () => {
 
   useEffect(() => {
     const searchQuery = searchParams.get("search") || "";
-
     const searchPattern = searchQuery.toLowerCase();
+
     const filtered = allCompanies.filter((company) => {
       return (
         company.name.toLowerCase().includes(searchPattern) ||
         company.description.toLowerCase().includes(searchPattern)
       );
     });
+
     setFilteredCompanies(filtered);
   }, [searchParams, allCompanies]);
+
+  const handleSort = (field: string, order: "asc" | "desc") => {
+    const sortedCompanies = [...filteredCompanies].sort((a, b) => {
+      const aValue = a[field];
+      const bValue = b[field];
+
+      if (order === "asc") {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
+    });
+    setFilteredCompanies(sortedCompanies);
+  };
 
   return (
     <div>
@@ -64,6 +78,7 @@ const CompanyList = () => {
         initialSearch={searchParams.get("search") || ""}
         classSearch="search-filter"
         showSort={true}
+        onSortChange={handleSort}
       />
       {loading && (
         <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
