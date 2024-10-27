@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CompanyCard from "@/components/CompanyCard";
+import CompanyCard from "@/components/company/card/CompanyCard";
 import SearchBar from "@/components/SearchBar";
-import { getAllCompanies } from "@/lib/db/company";
+import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { useSearchParams } from "next/navigation";
 import { CompanyWithRaiseFunding } from "@/types/company";
 
@@ -22,14 +22,17 @@ const CompanyList = () => {
     const fetchCompanies = async () => {
       try {
         const companiesData = await getAllCompanies();
-        const companies = companiesData.map((item) => ({
-          ...item.company,
-          fundingTarget: item.raiseFunding?.fundingTarget ?? null,
-          minInvest: item.raiseFunding?.minInvest ?? null,
-          maxInvest: item.raiseFunding?.maxInvest ?? null,
-          deadline: item.raiseFunding?.deadline ?? null,
-          priceShare: item.raiseFunding?.priceShare ?? null,
-        }));
+        const companies = await Promise.all(
+          companiesData.map(async (item) => ({
+            ...item.company,
+            fundingTarget: item.raiseFunding?.fundingTarget ?? null,
+            minInvest: item.raiseFunding?.minInvest ?? null,
+            maxInvest: item.raiseFunding?.maxInvest ?? null,
+            deadline: item.raiseFunding?.deadline ?? null,
+            priceShare: item.raiseFunding?.priceShare ?? null,
+            investorCount: (await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)).length,
+          }))
+        );
 
         setAllCompanies(companies);
         setFilteredCompanies(companies);
@@ -55,7 +58,8 @@ const CompanyList = () => {
       );
     });
 
-    setFilteredCompanies(filtered);
+    setFilteredCompanies(filtered)
+    ;
   }, [searchParams, allCompanies]);
 
   const handleSort = (field: string, order: "asc" | "desc") => {
@@ -91,17 +95,11 @@ const CompanyList = () => {
           No companies found.
         </div>
       )}
-      <div className="flex flex-wrap m-10">
+      <div className="grid grid-cols-6 gap-4">
         {filteredCompanies.map((company) => (
           <div key={company.id} className="flex-1">
             <CompanyCard
-              companyId={company.id}
-              logoUrl={company.logo}
-              backgroundUrl={company.banner}
-              companyName={company.name}
-              shortDescription={company.description}
-              investmentGoal={company.fundingTarget}
-              minInvest={company.minInvest}
+              company={company}
               className="w-[390px] sm:w-[500px] md:w-[750px] lg:w-[350px] xl:w-[270px]"
             />
           </div>

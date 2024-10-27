@@ -5,25 +5,18 @@ import { MdPeopleAlt } from "react-icons/md";
 import { CompanyCardProps } from "@/types";
 
 const CompanyCard = ({
-  companyId,
-  logoUrl,
-  backgroundUrl,
-  companyName,
-  shortDescription,
-  investmentGoal,
-  investorCount = 0, // default value = 0
-  minInvest,
+  company,
   className,
 }: CompanyCardProps) => {
   return (
-    <div className="p-4">
-      <Link href={`/company/${companyId}`}>
+    <div className="flex justify-center items-center p-4">
+      <Link href={`/company/${company.id}`}>
         <div className={`card ${className} group`}>
           <div className="relative w-full h-full">
             {/* Background Image */}
             <Image
-              src={backgroundUrl}
-              alt={`${companyName} background`}
+              src={company.banner}
+              alt={`${company.name} background`}
               layout="fill"
               objectFit="cover"
               className="rounded-[20px] absolute"
@@ -32,7 +25,7 @@ const CompanyCard = ({
             {/* Logo */}
             <Image
               id="example-profile-image"
-              src={logoUrl}
+              src={company.logo}
               width={60}
               height={60}
               alt="Company Logo Image"
@@ -41,21 +34,25 @@ const CompanyCard = ({
 
             {/* Card Inside */}
             <div className="card-inside transition-all ease-in-out duration-300">
-              <div className="card-name">{companyName}</div>
-
-              <div className="card-description">{shortDescription}</div>
+              <div>
+                <div className="card-name">{company.name}</div>
+                <div className="card-description">{company.description}</div>
+              </div>
 
               <div className="card-below">
                 <div>
-                  $<b>{(investmentGoal ?? 0).toLocaleString()}</b> raised
+                  $<b>{(company.fundingTarget ?? 0).toLocaleString()}</b> raised
                 </div>
                 <div className="flex items-center space-x-2">
-                  <b>{investorCount.toLocaleString()}</b>
+                  <b>{(company.investorCount ?? 0).toLocaleString()}</b>
                   <span>Investors</span>
                   <MdPeopleAlt />
                 </div>
                 <div>
-                  $<b>{minInvest?.toLocaleString() ?? "N/A"}</b> min. investment
+                  $<b>{(company.minInvest ?? 0).toLocaleString() ?? "0"}</b> min. investment
+                </div>
+                <div>
+                  $<b>{(company.maxInvest ?? 0).toLocaleString() ?? "0"}</b> max. investment
                 </div>
               </div>
             </div>

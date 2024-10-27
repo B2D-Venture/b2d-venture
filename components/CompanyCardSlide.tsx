@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CompanyCard from "@/components/CompanyCard";
-import { getAllCompanies } from "@/lib/db/company";
+import CompanyCard from "@/components/company/card/CompanyCard";
+import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { CompanyWithRaiseFunding } from "@/types/company";
 
 const CompanyCardSlide = () => {
@@ -15,14 +15,17 @@ const CompanyCardSlide = () => {
       try {
         const companiesData = await getAllCompanies("", 10);
 
-        const companies = companiesData.map((item) => ({
-          ...item.company,
-          fundingTarget: item.raiseFunding?.fundingTarget ?? null,
-          minInvest: item.raiseFunding?.minInvest ?? null,
-          maxInvest: item.raiseFunding?.maxInvest ?? null,
-          deadline: item.raiseFunding?.deadline ?? null,
-          priceShare: item.raiseFunding?.priceShare ?? null,
-        }));
+        const companies = await Promise.all(
+          companiesData.map(async (item) => ({
+            ...item.company,
+            fundingTarget: item.raiseFunding?.fundingTarget ?? null,
+            minInvest: item.raiseFunding?.minInvest ?? null,
+            maxInvest: item.raiseFunding?.maxInvest ?? null,
+            deadline: item.raiseFunding?.deadline ?? null,
+            priceShare: item.raiseFunding?.priceShare ?? null,
+            investorCount: (await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)).length,
+          }))
+        );
 
         setCompanies(companies);
       } catch (err) {
@@ -51,14 +54,7 @@ const CompanyCardSlide = () => {
           {companies.map((company) => (
             <CompanyCard
               key={company.id}
-              companyId={company.id}
-              logoUrl={company.logo}
-              backgroundUrl={company.banner}
-              companyName={company.name}
-              shortDescription={company.description}
-              investmentGoal={company.fundingTarget}
-              investorCount={0}
-              minInvest={company.minInvest}
+              company={company}
               className="w-[270px]"
             />
           ))}

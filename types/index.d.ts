@@ -1,14 +1,9 @@
 import { number } from "zod";
+import { Company } from "./company";
+import { CompanyWithRaiseFunding } from "@/types/company";
 
 interface CompanyCardProps {
-  companyId: number;
-  logoUrl: string;
-  backgroundUrl: string;
-  companyName: string;
-  shortDescription: string;
-  investmentGoal: number;
-  investorCount?: number;
-  minInvest: number;
+  company: CompanyWithRaiseFunding;
   className: string;
 }
 
