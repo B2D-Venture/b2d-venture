@@ -13,8 +13,9 @@ import {
     FormControl,
     FormItem,
 } from "@/components/ui/form";
-import { getUserByCompanyId } from "@/lib/db/user";
+import { getUserByCompanyId, getCompanyById } from "@/lib/db/index";
 import { InvestorProps } from "@/types/investor";
+import { Company } from "@/types/company";
 
 // Define a type for each message to make the form reusable
 type Message = {
@@ -32,6 +33,7 @@ type RejectMessageFormProps = {
     type: "investor" | "company" | "funding" | null;
     request: any;
     email?: string;
+    companyId?: number;
     handleReject: () => void;
 };
 
@@ -98,6 +100,33 @@ const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approve
     }
 };
 
+const sendEmailDataroomRequestStatus = async (dataroom: any, email: string, status: "approved" | "rejected", message: Message[], company: Company, investorProfile: string) => {
+    try {
+        const response = await fetch("/api/mail/dataroom", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message: message,
+                status,
+                email,
+                company,
+                investorProfile,
+            }),
+        });
+
+        if (response.ok) {
+            console.log("Email sent successfully!");
+        } else {
+            const errorData = await response.json();
+            console.error(`Error: ${errorData.message || "Failed to send email"}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
+
 const getRejectMessage = (type: string) => {
     if (type === "company") {
         return [
@@ -114,11 +143,16 @@ const getRejectMessage = (type: string) => {
             { id: "message2", title: "Incorrect Financial Information", description: "The financial information does not match verified records." },
             { id: "message3", title: "Missing Contact Details", description: "The investor contact details are incomplete." },
         ];
+    } else if (type === "funding") {
+        return [
+            { id: "message1", title: "Access Level Insufficient", description: "Your current access level does not permit viewing this document." },
+            { id: "message2", title: "Confidential Document", description: "This document contains sensitive information and is restricted to approved investors only." },
+        ];
     }
     return [];
 }
 
-export function RejectMessageForm({ className, type, request, handleReject, email }: RejectMessageFormProps) {
+export function RejectMessageForm({ className, type, request, handleReject, email, companyId }: RejectMessageFormProps) {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     let messages: Message[] = getRejectMessage(type ?? "");
 
@@ -151,6 +185,17 @@ export function RejectMessageForm({ className, type, request, handleReject, emai
         } else if (type === "investor") {
             await sendEmailInvestorStatus(request, "rejected", checkedMessages);
             handleReject();
+        } else if (type === "funding") {
+            const investorProfile = request.investorProfile;
+            if (companyId !== undefined) {
+                const company = await getCompanyById(companyId);
+                if (company) {
+                    await sendEmailDataroomRequestStatus(request, email ?? "", "rejected", checkedMessages, company, investorProfile);
+                    handleReject();
+                } else {
+                    setErrorMessage("⚠️ Company information is missing.");
+                }
+            }
         }
     }
 

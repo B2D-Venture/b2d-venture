@@ -14,24 +14,17 @@ import DataroomRequestBadge from "@/components/company/dataroom/card/DataRoomBad
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { RejectButton } from "@/components/admin/reject/RejectButton";
+import { InvestorProps } from "@/types/investor";
 
 export function DataRoomCard({
-  logo,
-  investorName,
-  email,
-  netWorth,
-  moneyReadyForInvestment,
-  Nationality,
+  investor,
+  companyId,
   handleApprove,
   handleReject,
 }: {
-  logo: string;
-  investorName: string;
-  email: string;
-  Nationality: string;
-  netWorth: number;
-  moneyReadyForInvestment: number;
+  investor: InvestorProps;
+  companyId?: number;
   handleApprove: () => void;
   handleReject: () => void;
 }) {
@@ -41,13 +34,13 @@ export function DataRoomCard({
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
             <img
-              src={logo}
+              src={investor.profileImage}
               alt="Investor Profile"
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{investorName}</span>
+                <span className="flex-1">{investor.firstName + " " + investor.lastName}</span>
                 <ChevronDownIcon
                   className="text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -63,7 +56,7 @@ export function DataRoomCard({
             <div className="flex flex-row items-center space-x-[80px]">
               <OutputTextBox
                 label="Email"
-                value={email}
+                value={investor.email}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -71,7 +64,7 @@ export function DataRoomCard({
             <div className="flex flex-row items-center space-x-[63px]">
               <OutputTextBox
                 label="Nationality"
-                value={Nationality}
+                value={investor.nationality}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -82,7 +75,7 @@ export function DataRoomCard({
               <div className="flex flex-row items-center space-x-[40px]">
                 <OutputTextBoxDollar
                   label="Net Worth"
-                  value={netWorth}
+                  value={investor.networth}
                   classNameLabel=""
                   classNameValue=""
                 />
@@ -90,7 +83,7 @@ export function DataRoomCard({
               <div className="flex flex-row items-center space-x-[10px]">
               <OutputTextBoxDollar
                 label="Investable Money"
-                value={moneyReadyForInvestment}
+                value={investor.investableAmount}
                 classNameLabel=""
                 classNameValue=""
               />
@@ -108,14 +101,8 @@ export function DataRoomCard({
         >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="bg-red-500"
-          onClick={handleReject}
-        >
-          <Cross2Icon className="h-4 w-4" />
-        </Button>
+
+        <RejectButton type="funding" request={investor} email={investor.email} handleReject={handleReject} companyId={companyId} />
       </div>
     </div>
   );

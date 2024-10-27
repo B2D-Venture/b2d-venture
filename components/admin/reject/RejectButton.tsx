@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/drawer";
 import { RejectMessageForm } from "@/components/admin/reject/RejectMessageForm";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { Company } from "@/types/company";
 
 
 interface RejectButtonProps {
@@ -30,12 +29,18 @@ interface RejectButtonProps {
     type: "investor" | "company" | "funding" | null;
     request: any;
     email?: string;
+    companyId?: number;
 }
 
-export function RejectButton({ type, request, email, handleReject }: RejectButtonProps) {
+export function RejectButton({ type, request, email, companyId, handleReject }: RejectButtonProps) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
     let messagesForm: { id: string; title: string; description: string; }[] = [];
+
+    const handleRejectAndClose = () => {
+        handleReject();
+        setOpen(false);
+    };
 
     if (isDesktop) {
         return (
@@ -59,7 +64,12 @@ export function RejectButton({ type, request, email, handleReject }: RejectButto
                         </DialogDescription>
                     </DialogHeader>
 
-                    <RejectMessageForm className="company-form" type={type} request={request} email={email} handleReject={handleReject} />
+                    <RejectMessageForm className="company-form" 
+                        type={type} 
+                        request={request} 
+                        email={email} 
+                        companyId={companyId}
+                        handleReject={handleRejectAndClose} />
 
                 </DialogContent>
             </Dialog>
@@ -71,13 +81,13 @@ export function RejectButton({ type, request, email, handleReject }: RejectButto
         <Drawer open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <div className="my-2 flex items-center justify-center">
-                    {/* <Button
+                    <Button
                         variant="ghost"
                         size="icon"
                         className="bg-red-500"
-                        onClick={handleReject}>
+                        onClick={() => { }}>
                         <Cross2Icon className="h-4 w-4" />
-                    </Button> */}
+                    </Button>
                 </div>
             </DialogTrigger>
             <DrawerContent>
@@ -88,7 +98,12 @@ export function RejectButton({ type, request, email, handleReject }: RejectButto
                     </DrawerDescription>
                 </DrawerHeader>
 
-                <RejectMessageForm className="px-4" type={type} request={request} email={email} handleReject={handleReject} />
+                <RejectMessageForm className="px-4" 
+                    type={type} 
+                    request={request} 
+                    email={email} 
+                    companyId={companyId}
+                    handleReject={handleRejectAndClose} />
 
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
