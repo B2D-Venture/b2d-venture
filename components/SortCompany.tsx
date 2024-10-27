@@ -14,12 +14,14 @@ import {
 import { IoFilter } from "react-icons/io5";
 
 interface SortCompanyProps {
-  onSortChange: (field: string, order: "asc" | "desc") => void;
+  onSortChange?: (field: string, order: "asc" | "desc") => void;
 }
 
 const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
   const handleSortClick = (field: string, order: "asc" | "desc") => {
-    onSortChange(field, order);
+    if (onSortChange) {
+      onSortChange(field, order);
+    }
   };
 
   return (

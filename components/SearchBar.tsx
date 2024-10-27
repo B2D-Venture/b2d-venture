@@ -9,7 +9,7 @@ interface SearchBarProps {
   initialSearch: string;
   classSearch: string;
   showSort?: boolean;
-  onSortChange: (field: string, order: "asc" | "desc") => void;
+  onSortChange?: (field: string, order: "asc" | "desc") => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
