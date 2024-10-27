@@ -3,6 +3,7 @@ import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
 import { RaiseFundingButton } from "@/components/RaiseFundingButton";
 import RequestBtn from "./company/dataroom/btn/RequestBtn";
+import InvestBtn from "./company/dataroom/btn/InvestBtn";
 
 const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
   if (dayLeft <= 0 || current >= target) {
@@ -16,7 +17,7 @@ const isOwnCompany = async (urlId: number, user: User) => {
     return true;
   }
   return false;
-}
+};
 
 const DealTerm = async ({
   recentFunding,
@@ -31,7 +32,9 @@ const DealTerm = async ({
   return (
     <div className="sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 md:m-5 md:rounded-xl shadow-lg p-6">
       <div className="mb-5">
-        <h2 className="text-black dark:text-white text-4xl font-bold text-center">Deal Terms</h2>
+        <h2 className="text-black dark:text-white text-4xl font-bold text-center">
+          Deal Terms
+        </h2>
       </div>
       <div className="space-y-4">
         <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
@@ -56,7 +59,7 @@ const DealTerm = async ({
 
       {roleId !== 3 && (
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <DealTermBtn
+          <InvestBtn
             text="Invest Now"
             textColor="text-white"
             hoverTextColor="hover:text-white"
@@ -64,7 +67,8 @@ const DealTerm = async ({
             hoverBgColor="hover:bg-[#639093] dark:hover:bg-[#FF8A00]"
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
-            link="/company"
+            urlId={urlId}
+            investorId={investorId}
           />
           <RequestBtn
             text="Request Data Room"
@@ -89,9 +93,15 @@ const DealTerm = async ({
           />
         </div>
       )}
-      {(roleId === 3 && isOwnCompany) && (
+      {roleId === 3 && isOwnCompany && (
         <div className="mt-6 flex justify-center items-center">
-          <RaiseFundingButton canRaiseFunding={canRaiseFunding(dayLeft, currentInvestment, recentFunding.fundingTarget)} />
+          <RaiseFundingButton
+            canRaiseFunding={canRaiseFunding(
+              dayLeft,
+              currentInvestment,
+              recentFunding.fundingTarget
+            )}
+          />
         </div>
       )}
     </div>
