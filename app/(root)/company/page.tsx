@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { useSearchParams } from "next/navigation";
 import { CompanyWithRaiseFunding } from "@/types/company";
+import CompanyPageLoading from "@/components/loading/CompanyPageLoading";
 
 const CompanyList = () => {
   const [allCompanies, setAllCompanies] = useState<CompanyWithRaiseFunding[]>(
@@ -59,7 +60,7 @@ const CompanyList = () => {
     });
 
     setFilteredCompanies(filtered)
-    ;
+      ;
   }, [searchParams, allCompanies]);
 
   const handleSort = (field: string, order: "asc" | "desc") => {
@@ -84,23 +85,30 @@ const CompanyList = () => {
         showSort={true}
         onSortChange={handleSort}
       />
-      {loading && (
-        <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
-          Loading...
-        </div>
-      )}
+      {loading && (<CompanyPageLoading />)}
       {error && <div className="flex flex-wrap m-10 text-white">{error}</div>}
       {filteredCompanies.length === 0 && !loading && (
         <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
           No companies found.
         </div>
       )}
-      <div className="grid grid-cols-6 gap-4">
+      <div className="
+        grid grid-cols-2 gap-4 
+        md:grid-cols-3
+        xl:grid-cols-4
+        2xl:grid-cols-5
+        3xl:grid-cols-6
+        4xl:grid-cols-7
+        5xl:grid-cols-9
+        6xl:grid-cols-11
+        7xl:grid-cols-12
+        "
+      >
         {filteredCompanies.map((company) => (
           <div key={company.id} className="flex-1">
             <CompanyCard
               company={company}
-              className="w-[390px] sm:w-[500px] md:w-[750px] lg:w-[350px] xl:w-[270px]"
+              className="w-[270px]"
             />
           </div>
         ))}
