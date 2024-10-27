@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import CompanyCard from "@/components/company/card/CompanyCard";
 import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { CompanyWithRaiseFunding } from "@/types/company";
+import CompanyCardSlideLoading from "@/components/loading/main/CompanyCardSlideLoading";
 
 const CompanyCardSlide = () => {
   const [companies, setCompanies] = useState<CompanyWithRaiseFunding[]>([]);
@@ -40,7 +41,7 @@ const CompanyCardSlide = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CompanyCardSlideLoading />;
   }
 
   if (error) {

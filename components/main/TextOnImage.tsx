@@ -1,5 +1,5 @@
 import React from "react";
-import { BannerCarousel } from "./main/banner";
+import { BannerCarousel } from "@/components/main/banner";
 
 const TextOnImage = () => {
   const bannerData = [

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import CompanyLogoBox from "@/components/CompanyLogoBox";
 import { getAllCompanies } from "@/lib/db/company";
 import { Company } from "@/types/company";
+import CompanyLogoBoxLoading from "@/components/loading/main/CompanyLogoBoxLoading";
 
 const CompanyLogoBoxList = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -29,7 +30,7 @@ const CompanyLogoBoxList = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CompanyLogoBoxLoading />;
   }
 
   if (error) {

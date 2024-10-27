@@ -1,10 +1,9 @@
 import React from "react";
-import Image from "next/image";
-import CompanyAllStatistics from "@/components/CompanyAllStatistics";
-import CompanyLogoBoxList from "@/components/CompanyLogoBoxList";
-import CompanyCardSlide from "@/components/CompanyCardSlide";
+import CompanyAllStatistics from "@/components/main/CompanyAllStatistics";
+import CompanyLogoBoxList from "@/components/main/CompanyLogoBoxList";
+import CompanyCardSlide from "@/components/main/CompanyCardSlide";
 import Link from "next/link";
-import TextOnImage from "@/components/TextOnImage";
+import TextOnImage from "@/components/main/TextOnImage";
 
 const Home = () => {
   return (
