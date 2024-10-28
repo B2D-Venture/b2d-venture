@@ -18,21 +18,23 @@ import {
 
 // Combine schemas
 const formSchema = CalendarFormSchema.extend({
-  fundingGoal: z.string(),
+  valuation: z.string(),
+  fundingTarget: z.string(),
+  pricePerShare: z.string(),
   minimumInvestment: z.string(),
   maximumInvestment: z.string(),
-  pricePerShare: z.string(),
 });
 
 export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fundingGoal: "",
+      valuation: "",
+      fundingTarget: "",
+      pricePerShare: "",
       minimumInvestment: "",
       maximumInvestment: "",
       dob: undefined,
-      pricePerShare: "",
     },
   });
 
@@ -47,11 +49,31 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
         className={`grid gap-4 ${className}`}
       >
         <div className="grid gap-4">
-          {/* Funding Goal */}
+          {/* Valuation */}
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="fundingGoal"
+              name="valuation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[17px]">Valuation</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="bg-[#bfbfbf]"
+                      placeholder="$"
+                      type="number"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Funding Target */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="fundingTarget"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[17px]">Funding Target</FormLabel>
@@ -64,6 +86,36 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
                     />
                   </FormControl>
                 </FormItem>
+              )}
+            />
+          </div>
+          {/* Price per Share */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="pricePerShare"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[17px]">Price per Share</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="bg-[#bfbfbf]"
+                      placeholder="$"
+                      type="number"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Investment Deadline (using CalendarForm) */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <CalendarForm label={"Investment Deadline"} field={field} />
               )}
             />
           </div>
@@ -99,36 +151,6 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
                   <FormLabel className="text-[17px]">
                     Maximum Investment
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="bg-[#bfbfbf]"
-                      placeholder="$"
-                      type="number"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Date (using CalendarForm) */}
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="dob"
-              render={({ field }) => (
-                <CalendarForm label={"Date"} field={field} />
-              )}
-            />
-          </div>
-          {/* Price per Share */}
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="pricePerShare"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[17px]">Price per Share</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#bfbfbf]"
