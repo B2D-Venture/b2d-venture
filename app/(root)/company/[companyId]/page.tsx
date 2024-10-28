@@ -147,7 +147,6 @@ export default async function CompanyProfile({
                 companyId={params.companyId}
                 raiseId={recentFunding.id}
               />}
-
               <DealTerm
                 recentFunding={recentFunding}
                 currentInvestment={totalInvestment}
@@ -156,6 +155,7 @@ export default async function CompanyProfile({
                 roleId={user?.roleId ?? null}
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
                 urlId={params.companyId}
+                investorId={user?.roleIdNumber ?? null}
               />
             </div>
           )}
