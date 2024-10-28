@@ -31,8 +31,11 @@ const CompanyList = () => {
             maxInvest: item.raiseFunding?.maxInvest ?? null,
             deadline: item.raiseFunding?.deadline ?? null,
             priceShare: item.raiseFunding?.priceShare ?? null,
-            investorCount: (await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)).length,
-          }))
+            valuation: item.raiseFunding?.valuation ?? null,
+            investorCount: (
+              await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)
+            ).length,
+          })),
         );
 
         setAllCompanies(companies);
@@ -59,8 +62,7 @@ const CompanyList = () => {
       );
     });
 
-    setFilteredCompanies(filtered)
-      ;
+    setFilteredCompanies(filtered);
   }, [searchParams, allCompanies]);
 
   const handleSort = (field: string, order: "asc" | "desc") => {
@@ -68,12 +70,19 @@ const CompanyList = () => {
       const aValue = a[field];
       const bValue = b[field];
 
-      if (order === "asc") {
-        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-      } else {
-        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return order === "asc" ? aValue - bValue : bValue - aValue;
       }
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return order === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      return 0;
     });
+
     setFilteredCompanies(sortedCompanies);
   };
 
@@ -81,18 +90,19 @@ const CompanyList = () => {
     <div>
       <SearchBar
         initialSearch={searchParams.get("search") || ""}
-        classSearch="search-filter"
+        classSearch="search-sort"
         showSort={true}
         onSortChange={handleSort}
       />
-      {loading && (<CompanyPageLoading />)}
+      {loading && <CompanyPageLoading />}
       {error && <div className="flex flex-wrap m-10 text-white">{error}</div>}
       {filteredCompanies.length === 0 && !loading && (
         <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
           No companies found.
         </div>
       )}
-      <div className="
+      <div
+        className="
         grid grid-cols-2 gap-4 
         md:grid-cols-3
         xl:grid-cols-4
@@ -106,10 +116,7 @@ const CompanyList = () => {
       >
         {filteredCompanies.map((company) => (
           <div key={company.id} className="flex-1">
-            <CompanyCard
-              company={company}
-              className="w-[270px]"
-            />
+            <CompanyCard company={company} className="w-[270px]" />
           </div>
         ))}
       </div>

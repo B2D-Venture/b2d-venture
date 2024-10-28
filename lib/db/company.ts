@@ -69,7 +69,7 @@ export async function getAllCompanies(
 
     if (sortBy) {
       const sortColumn = {
-        // valuation: RaiseFundingTable.valuation,
+        valuation: RaiseFundingTable.valuation,
         fundingTarget: RaiseFundingTable.fundingTarget,
         pricePerShare: RaiseFundingTable.priceShare,
         investmentDeadline: RaiseFundingTable.deadline,
