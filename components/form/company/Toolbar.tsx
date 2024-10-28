@@ -141,7 +141,7 @@ export default function ToolBar({ editor }: ToolbarProps) {
     ];
 
     return (
-        <div className="px-2 py-1 rounded-md flex justify-between items-start gap-5 w-full flex-wrap border border-gray-700">
+        <div className="sticky top-28 z-10 px-2 py-1 rounded-md flex justify-between items-start gap-5 w-full flex-wrap border border-gray-700 bg-slate-50">
             <div className="flex justify-start items-center gap-5 w-full flex-wrap ">
                 {Options.map((option, i) => (
                     <Toggle

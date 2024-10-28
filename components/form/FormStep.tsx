@@ -15,7 +15,6 @@ import FormSubmitLoading from "@/components/loading/FormSubmitLoading";
 
 export default function FormStep() {
   const [user, setUser] = useState<User | null>(null);
-  // const [roleSelected, setRoleSelected] = useState<string | null>("");
   const { step } = useFormState();
   const [loading, setLoading] = useState(true);
   const [successRole, setSuccessRole] = useState<string | null>(null);
@@ -44,10 +43,6 @@ export default function FormStep() {
           setHasApproval(requestData.approval);
           setSuccessRole("Investor");
         } else if (user.roleId === 3) {
-          // const recentFunding = await getRecentRaiseFundingByCompanyId(user.roleIdNumber);
-          // const fundingRequest = await getRaiseFundingRequestById(recentFunding.id);
-          // console.log(fundingRequest);
-          // setHasApproval(fundingRequest.approval);  // TODO: Fix this
           setSuccessRole("Company");
         }
       }

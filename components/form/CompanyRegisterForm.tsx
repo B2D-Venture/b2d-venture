@@ -56,7 +56,8 @@ export const formSchema = z.object({
   fundingTarget: z.number({
     required_error: "Funding target is required.",
   })
-    .min(0, "Funding target cannot be negative"),
+    .min(0, "Funding target cannot be negative")
+    .max(1000000000, "Funding target cannot be more than 1 billion"),
   minInvest: z.number({
     required_error: "Minimum investment is required.",
   }).min(0, "Minimum investment cannot be negative"),
@@ -66,8 +67,14 @@ export const formSchema = z.object({
   deadline: z.date({ required_error: "Deadline is required." }),
   priceShare: z.number({
     required_error: "Price per share is required.",
-  }).min(0, "Price per share cannot be negative"),
-  pitch: z.string().min(1, "Pitch is required"),
+  })
+    .min(0, "Price per share cannot be negative"),
+  valuation: z.number({
+    required_error: "Valuation is required.",
+  })
+    .min(0, "Valuation cannot be negative")
+    .max(1000000000, "Valuation cannot be more than 1 billion"),
+  pitch: z.string().min(1, "Pitch is required").max(10000, "Pitch is too long"),
   status: z.boolean().default(false),
   document: documentSchema.optional(),
 }).refine((data) => data.minInvest <= data.maxInvest, {
@@ -194,6 +201,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
         maxInvest: companyFormData.maxInvest,
         deadline: companyFormData.deadline.toISOString(),
         priceShare: companyFormData.priceShare,
+        valuation: companyFormData.valuation,
       }
 
       addCompany(companyData)
@@ -292,8 +300,8 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
                       )}
                     />
                   </div>
-                  <div className="text-[12px] text-[#949191] mt-5">
-                    <p>
+                  <div className="text-sm bg-[#c4c4c3d2] text-gray-600 mt-4 text-center p-2 rounded-md">
+                    <p className="font-medium leading-relaxed">
                       Please upload only a profile image of a real person. Do not
                       upload images of cartoons, animals, objects, or any other type
                       of image. Non-compliant uploads may be rejected.
@@ -394,6 +402,18 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
                       name="priceShare"
                       label="Price per Share"
                       dataId="share-input"
+                      placeholder="$"
+                      type="number"
+                      disabled={canEdit}
+                    />
+                  </div>
+                  {/* Valuation */}
+                  <div className="col-span-1">
+                    <FormFields
+                      control={form.control}
+                      name="valuation"
+                      label="Valuation"
+                      dataId="valuation-input"
                       placeholder="$"
                       type="number"
                       disabled={canEdit}

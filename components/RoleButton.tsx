@@ -27,7 +27,10 @@ const RoleButton = ({ role, focusedRole, onClick }: RoleButtonProps) => {
             {focusedRole === "Investor" ? (
               <div>
                 <div className="flex justify-center">
-                  <PiUserListFill size={100} />
+                  <PiUserListFill
+                    size={100}
+                    className="text-black"
+                  />
                 </div>
                 <span className="role-text-click">{role}</span>
               </div>
@@ -36,6 +39,7 @@ const RoleButton = ({ role, focusedRole, onClick }: RoleButtonProps) => {
                 <div className="flex justify-center">
                   <PiUserListBold
                     size={100}
+                    className="text-black"
                   />
                 </div>
                 <span className="role-text-unclick">{role}</span>
@@ -47,14 +51,20 @@ const RoleButton = ({ role, focusedRole, onClick }: RoleButtonProps) => {
             {focusedRole === "Company" ? (
               <div>
                 <div className="flex justify-center">
-                  <PiBuildingsFill size={100} />
+                  <PiBuildingsFill
+                    size={100}
+                    className="text-black"
+                  />
                 </div>
                 <span className="role-text-click">{role}</span>
               </div>
             ) : (
               <div>
                 <div className="flex justify-center">
-                  <PiBuildingsBold size={100} />
+                  <PiBuildingsBold
+                    size={100}
+                    className="text-black"
+                  />
                 </div>
                 <span className="role-text-unclick">{role}</span>
               </div>

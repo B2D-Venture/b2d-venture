@@ -124,6 +124,7 @@ export const RaiseFundingTable = pgTable("raise_funding", {
   maxInvest: integer("max_invest").notNull(),
   deadline: date("deadline").notNull(),
   priceShare: real("price_share").notNull(),
+  valuation: real("valuation").default(0).notNull(),
 });
 
 export const RaiseFundingRequestTable = pgTable("raise_funding_request", {

@@ -85,7 +85,7 @@ export function CalendarForm({ label, field, canSetMoreThanToday = false }: Cale
         <select
           value={selectedDay || ""}
           onChange={handleDayChange}
-          className="border rounded p-2"
+          className="border border-gray-700 rounded p-2 text-black bg-gray-300"
         >
           <option value="">Day</option>
           {Array.from({ length: 31 }, (_, i) => (
@@ -97,7 +97,7 @@ export function CalendarForm({ label, field, canSetMoreThanToday = false }: Cale
         <select
           value={selectedMonth || ""}
           onChange={handleMonthChange}
-          className="border rounded p-2"
+          className="border border-gray-700 rounded p-2 text-black bg-gray-300"
         >
           <option value="">Month</option>
           {months.map((month) => (
@@ -109,7 +109,7 @@ export function CalendarForm({ label, field, canSetMoreThanToday = false }: Cale
         <select
           value={selectedYear || ""}
           onChange={handleYearChange}
-          className="border rounded p-2"
+          className="border border-gray-700 rounded p-2 text-black bg-gray-300"
         >
           <option value="">Year</option>
           {years.map((year) => (
