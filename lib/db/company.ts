@@ -1,17 +1,16 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import {
-  CompanyData,
-  CompanyRequestData,
-  DataRoomData,
-} from "../../types/company/index";
+import { Company, CompanyRequest, DataRoom } from "../../types/company/index";
 import {
   CompanyTable,
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
+  RaiseFundingTable,
+  CompanyEditRequestTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
 import { eq, ilike, or } from "drizzle-orm";
+import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -22,7 +21,7 @@ if (!databaseUrl) {
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
 
-export async function addCompany(company: CompanyData) {
+export async function addCompany(company: Company) {
   const insertedCompany = await db
     .insert(CompanyTable)
     .values(company)
@@ -32,17 +31,31 @@ export async function addCompany(company: CompanyData) {
   return insertedCompany[0]?.companyId;
 }
 
-export async function addCompanyRequest(request: CompanyRequestData) {
+export async function addCompanyRequest(request: CompanyRequest) {
   return await db.insert(CompanyRequestTable).values(request).execute();
 }
 
-export async function addDataRoom(data: DataRoomData) {
+export async function addDataRoom(data: DataRoom) {
   return await db.insert(DataRoomTable).values(data).execute();
 }
 
-export async function getAllCompanies(searchQuery?: string, limit?: number) {
+export async function getAllCompanies(
+  searchQuery?: string,
+  limit?: number,
+  sortBy?: string,
+  sortDirection: "asc" | "desc" = "asc",
+) {
   try {
-    let query = db.select().from(CompanyTable);
+    let query = db
+      .select({
+        company: CompanyTable,
+        raiseFunding: RaiseFundingTable,
+      })
+      .from(CompanyTable)
+      .leftJoin(
+        RaiseFundingTable,
+        eq(RaiseFundingTable.companyId, CompanyTable.id),
+      );
 
     if (searchQuery) {
       const searchPattern = `%${searchQuery}%`;
@@ -54,20 +67,38 @@ export async function getAllCompanies(searchQuery?: string, limit?: number) {
       );
     }
 
-    if (limit) {
-      query.limit(limit);
+    if (sortBy) {
+      const sortColumn = {
+        valuation: RaiseFundingTable.valuation,
+        fundingTarget: RaiseFundingTable.fundingTarget,
+        pricePerShare: RaiseFundingTable.priceShare,
+        investmentDeadline: RaiseFundingTable.deadline,
+        minInvestment: RaiseFundingTable.minInvest,
+        maxInvestment: RaiseFundingTable.maxInvest,
+      }[sortBy];
+
+      if (sortColumn) {
+        query = query.orderBy(sortColumn, sortDirection);
+      }
     }
 
-    const companies = await query.execute();
+    if (limit) {
+      query = query.limit(limit);
+    }
 
-    return companies;
+    const companiesWithFunding = await query.execute();
+    return companiesWithFunding;
   } catch (error) {
-    console.error("Error retrieving companies:", error);
+    console.error("Error retrieving companies with funding details:", error);
     throw error;
   }
 }
 
 export async function getCompanyById(id: number) {
+  if (!validateIntegerId(id)) {
+    return null;
+  }
+
   const company = await db
     .select()
     .from(CompanyTable)
@@ -78,6 +109,10 @@ export async function getCompanyById(id: number) {
 }
 
 export async function getCompanyRequestById(id: number) {
+  if (!validateIntegerId(id)) {
+    return null;
+  }
+
   return await db
     .select({
       approval: CompanyRequestTable.approval,
@@ -94,6 +129,10 @@ export async function changeToCompanyRole({
   email: string;
   companyId: number;
 }) {
+  if (!validateIntegerId(companyId)) {
+    return null;
+  }
+
   return await db
     .update(UserTable)
     .set({
@@ -103,3 +142,42 @@ export async function changeToCompanyRole({
     .where(eq(UserTable.email, email))
     .execute();
 }
+
+export async function addCompanyEditRequest(company: Company) {
+  if (company.id === undefined) {
+    throw new Error("Company ID is undefined");
+  }
+
+  return await db
+    .insert(CompanyEditRequestTable)
+    .values({
+      companyId: company.id,
+      name: company.name,
+      logo: company.logo,
+      banner: company.banner,
+      abbr: company.abbr,
+      description: company.description,
+      pitch: company.pitch,
+    })
+    .execute();
+}
+
+export async function updateCompany(company: Company) {
+  if (company.id === undefined) {
+    throw new Error("Company ID is undefined");
+  }
+
+  return await db
+    .update(CompanyTable)
+    .set({
+      name: company.name,
+      logo: company.logo,
+      banner: company.banner,
+      abbr: company.abbr,
+      description: company.description,
+      pitch: company.pitch,
+    })
+    .where(eq(CompanyTable.id, company.id))
+    .execute();
+}
+

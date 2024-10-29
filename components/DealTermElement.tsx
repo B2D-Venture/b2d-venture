@@ -8,13 +8,13 @@ const DealTermElement = ({ data, label, type }: DealTermElementProps) => {
         {type === "deadline" && (
           <div className="flex items-center space-x-2">
             {typeof data === 'number' && data <= 30 ? (<FaFire className="text-red-500 text-3xl animate-pulse" />) : null}
-            <span className="text-black text-4xl font-bold">{data}</span>
+            <span className="text-black dark:text-white text-4xl font-bold">{data}</span>
           </div>
         )}
         {type !== "deadline" && (
-          <div className="text-black text-4xl font-bold">{data}</div>
+          <div className="text-black dark:text-white text-4xl font-bold">{data}</div>
         )}
-        <div className="text-[#423f3f] text-lg font-semibold">{label}</div>
+        <div className="text-[#423f3f] dark:text-white text-lg font-semibold ml-4">{label}</div>
       </div>
       <div className="w-full border border-[#dcdcdc] my-3" />
     </div>

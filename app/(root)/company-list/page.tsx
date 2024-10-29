@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import CompanyCard from "@/components/CompanyCard";
 import SearchBar from "@/components/SearchBar";
 import { getAllCompanies } from "@/lib/db/company";
-import { Company } from "@/types";
 import { useSearchParams } from "next/navigation";
+import { CompanyWithRaiseFunding } from "@/types/company";
 
 const CompanyList = () => {
-  const [allCompanies, setAllCompanies] = useState<Company[]>([]);
-  const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
+  const [allCompanies, setAllCompanies] = useState<CompanyWithRaiseFunding[]>(
+    [],
+  );
+  const [filteredCompanies, setFilteredCompanies] = useState<
+    CompanyWithRaiseFunding[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
@@ -17,7 +21,17 @@ const CompanyList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getAllCompanies();
+        const companiesData = await getAllCompanies();
+
+        const companies = companiesData.map((item) => ({
+          ...item.company,
+          fundingTarget: item.raiseFunding?.fundingTarget ?? null,
+          minInvest: item.raiseFunding?.minInvest ?? null,
+          maxInvest: item.raiseFunding?.maxInvest ?? null,
+          deadline: item.raiseFunding?.deadline ?? null,
+          priceShare: item.raiseFunding?.priceShare ?? null,
+        }));
+
         setAllCompanies(companies);
         setFilteredCompanies(companies);
       } catch (error) {

@@ -1,21 +1,70 @@
+'use client';
+
 import React, { useState, useEffect } from "react";
 import { useFormState } from "../FormContext";
-import RoleSelectForm from "../RoleSelectForm";
-import InvestorForm from "./InvestorForm"
+import RoleSelectForm from "./RoleSelectForm";
+import InvestorForm from "./InvestorForm";
 import CompanyForm from "./CompanyForm";
 import SuccessForm from "../SuccessForm";
+import {
+  getInvestorRequestById,
+  getRecentRaiseFundingByCompanyId,
+  getRaiseFundingRequestById,
+} from "@/lib/db/index";
+import FormSubmitLoading from "@/components/loading/FormSubmitLoading";
 
-const FormStep = () => {
-  const [roleSelected, setRoleSelected] = useState<string | null>("");
+export default function FormStep() {
+  const [user, setUser] = useState<User | null>(null);
   const { step } = useFormState();
+  const [loading, setLoading] = useState(true);
+  const [successRole, setSuccessRole] = useState<string | null>(null);
+  const [hasApproval, setHasApproval] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (step === 2) {
-      setRoleSelected("Investor");
-    } else if (step === 3) {
-      setRoleSelected("Company");
+    const fetchUser = async () => {
+      const response = await fetch('/api/user');
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      } else {
+        window.location.href = `/signup?callbackUrl=/role-register`;
+      }
+      setLoading(false);
+    };
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchApprovalStatus = async () => {
+      if (user) {
+        if (user.roleId === 2) {
+          const requestData = await getInvestorRequestById(user.roleIdNumber);
+          setHasApproval(requestData.approval);
+          setSuccessRole("Investor");
+        } else if (user.roleId === 3) {
+          setSuccessRole("Company");
+        }
+      }
+    };
+
+    fetchApprovalStatus();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <FormSubmitLoading />
+    );
+  }
+
+  if ((user && user.roleId !== 1) || step === 4) {
+    if (user.roleId === 2) {
+      return <SuccessForm role={successRole || "Investor"} hasApproval={hasApproval} />;
+    } else if (user.roleId === 3) {
+      return <SuccessForm role={successRole || "Company"} hasApproval={hasApproval} roleIdNumber={user?.roleIdNumber} />;
     }
-  }, [step]);
+    return <SuccessForm role={successRole || ""} hasApproval={hasApproval} />;
+  }
 
   if (step === 1) {
     return <RoleSelectForm />;
@@ -26,11 +75,6 @@ const FormStep = () => {
   if (step === 3) {
     return <CompanyForm />;
   }
-  if (step === 4) {
-    return <SuccessForm role={roleSelected || ""} />;
-  }
 
   return null;
-};
-
-export default FormStep;
+}

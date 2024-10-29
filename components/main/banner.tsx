@@ -30,7 +30,7 @@ export function BannerCarousel({
               <div className="h-full w-full">
                 {" "}
                 <div
-                  className="w-full h-[400px] bg-cover bg-center"
+                  className="w-full h-[550px] bg-cover bg-center"
                   style={{
                     backgroundImage: `url(${banner.backgroundUrl})`,
                     backgroundSize: "cover",

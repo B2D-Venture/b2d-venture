@@ -17,7 +17,6 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-
 export function Dealcard({
   investorName,
   moneyReadyForInvestment,
@@ -61,13 +60,18 @@ export function Dealcard({
             </div>
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
-          <DealBadge/>
+          <DealBadge />
           <div className="grid grid-cols-2 gap-4 text-black justify-between w-full">
             <div className="flex flex-col space-y-2">
-              <div className="flex flex-row items-center space-x-5">
-                <OutputTextBox label="Investor Name" value={investorName} />
+              <div className="flex flex-row items-center space-x-[118px]">
+                <OutputTextBox
+                  label="Investor Name"
+                  value={investorName}
+                  classNameLabel="space-x-1"
+                  classNameValue="pl-[5px]"
+                />
               </div>
-              <div className="flex flex-row items-center space-x-2">
+              <div className="flex flex-row items-center space-x-[104px]">
                 <OutputTextBoxDollar
                   label="Invest Amount"
                   value={investAmount}
@@ -78,7 +82,12 @@ export function Dealcard({
             </div>
             <div className="flex flex-col space-y-2">
               <div className="flex flex-row items-center space-x-[19px]">
-                <OutputTextBox label="Company Name" value={companyName} />
+                <OutputTextBox
+                  label="Company Name"
+                  value={companyName}
+                  classNameLabel="space-x-1"
+                  classNameValue="pl-[5px]"
+                />
               </div>
               <div className="flex flex-row items-center space-x-7">
                 <OutputTextBoxDollar
@@ -93,10 +102,12 @@ export function Dealcard({
           <AccordionContent>
             <div className="grid grid-cols-2 gap-4 text-black justify-between w-full mt-2">
               <div className="flex flex-col space-y-2">
-                <div className="flex flex-row items-center space-x-[52px]">
+                <div className="flex flex-row items-center space-x-[148px]">
                   <OutputTextBoxPercentage
                     label="Get Stock"
                     value={stockPercentage}
+                    classNameLabel="space-x-1"
+                    classNameValue="pl-[5px]"
                   />
                 </div>
                 <div className="flex flex-row items-center space-x-2">
@@ -122,7 +133,7 @@ export function Dealcard({
                     label="Valuation"
                     value={valuation}
                     classNameLabel="space-x-1"
-                    classNameValue=""
+                    classNameValue="pl-[5px]"
                   />
                 </div>
               </div>
@@ -131,10 +142,20 @@ export function Dealcard({
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-green-500"
+          onClick={handleApprove}
+        >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-red-500"
+          onClick={handleReject}
+        >
           <Cross2Icon className="h-4 w-4" />
         </Button>
       </div>

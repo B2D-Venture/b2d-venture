@@ -2,83 +2,212 @@
 import React, { useState, useEffect } from "react";
 import { CompanyProfileCard } from "@/components/admin/CompanyProfile/CompanyProfileCard";
 import { InvestorProfileCard } from "@/components/admin/InvestorProfile/InvestorProfileCard";
+import { RaiseFundingCard } from "@/components/admin/Raisefunding/RaisefundingCard";
 import { Dealcard } from "@/components/admin/Deal/DealCard";
 import {
   getInvestmentRequest,
   getCompanyRequest,
   getInvestorRequest,
-  getCompanyById,
-  getInvestorById,
+  getRaiseFundingRequests,
   approveCompanyRequest,
   approveInvestorRequest,
   approveInvestmentRequest,
+  approveRaiseFundingRequest,
   rejectCompanyRequest,
   rejectInvestorRequest,
   rejectInvestmentRequest,
-} from "@/lib/db";
+  rejectRaiseFundingRequest,
+  getUserByCompanyId,
+} from "@/lib/db/index";
+import { Company } from "@/types/company";
+import { InvestorProps } from "@/types/investor";
+import { getCompanyById } from "@/lib/db/company";
+import { getInvestorById } from "@/lib/db/investor";
+import {
+  getRaiseFundingByCompanyId,
+  getRaiseFundingById,
+} from "@/lib/db/raise";
 
-// Define TypeScript interfaces for your data
+
 interface CompanyRequest {
   id: number;
   companyId: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
+  company: Company;
 }
 
 interface InvestorRequest {
   id: number;
   investorId: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
+  investor: InvestorProps;
 }
 
 interface InvestmentRequest {
   id: number;
   investorId: number;
-  companyId: number;
+  raiseFundingId: number;
   amount: number;
   getStock: number;
   requestDate: Date;
-  approval: boolean;
+  approval: boolean | null;
 }
+
+interface RaiseFundingRequest {
+  id: number;
+  raiseFundingId: number;
+  requestDate: Date;
+  approval: boolean | null;
+}
+
+const sendEmailCompanyStatus = async (company: Company, email: string, status: "approved" | "rejected") => {
+  const messages = {
+    approved: "Your company profile has been successfully created.",
+    rejected: "Thank you for your request",
+  };
+
+  try {
+    const response = await fetch("/api/mail/company", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: messages[status],
+        status,
+        email,
+        name: company.name,
+        abbr: company.abbr,
+        description: company.description,
+        pitch: company.pitch,
+        logo: company.logo,
+        banner: company.banner,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Email sent successfully!");
+    } else {
+      const errorData = await response.json();
+      console.error(`Error: ${errorData.message || "Failed to send email"}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+
+const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approved" | "rejected") => {
+  const messages = {
+    approved: "Your investor profile has been successfully created.",
+    rejected: "Thank you for your request",
+  };
+
+  try {
+    const response = await fetch("/api/mail/investor", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: messages[status],
+        status,
+        email: investor.email,
+        profileImage: investor.profileImage,
+        firstName: investor.firstName,
+        lastName: investor.lastName,
+        nationalId: investor.nationalId,
+        birthDate: investor.birthDate,
+        nationality: investor.nationality,
+        networth: investor.networth,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Email sent successfully!");
+    } else {
+      const errorData = await response.json();
+      console.error(`Error: ${errorData.message || "Failed to send email"}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 const AdminPage = () => {
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
   const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
+  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequest[]>([]);
 
   const fetchData = async () => {
     try {
       const companyRequests = await getCompanyRequest();
-      console.log("Fetched Company Requests:", companyRequests);
       const investorRequests = await getInvestorRequest();
       const investmentRequests = await getInvestmentRequest();
+      const raiseFundingRequests = await getRaiseFundingRequests();
 
-      // Fetch company details for each request
       const companyDetails = await Promise.all(
         companyRequests.map(async (request) => {
-          const companies = await getCompanyById(request.companyId);
+          const company = await getCompanyById(request.companyId);
+          const raiseFunding = await getRaiseFundingByCompanyId(
+            request.companyId
+          );
+
           return {
             ...request,
-            company: companies[0] || null, // Assuming the response is an array
+            company: {
+              ...company,
+              raise_funding: raiseFunding[0] || null,
+            },
           };
         })
       );
 
-      // Fetch investor details for each request
       const investorDetails = await Promise.all(
         investorRequests.map(async (request) => {
           const investors = await getInvestorById(request.investorId);
           return {
             ...request,
-            investor: investors[0] || null, // Assuming the response is an array
+            investor: investors || null,
+          };
+        })
+      );
+
+      const investmentDetails = await Promise.all(
+        investmentRequests.map(async (request) => {
+          const investor = await getInvestorById(request.investorId);
+          const raiseFunding = await getRaiseFundingById(
+            request.raiseFundingId
+          );
+          const company = await getCompanyById(raiseFunding.companyId);
+          return {
+            ...request,
+            investor: investor || null,
+            raiseFunding: raiseFunding || null,
+            company: company || null,
+          };
+        })
+      );
+
+      const raiseFundingDetails = await Promise.all(
+        raiseFundingRequests.map(async (request) => {
+          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
+          const company = await getCompanyById(raiseFunding.companyId);
+          return {
+            ...request,
+            raiseFunding: raiseFunding || null,
+            company: company || null,
           };
         })
       );
 
       setCompanyData(companyDetails);
       setInvestorData(investorDetails);
-      setDealData(investmentRequests);
+      setDealData(investmentDetails);
+      setRaiseFundingData(raiseFundingDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -93,7 +222,6 @@ const AdminPage = () => {
 
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4">
-      {/* Render Company Cards */}
       {companyData.length > 0 &&
         companyData.map((companyRequest, index) => (
           <div
@@ -101,32 +229,28 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <CompanyProfileCard
-              logo={companyRequest.company?.logo || "default_logo_url.png"} // Default logo if none exists
-              companyName={
-                companyRequest.company?.name ||
-                `Company ${companyRequest.companyId}`
-              }
-              description={
-                companyRequest.company?.description ||
-                `Description for Company ${companyRequest.companyId}`
-              }
-              abbreviation={companyRequest.company?.abbr || "CMP"}
-              valuation={companyRequest.company?.fundingTarget || 10000000}
-              minimumInvestment={companyRequest.company?.minInvest || 100000}
-              maximumInvestment={companyRequest.company?.maxInvest || 1000000}
-              securityType={companyRequest.company?.securityType || "Stock"}
-              target={companyRequest.company?.fundingTarget || 10000000}
+              companyRequest={companyRequest}
+              email=""
               handleApprove={async () => {
-                await approveCompanyRequest(companyRequest.id);
-                await delay(100);
-                fetchData();
-                console.log("Approve Company Request");
+                try {
+                  await approveCompanyRequest(companyRequest.id);
+                  await delay(100);
+                  fetchData();
+                  const user = await getUserByCompanyId(companyRequest.companyId);
+                  sendEmailCompanyStatus(companyRequest.company, user.email, "approved");
+                  console.log("Approved Company Request");
+                } catch (error) {
+                  console.error("Error approving company request:", error);
+                }
               }}
               handleReject={async () => {
-                await rejectCompanyRequest(companyRequest.id);
-                await delay(100);
-                fetchData();
-                console.log("Reject Company Request");
+                try {
+                  await rejectCompanyRequest(companyRequest.id);
+                  await delay(100); // Small delay to ensure smooth UI update
+                  fetchData(); // Re-fetch data after rejection
+                } catch (error) {
+                  console.error("Error rejecting company request:", error);
+                }
               }}
             />
           </div>
@@ -140,25 +264,12 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <InvestorProfileCard
-              logo={
-                investorRequest.investor?.profileImage ||
-                "https://utfs.io/f/EDwc07VFqTZJz8b9sjIOrtwiWIsCUTmuHpyAX4vVgBK5kdxn"
-              } // Default logo if none exists
-              investorName={
-                investorRequest.investor?.name ||
-                `Investor ${investorRequest.investorId}`
-              }
-              Nationality={investorRequest.investor?.nationality || "Unknown"}
-              email={investorRequest.investor?.email || "email@domain.com"}
-              age={investorRequest.investor?.age || 30} // Default age if not available
-              netWorth={investorRequest.investor?.netWorth || 0} // Default net worth if not available
-              moneyReadyForInvestment={
-                investorRequest.investor?.invesinvestable_amount || 0
-              }
+              investorRequest={investorRequest}
               handleApprove={async () => {
                 await approveInvestorRequest(investorRequest.id);
                 await delay(100);
                 fetchData(); // Refresh data after approval
+                sendEmailInvestorStatus(investorRequest.investor, "approved");
                 console.log("Approve Investor Request");
               }}
               handleReject={async () => {
@@ -179,46 +290,67 @@ const AdminPage = () => {
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <Dealcard
-              investorName={`Investor ${deal.investorId}`} // This could be fetched as well
-              moneyReadyForInvestment={deal.amount}
-              investAmount={deal.amount} // This could be the investment amount
-              stockPercentage={deal.getStock} // This should be the stock percentage offered
-              companyName={`Company ${deal.companyId}`} // This could be the company's name if fetched
-              raiseTarget={10000000} // Fetch this value if applicable
-              raisePercentage={10} // This might need to be calculated based on your logic
-              valuation={10000000} // Fetch this if applicable
+              investorName={
+                deal.investor?.firstName + " " + deal.investor?.lastName ||
+                "Investor"
+              }
+              moneyReadyForInvestment={deal.investor?.investableAmount || 0}
+              investAmount={deal.amount || 0}
+              stockPercentage={deal.getStock || 0}
+              companyName={deal.company?.name || "Company"}
+              raiseTarget={deal.raiseFunding?.fundingTarget || 0}
+              raisePercentage={
+                (deal.amount / deal.raiseFunding?.fundingTarget) * 100 || 0
+              }
+              valuation={(100 / deal.getStock) * deal.amount || 0}
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);
                 await delay(100);
                 console.log("Approve Investment Request");
-                fetchData(); // Refresh data after approval
+                fetchData();
               }}
               handleReject={async () => {
                 await rejectInvestmentRequest(deal.id);
                 await delay(100);
                 console.log("Reject Investment Request");
-                fetchData(); // Refresh data after rejection
+                fetchData();
+              }}
+            />
+          </div>
+        ))}
+      {/* Render Raise Funding Cards */}
+      {raiseFundingData.length > 0 &&
+        raiseFundingData.map((raiseFunding, index) => (
+          <div
+            key={index}
+            className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
+          >
+            <RaiseFundingCard
+              logo={raiseFunding.company?.logo || "default_logo_url.png"}
+              companyName={raiseFunding.company?.name || "Company Name"}
+              description={raiseFunding.company?.description || "Company Description"}
+              PricePerShare={raiseFunding.raiseFunding?.priceShare || 100}
+              valuation={raiseFunding.raiseFunding?.valuation || 10000000}
+              minimumInvestment={raiseFunding.raiseFunding?.minInvest || 1000}
+              maximumInvestment={raiseFunding.raiseFunding?.maxInvest || 10000}
+              deadline={raiseFunding.raiseFunding?.deadline || "Stock"}
+              target={raiseFunding.raiseFunding?.fundingTarget || 10000000}
+              handleApprove={async () => {
+                await approveRaiseFundingRequest(raiseFunding.id);
+                await delay(100);
+                console.log("Approve Raise Funding Request");
+                fetchData();
+              }}
+              handleReject={async () => {
+                await rejectRaiseFundingRequest(raiseFunding.id);
+                await delay(100);
+                console.log("Reject Raise Funding Request");
+                fetchData();
               }}
             />
           </div>
         ))}
 
-      {/* Refresh Data Button */}
-      <button
-        onClick={fetchData}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Refresh Data
-      </button>
-
-      <button
-        onClick={() => {
-          console.log(companyData, investorData, dealData);
-        }}
-        className="bg-gray-500 text-white px-4 py-2 rounded"
-      >
-        Log Data to Console
-      </button>
     </div>
   );
 };

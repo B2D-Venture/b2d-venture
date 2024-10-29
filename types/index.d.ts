@@ -1,30 +1,9 @@
 import { number } from "zod";
-
-interface Company {
-  id: number;
-  logo: string;
-  banner: string;
-  name: string;
-  abbr: string;
-  description: string;
-  fundingTarget: number;
-  minInvest: number;
-  maxInvest: number;
-  deadline: string;
-  securityType: string;
-  priceShare: number;
-  pitch: string;
-  status: boolean;
-}
+import { Company } from "./company";
+import { CompanyWithRaiseFunding } from "@/types/company";
 
 interface CompanyCardProps {
-  logoUrl: string;
-  backgroundUrl: string;
-  companyName: string;
-  shortDescription: string;
-  investmentGoal: number;
-  investorCount?: number;
-  minInvest: number;
+  company: CompanyWithRaiseFunding;
   className: string;
 }
 
@@ -41,9 +20,11 @@ interface DealTermBtnProps {
   hoverBgColor: string;
   borderColor: string;
   hoverBorderColor: string;
+  link: string;
 }
 
 interface CompanyLogoBoxProps {
+  companyId: number;
   logoUrl: string;
   companyAbbr: string;
   companyName: string;
@@ -67,17 +48,9 @@ type InvestorRequestData = {
 
 
 interface InvestmentItemProps {
-  logoUrl: string;
-  companyAbbr: string;
-  companyName: string;
-  amount: number;
+  company: Company;
+  request: InvestmentRequest;
   status: string;
-  date: string;
-  marketPrice: number;
-  priceChange: number;
-  stockPercentage: number;
-  valuationAtInvest: number;
-  valuationMarket: number;
 }
 
 interface OutputTextBoxProps {

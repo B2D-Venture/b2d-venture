@@ -3,45 +3,47 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
-import { IoFilter } from "react-icons/io5";
+import SortCompany from "@/components/SortCompany";
 
 interface SearchBarProps {
   initialSearch: string;
   classSearch: string;
-  showFilter?: boolean;
+  showSort?: boolean;
+  onSortChange?: (field: string, order: "asc" | "desc") => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   initialSearch,
   classSearch,
-  showFilter = false,
+  showSort = false,
+  onSortChange,
 }) => {
   const [searchInput, setSearchInput] = useState<string>(initialSearch);
+
   const router = useRouter();
 
-  const handleSearch = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      router.push(`/company-list?search=${encodeURIComponent(searchInput)}`);
-      if (!showFilter) {
-        setSearchInput("");
-      }
+      const url = `/company?search=${searchInput}`;
+      router.push(url);
+      setSearchInput("");
     }
   };
 
   return (
     <div
-      className={`${classSearch} group focus-within:border-yellow-500 focus-within:border-4`}
+      className={`${classSearch} group focus-within:border-[#9394a5] dark:focus-within:border-yellow-500 focus-within:border-4`}
     >
-      <FaSearch className="mr-3" />
+      <FaSearch className="mr-3 text-black" />
       <input
         type="text"
-        className="flex-1 focus:outline-none focus:ring-0"
+        className="flex-1 focus:outline-none focus:ring-0 bg-white text-black"
         placeholder="Search for companies"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         onKeyDown={handleSearch}
       />
-      {showFilter && <IoFilter className="ml-3" />}
+      {showSort && <SortCompany onSortChange={onSortChange} />}
     </div>
   );
 };

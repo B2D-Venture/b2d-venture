@@ -11,7 +11,6 @@ interface InvestorProps {
   nationality: string;
   networth: number;
   investableAmount: number;
-  status: boolean;
 }
 
 interface InvestorProfileCardProps {

@@ -1,17 +1,36 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import AnimatedCounter from "@/components/animation/AnimatedCounter";
+import { HiCash } from "react-icons/hi";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { UpdateInvestorAmount } from "@/lib/db/index"; 
 
-const InvestableAmount = ({ amount }: { amount: number }) => {
-  const formattedAmount = new Intl.NumberFormat().format(amount);
+
+const InvestableAmount = ({ initialAmount, investorId }: { initialAmount: number, investorId: number }) => {
+  let [amount, setAmount] = useState(initialAmount);
+
+  const addCash = () => {
+    setAmount((prevAmount) => prevAmount + 100000);
+    UpdateInvestorAmount({ investorId, amount: amount + 100000 });
+  };
+
   return (
-    <div className="text-white p-4 rounded-lg text-right">
-      <h3 className="text-xl">You can Invest</h3>
-      <p className="text-4xl font-bold my-2 text-[#E4A222]">${formattedAmount}</p>
-      <p className="text-xs">
-        Based on your income, net worth<br></br>
-        and current investments
+    <div className="p-4 rounded-xl bg-[#f7fbfe] dark:bg-[#1a1c22] shadow-lg text-right transition-all duration-300 my-3">
+      <h3 className="text-xl font-semibold text-black dark:text-gray-300">You can Invest</h3>
+      <div className="text-4xl flex justify-center items-center font-extrabold my-4 text-[#E4A222]">
+        <AnimatedCounter amount={amount} />
+        <HiCash className="ml-3 text-[#E4A222] animate-pulse" />
+      </div>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Based on your income, net worth, <br /> and current investments
       </p>
+      <div className="flex justify-end items-center space-x-2">
+        <button onClick={addCash}>
+          <IoAddCircleOutline className="text-[#E4A222] text-2xl hover:text-yellow-400 transition duration-200 ease-in-out transform hover:scale-125" />
+        </button>
+        <div className="text-xl text-[#E4A222] font-bold">100,000 $</div>
+      </div>
     </div>
   );
 };

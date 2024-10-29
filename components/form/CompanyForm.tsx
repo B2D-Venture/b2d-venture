@@ -1,12 +1,12 @@
 import ShowStep from "@/components/ShowStepForm";
-import { CompanyRegisterForm } from "@/components/CompanyRegisterForm";
+import { CompanyRegisterForm } from "@/components/form/CompanyRegisterForm";
 import FormContent from "@/components/form/FormContent";
 
 export default function CompanyForm() {
   return (
-    <FormContent 
+    <FormContent
       label="Company Profile"
-      shopStepComponent={<ShowStep step={2} />}
+      showStepComponent={<ShowStep step={2} />}
       formComponent={<CompanyRegisterForm />}
     />
   );

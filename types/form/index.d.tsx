@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export type FormContentProps = {
     label: string;
-    shopStepComponent: ReactNode;
+    showStepComponent: ReactNode;
     formComponent: ReactNode;
 };
 
@@ -13,4 +13,12 @@ export interface FormFieldProps {
     dataId?: string;
     placeholder?: string;
     type?: string;
+    disabled?: boolean;
+    defaultValue?: string | Date;
 };
+
+export interface SuccessFormProps {
+    role: string;
+    hasApproval: boolean | null;
+    roleIdNumber?: number;
+}

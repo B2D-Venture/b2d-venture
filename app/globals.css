@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-body {
-  background-color: #181a20;
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -30,11 +21,11 @@ body {
   }
 
   .b2d-logo {
-    @apply rounded-full m-3;
+    @apply rounded-full m-3 border-4 border-black dark:border-yellow-500;
   }
 
   .avatar {
-    @apply w-[50px] h-[50px] rounded-full border-2 border-yellow-500;
+    @apply w-[50px] h-[50px] rounded-full border-2 border-black dark:border-yellow-500;
   }
 
   .sub-menu-wrap {
@@ -42,7 +33,7 @@ body {
   }
 
   .sub-menu {
-    @apply bg-[#fef5e2] rounded-lg shadow-lg;
+    @apply bg-[#eeefef] dark:bg-[#fef5e2] rounded-lg shadow-lg;
   }
 
   .user-info {
@@ -53,7 +44,7 @@ body {
     @apply h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between;
   }
 
-  .search-filter {
+  .search-sort {
     @apply w-[full] h-[45px] pl-6 pr-6 bg-white rounded-[60px] border-2 border-black flex items-center justify-between mx-32 my-14;
   }
 
@@ -82,15 +73,18 @@ body {
   }
 
   .navbar-link {
-    @apply flex gap-3 items-center py-1 md:p-3 2xl:p-4 rounded-lg justify-center 2xl:justify-start text-lg text-navbarTitle max-lg:hidden;
+    @apply flex gap-3 items-center py-2 px-4 rounded-lg justify-center md:justify-start text-lg transition-all duration-300 ease-in-out;
+    @apply text-gray-800 dark:text-navbarTitle hover:text-white dark:hover:text-white;
+    @apply bg-transparent hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-800;
   }
-
+  
   .navbar-link:hover {
-    @apply text-black bg-navbarTitle rounded-full p-3;
+    @apply shadow-md font-extrabold dark:bg-navbarTitle dark:text-black bg-gray-400;
   }
-
+  
   .navbar-link-active {
-    @apply text-black bg-navbarTitle rounded-full p-3;
+    @apply shadow-md font-extrabold dark:bg-navbarTitle dark:text-black bg-gray-400;
+    @apply p-3 shadow-lg;
   }
 
   .text-container-on-image {
@@ -126,7 +120,7 @@ body {
   }
 
   .text-company-statistic-num {
-    @apply text-[#fffefe] text-[32px] font-bold;
+    @apply text-black dark:text-[#fffefe] text-[32px] font-bold;
     @apply max-xl:text-[30px];
     @apply max-lg:text-[28px];
     @apply max-md:text-[26px];
@@ -140,15 +134,15 @@ body {
   }
 
   .card {
-    @apply relative h-[378px] border-solid border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-yellow-50;
+    @apply relative h-[378px] border-solid border-gray-500 dark:border-yellow-600 border-2 rounded-[20px] overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-gray-600 dark:hover:shadow-yellow-50;
   }
 
   .card-logo {
-    @apply absolute left-[27px] top-[160px] rounded-lg shadow-md border-solid border-white border-2 group-hover:top-[50px] z-10;
+    @apply absolute left-[27px] top-[160px] rounded-lg shadow-md border-solid border-black dark:border-white border-2 group-hover:top-[50px] z-10;
   }
 
   .card-inside {
-    @apply absolute h-full w-full bg-[#f6ecc0] rounded-[20px] transform translate-y-48 group-hover:translate-y-20;
+    @apply absolute h-full w-full bg-[#f3f3f3] dark:bg-[#f6ecc0] rounded-[20px] transform translate-y-48 group-hover:translate-y-20;
   }
 
   .card-below {
@@ -164,7 +158,7 @@ body {
   }
 
   .card-description {
-    @apply text-[#181a20] text-xs font-normal ml-5 mr-5 line-clamp-5 group-hover:line-clamp-none break-words whitespace-normal;
+    @apply text-[#181a20] text-xs font-normal ml-5 mr-5 line-clamp-2 group-hover:line-clamp-3 break-words whitespace-normal;
   }
 }
 

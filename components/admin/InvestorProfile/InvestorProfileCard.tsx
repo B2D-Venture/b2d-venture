@@ -14,26 +14,14 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { RejectButton } from "@/components/admin/reject/RejectButton";
 
 export function InvestorProfileCard({
-  logo,
-  investorName,
-  email,
-  age,
-  netWorth,
-  moneyReadyForInvestment,
-  Nationality,
+  investorRequest,
   handleApprove,
   handleReject,
 }: {
-  logo: string;
-  investorName: string;
-  email: string;
-  Nationality: string;
-  age: number;
-  netWorth: number;
-  moneyReadyForInvestment: number;
+  investorRequest: any;
   handleApprove: () => void;
   handleReject: () => void;
 }) {
@@ -43,13 +31,15 @@ export function InvestorProfileCard({
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
             <img
-              src={logo}
+              src={investorRequest.investor?.profileImage}
               alt="Investor Profile"
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{investorName}</span>
+                <span className="flex-1">
+                  {investorRequest.investor?.firstName + " " + investorRequest.investor?.lastName}
+                </span>
                 <ChevronDownIcon
                   className="text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -61,51 +51,65 @@ export function InvestorProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
-          <div className="flex flex-row items-center space-x-4 mt-2 text-black mb-2">
-            <OutputTextBox
-              label="Email"
-              value={email}
-              classNameLabel=""
-              classNameValue=""
-            />
-            <OutputTextBox
-              label="Nationality"
-              value={Nationality}
-              classNameLabel=""
-              classNameValue=""
-            />
+          <div className="grid grid-cols-3 text-black justify-start w-full my-2">
+            <div className="flex flex-row items-center space-x-[80px]">
+              <OutputTextBox
+                label="Email"
+                value={investorRequest.investor?.email}
+                classNameLabel=""
+                classNameValue=""
+              />
+            </div>
+            <div className="flex flex-row items-center space-x-[63px]">
+              <OutputTextBox
+                label="Nationality"
+                value={investorRequest.investor?.nationality}
+                classNameLabel=""
+                classNameValue=""
+              />
+            </div>
+            <div className="flex flex-row items-center space-x-5">
+              <OutputTextBox
+                label="BirthDate"
+                value={investorRequest.investor?.birthDate}
+                classNameLabel=""
+                classNameValue=""
+              />
+            </div>
           </div>
           <AccordionContent>
-            <div className="flex flex-row items-center justify-between">
-              <OutputTextBox
-                label="Age"
-                value={age}
-                classNameLabel=""
-                classNameValue=""
-              />
-              <OutputTextBoxDollar
-                label="Net Worth"
-                value={netWorth}
-                classNameLabel=""
-                classNameValue=""
-              />
-              <OutputTextBoxDollar
-                label="Money Ready For Investment"
-                value={moneyReadyForInvestment}
-                classNameLabel=""
-                classNameValue=""
-              />
+            <div className="grid grid-cols-3 text-black justify-start w-full my-2">
+              <div className="flex flex-row items-center space-x-[40px]">
+                <OutputTextBoxDollar
+                  label="Net Worth"
+                  value={investorRequest.investor?.networth}
+                  classNameLabel=""
+                  classNameValue=""
+                />
+              </div>
+              <div className="flex flex-row items-center space-x-[10px]">
+                <OutputTextBoxDollar
+                  label="Investable Money"
+                  value={investorRequest.investor?.investableAmount}
+                  classNameLabel=""
+                  classNameValue=""
+                />
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
-        <Button variant="ghost" size="icon" className="bg-green-500" onClick={handleApprove}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-green-500"
+          onClick={handleApprove}
+        >
           <CheckIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="bg-red-500" onClick={handleReject}>
-          <Cross2Icon className="h-4 w-4" />
-        </Button>
+
+        <RejectButton type="investor" request={investorRequest} email={investorRequest.investor?.email} handleReject={handleReject}  />
       </div>
     </div>
   );

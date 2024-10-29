@@ -1,3 +1,14 @@
+interface DealTermProps {
+  recentFunding: RaiseFunding;
+  dayLeft: number;
+  totalInvestor: number;
+  currentInvestment: number;
+  roleId: number | null;
+  isOwnCompany: boolean;
+  urlId: number;
+  investorId: number;
+}
+
 interface DealTermElementProps {
   data: string | number;
   label: string;

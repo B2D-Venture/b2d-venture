@@ -1,10 +1,8 @@
 import { UploadButton } from '@/src/utils/uploadthing';
 import React, { useState } from 'react';
 
-export function ProfileImageForm({ setProfileImage }: { setProfileImage: (image: string) => void }) {
+export function ProfileImageForm({ setProfileImage, defaultImage = "/form/default-profile.png" }: { setProfileImage: (image: string) => void, defaultImage?: string }) {
   const [imageSrc, setImageSrc] = useState("");
-
-  const defaultImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd5avdba8EiOZH8lmV3XshrXx7dKRZvhx-A&s";
 
   return (
     <div className="relative flex flex-col items-center">
@@ -12,7 +10,7 @@ export function ProfileImageForm({ setProfileImage }: { setProfileImage: (image:
         {imageSrc ? (
           <img src={imageSrc} alt="Uploaded" className="w-full h-full object-cover" />
         ) : (
-          <img src={defaultImage} alt="Default" className="w-full h-full object-cover opacity-50" />
+          <img src={defaultImage} alt="Default" className="w-full h-full object-cover" />
         )}
       </div>
 

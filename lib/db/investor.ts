@@ -48,6 +48,16 @@ export async function addInvestorRequest(request: InvestorRequestData) {
   return await db.insert(InvestorRequestTable).values(request).execute();
 }
 
+export async function getInvestorRequestById(investorId: number) {
+  const investorRequest = await db
+    .select()
+    .from(InvestorRequestTable)
+    .where(eq(InvestorRequestTable.investorId, investorId))
+    .execute();
+
+  return investorRequest[0];
+}
+
 export async function changeToInvestorRole({ email, investor_id }: { email: string, investor_id: number }) {
   return await db
     .update(UserTable)
@@ -56,5 +66,13 @@ export async function changeToInvestorRole({ email, investor_id }: { email: stri
       roleIdNumber: investor_id
     })
     .where(eq(UserTable.email, email))
+    .execute();
+}
+
+export async function UpdateInvestorAmount({ investorId, amount }: { investorId: number, amount: number }) {
+  return await db
+    .update(InvestorTable)
+    .set({ investableAmount: amount })
+    .where(eq(InvestorTable.id, investorId))
     .execute();
 }

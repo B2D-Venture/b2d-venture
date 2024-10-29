@@ -1,26 +1,33 @@
-export type CompanyData = {
-    logo: string;
-    banner: string;
-    name: string;
-    abbr: string;
-    description: string;
-    fundingTarget: number;
-    minInvest: number;
-    maxInvest: number;
-    deadline: Date;
-    securityType: string;
-    priceShare: number;
-    pitch: string;
-    status?: boolean;
+import { RaiseFunding } from "../raise";
+
+interface Company {
+  id?: number;
+  logo: string;
+  banner: string;
+  name: string;
+  abbr: string;
+  description: string;
+  pitch: string;
 }
 
-export type CompanyRequestData = {
-    companyId: number;
-}
+export type CompanyWithRaiseFunding = Company & RaiseFunding;
 
-export type DataRoomData = {
-    companyId: number;
-    documentName: string;
-    documentUrl: string;
-}
+export type CompanyRequest = {
+  companyId: number;
+};
 
+export type DataRoom = {
+  id?: number;
+  companyId: number;
+  documentName: string;
+  documentSize: number;
+  documentUrl: string;
+};
+
+export type DataRoomRequest = {
+  id: number;
+  companyId: number;
+  investorId: number;
+  requestDate: Date;
+  approval: boolean;
+};

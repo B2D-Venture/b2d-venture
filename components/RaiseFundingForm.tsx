@@ -6,7 +6,8 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CalendarForm, CalendarFormSchema } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/CalendarForm";
+import { addRaiseFunding, addRaiseFundingRequest } from "@/lib/db/index";
 
 import {
   Form,
@@ -14,30 +15,71 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 
+interface RaiseFundingFormProps extends React.ComponentProps<"form"> {
+  companyId: number;
+}
+
 // Combine schemas
-const formSchema = CalendarFormSchema.extend({
-  fundingGoal: z.string(),
-  minimumInvestment: z.string(),
-  maximumInvestment: z.string(),
-  pricePerShare: z.string(),
+const formSchema = z.object({
+  valuation: z
+    .number({
+      required_error: "Valuation is required.",
+    })
+    .min(0, { message: "Valuation cannot be negative" }),
+  fundingTarget: z
+    .number({
+      required_error: "Funding Target is required.",
+    })
+    .min(0, { message: "Funding Target cannot be negative" }),
+  priceShare: z
+    .number({
+      required_error: "Price Per Share is required.",
+    })
+    .min(0, { message: "Price Per Share cannot be negative" }),
+  minInvest: z
+    .number({
+      required_error: "Minimum Investment is required.",
+    })
+    .min(0, { message: "Minimum Investment cannot be negative" }),
+  maxInvest: z
+    .number({
+      required_error: "Maximum Investment is required.",
+    })
+    .min(0, { message: "Maximum Investment cannot be negative" }),
+  deadline: z.date({ required_error: "Investment Deadline is required." }),
 });
 
-export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
+export function RaiseFundingForm({
+  className,
+  companyId,
+}: RaiseFundingFormProps) {
+  console.log("Company Id Raise:", companyId);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fundingGoal: "",
-      minimumInvestment: "",
-      maximumInvestment: "",
-      dob: undefined,
-      pricePerShare: "",
+      valuation: undefined,
+      fundingTarget: undefined,
+      priceShare: undefined,
+      minInvest: undefined,
+      maxInvest: undefined,
+      deadline: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function onSubmit(values: any) {
+    console.log("RaiseFunding Value:", values);
+    if (values.deadline) {
+      values.deadline = new Date(values.deadline).toISOString();
+    }
+
+    addRaiseFunding(values, companyId)
+      .then((raiseFundingId) => {
+        addRaiseFundingRequest({ raiseFundingId });
+      })
+      .catch((err) => console.error("Error Raise Funding:", err));
   }
 
   return (
@@ -47,23 +89,92 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
         className={`grid gap-4 ${className}`}
       >
         <div className="grid gap-4">
-          {/* Funding Goal */}
+          {/* Valuation */}
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="fundingGoal"
+              name="valuation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[17px]">Funding Goal</FormLabel>
+                  <FormLabel className="text-[17px]">Valuation</FormLabel>
                   <FormControl>
                     <Input
-                      className="bg-[#bfbfbf]"
+                      className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
-                      {...field}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        field.onChange(value ? parseFloat(value) : 0);
+                      }}
+                      value={field.value}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
+              )}
+            />
+          </div>
+          {/* Funding Target */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="fundingTarget"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[17px]">Funding Target</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="bg-[#bfbfbf] text-black"
+                      placeholder="$"
+                      type="number"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        field.onChange(value ? parseFloat(value) : 0);
+                      }}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Price per Share */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="priceShare"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[17px]">Price per Share</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="bg-[#bfbfbf] text-black"
+                      placeholder="$"
+                      type="number"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        field.onChange(value ? parseFloat(value) : 0);
+                      }}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Investment Deadline (using CalendarForm) */}
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="deadline"
+              render={({ field }) => (
+                <CalendarForm
+                  label={"Investment Deadline"}
+                  canSetMoreThanToday={true}
+                  field={field}
+                />
               )}
             />
           </div>
@@ -71,7 +182,7 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="minimumInvestment"
+              name="minInvest"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[17px]">
@@ -79,12 +190,17 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="bg-[#bfbfbf]"
+                      className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
-                      {...field}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        field.onChange(value ? parseFloat(value) : 0);
+                      }}
+                      value={field.value}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -93,7 +209,7 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="maximumInvestment"
+              name="maxInvest"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[17px]">
@@ -101,42 +217,17 @@ export function RaiseFundingForm({ className }: React.ComponentProps<"form">) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="bg-[#bfbfbf]"
+                      className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
-                      {...field}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        field.onChange(value ? parseFloat(value) : 0);
+                      }}
+                      value={field.value}
                     />
                   </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Date (using CalendarForm) */}
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="dob"
-              render={({ field }) => (
-                <CalendarForm label={"Date"} field={field} />
-              )}
-            />
-          </div>
-          {/* Price per Share */}
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="pricePerShare"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[17px]">Price per Share</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="bg-[#bfbfbf]"
-                      placeholder="$"
-                      type="number"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
