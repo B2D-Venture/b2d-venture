@@ -27,9 +27,15 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
-export function RaiseFundingButton({ canRaiseFunding }: { canRaiseFunding: boolean }) {
+export function RaiseFundingButton({
+  canRaiseFunding,
+  companyId,
+}: {
+  canRaiseFunding: boolean;
+  companyId: number;
+}) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -59,10 +65,13 @@ export function RaiseFundingButton({ canRaiseFunding }: { canRaiseFunding: boole
                   <div className="flex flex-col items-center p-2 border border-red-500 bg-red-50 text-red-700 rounded-lg shadow-md">
                     <div className="flex items-center">
                       <IoWarning className="text-xl mr-2" />
-                      <p className="font-semibold">You cannot raise funding at this time.</p>
+                      <p className="font-semibold">
+                        You cannot raise funding at this time.
+                      </p>
                     </div>
                     <p className="text-sm text-center">
-                      The deadline has not passed, or your funding goal has not been fully reached.
+                      The deadline has not passed, or your funding goal has not
+                      been fully reached.
                     </p>
                   </div>
                 </TooltipContent>
@@ -77,7 +86,7 @@ export function RaiseFundingButton({ canRaiseFunding }: { canRaiseFunding: boole
               Provide the necessary details to raise funding.
             </DialogDescription>
           </DialogHeader>
-          <RaiseFundingForm />
+          <RaiseFundingForm companyId={companyId} />
         </DialogContent>
       </Dialog>
     );
@@ -105,10 +114,13 @@ export function RaiseFundingButton({ canRaiseFunding }: { canRaiseFunding: boole
                 <div className="flex flex-col items-center p-2 border border-red-500 bg-red-50 text-red-700 rounded-lg shadow-md">
                   <div className="flex items-center">
                     <IoWarning className="text-xl mr-2" />
-                    <p className="font-semibold">You cannot raise funding at this time.</p>
+                    <p className="font-semibold">
+                      You cannot raise funding at this time.
+                    </p>
                   </div>
                   <p className="text-sm text-center">
-                    The deadline has not passed, or your funding goal has not been fully reached.
+                    The deadline has not passed, or your funding goal has not
+                    been fully reached.
                   </p>
                 </div>
               </TooltipContent>
@@ -123,7 +135,7 @@ export function RaiseFundingButton({ canRaiseFunding }: { canRaiseFunding: boole
             Provide the necessary details to raise funding.
           </DrawerDescription>
         </DrawerHeader>
-        <RaiseFundingForm className="px-4" />
+        <RaiseFundingForm className="px-4" companyId={companyId} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

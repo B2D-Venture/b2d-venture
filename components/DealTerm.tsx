@@ -91,6 +91,7 @@ const DealTerm = async ({
               currentInvestment,
               recentFunding.fundingTarget
             )}
+            companyId={urlId}
           />
           <DealTermBtn
             text="Data Room Request"
