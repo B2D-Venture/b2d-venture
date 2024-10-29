@@ -23,3 +23,11 @@ export type DataRoom = {
   documentSize: number;
   documentUrl: string;
 };
+
+export type DataRoomRequest = {
+  id: number;
+  companyId: number;
+  investorId: number;
+  requestDate: Date;
+  approval: boolean;
+};

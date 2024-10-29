@@ -30,14 +30,14 @@ export function InvestorProfileCard({ investor }: InvestorProfileCardProps) {
     <div className="w-full space-y-8">
       <div className="grid grid-cols-5 gap-4">
         <div className="cor-span-1 flex flex-col justify-center items-center">
-          <div className="w-56 h-56 max-sm:w-24 max-sm:h-24 border-2 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center">
+          <div className="w-56 h-56 max-sm:w-24 max-sm:h-24 border-4 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-center border-gray-700 dark:border-[#b48b38]">
           <Image
               id="example-profile-image"
               src={investor.profileImage}
               width={300}
               height={350}
               alt="Example Profile Image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover "
             />
           </div>
         </div>

@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CompanyLogoBoxProps } from "@/types";
+import { Company } from "@/types/company";
 
 const CompanyLogoBox = ({
   companyId,

@@ -27,7 +27,6 @@ const Document = ({ canEdit, companyId }: DocumentProps) => {
     const [pdfSrc, setPdfSrc] = useState<PdfFile[]>([]);
 
     const handleRemovePdf = (identifier: string | number) => {
-        console.log("identifier", identifier);
         setPdfSrc((prev) => {
             const updatedPdfs = prev.filter((pdf) =>
                 pdf.id ? pdf.id !== identifier : pdf.key !== identifier

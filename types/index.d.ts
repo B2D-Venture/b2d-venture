@@ -48,17 +48,9 @@ type InvestorRequestData = {
 
 
 interface InvestmentItemProps {
-  logoUrl: string;
-  companyAbbr: string;
-  companyName: string;
-  amount: number;
+  company: Company;
+  request: InvestmentRequest;
   status: string;
-  date: string;
-  marketPrice: number;
-  priceChange: number;
-  stockPercentage: number;
-  valuationAtInvest: number;
-  valuationMarket: number;
 }
 
 interface OutputTextBoxProps {

@@ -1,5 +1,5 @@
 import InvestableAmount from "@/components/InvestableAmount";
-import InvestmentItemList from "@/components/InvestmentItemList";
+import InvestmentItemList from "@/components/profile/investor/InvestmentItemList";
 import { InvestorProfileCard } from "@/components/InvestorProfileCard";
 import {
   getUserByEmail,
@@ -8,33 +8,47 @@ import {
   getAllInvestmentRequestByInvestorId,
   getRaiseFundingById,
   getCompanyById,
+  getCompanyDataRoomRequestsByInvestor,
+  getDataRoomByCompanyId,
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
 import { CgProfile } from "react-icons/cg";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import DataroomItemList from "@/components/profile/investor/DataroomItemList";
+
 
 const getAllInvestmentData = async (investmentRequest: any) => {
   const investmentData = await Promise.all(investmentRequest.map(async (request: any) => {
     const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
     const company = await getCompanyById(raiseFunding.companyId);
     return {
-      logoUrl: company.logo,
-      companyName: company.name,
-      companyAbbr: company.abbr,
-      status: request.approval ? "Finalized" : "Waitlisted",
-      date: request.requestDate,
-      amount: request.amount,
-      stockPercentage: request.getStock,
-      marketPrice: 1000,          // Random
-      priceChange: 10,            // Random
-      valuationAtInvest: 200000,  // Random
-      valuationMarket: 220000,    // Random
+      id: company?.id ?? undefined,
+      company: company,
+      request: request,
+      status: request.approval === null ? "Waitlisted" : request.approval === true ? "Finalized" : "Rejected",
     };
   }));
 
   return investmentData;
+}
+
+const getAllDataroomData = async (dataroomRequest: any) => {
+  const dataroomData = await Promise.all(dataroomRequest.map(async (request: any) => {
+    const company = await getCompanyById(request.companyId);
+    const pdfs = await getDataRoomByCompanyId(request.companyId);
+    return {
+      id: company?.id ?? undefined,
+      company: company,
+      request: request,
+      status: request.approval === null ? "Waitlisted" : request.approval === true ? "Finalized" : "Rejected",
+      pdfs: pdfs,
+    };
+  }));
+
+  return dataroomData;
 }
 
 
@@ -56,11 +70,15 @@ export default async function InvestorProfile() {
   let investorRequest = null;
   let investmentRequest = null;
   let investmentData = null;
+  let dataroomRequest = null;
+  let dataroomItems = null;
   if (user.roleIdNumber !== null) {
     investor = await getInvestorById(user.roleIdNumber);
     investorRequest = await getInvestorRequestById(user.roleIdNumber);
     investmentRequest = await getAllInvestmentRequestByInvestorId(user.roleIdNumber);
     investmentData = await getAllInvestmentData(investmentRequest);
+    dataroomRequest = await getCompanyDataRoomRequestsByInvestor(user.roleIdNumber);
+    dataroomItems = await getAllDataroomData(dataroomRequest);
   }
 
   return (
@@ -80,7 +98,16 @@ export default async function InvestorProfile() {
           {investor && <InvestorProfileCard investor={investor} />}
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
-          {investmentData && <InvestmentItemList investments={investmentData} />}
+          <Tabs defaultValue="investment" className="w-full h-full mt-10 text-2xl">
+            <TabsList>
+              <TabsTrigger value="investment" className="text-2xl text-black">Investment</TabsTrigger>
+              <TabsTrigger value="request" className="text-2xl text-black">Dataroom</TabsTrigger>
+            </TabsList>
+            <TabsContent value="investment">{investmentData && <InvestmentItemList investments={investmentData} />}</TabsContent>
+            <TabsContent value="request">
+              {dataroomItems && <DataroomItemList dataroomItems={dataroomItems} />}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

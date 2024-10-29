@@ -60,8 +60,6 @@ export default async function CompanyProfile({
 }: {
   params: { companyId: number };
 }) {
-  console.log("Company ID:", params.companyId);
-
   const session = await getServerSession(authConfig);
   const companyRequest = await getCompanyRequestById(params.companyId);  
 
@@ -80,14 +78,12 @@ export default async function CompanyProfile({
 
   if (!isOwnCompany(params.companyId ?? 1, user)) {
     if (!companyRequest || companyRequest[0]?.approval !== true) {
-      console.log("return null");
       return notFound();
     }
   } 
 
   if (!isOwnCompany(params.companyId ?? 1, user)) {
     if (!companyRequest || companyRequest[0]?.approval !== true) {
-      console.log("return null");
       return notFound();
     }
   } 

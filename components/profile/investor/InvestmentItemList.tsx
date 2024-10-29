@@ -1,5 +1,6 @@
 import React from "react";
-import InvestmentItem from "@/components/InvestmentItem";
+import InvestmentItem from "@/components/profile/investor/InvestmentItem";
+import { Company } from "@/types/company";
 
 
 const formatISODate = (isoDate: string): string => {
@@ -17,7 +18,19 @@ const formatISODate = (isoDate: string): string => {
   return `${formattedDate}, ${formattedTime}`;
 };
 
-const InvestmentItemList = ({ investments }: {investments: any}) => {
+type InvestmentItem = {
+  id: number;
+  company: Company;
+  request: InvestmentRequest;
+  status: string;
+  investments: Company[];
+}
+
+interface InvestmentItemListProps {
+  investments: InvestmentItem[];
+}
+
+const InvestmentItemList = ({ investments }: InvestmentItemListProps) => {
   return (
     <div className="w-full">
       <div className="w-full mt-8 p-4 grid grid-cols-5 gap-5 items-center">
@@ -28,20 +41,12 @@ const InvestmentItemList = ({ investments }: {investments: any}) => {
       <div className="border-b-2 border-black dark:border-white mb-5" />
       {Array.from({ length: 1 }, () => investments)
         .flat()
-        .map((company) => (
+        .map((item) => (
           <InvestmentItem
-            key={company.companyName}
-            logoUrl={company.logoUrl}
-            companyAbbr={company.companyAbbr}
-            companyName={company.companyName}
-            status={company.status}
-            date={formatISODate(company.date)}
-            amount={company.amount}
-            marketPrice={company.marketPrice}
-            priceChange={company.priceChange}
-            stockPercentage={company.stockPercentage}
-            valuationAtInvest={company.valuationAtInvest}
-            valuationMarket={company.valuationMarket}
+            key={item.id}
+            company={item.company}
+            request={item.request}
+            status={item.status}
           />
         ))}
     </div>
