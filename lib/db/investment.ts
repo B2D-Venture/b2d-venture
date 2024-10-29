@@ -37,3 +37,4 @@ export async function getAllInvestmentRequestByInvestorId(investorId: number) {
   return investment;
 }
 
+// export async function addInvest
