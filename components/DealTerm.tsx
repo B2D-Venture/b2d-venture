@@ -12,13 +12,6 @@ const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
   return false;
 };
 
-const isOwnCompany = async (urlId: number, user: User) => {
-  if (user.roleIdNumber == urlId) {
-    return true;
-  }
-  return false;
-};
-
 const DealTerm = async ({
   recentFunding,
   dayLeft,
@@ -28,6 +21,7 @@ const DealTerm = async ({
   isOwnCompany,
   urlId,
   investorId,
+  user,
 }: DealTermProps) => {
   return (
     <div className="sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 md:m-5 md:rounded-xl shadow-lg p-6">
@@ -55,6 +49,11 @@ const DealTerm = async ({
           data={`${recentFunding.priceShare.toLocaleString()} $`}
           label="Price per Share"
         />
+        {/* findingtarget/priceshare */}
+        <DealTermElement
+          data={`${(recentFunding.fundingTarget/recentFunding.priceShare).toLocaleString()} `}
+          label="Total Shares"
+        />
       </div>
 
       {roleId !== 3 && (
@@ -69,6 +68,7 @@ const DealTerm = async ({
             hoverBorderColor="border-transparent"
             urlId={urlId}
             investorId={investorId}
+            user={user}
           />
           <RequestBtn
             text="Request Data Room"
@@ -80,11 +80,12 @@ const DealTerm = async ({
             hoverBorderColor="border-transparent"
             urlId={urlId}
             investorId={investorId}
+            user={user}
           />
         </div>
       )}
       {roleId === 3 && isOwnCompany && (
-        <div className="mt-6 flex justify-center items-center">
+        <div className="mt-6 flex justify-center items-center space-x-1">
           <RaiseFundingButton
             canRaiseFunding={canRaiseFunding(
               dayLeft,

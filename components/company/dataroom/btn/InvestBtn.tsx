@@ -13,6 +13,7 @@ interface InvestBtnProps {
   hoverBorderColor: string;
   urlId: number;
   investorId: number;
+  user: User;
 }
 
 const InvestBtn: React.FC<InvestBtnProps> = ({
@@ -25,9 +26,12 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
   hoverBorderColor,
   urlId,
   investorId,
+  user,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investor, setInvestor] = useState<{ investableAmount: number } | null>(null);
+  const [investor, setInvestor] = useState<{ investableAmount: number } | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchInvestor = async () => {
@@ -38,7 +42,11 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
   }, [investorId]);
 
   const handleInvestClick = () => {
-    setIsModalOpen(true);
+    if (user) {
+      if (user.roleId === 2) {
+        setIsModalOpen(true);
+      }
+    }
   };
 
   const closeModal = () => {
@@ -61,7 +69,8 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
               Investment Form
             </h2>
             <p className="text-gray-700 mb-4">
-              Available: ${investor?.investableAmount ?? "Loading..."}
+              Available: ${" "}
+              {investor?.investableAmount.toLocaleString() ?? "Loading..."}
             </p>
             <form>
               <div className="mb-4">

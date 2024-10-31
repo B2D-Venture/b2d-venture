@@ -152,6 +152,7 @@ export default async function CompanyProfile({
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
                 urlId={params.companyId}
                 investorId={user?.roleIdNumber ?? null}
+                user={user}
               />
             </div>
           )}
