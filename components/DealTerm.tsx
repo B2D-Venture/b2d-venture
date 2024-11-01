@@ -69,6 +69,7 @@ const DealTerm = async ({
             urlId={urlId}
             investorId={investorId}
             user={user}
+            recentFunding={recentFunding}
           />
           <RequestBtn
             text="Request Data Room"
