@@ -37,4 +37,9 @@ export async function getAllInvestmentRequestByInvestorId(investorId: number) {
   return investment;
 }
 
-// export async function addInvest
+export async function addInvestmentRequest(investorId: number, raiseFundingId: number, amount: number, getStock: number) {
+  await db
+    .insert(InvestmentRequestTable)
+    .values({ investorId, raiseFundingId, amount, getStock})
+    .execute();
+}
