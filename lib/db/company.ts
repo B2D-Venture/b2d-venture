@@ -5,11 +5,10 @@ import {
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
-  RaiseFundingTable,
   CompanyEditRequestTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, ilike, or } from "drizzle-orm";
+import { sql, eq, ilike, or } from "drizzle-orm";
 import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -18,8 +17,8 @@ if (!databaseUrl) {
   throw new Error("DATABASE_URL is not defined");
 }
 
-const sql = neon(databaseUrl);
-const db = drizzle(sql);
+const sqlNeon = neon(databaseUrl);
+const db = drizzle(sqlNeon);
 
 export async function addCompany(company: Company) {
   const insertedCompany = await db
@@ -46,47 +45,89 @@ export async function getAllCompanies(
   sortDirection: "asc" | "desc" = "asc",
 ) {
   try {
-    let query = db
-      .select({
-        company: CompanyTable,
-        raiseFunding: RaiseFundingTable,
-      })
-      .from(CompanyTable)
-      .leftJoin(
-        RaiseFundingTable,
-        eq(RaiseFundingTable.companyId, CompanyTable.id),
-      );
+    let baseQuery = `
+      WITH LatestApproved AS (
+        SELECT 
+          rfr.raise_funding_id,
+          rfr.approval,
+          rfr.request_date,
+          ROW_NUMBER() OVER (PARTITION BY rf.company_id ORDER BY rfr.request_date DESC) AS rn
+        FROM 
+          raise_funding_request rfr
+        JOIN 
+          raise_funding rf ON rfr.raise_funding_id = rf.id
+        WHERE 
+          rfr.approval = true
+      )
+      SELECT 
+        c.*, 
+        rf.*, 
+        LatestApproved.raise_funding_id AS latest_approved_raise_funding_id,
+        LatestApproved.approval
+      FROM 
+        company c
+      LEFT JOIN 
+        raise_funding rf ON c.id = rf.company_id
+      LEFT JOIN 
+        LatestApproved ON rf.id = LatestApproved.raise_funding_id
+      WHERE 
+        LatestApproved.rn = 1`;
 
     if (searchQuery) {
       const searchPattern = `%${searchQuery}%`;
-      query = query.where(
-        or(
-          ilike(CompanyTable.name, searchPattern),
-          ilike(CompanyTable.description, searchPattern),
-        ),
-      );
+      baseQuery += `
+      AND (
+        c.name ILIKE ${searchPattern} OR
+        c.description ILIKE ${searchPattern}
+      )`;
     }
 
     if (sortBy) {
       const sortColumn = {
-        valuation: RaiseFundingTable.valuation,
-        fundingTarget: RaiseFundingTable.fundingTarget,
-        pricePerShare: RaiseFundingTable.priceShare,
-        investmentDeadline: RaiseFundingTable.deadline,
-        minInvestment: RaiseFundingTable.minInvest,
-        maxInvestment: RaiseFundingTable.maxInvest,
+        valuation: "rf.valuation",
+        fundingTarget: "rf.funding_target",
+        pricePerShare: "rf.price_per_share",
+        investmentDeadline: "rf.deadline",
+        minInvestment: "rf.min_invest",
+        maxInvestment: "rf.max_invest",
       }[sortBy];
 
       if (sortColumn) {
-        query = query.orderBy(sortColumn, sortDirection);
+        baseQuery += ` ORDER BY ${sortColumn} ${sortDirection}`;
       }
     }
 
     if (limit) {
-      query = query.limit(limit);
+      baseQuery += ` LIMIT ${limit}`;
     }
 
-    const companiesWithFunding = await query.execute();
+    const result = await db.execute(sql.raw(baseQuery));
+    console.log(result);
+
+    const companiesWithFunding = result.rows.map((row) => ({
+      company: {
+        id: row.company_id,
+        abbr: row.abbr,
+        name: row.name,
+        logo: row.logo,
+        banner: row.banner,
+        description: row.description,
+        pitch: row.pitch,
+      },
+      raiseFunding: {
+        id: row.id,
+        companyId: row.company_id,
+        fundingTarget: row.funding_target,
+        minInvest: row.min_invest,
+        maxInvest: row.max_invest,
+        priceShare: row.price_per_share,
+        valuation: row.valuation,
+        deadline: row.deadline,
+        approval: row.approval,
+      },
+    }));
+
+    console.log(companiesWithFunding);
     return companiesWithFunding;
   } catch (error) {
     console.error("Error retrieving companies with funding details:", error);
@@ -180,4 +221,3 @@ export async function updateCompany(company: Company) {
     .where(eq(CompanyTable.id, company.id))
     .execute();
 }
-
