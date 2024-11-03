@@ -238,7 +238,6 @@ const AdminPage = () => {
                   fetchData();
                   const user = await getUserByCompanyId(companyRequest.companyId);
                   sendEmailCompanyStatus(companyRequest.company, user.email, "approved");
-                  console.log("Approved Company Request");
                 } catch (error) {
                   console.error("Error approving company request:", error);
                 }
@@ -270,7 +269,6 @@ const AdminPage = () => {
                 await delay(100);
                 fetchData(); // Refresh data after approval
                 sendEmailInvestorStatus(investorRequest.investor, "approved");
-                console.log("Approve Investor Request");
               }}
               handleReject={async () => {
                 await rejectInvestorRequest(investorRequest.id);
