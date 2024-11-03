@@ -124,9 +124,11 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
   const { reset } = form;
   useEffect(() => {
     const fetchCompany = async () => {
-      const companyRequest = await getCompanyRequestById(companyEditId);
-      if (companyRequest) {
-        setHasPublish(true);
+      if (companyEditId !== undefined) {
+        const companyRequest = await getCompanyRequestById(companyEditId);
+        if ((companyRequest ?? []).length > 0) {
+          setHasPublish(true);
+        }
       }
       try {
         const response = await fetch('/api/company');
@@ -151,6 +153,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
                 maxInvest: funding.maxInvest ?? 0,
                 deadline: funding.deadline ? new Date(funding.deadline) : undefined,
                 priceShare: funding.priceShare ?? 0,
+                valuation: funding.valuation ?? 0,
                 pitch: data.company.pitch ?? "",
               });
               setLoading(false);
