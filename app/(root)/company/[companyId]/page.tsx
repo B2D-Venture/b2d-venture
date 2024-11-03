@@ -13,6 +13,7 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import RejectShow from "@/components/profile/RejectShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 import PublishForm from "@/components/profile/company/PublishForm";
 
@@ -63,7 +64,7 @@ export default async function CompanyProfile({
   const session = await getServerSession(authConfig);
   const companyRequest = await getCompanyRequestById(params.companyId);  
 
-  let user = null;
+  let user: User | undefined = undefined;
   let roleId = 1;
   let isApproval = null;
   if (session && session.user?.email) {
@@ -98,6 +99,9 @@ export default async function CompanyProfile({
     <div className="flex flex-col items-center min-h-screen relative">
       {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
         <WaitingShow />
+      )}
+      {(roleId === 3 && isApproval?.approval === false && user && await isOwnCompany(params.companyId ?? 1, user)) && (
+        <RejectShow user={user} />
       )}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
@@ -139,6 +143,10 @@ export default async function CompanyProfile({
         <div>
           {recentFunding && (
             <div className="sticky top-36">
+              {(isOwnCompany(params.companyId ?? 1, user) && hasPublish(companyRequest)) && <PublishForm
+                companyId={params.companyId}
+                raiseId={recentFunding.id}
+              />}
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
                 raiseId={recentFunding.id}
