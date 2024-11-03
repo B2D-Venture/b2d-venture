@@ -2,17 +2,54 @@
 
 import { useSession, signIn } from "next-auth/react";
 import { usePathname, useSearchParams } from "next/navigation";
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import SignInLoading from "@/components/loading/SignInLoading";
 
-const SignUp = () => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || pathname;
-  console.log("callbackUrl", callbackUrl);
-  console.log("pathname", pathname);
-  const signUpClick = () => {
-    signIn("google", { callbackUrl });
-  };
+  const SignUp = () => {
+    const pathname = usePathname();
+    const [user, setUser] = useState<User | null>(null);
+    const { data: session, status } = useSession();
+    const [loading, setLoading] = useState(true);
+
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('/api/user');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const searchParams = useSearchParams();
+    let callbackUrl = searchParams.get('callbackUrl') || pathname;
+
+    useEffect(() => {
+      if (status === "authenticated") {
+        fetchUser();
+      } else if (status === "unauthenticated" && pathname === "/signup") {
+        callbackUrl = "/role-register";
+      } else {
+        setLoading(false);
+      }
+    }, [status]);    
+    
+    if (callbackUrl === "/signup" && user) {
+      if (user.roleId === 2) {
+        window.location.href = `/investor-profile`;
+      } else if (user.roleId === 3) {
+        window.location.href = `/company/${user.roleIdNumber}`;
+      }
+    }
+
+    const signUpClick = () => {
+      signIn("google", { callbackUrl });
+    };
+
+    if (loading) return <SignInLoading />;
+
   return (
     <div className="h-screen overflow-hidden flex items-center justify-center bg-[#c9c9c9]">
       <div className="flex h-full w-full lg:w-3/5">
