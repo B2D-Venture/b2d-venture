@@ -43,7 +43,6 @@ type InvestorFormData = {
 
 type InvestorRequestData = {
   investorId: number;
-  approval: boolean;
 }
 
 

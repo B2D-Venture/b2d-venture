@@ -7,6 +7,7 @@ import { SuccessFormProps } from "@/types/form/index.d";
 
 
 const SuccessForm = ({ role, hasApproval, roleIdNumber }: SuccessFormProps) => {
+  console.log("SuccessForm: ", role, hasApproval, roleIdNumber);
   const progress = useMotionValue(90);
 
   return (

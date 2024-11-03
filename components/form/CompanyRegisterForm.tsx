@@ -94,7 +94,7 @@ export const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdit?: boolean, companyEditId?: number }) {
+export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: { canEdit?: boolean, companyEditId?: number, onRoleChange: () => void }) {
   const { handleStepChange } = useFormState();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -183,7 +183,6 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
-    console.log("values", values);
     const companyData: Company = {
       id: companyEditId,
       logo: companyFormData.logo,
@@ -222,7 +221,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
               addDataRoom(dataRoomEntry);
             });
           }
-
+          onRoleChange();
           handleStepChange(1);
         })
         .catch((err) => console.error("Error adding company:", err));

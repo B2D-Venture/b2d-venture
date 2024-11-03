@@ -20,18 +20,33 @@ export default function FormStep() {
   const [successRole, setSuccessRole] = useState<string | null>(null);
   const [hasApproval, setHasApproval] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch('/api/user');
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      } else {
-        window.location.href = `/signup?callbackUrl=/role-register`;
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const response = await fetch('/api/user');
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setUser(data.user);
+  //     } else {
+  //       window.location.href = `/signup?callbackUrl=/role-register`;
+  //     }
+  //     setLoading(false);
+  //   };
 
+  //   fetchUser();
+  // }, []);
+
+  const fetchUser = async () => {
+    const response = await fetch('/api/user');
+    if (response.ok) {
+      const data = await response.json();
+      setUser(data.user);
+    } else {
+      window.location.href = `/signup?callbackUrl=/role-register`;
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -51,29 +66,36 @@ export default function FormStep() {
     fetchApprovalStatus();
   }, [user]);
 
+  const handleRoleChange = () => {
+    fetchUser(); // Refetch user data after role change
+  };
+
   if (loading) {
     return (
       <FormSubmitLoading />
     );
   }
 
+  console.log("Step:", step);
+  console.log("User data:", user);
+  console.log("successRole:", successRole);
+
   if ((user && user.roleId !== 1) || step === 4) {
     if (user.roleId === 2) {
-      return <SuccessForm role={successRole || "Investor"} hasApproval={hasApproval} />;
+      return <SuccessForm role={"Investor"} hasApproval={hasApproval} />;
     } else if (user.roleId === 3) {
-      return <SuccessForm role={successRole || "Company"} hasApproval={hasApproval} roleIdNumber={user?.roleIdNumber} />;
+      return <SuccessForm role={"Company"} hasApproval={hasApproval} roleIdNumber={user?.roleIdNumber} />;
     }
-    return <SuccessForm role={successRole || ""} hasApproval={hasApproval} />;
   }
 
   if (step === 1) {
     return <RoleSelectForm />;
   }
-  if (step === 2) {
-    return <InvestorForm />;
+  else if (step === 2) {
+    return <InvestorForm onRoleChange={handleRoleChange} />;
   }
-  if (step === 3) {
-    return <CompanyForm />;
+  else if (step === 3) {
+    return <CompanyForm onRoleChange={handleRoleChange} />;
   }
 
   return null;
