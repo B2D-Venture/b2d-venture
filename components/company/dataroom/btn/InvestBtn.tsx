@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { getInvestorById } from "@/lib/db/investor";
-import { addInvestmentRequest } from "@/lib/db/investment";
+import { addInvestmentRequest, getInvestorRequestById } from "@/lib/db/index";
 
 interface InvestBtnProps {
   text: string;
@@ -48,9 +48,14 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     fetchInvestor();
   }, [investorId]);
 
-  const handleInvestClick = () => {
-    if (user && user.roleId === 2) {
-      setIsModalOpen(true);
+  const handleInvestClick = async () => {
+    try {
+      const investorRequest = await getInvestorRequestById(investorId);
+      if (user && user.roleId === 2 && investorRequest?.approval) {
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching investor request:", error);
     }
   };
 

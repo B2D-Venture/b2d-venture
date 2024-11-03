@@ -2,8 +2,8 @@ import React from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
 import { RaiseFundingButton } from "@/components/RaiseFundingButton";
-import RequestBtn from "./company/dataroom/btn/RequestBtn";
-import InvestBtn from "./company/dataroom/btn/InvestBtn";
+import RequestBtn from "../../../company/dataroom/btn/RequestBtn";
+import InvestBtn from "../../../company/dataroom/btn/InvestBtn";
 
 const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
   if (dayLeft <= 0 || current >= target) {

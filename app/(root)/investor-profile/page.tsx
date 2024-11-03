@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import RejectShow from "@/components/profile/RejectShow";
 import { CgProfile } from "react-icons/cg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DataroomItemList from "@/components/profile/investor/DataroomItemList";
@@ -81,10 +82,13 @@ export default async function InvestorProfile() {
     dataroomItems = await getAllDataroomData(dataroomRequest);
   }
 
+  console.log("approval", investorRequest?.approval);
+
   return (
     <div>
       <div className="flex flex-col items-center min-h-screen relative">
         {investorRequest?.approval === null && (<WaitingShow />)}
+        {investorRequest?.approval === false && (<RejectShow user={user} />)}
 
         <div className="flex justify-between w-11/12 h-9/10">
           <h1 className="flex flex-col justify-end text-black dark:text-white ml-70 text-[40px] font-bold mt-10">

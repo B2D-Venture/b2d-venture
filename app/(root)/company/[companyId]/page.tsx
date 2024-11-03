@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/profile/company/Pitch";
-import DealTerm from "@/components/DealTerm";
+import DealTerm from "@/components/profile/company/dealterm/DealTerm";
 import {
   getUser,
   getCompanyById,
@@ -143,10 +143,6 @@ export default async function CompanyProfile({
         <div>
           {recentFunding && (
             <div className="sticky top-36">
-              {(isOwnCompany(params.companyId ?? 1, user) && hasPublish(companyRequest)) && <PublishForm
-                companyId={params.companyId}
-                raiseId={recentFunding.id}
-              />}
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
                 raiseId={recentFunding.id}
