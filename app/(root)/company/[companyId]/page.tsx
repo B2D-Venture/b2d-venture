@@ -142,7 +142,7 @@ export default async function CompanyProfile({
         </div>
         <div>
           {recentFunding && (
-            <div className="sticky top-36">
+            <div className="sticky top-28">
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
                 raiseId={recentFunding.id}

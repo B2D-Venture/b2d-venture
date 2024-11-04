@@ -24,13 +24,13 @@ const DealTerm = async ({
   user,
 }: DealTermProps) => {
   return (
-    <div className="sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 md:m-5 md:rounded-xl shadow-lg p-6">
-      <div className="mb-5">
-        <h2 className="text-black dark:text-white text-4xl font-bold text-center">
+    <div className="m-5 sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4 md:p-1 lg:p-2 xl:p-3">
+      <div className="mb-4 md:mb-2 lg:mb-4 xl:mb-5">
+        <h2 className="text-black dark:text-white text-3xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center">
           Deal Terms
         </h2>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-2 lg:space-y-3 xl:space-y-4">
         <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
         <DealTermElement data={totalInvestor} label="Investors" />
         <DealTermElement
@@ -49,15 +49,14 @@ const DealTerm = async ({
           data={`${recentFunding.priceShare.toLocaleString()} $`}
           label="Price per Share"
         />
-        {/* findingtarget/priceshare */}
         <DealTermElement
-          data={`${(recentFunding.fundingTarget/recentFunding.priceShare).toLocaleString()} `}
+          data={`${(recentFunding.fundingTarget/recentFunding.priceShare).toLocaleString()}`}
           label="Total Shares"
         />
       </div>
 
       {roleId !== 3 && (
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mt-5 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <InvestBtn
             text="Invest Now"
             textColor="text-white"
@@ -86,7 +85,7 @@ const DealTerm = async ({
         </div>
       )}
       {roleId === 3 && isOwnCompany && (
-        <div className="mt-6 flex justify-center items-center space-x-1">
+        <div className="mt-2 md:mt-2 lg:mt-4 xl:mt-5 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2">
           <RaiseFundingButton
             canRaiseFunding={canRaiseFunding(
               dayLeft,
@@ -110,5 +109,6 @@ const DealTerm = async ({
     </div>
   );
 };
+
 
 export default DealTerm;

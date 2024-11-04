@@ -135,7 +135,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
         if (response.ok) {
           const data = await response.json();
           if (companyEditId !== undefined) {
-            if (companyEditId != data.company.id) {
+            if (Object.keys(data).length === 0 || companyEditId != data.company.id) {
               window.location.href = `/company/${companyEditId}`;
             } else {
               const funding = await getRecentRaiseFundingByCompanyId(companyEditId);
@@ -161,7 +161,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
             }
           }
         } else {
-          window.location.href = `/signup?callbackUrl=/role-register`;
+          window.location.href = `/company/${companyEditId}`;
         }
       } catch (error) {
         console.error("Error fetching company data:", error);
