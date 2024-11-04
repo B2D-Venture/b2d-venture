@@ -27,18 +27,12 @@ const Home = () => {
 
       <Link
         href="/company"
-        className="bottom-[50px] w-[120px] h-[38px] mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-lg flex justify-center items-center "
+        className="bottom-[50px] w-[120px] h-[38px] mb-10 mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-lg flex justify-center items-center "
       >
         <div className="text-center text-[#363324] text-xl font-bold hover:text-[#d9d9d9]">
           View All
         </div>
       </Link>
-
-      <div className="w-[235px] h-[17px] left-[604px] top-[2025px] absolute justify-center items-center inline-flex">
-        <div className="w-[235px] h-[17px] text-white text-sm font-normal">
-          copyright ©2024. All rights reserve
-        </div>
-      </div>
     </div>
   );
 };

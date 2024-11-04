@@ -9,6 +9,7 @@ import { ourFileRouter } from "../api/uploadthing/core";
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { type ThemeProviderProps } from "next-themes/dist/types"
 import { SessionProvider, useSession } from "next-auth/react";
+import Footer from "@/components/navbar/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#fafafa] dark:bg-[#181a20]">
+      <body className="bg-[#fafafa] dark:bg-[#181a20] flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -46,7 +47,10 @@ export default function RootLayout({
           />
 
           <Navbar />
-          <Providers>{children}</Providers>
+          <Providers>
+            <main className="flex-grow">{children}</main>
+          </Providers>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

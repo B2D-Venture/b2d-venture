@@ -82,10 +82,8 @@ export default async function InvestorProfile() {
     dataroomItems = await getAllDataroomData(dataroomRequest);
   }
 
-  console.log("approval", investorRequest?.approval);
-
   return (
-    <div>
+    <div className="mb-20">
       <div className="flex flex-col items-center min-h-screen relative">
         {investorRequest?.approval === null && (<WaitingShow />)}
         {investorRequest?.approval === false && (<RejectShow user={user} />)}
@@ -102,10 +100,10 @@ export default async function InvestorProfile() {
           {investor && <InvestorProfileCard investor={investor} />}
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
-          <Tabs defaultValue="investment" className="w-full h-full mt-10 text-2xl">
+          <Tabs defaultValue="investment" className="w-full h-full mt-8">
             <TabsList>
-              <TabsTrigger value="investment" className="text-2xl text-black">Investment</TabsTrigger>
-              <TabsTrigger value="request" className="text-2xl text-black">Dataroom</TabsTrigger>
+              <TabsTrigger value="investment" className="text-lg text-black">Investment</TabsTrigger>
+              <TabsTrigger value="request" className="text-lg text-black">Dataroom</TabsTrigger>
             </TabsList>
             <TabsContent value="investment">{investmentData && <InvestmentItemList investments={investmentData} />}</TabsContent>
             <TabsContent value="request">

@@ -88,7 +88,7 @@ const CompanyList = () => {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <SearchBar
         initialSearch={searchParams.get("search") || ""}
         classSearch="search-sort"

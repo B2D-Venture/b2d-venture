@@ -96,7 +96,7 @@ export default async function CompanyProfile({
   const totalInvestment = getTotalInvestment(allInvestmentFunding);
 
   return (
-    <div className="flex flex-col items-center min-h-screen relative">
+    <div className="flex flex-col items-center min-h-screen relative mb-20">
       {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
         <WaitingShow />
       )}

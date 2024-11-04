@@ -22,7 +22,6 @@ const Navbar = () => {
         const response = await fetch('/api/user');
         if (response.ok) {
           const data = await response.json();
-          console.log("User data:", data);
           setUser(data.user);
         }
       } catch (error) {

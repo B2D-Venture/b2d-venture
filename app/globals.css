@@ -73,18 +73,18 @@
   }
 
   .navbar-link {
-    @apply flex gap-3 items-center py-2 px-4 rounded-lg justify-center md:justify-start text-lg transition-all duration-300 ease-in-out;
+    @apply flex gap-3 items-center py-2 px-4 rounded-full justify-center md:justify-start text-lg transition-all duration-300 ease-in-out;
     @apply text-gray-800 dark:text-navbarTitle hover:text-white dark:hover:text-white;
     @apply bg-transparent hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-800;
   }
   
   .navbar-link:hover {
-    @apply shadow-md font-extrabold dark:bg-navbarTitle dark:text-black bg-gray-400;
+    @apply shadow-md dark:bg-navbarTitle dark:text-black bg-gray-400;
   }
   
   .navbar-link-active {
-    @apply shadow-md font-extrabold dark:bg-navbarTitle dark:text-black bg-gray-400;
-    @apply p-3 shadow-lg;
+    @apply shadow-md dark:bg-navbarTitle dark:text-black bg-gray-400;
+    @apply shadow-lg;
   }
 
   .text-container-on-image {
