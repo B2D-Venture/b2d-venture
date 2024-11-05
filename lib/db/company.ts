@@ -102,7 +102,6 @@ export async function getAllCompanies(
     }
 
     const result = await db.execute(sql.raw(baseQuery));
-    console.log(result);
 
     const companiesWithFunding = result.rows.map((row) => ({
       company: {
@@ -127,7 +126,6 @@ export async function getAllCompanies(
       },
     }));
 
-    console.log(companiesWithFunding);
     return companiesWithFunding;
   } catch (error) {
     console.error("Error retrieving companies with funding details:", error);
