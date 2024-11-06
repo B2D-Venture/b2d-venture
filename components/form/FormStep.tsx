@@ -24,7 +24,7 @@ export default function FormStep() {
       const data = await response.json();
       setUser(data.user);
     } else {
-      window.location.href = `/signup?callbackUrl=/role-register`;
+      window.location.href = `/signin?callbackUrl=/role-register`;
     }
     setLoading(false);
   };

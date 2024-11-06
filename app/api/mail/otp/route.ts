@@ -1,29 +1,22 @@
 import { render } from "@react-email/render";
-import EmailDataroomStatusProps from "@/emails/dataroom";
+import PlaidVerifyIdentityEmailProps from "@/emails/otp";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+
 export async function POST(request: Request) {
   const { 
-    message,
-    email,
-    status,
-    company,
-    investorProfile,
+    validationCode,
 } = await request.json();
 
   try {
     const { error } = await resend.emails.send({
       from: "Acme <noreply@resend.dev>",
       to: ["bosskingblack10@gmail.com"],
-      subject: "Dataroom Request Status",
-      html: await render(EmailDataroomStatusProps({ 
-        message,
-        status,
-        loginDate: new Date(),
-        company,
-        investorProfile,
+      subject: "Verify Your Identity",
+      html: await render(PlaidVerifyIdentityEmailProps({ 
+        validationCode,
       })),
     });
 

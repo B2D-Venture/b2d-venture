@@ -57,7 +57,7 @@ export default async function InvestorProfile() {
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user?.email) {
-    redirect(`/signup?callbackUrl=/investor-profile`);
+    redirect(`/signin?callbackUrl=/investor-profile`);
   }
 
   const userEmail = session.user.email;

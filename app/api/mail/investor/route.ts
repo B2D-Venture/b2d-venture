@@ -18,17 +18,6 @@ export async function POST(request: Request) {
     networth,
   } = await request.json();
 
-  console.log("data", {
-    message,
-    email,
-    status,
-    profileImage,
-    firstName,
-    lastName,
-    nationalId,
-    birthDate,
-  });
-
   try {
     const { error } = await resend.emails.send({
       from: "Acme <noreply@resend.dev>",

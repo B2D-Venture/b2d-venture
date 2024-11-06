@@ -37,7 +37,6 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      console.log("error", error);
       return new Response(JSON.stringify({ error }), { status: 500 });
     }
 
@@ -45,7 +44,6 @@ export async function POST(request: Request) {
       status: 200,
     });
   } catch (error) {
-    console.log("error", error);
     return new Response(JSON.stringify({ error: "Failed to send email" }), {
       status: 500,
     });
