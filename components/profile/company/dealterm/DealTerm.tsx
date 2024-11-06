@@ -32,28 +32,34 @@ const DealTerm = async ({
       </div>
       <div className="space-y-3 md:space-y-2 lg:space-y-3 xl:space-y-4">
         <DealTermElement data={dayLeft} label="Days Left" type="deadline" />
-        <DealTermElement data={totalInvestor} label="Investors" />
         <DealTermElement
-          data={`${recentFunding.minInvest.toLocaleString()} $`}
-          label="Minimum Investment"
-        />
-        <DealTermElement
-          data={`${recentFunding.maxInvest.toLocaleString()} $`}
-          label="Maximum Investment"
+          data={`${recentFunding.valuation.toLocaleString()} $`}
+          label="Valuation"
         />
         <DealTermElement
           data={`${recentFunding.fundingTarget.toLocaleString()} $`}
           label="Funding Target"
         />
         <DealTermElement
+          data={`${recentFunding.maxInvest.toLocaleString()} $`}
+          label="Maximum Investment"
+        />
+        <DealTermElement
+          data={`${recentFunding.minInvest.toLocaleString()} $`}
+          label="Minimum Investment"
+        />
+        <DealTermElement
           data={`${recentFunding.priceShare.toLocaleString()} $`}
           label="Price per Share"
         />
         <DealTermElement
-          data={`${(recentFunding.fundingTarget/recentFunding.priceShare).toLocaleString()}`}
+          data={`${(
+            recentFunding.fundingTarget / recentFunding.priceShare
+          ).toLocaleString()}`}
           label="Total Shares"
         />
       </div>
+      <DealTermElement data={totalInvestor} label="Investors" />
 
       {roleId !== 3 && (
         <div className="mt-5 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -109,6 +115,5 @@ const DealTerm = async ({
     </div>
   );
 };
-
 
 export default DealTerm;

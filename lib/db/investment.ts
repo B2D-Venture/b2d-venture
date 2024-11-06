@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { InvestorFormData, InvestorRequestData } from "../../types/index";
-import { InvestorTable, InvestorRequestTable, UserTable, InvestmentRequestTable } from "../schema";
+import {
+  InvestmentRequestTable,
+} from "../schema";
 import { eq, and } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import dotenv from "dotenv";
@@ -21,7 +22,12 @@ export async function getInvesmentByFundingId(id: number) {
   const funding = await db
     .select()
     .from(InvestmentRequestTable)
-    .where(and(eq(InvestmentRequestTable.raiseFundingId, id), eq(InvestmentRequestTable.approval, true)))
+    .where(
+      and(
+        eq(InvestmentRequestTable.raiseFundingId, id),
+        eq(InvestmentRequestTable.approval, true)
+      )
+    )
     .execute();
 
   return funding;
@@ -37,9 +43,50 @@ export async function getAllInvestmentRequestByInvestorId(investorId: number) {
   return investment;
 }
 
-export async function addInvestmentRequest(investorId: number, raiseFundingId: number, amount: number, getStock: number) {
+export async function addInvestmentRequest(
+  investorId: number,
+  raiseFundingId: number,
+  amount: number,
+  getStock: number
+) {
   await db
     .insert(InvestmentRequestTable)
-    .values({ investorId, raiseFundingId, amount, getStock})
+    .values({ investorId, raiseFundingId, amount, getStock })
+    .execute();
+}
+
+export async function getInvestorRequestByInvestorandRaiseFunding(
+  investorId: number,
+  raiseFundingId: number
+) {
+  const request = await db
+    .select()
+    .from(InvestmentRequestTable)
+    .where(
+      and(
+        eq(InvestmentRequestTable.investorId, investorId),
+        eq(InvestmentRequestTable.raiseFundingId, raiseFundingId)
+      )
+    )
+    .execute();
+
+  return request[0];
+}
+
+export async function addAmount(
+  investorId: number,
+  raiseFundingId: number,
+  amount: number,
+  getStock: number
+) {
+  return await db
+    .update(InvestmentRequestTable)
+    .set({ amount, getStock })
+    .where(
+      and(
+        eq(InvestmentRequestTable.investorId, investorId),
+        eq(InvestmentRequestTable.raiseFundingId, raiseFundingId)
+      )
+    )
     .execute();
 }
