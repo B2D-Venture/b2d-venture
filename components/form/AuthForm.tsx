@@ -33,6 +33,8 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp"
+import ReCAPTCHA from "react-google-recaptcha";
+import { AbideAlert } from "../registration/AbideAlert";
 
 
 interface AuthFormProps {
@@ -107,10 +109,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showOTPModal, setShowOTPModal] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(5);
+    const [timeLeft, setTimeLeft] = useState(60);
     const [canResendOTP, setCanResendOTP] = useState(false);
     const [otp, setOtp] = useState<string | null>(null);
     const [otpError, setOtpError] = useState<string | null>(null);
+    const [captchaValid, setCaptchaValid] = useState(false);
+    const [captchaError, setCaptchaError] = useState<string | null>(null);
 
     let callbackUrl = searchParams.get('callbackUrl') || pathname;
 
@@ -205,6 +209,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
             }
         }
         else if (title === "Sign Up") {
+            console.log(captchaValid);
+            if (!captchaValid) {
+                setCaptchaError("Please complete the reCAPTCHA.");
+                return;
+            }
             setShowOTPModal(true);
             const otp = generateOTP();
             sendOtpCode(otp);
@@ -218,6 +227,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         const otp = generateOTP();
         sendOtpCode(otp);
         setOtp(otp);
+    };
+
+    const handleCaptchaChange = (value: string | null) => {
+        if (value) {
+            setCaptchaValid(true); // Captcha is valid
+        } else {
+            setCaptchaValid(false); // Captcha not completed
+        }
     };
 
     async function handleVerifyOTP(data: z.infer<typeof otpFormSchema>) {
@@ -296,17 +313,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                             <p className="text-red-500 text-sm text-center mt-2">{error}</p>
                                         )}
 
-
-                                        {title === "Sign Up" && (<p className="mt-6 text-xs text-gray-600 text-center">
-                                            I agree to abide by b2d-venture's&nbsp;
-                                            <a href="#" className="border-b border-gray-500 border-dotted">
-                                                Terms of Service
-                                            </a>
-                                            &nbsp;and its&nbsp;
-                                            <a href="#" className="border-b border-gray-500 border-dotted">
-                                                Privacy Policy
-                                            </a>
-                                        </p>)}
+                                        {title === "Sign Up" && (
+                                            <div>
+                                                <ReCAPTCHA sitekey={process.env.RECAPTCHA_PUBLIC_KEY!} onChange={handleCaptchaChange} className="flex justify-center items-center mx-auto" />
+                                                {captchaError && <p className="text-red-500 text-sm">{captchaError}</p>}
+                                                <p className="mt-6 text-xs text-gray-600 text-center">
+                                                    I agree to abide by b2d-venture's&nbsp;
+                                                    <AbideAlert type="tos" />
+                                                    &nbsp;and its&nbsp;
+                                                    <AbideAlert type="privacy" />
+                                                </p>
+                                            </div>
+                                        )}
                                         <Button
                                             className="mt-5 h-30 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                                             type="submit"
@@ -345,7 +363,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                                             control={otpForm.control}
                                                             name="pin"
                                                             render={({ field }) => (
-
                                                                 <FormItem>
                                                                     <FormControl>
                                                                         <InputOTP maxLength={6} {...field}>

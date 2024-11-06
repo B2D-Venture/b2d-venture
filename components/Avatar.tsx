@@ -13,7 +13,7 @@ const Avatar = ({
   return (
     <div>
       <Image
-        src={imageUrl || "/default-avatar.png"}
+        src={imageUrl || "/navbar/default-profile.jpg"}
         alt="User Avatar"
         width={width}
         height={height}
