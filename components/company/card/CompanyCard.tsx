@@ -1,16 +1,30 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { MdPeopleAlt } from "react-icons/md";
 import { CompanyCardProps } from "@/types";
+import RedirectLoading from "@/components/loading/RedirectLoading";
 
 const CompanyCard = ({
   company,
   className,
 }: CompanyCardProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleRedirectCompanyDetailPage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    router.push("/company/" + company.id);
+  };
+
   return (
     <div className="flex justify-center items-center p-4">
-      <Link href={`/company/${company.id}`}>
+      {isLoading && <RedirectLoading />}
+      <Link href={`/company/${company.id}`} onClick={handleRedirectCompanyDetailPage}>
         <div className={`card ${className} group`}>
           <div className="relative w-full h-full">
             {/* Background Image */}

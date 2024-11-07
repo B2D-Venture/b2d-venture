@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -7,12 +6,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
 import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import RedirectLoading from "../loading/RedirectLoading";
 
 export function BannerCarousel({
   bannerData,
@@ -21,6 +20,15 @@ export function BannerCarousel({
   bannerData: Array<{ backgroundUrl: string }>;
   length_banners: number;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleRedirectRegisterPage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    router.push("/role-register");
+  };
+
   return (
     <>
       <Carousel className="w-full h-1/2">
@@ -55,7 +63,8 @@ export function BannerCarousel({
           ))}
         </CarouselContent>
         {/* Optionally uncomment these for navigation */}
-        <Link href="/role-register">
+        {isLoading && <RedirectLoading />}
+        <Link href="/role-register" onClick={handleRedirectRegisterPage}>
           <Button
             size="lg"
             className="absolute bottom-8 left-8 transform translate-y-0 border border-input bg-[#E8A117] shadow-sm hover:bg-accent hover:text-accent-foreground text-black"
