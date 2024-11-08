@@ -18,6 +18,7 @@ import {
   rejectInvestmentRequest,
   rejectRaiseFundingRequest,
   getUserByCompanyId,
+  UpdateInvestorAmount,
 } from "@/lib/db/index";
 import { Company } from "@/types/company";
 import { InvestorProps } from "@/types/investor";
@@ -309,6 +310,7 @@ const AdminPage = () => {
               }}
               handleReject={async () => {
                 await rejectInvestmentRequest(deal.id);
+                await UpdateInvestorAmount({investorId: deal.investorId, amount: deal.investor.investableAmount + deal.amount});
                 await delay(100);
                 console.log("Reject Investment Request");
                 fetchData();

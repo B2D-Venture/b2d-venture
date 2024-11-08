@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import {
   InvestmentRequestTable,
 } from "../schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNull, or } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import dotenv from "dotenv";
 import path from "path";
@@ -65,7 +65,8 @@ export async function getInvestorRequestByInvestorandRaiseFunding(
     .where(
       and(
         eq(InvestmentRequestTable.investorId, investorId),
-        eq(InvestmentRequestTable.raiseFundingId, raiseFundingId)
+        eq(InvestmentRequestTable.raiseFundingId, raiseFundingId),
+        or(isNull(InvestmentRequestTable.approval), eq(InvestmentRequestTable.approval, true))
       )
     )
     .execute();
