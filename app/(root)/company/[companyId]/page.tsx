@@ -83,12 +83,6 @@ export default async function CompanyProfile({
     }
   } 
 
-  if (!isOwnCompany(params.companyId ?? 1, user)) {
-    if (!companyRequest || companyRequest[0]?.approval !== true) {
-      return notFound();
-    }
-  } 
-
   const company = await getCompanyById(params.companyId);
   const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
   const allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
