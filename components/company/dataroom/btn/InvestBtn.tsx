@@ -2,7 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { getInvestorById, UpdateInvestorAmount } from "@/lib/db/investor";
-import { addInvestmentRequest, getInvestorRequestById, getInvestorRequestByInvestorandRaiseFunding, addAmount } from "@/lib/db/index";
+import {
+  addInvestmentRequest,
+  getInvestorRequestById,
+  getInvestorRequestByInvestorandRaiseFunding,
+  addAmount,
+} from "@/lib/db/index";
 
 interface InvestBtnProps {
   text: string;
@@ -32,13 +37,18 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
   recentFunding,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investor, setInvestor] = useState<{ investableAmount: number } | null>(null);
+  const [investor, setInvestor] = useState<{ investableAmount: number } | null>(
+    null
+  );
   const [existingInvestment, setExistingInvestment] = useState<number>(0);
   const [amount, setAmount] = useState<number | "">("");
   const [stock, setStock] = useState<number | "">("");
   const [stockPercentage, setStockPercentage] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
-  const [alertMessage, setAlertMessage] = useState<{ text: string; type: string } | null>(null);
+  const [alertMessage, setAlertMessage] = useState<{
+    text: string;
+    type: string;
+  } | null>(null);
 
   const fetchInvestor = async () => {
     const data = await getInvestorById(investorId);
@@ -46,7 +56,10 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
   };
 
   const fetchExistingInvestment = async () => {
-    const existingRequest = await getInvestorRequestByInvestorandRaiseFunding(investorId, recentFunding.id);
+    const existingRequest = await getInvestorRequestByInvestorandRaiseFunding(
+      investorId,
+      recentFunding.id
+    );
     setExistingInvestment(existingRequest?.amount || 0);
   };
 
@@ -79,17 +92,23 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
 
     if (enteredAmount && recentFunding.priceShare) {
       if (existingInvestment === 0 && enteredAmount < recentFunding.minInvest) {
-        setError(`Amount must be at least $${recentFunding.minInvest} for the first investment.`);
+        setError(
+          `Amount must be at least $${recentFunding.minInvest} for the first investment.`
+        );
         setStock("");
         setStockPercentage("");
         return;
       } else if (totalInvestment > recentFunding.maxInvest) {
-        setError(`Total investment must not exceed $${recentFunding.maxInvest}.`);
+        setError(
+          `Total investment must not exceed $${recentFunding.maxInvest}.`
+        );
         setStock("");
         setStockPercentage("");
         return;
       } else if (investor && enteredAmount > investor.investableAmount) {
-        setError(`You only have $${investor.investableAmount.toLocaleString()} available to invest.`);
+        setError(
+          `You only have $${investor.investableAmount.toLocaleString()} available to invest.`
+        );
         setStock("");
         setStockPercentage("");
         return;
@@ -98,7 +117,10 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
         const calculatedStock = enteredAmount / recentFunding.priceShare;
         setStock(calculatedStock);
 
-        const calculatedPercentage = (calculatedStock / (recentFunding.valuation / recentFunding.priceShare)) * 100;
+        const calculatedPercentage =
+          (calculatedStock /
+            (recentFunding.valuation / recentFunding.priceShare)) *
+          100;
         setStockPercentage(calculatedPercentage);
       }
     } else {
@@ -111,20 +133,45 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     if (typeof amount === "number" && typeof stock === "number") {
       const newAmount = investor.investableAmount - amount;
       try {
-        const existingRequest = await getInvestorRequestByInvestorandRaiseFunding(investorId, Number(recentFunding.id));
+        const existingRequest =
+          await getInvestorRequestByInvestorandRaiseFunding(
+            investorId,
+            Number(recentFunding.id)
+          );
 
         if (existingRequest) {
-          await addAmount(investorId, Number(recentFunding.id), amount + existingRequest.amount, Number(stockPercentage) + existingRequest.getStock);
-          setAlertMessage({ text: "Investment amount updated successfully!", type: "existing" });
+          await addAmount(
+            investorId,
+            Number(recentFunding.id),
+            amount + existingRequest.amount,
+            Number(stockPercentage) + existingRequest.getStock
+          );
+          setAlertMessage({
+            text: "Investment amount updated successfully!",
+            type: "existing",
+          });
         } else {
-          await addInvestmentRequest(investorId, Number(recentFunding.id), amount, Number(stockPercentage));
-          setAlertMessage({ text: "New investment request added successfully!", type: "new" });
+          await addInvestmentRequest(
+            investorId,
+            Number(recentFunding.id),
+            amount,
+            Number(stockPercentage)
+          );
+          setAlertMessage({
+            text: "New investment request added successfully!",
+            type: "new",
+          });
         }
 
         await UpdateInvestorAmount({ investorId, amount: newAmount });
         await fetchInvestor();
         await fetchExistingInvestment();
         closeModal();
+
+        // Reset the amount, stock, and stockPercentage fields
+        setAmount("");
+        setStock("");
+        setStockPercentage("");
       } catch (err) {
         console.error(err);
         setError("Failed to process the investment request. Please try again.");
@@ -156,9 +203,12 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-[#D9D9D9] p-8 rounded-lg shadow-lg w-80">
-            <h2 className="text-lg text-black font-bold mb-4">Investment Form</h2>
+            <h2 className="text-lg text-black font-bold mb-4">
+              Investment Form
+            </h2>
             <p className="text-gray-700 mb-4">
-              Available: ${investor?.investableAmount.toLocaleString() ?? "Loading..."}
+              Available: $
+              {investor?.investableAmount.toLocaleString() ?? "Loading..."}
             </p>
             <form>
               <div className="mb-4">
@@ -192,7 +242,9 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
                 <label className="block text-gray-700">Share Percentage:</label>
                 <input
                   disabled
-                  value={stockPercentage ? `${stockPercentage.toFixed(3)}%` : ""}
+                  value={
+                    stockPercentage ? `${stockPercentage.toFixed(3)}%` : ""
+                  }
                   className="w-full border-2 border-[#ffffff] rounded px-3 py-2 mt-1 bg-[#BFBFBF]"
                 />
               </div>
@@ -220,7 +272,9 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
       {alertMessage && (
         <div
           className={`fixed top-32 right-4 px-4 py-3 rounded-lg text-white shadow-md z-50 ${
-            alertMessage.type === "new" ? "bg-yellow-400 border-t-4 border-yellow-500" : "bg-green-400 border-t-4 border-green-500"
+            alertMessage.type === "new"
+              ? "bg-yellow-400 border-t-4 border-yellow-500"
+              : "bg-green-400 border-t-4 border-green-500"
           }`}
           role="alert"
         >
@@ -235,7 +289,11 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
               </svg>
             </div>
             <div>
-              <p className="font-bold">{alertMessage.type === "new" ? "New Request Added!" : "Request Updated!"}</p>
+              <p className="font-bold">
+                {alertMessage.type === "new"
+                  ? "New Request Added!"
+                  : "Request Updated!"}
+              </p>
               <p className="text-sm">{alertMessage.text}</p>
             </div>
           </div>
