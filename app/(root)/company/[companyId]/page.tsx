@@ -8,6 +8,7 @@ import {
   getCompanyRequestById,
   getRecentRaiseFundingByCompanyId,
   getInvesmentByFundingId,
+  getOneRecentFundingByCompanyId,
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
@@ -85,9 +86,16 @@ export default async function CompanyProfile({
 
   const company = await getCompanyById(params.companyId);
   const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
-  const allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
-  const totalInvestor = getTotalInvestor(allInvestmentFunding);
-  const totalInvestment = getTotalInvestment(allInvestmentFunding);
+  const oneFunding = await getOneRecentFundingByCompanyId(params.companyId);
+  let allInvestmentFunding = [];
+  let totalInvestor = 0;
+  let totalInvestment = 0;
+
+  if (recentFunding) {
+    allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+    totalInvestor = getTotalInvestor(allInvestmentFunding);
+    totalInvestment = getTotalInvestment(allInvestmentFunding);
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen relative mb-20">
@@ -135,16 +143,16 @@ export default async function CompanyProfile({
           <Pitch pitchData={company?.pitch || ""} />
         </div>
         <div>
-          {recentFunding && (
+          {(recentFunding || oneFunding) && (
             <div className="sticky top-28">
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
-                raiseId={recentFunding.id}
+                raiseId={recentFunding?.id || oneFunding.id}
               />}
               <DealTerm
-                recentFunding={recentFunding}
+                recentFunding={recentFunding || oneFunding}
                 currentInvestment={totalInvestment}
-                dayLeft={calculateDaysLeft(recentFunding.deadline)}
+                dayLeft={calculateDaysLeft(recentFunding?.deadline || oneFunding.deadline)}
                 totalInvestor={totalInvestor}
                 roleId={user?.roleId ?? null}
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}

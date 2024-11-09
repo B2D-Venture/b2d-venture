@@ -18,12 +18,12 @@ import {
   addCompany,
   addDataRoom,
   changeToCompanyRole,
-  getRecentRaiseFundingByCompanyId,
   addRaiseFunding,
   updateCompany,
   getDataRoomByCompanyId,
   deleteDataRoom,
   getCompanyRequestById,
+  getOneRecentFundingByCompanyId,
 } from "@/lib/db/index";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
@@ -138,7 +138,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
             if (Object.keys(data).length === 0 || companyEditId != data.company.id) {
               window.location.href = `/company/${companyEditId}`;
             } else {
-              const funding = await getRecentRaiseFundingByCompanyId(companyEditId);
+              const funding = await getOneRecentFundingByCompanyId(companyEditId);
               const existingDocuments = await getDataRoomByCompanyId(companyEditId)
               setCompany(data.company);
               setRecentFunding(funding);
@@ -156,7 +156,6 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
                 valuation: funding.valuation ?? 0,
                 pitch: data.company.pitch ?? "",
               });
-              setLoading(false);
               setInitialDocuments(existingDocuments ?? []);
             }
           }
@@ -170,9 +169,8 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
 
     if (canEdit) {
       fetchCompany();
-    } else {
-      setLoading(false);
     }
+    setLoading(false);
   }, [canEdit, companyEditId, reset]);
 
   if (loading) {

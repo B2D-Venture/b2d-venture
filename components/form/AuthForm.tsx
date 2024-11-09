@@ -89,9 +89,7 @@ const sendOtpCode = async (otp: string) => {
             }),
         });
 
-        if (response.ok) {
-            window.location.reload();
-        } else {
+        if (!response.ok) {
             const errorData = await response.json();
             console.error(`Error: ${errorData.message || "Failed to send email"}`);
         }
@@ -209,7 +207,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
             }
         }
         else if (title === "Sign Up") {
-            console.log(captchaValid);
             if (!captchaValid) {
                 setCaptchaError("Please complete the reCAPTCHA.");
                 return;

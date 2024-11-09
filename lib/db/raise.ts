@@ -85,6 +85,16 @@ export async function getRecentRaiseFundingByCompanyId(companyId: number) {
   }
 }
 
+export async function getOneRecentFundingByCompanyId(companyId: number) {
+  const recentFunding = await db
+    .select()
+    .from(RaiseFundingTable)
+    .where(eq(RaiseFundingTable.companyId, companyId))
+    .orderBy(desc(RaiseFundingTable.id))
+    .execute();
+  return recentFunding[0];
+}
+
 export const getRaiseFundingByCompanyId = async (companyId: number) => {
   try {
     const raiseFundingRecord = await db

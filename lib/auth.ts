@@ -51,6 +51,35 @@ export const authConfig: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ account, profile }) {
+      if (!profile?.email) {
+        throw new Error("No email returned from Google");
+      }
+
+      const existingUser = await db
+        .select()
+        .from(UserTable)
+        .where(eq(UserTable.email, profile.email))
+        .execute();
+
+      if (existingUser.length === 0) {
+        // If the user does not exist, create a new user
+        // Role Id
+        // 1 - Viewer
+        // 2 - Investor
+        // 3 - Company
+        await db
+          .insert(UserTable)
+          .values({
+            email: profile.email,
+            password: "",
+            roleId: 1,
+          })
+          .execute();
+      }
+
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
