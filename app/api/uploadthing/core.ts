@@ -1,9 +1,17 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-
+import { getServerSession } from "next-auth";
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+// const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+// add auth
+const auth = async (req: Request) => {
+  const session = await getServerSession();
+  if (!session || !session.user?.email) {
+    return null;
+  }
+  return { id: session.user.email };
+};
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
