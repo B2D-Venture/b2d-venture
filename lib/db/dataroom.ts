@@ -93,7 +93,7 @@ export async function getCompanyDataRoomRequestsByCompany(companyId: number) {
   return await db
     .select()
     .from(DataRoomRequestTable)
-    .where(eq(DataRoomRequestTable.companyId, companyId))
+    .where(and(eq(DataRoomRequestTable.companyId, companyId), isNull(DataRoomRequestTable.approval)))
     .execute();
 }
 
