@@ -19,6 +19,7 @@ import {
   rejectRaiseFundingRequest,
   getUserByCompanyId,
   UpdateInvestorAmount,
+  getUser,
 } from "@/lib/db/index";
 import { Company } from "@/types/company";
 import { InvestorProps } from "@/types/investor";
@@ -28,7 +29,8 @@ import {
   getRaiseFundingByCompanyId,
   getRaiseFundingById,
 } from "@/lib/db/raise";
-
+import { useSession } from "next-auth/react";
+import { notFound } from "next/navigation";
 
 interface CompanyRequest {
   id: number;
@@ -63,7 +65,11 @@ interface RaiseFundingRequest {
   approval: boolean | null;
 }
 
-const sendEmailCompanyStatus = async (company: Company, email: string, status: "approved" | "rejected") => {
+const sendEmailCompanyStatus = async (
+  company: Company,
+  email: string,
+  status: "approved" | "rejected"
+) => {
   const messages = {
     approved: "Your company profile has been successfully created.",
     rejected: "Thank you for your request",
@@ -99,8 +105,10 @@ const sendEmailCompanyStatus = async (company: Company, email: string, status: "
   }
 };
 
-
-const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approved" | "rejected") => {
+const sendEmailInvestorStatus = async (
+  investor: InvestorProps,
+  status: "approved" | "rejected"
+) => {
   const messages = {
     approved: "Your investor profile has been successfully created.",
     rejected: "Thank you for your request",
@@ -138,11 +146,28 @@ const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approve
 };
 
 const AdminPage = () => {
+  const { data: session, status } = useSession();
+  const [notfound, setNotfound] = useState<boolean>(false);
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
   const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
-  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequest[]>([]);
-
+  const [raiseFundingData, setRaiseFundingData] = useState<
+    RaiseFundingRequest[]
+  >([]);
+  const [data, setData] = useState<boolean>(false);
+  if (status === "authenticated" && session.user?.email) {
+    console.log("Fetching data...");
+    const fetchUser = async () => {
+      const user = await getUser(String(session?.user?.email));
+      console.log(user);
+      if (user.roleId !== 4) {
+        setNotfound(true);
+      } else {
+        setData(true);
+      }
+    };
+    fetchUser();
+  }
   const fetchData = async () => {
     try {
       const companyRequests = await getCompanyRequest();
@@ -195,7 +220,9 @@ const AdminPage = () => {
 
       const raiseFundingDetails = await Promise.all(
         raiseFundingRequests.map(async (request) => {
-          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
+          const raiseFunding = await getRaiseFundingById(
+            request.raiseFundingId
+          );
           const company = await getCompanyById(raiseFunding.companyId);
           return {
             ...request,
@@ -214,15 +241,24 @@ const AdminPage = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (data) {
+  //     fetchData();
+  //   }
+  // }, []);
+  if (notfound) {
+    return notFound();
+  }
   useEffect(() => {
-    fetchData();
-  }, []);
-
+    if (data) {
+      fetchData();
+    }
+  }, [data]);
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
   return (
-    <div className="text-white flex flex-col items-center mt-10 space-y-4">
+    <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
       {companyData.length > 0 &&
         companyData.map((companyRequest, index) => (
           <div
@@ -237,8 +273,14 @@ const AdminPage = () => {
                   await approveCompanyRequest(companyRequest.id);
                   await delay(100);
                   fetchData();
-                  const user = await getUserByCompanyId(companyRequest.companyId);
-                  sendEmailCompanyStatus(companyRequest.company, user.email, "approved");
+                  const user = await getUserByCompanyId(
+                    companyRequest.companyId
+                  );
+                  sendEmailCompanyStatus(
+                    companyRequest.company,
+                    user.email,
+                    "approved"
+                  );
                 } catch (error) {
                   console.error("Error approving company request:", error);
                 }
@@ -310,7 +352,10 @@ const AdminPage = () => {
               }}
               handleReject={async () => {
                 await rejectInvestmentRequest(deal.id);
-                await UpdateInvestorAmount({investorId: deal.investorId, amount: deal.investor.investableAmount + deal.amount});
+                await UpdateInvestorAmount({
+                  investorId: deal.investorId,
+                  amount: deal.investor.investableAmount + deal.amount,
+                });
                 await delay(100);
                 console.log("Reject Investment Request");
                 fetchData();
@@ -328,7 +373,9 @@ const AdminPage = () => {
             <RaiseFundingCard
               logo={raiseFunding.company?.logo || "default_logo_url.png"}
               companyName={raiseFunding.company?.name || "Company Name"}
-              description={raiseFunding.company?.description || "Company Description"}
+              description={
+                raiseFunding.company?.description || "Company Description"
+              }
               PricePerShare={raiseFunding.raiseFunding?.priceShare || 100}
               valuation={raiseFunding.raiseFunding?.valuation || 10000000}
               minimumInvestment={raiseFunding.raiseFunding?.minInvest || 1000}
@@ -350,7 +397,6 @@ const AdminPage = () => {
             />
           </div>
         ))}
-
     </div>
   );
 };
