@@ -1,13 +1,28 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import CompanyAllStatistics from "@/components/main/CompanyAllStatistics";
 import CompanyLogoBoxList from "@/components/main/CompanyLogoBoxList";
 import CompanyCardSlide from "@/components/main/CompanyCardSlide";
-import Link from "next/link";
 import TextOnImage from "@/components/main/TextOnImage";
+import Link from "next/link";
+import RedirectLoading from "@/components/loading/RedirectLoading";
 
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleRedirectCompanyPage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    router.push("/company");
+  };
+
   return (
     <div className="relative">
+      {isLoading && <RedirectLoading />}
+
       <div className="flex justify-center items-center w-full h-full overflow-hidden">
         <TextOnImage />
       </div>
@@ -27,18 +42,13 @@ const Home = () => {
 
       <Link
         href="/company"
-        className="bottom-[50px] w-[120px] h-[38px] mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-lg flex justify-center items-center "
+        onClick={handleRedirectCompanyPage}
+        className="bottom-[50px] w-[120px] h-[38px] mb-10 mx-10 py-1.5 bg-[#d9d9d9] hover:bg-[#919191] rounded-lg flex justify-center items-center "
       >
         <div className="text-center text-[#363324] text-xl font-bold hover:text-[#d9d9d9]">
           View All
         </div>
       </Link>
-
-      <div className="w-[235px] h-[17px] left-[604px] top-[2025px] absolute justify-center items-center inline-flex">
-        <div className="w-[235px] h-[17px] text-white text-sm font-normal">
-          copyright ©2024. All rights reserve
-        </div>
-      </div>
     </div>
   );
 };

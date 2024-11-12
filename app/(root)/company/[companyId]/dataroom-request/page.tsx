@@ -1,10 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { approveDataRoomRequest, getDataRoomRequests, rejectDataRoomRequest } from "@/lib/db/dataroom";
-import { getInvestorById, getCompanyById } from "@/lib/db/index";
+import {
+  getInvestorById,
+  getCompanyById,
+  getUser,
+  getCompanyRequestById,
+  approveDataRoomRequest,
+  getCompanyDataRoomRequestsByCompany,
+  rejectDataRoomRequest,
+} from "@/lib/db/index";
 import { DataRoomCard } from "@/components/company/dataroom/card/DataRoomCard";
 import { InvestorProps } from "@/types/investor";
 import { Company } from "@/types/company";
+import { useSession } from "next-auth/react";
+import { notFound } from "next/navigation";
 
 interface dataroomRequest {
   investor: InvestorProps;
@@ -15,40 +24,69 @@ interface dataroomRequest {
   approval: boolean | null;
 }
 
-const sendEmailDataroomRequestStatus = async (dataroom: any, email: string, status: "approved" | "rejected", company: Company, investorProfile: string) => {
-  try {
-      const response = await fetch("/api/mail/dataroom", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              message: '',
-              status,
-              email,
-              company,
-              investorProfile,
-          }),
-      });
+const isOwnCompany = (urlId: number, roleIdNumber: number) => {
+  if (Number(roleIdNumber) == urlId) {
+    return true;
+  }
+  return false;
+};
 
-      if (response.ok) {
-          console.log("Email sent successfully!");
-      } else {
-          const errorData = await response.json();
-          console.error(`Error: ${errorData.message || "Failed to send email"}`);
-      }
+const sendEmailDataroomRequestStatus = async (
+  dataroom: any,
+  email: string,
+  status: "approved" | "rejected",
+  company: Company,
+  investorProfile: string
+) => {
+  try {
+    const response = await fetch("/api/mail/dataroom", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "",
+        status,
+        email,
+        company,
+        investorProfile,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error(`Error: ${errorData.message || "Failed to send email"}`);
+    }
   } catch (error) {
-      console.error("Error:", error);
+    console.error("Error:", error);
   }
 };
 
-const DataroomRequestPage = () => {
+async function getUserByEmail(email: string) {
+  const user = await getUser(email);
+  return user;
+}
+
+async function getCompany(companyId: number) {
+  const companyRequest = await getCompanyRequestById(companyId);
+  return companyRequest;
+}
+
+export default function DataroomRequestPage({
+  params,
+}: {
+  params: { companyId: number };
+}) {
+  const { data: session, status } = useSession();
+
   const [dataroomData, setDataroomData] = useState<dataroomRequest[]>([]);
+  const [notfound, setNotfound] = useState<boolean>(false);
 
   const fetchData = async () => {
     try {
-      const dataRoomRequests = await getDataRoomRequests();
-
+      const dataRoomRequests = await getCompanyDataRoomRequestsByCompany(
+        params.companyId
+      );
       const DataRoomDetails = await Promise.all(
         dataRoomRequests.map(async (request) => {
           const inverstor = await getInvestorById(request.investorId);
@@ -66,14 +104,34 @@ const DataroomRequestPage = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
+    if (status === "authenticated" && session.user?.email) {
+      const fetchUser = async () => {
+        const user = await getUserByEmail(String(session?.user?.email));
+        const companyRequest = await getCompanyRequestById(params.companyId);
+        if (
+          !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
+        ) {
+          setNotfound(true);
+        } else {
+          if (!companyRequest || companyRequest[0]?.approval !== true) {
+            setNotfound(true);
+          }
+          else {
+          fetchData();
+          }
+        }
+      };
+      fetchUser();
+    }
+  }, [session, status, params.companyId]);
+  if (notfound) {
+    return notFound();
+  }
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
   return (
-    <div className="text-white flex flex-col items-center mt-10 space-y-4">
+    <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
       {dataroomData.length > 0 &&
         dataroomData.map((dataRoomRequests, index) => (
           <div
@@ -87,8 +145,16 @@ const DataroomRequestPage = () => {
                 await approveDataRoomRequest(dataRoomRequests.id);
                 await delay(100);
                 console.log("Approve");
-                const company = await getCompanyById(dataRoomRequests.companyId);
-                sendEmailDataroomRequestStatus(dataRoomRequests, dataRoomRequests.investor.email, "approved", company, dataRoomRequests.investor.profileImage);
+                const company = await getCompanyById(
+                  dataRoomRequests.companyId
+                );
+                sendEmailDataroomRequestStatus(
+                  dataRoomRequests,
+                  dataRoomRequests.investor.email,
+                  "approved",
+                  company,
+                  dataRoomRequests.investor.profileImage
+                );
                 fetchData();
               }}
               handleReject={async () => {
@@ -102,6 +168,4 @@ const DataroomRequestPage = () => {
         ))}
     </div>
   );
-};
-
-export default DataroomRequestPage;
+}

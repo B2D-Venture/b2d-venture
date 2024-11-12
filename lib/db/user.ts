@@ -42,3 +42,14 @@ export async function getUserByCompanyId(companyId: number) {
   
   return user[0];
 }
+
+export async function changeToViewerRole(email: string) {
+  return await db
+    .update(UserTable)
+    .set({
+      roleId: 1,
+      roleIdNumber: null,
+    })
+    .where(eq(UserTable.email, email))
+    .execute();
+}

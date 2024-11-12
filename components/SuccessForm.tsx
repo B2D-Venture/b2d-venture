@@ -35,15 +35,15 @@ const SuccessForm = ({ role, hasApproval, roleIdNumber }: SuccessFormProps) => {
         {role === "Investor" ? (
           hasApproval === true ? (
             <div className="text-center text-[#939191] text-2xl mb-8">
-              Your information has been approved successfully
+              Your information has been <span className="text-green-500">approved</span> successfully
             </div>
           ) : hasApproval === false ? (
             <div className="text-center text-[#939191] text-2xl mb-8">
-              Your information has been rejected by admin
+              Your information has been <span className="text-red-400">rejected</span> by admin
             </div>
           ) : (
             <div className="text-center text-[#939191] text-2xl mb-8">
-              Waiting for admin approval of your information
+              <span className="text-yellow-600">Waiting</span> for admin approval of your information
             </div>
           )
         ) : null}

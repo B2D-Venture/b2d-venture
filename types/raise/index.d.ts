@@ -6,6 +6,7 @@ interface RaiseFunding {
   maxInvest: number;
   deadline: string;
   priceShare: number;
+  valuation: number;
 }
 
 interface RaiseFundingRequest {

@@ -23,34 +23,53 @@ interface RaiseFundingFormProps extends React.ComponentProps<"form"> {
 }
 
 // Combine schemas
-const formSchema = z.object({
-  valuation: z
-    .number({
-      required_error: "Valuation is required.",
-    })
-    .min(0, { message: "Valuation cannot be negative" }),
-  fundingTarget: z
-    .number({
-      required_error: "Funding Target is required.",
-    })
-    .min(0, { message: "Funding Target cannot be negative" }),
-  priceShare: z
-    .number({
-      required_error: "Price Per Share is required.",
-    })
-    .min(0, { message: "Price Per Share cannot be negative" }),
-  minInvest: z
-    .number({
-      required_error: "Minimum Investment is required.",
-    })
-    .min(0, { message: "Minimum Investment cannot be negative" }),
-  maxInvest: z
-    .number({
-      required_error: "Maximum Investment is required.",
-    })
-    .min(0, { message: "Maximum Investment cannot be negative" }),
-  deadline: z.date({ required_error: "Investment Deadline is required." }),
-});
+const formSchema = z
+  .object({
+    valuation: z
+      .number({
+        required_error: "Valuation is required.",
+      })
+      .min(0, { message: "Valuation cannot be negative" })
+      .max(1000000000, "Valuation cannot be more than 1 billion"),
+    fundingTarget: z
+      .number({
+        required_error: "Funding Target is required.",
+      })
+      .min(0, { message: "Funding Target cannot be negative" })
+      .max(1000000000, "Funding target cannot be more than 1 billion"),
+    priceShare: z
+      .number({
+        required_error: "Price Per Share is required.",
+      })
+      .min(0, { message: "Price Per Share cannot be negative" }),
+    minInvest: z
+      .number({
+        required_error: "Minimum Investment is required.",
+      })
+      .min(0, { message: "Minimum Investment cannot be negative" }),
+    maxInvest: z
+      .number({
+        required_error: "Maximum Investment is required.",
+      })
+      .min(0, { message: "Maximum Investment cannot be negative" }),
+    deadline: z.date({ required_error: "Investment Deadline is required." }),
+  })
+  .refine((data) => data.minInvest <= data.maxInvest, {
+    message: "Minimum investment cannot be greater than maximum investment.",
+    path: ["minInvest"],
+  })
+  .refine((data) => data.minInvest <= data.fundingTarget, {
+    message: "Minimum investment cannot be greater than the funding target.",
+    path: ["minInvest"],
+  })
+  .refine((data) => data.maxInvest <= data.fundingTarget, {
+    message: "Maximum investment cannot be greater than the funding target.",
+    path: ["maxInvest"],
+  })
+  .refine((data) => data.priceShare <= data.fundingTarget, {
+    message: "Price per share cannot be more than the funding target",
+    path: ["priceShare"],
+  });
 
 export function RaiseFundingForm({
   className,

@@ -1,5 +1,9 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { CompanyTable, RaiseFundingTable, RaiseFundingRequestTable } from "../schema";
+import {
+  CompanyTable,
+  RaiseFundingTable,
+  RaiseFundingRequestTable,
+} from "../schema";
 import { eq, and, desc } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 
@@ -16,7 +20,10 @@ export async function addRaiseFundingRequest(request: RaiseFundingRequest) {
   await db.insert(RaiseFundingRequestTable).values(request).execute();
 }
 
-export async function addRaiseFunding(fundingData: RaiseFunding, companyId: number) {
+export async function addRaiseFunding(
+  fundingData: RaiseFunding,
+  companyId: number,
+) {
   const insertedFunding = await db
     .insert(RaiseFundingTable)
     .values({ ...fundingData, companyId })
@@ -27,6 +34,58 @@ export async function addRaiseFunding(fundingData: RaiseFunding, companyId: numb
 }
 
 export async function getRecentRaiseFundingByCompanyId(companyId: number) {
+  try {
+    const latestApprovedRequest = await db
+      .select({
+        raiseFundingId: RaiseFundingRequestTable.raiseFundingId,
+      })
+      .from(RaiseFundingRequestTable)
+      .innerJoin(
+        RaiseFundingTable,
+        eq(RaiseFundingRequestTable.raiseFundingId, RaiseFundingTable.id),
+      )
+      .where(
+        and(
+          eq(RaiseFundingTable.companyId, companyId),
+          eq(RaiseFundingRequestTable.approval, true),
+        ),
+      )
+      .orderBy(desc(RaiseFundingRequestTable.requestDate))
+      .limit(1)
+      .execute();
+
+    if (latestApprovedRequest.length === 0) {
+      return null;
+    }
+
+    const recentFunding = await db
+      .select()
+      .from(RaiseFundingTable)
+      .where(eq(RaiseFundingTable.id, latestApprovedRequest[0].raiseFundingId))
+      .execute();
+
+    if (recentFunding.length > 0) {
+      const row = recentFunding[0];
+      return {
+        id: row.id,
+        companyId: row.companyId,
+        fundingTarget: row.fundingTarget,
+        minInvest: row.minInvest,
+        maxInvest: row.maxInvest,
+        priceShare: row.priceShare,
+        valuation: row.valuation,
+        deadline: row.deadline,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error retrieving recent raise funding:", error);
+    throw error;
+  }
+}
+
+export async function getOneRecentFundingByCompanyId(companyId: number) {
   const recentFunding = await db
     .select()
     .from(RaiseFundingTable)
@@ -43,7 +102,7 @@ export const getRaiseFundingByCompanyId = async (companyId: number) => {
       .from(RaiseFundingTable)
       .where(eq(RaiseFundingTable.companyId, companyId))
       .execute();
-      
+
     return raiseFundingRecord;
   } catch (error) {
     console.error("Error fetching raise funding record:", error);
@@ -68,3 +127,4 @@ export async function getRaiseFundingRequestById(raiseFundingId: number) {
     .execute();
   return raiseFundingRequest[0];
 }
+

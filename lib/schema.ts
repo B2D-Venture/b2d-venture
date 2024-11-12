@@ -21,6 +21,7 @@ export const RoleTable = pgTable("role", {
 export const UserTable = pgTable("user", {
   id: serial("id").primaryKey().notNull(),
   email: varchar("email").notNull(),
+  password: varchar("password").notNull(),
   roleId: integer("role_id")
     .references(() => RoleTable.id)
     .notNull(),

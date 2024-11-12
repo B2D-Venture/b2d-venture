@@ -7,6 +7,7 @@ interface DealTermProps {
   isOwnCompany: boolean;
   urlId: number;
   investorId: number;
+  user: User;
 }
 
 interface DealTermElementProps {

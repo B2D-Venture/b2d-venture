@@ -46,7 +46,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
         return (
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <div className="my-2 flex items-center justify-center">
+                    <div className="flex flex-row space-x-2 justify-end">
                         <Button
                             variant="ghost"
                             size="icon"

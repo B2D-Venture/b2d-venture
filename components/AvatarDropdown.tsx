@@ -97,10 +97,17 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
                     Investor Profile
                   </span>
                 </Link>
-              ) : (
+              ) :
+              (user.roleId === 3) ? (
                 <Link href={`/company/${user.roleIdNumber}`}>
                   <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
                     Company Profile
+                  </span>
+                </Link>
+              ) : (
+                <Link href="/role-register">
+                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                    Register Role
                   </span>
                 </Link>
               )}

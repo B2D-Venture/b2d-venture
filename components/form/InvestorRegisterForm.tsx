@@ -52,7 +52,7 @@ const formSchema = z.object({
   birthDate: z.date({ required_error: "Birth date is required." }),
 });
 
-export function InvestorRegisterForm() {
+export function InvestorRegisterForm({ onRoleChange }: { onRoleChange: () => void }) {
   const { handleStepChange } = useFormState();
 
   const { data: session } = useSession();
@@ -80,7 +80,8 @@ export function InvestorRegisterForm() {
     addInvestor(values)
       .then((investorId) => {
         changeToInvestorRole({ email: values.email, investor_id: investorId });
-        addInvestorRequest({ investorId, approval: false });
+        addInvestorRequest({ investorId });
+        onRoleChange();
         handleStepChange(2);
       })
       .catch((err) => console.error("Error adding investor:", err));

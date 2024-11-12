@@ -28,7 +28,7 @@ const getStatusColor = (status: string) => {
 
 const DataroomItemList = ({ dataroomItems }: { dataroomItems: DataRoomItemsProps[] }) => {
     return (
-        <div className="w-full mb-40">
+        <div className="w-full">
             <div className="w-full mt-8 p-4 grid grid-cols-5 gap-5 items-center">
                 <div className="col-span-2 text-[#E4A222] text-3xl font-bold">Dataroom</div>
                 <div className="col-span-1"></div>

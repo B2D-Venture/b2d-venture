@@ -97,9 +97,28 @@ export const EmailInvestorStatus = ({
                 </Row>
                 <Row>
                   <Text style={instructions}>
-                    You can not create because {message}
+                    you cannot create your investor profile due to the following issues:
                   </Text>
                 </Row>
+                {message.map((msg) => (
+                  <Row key={msg.id}>
+                    <ul>
+                      <li>
+                        <Text style={{
+                          fontSize: 16,
+                          color: '#777',
+                          marginBottom: '10px',
+                          textAlign: "left",
+                          lineHeight: '1.5'
+                        }}>
+                          <strong>{msg.title}</strong>
+                          <br />
+                          {msg.description}
+                        </Text>
+                      </li>
+                    </ul>
+                  </Row>
+                ))}
                 <Row>
                   <Text style={{ ...paragraph, textAlign: "center", marginTop: "20px" }}>
                     Please make the necessary changes and submit your information for approve.
@@ -277,9 +296,13 @@ export const EmailInvestorStatus = ({
 };
 
 EmailInvestorStatus.PreviewProps = {
-  message: "your company pitch is not good",
-  status: "approved",
-  // status: "rejected",
+  message: [
+    { id: "message1", title: "Incorrect Profile Image", description: "The uploaded profile image does not match the investor." },
+    { id: "message2", title: "Incorrect Name", description: "The name provided does not match the investor." },
+    { id: "message3", title: "Incorrect Nationality", description: "The Nationality provided is incorrect." },
+  ],
+  // status: "approved",
+  status: "rejected",
   profileImage: "https://images.squarespace-cdn.com/content/v1/656f4e4dababbd7c042c4946/82bec838-05c8-4d68-b173-2284a6ad4e52/how-to-stop-being-a-people-pleaser",
   firstName: "Steve",
   lastName: "Jobs",
@@ -288,7 +311,7 @@ EmailInvestorStatus.PreviewProps = {
   email: "hellotest1234@gmail.com",
   nationality: "Thailand",
   networth: 1000000,
-} as EmailInvestorStatusProps;
+} as unknown as EmailInvestorStatusProps;
 
 export default EmailInvestorStatus;
 

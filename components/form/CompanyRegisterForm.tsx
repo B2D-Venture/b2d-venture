@@ -18,12 +18,12 @@ import {
   addCompany,
   addDataRoom,
   changeToCompanyRole,
-  getRecentRaiseFundingByCompanyId,
   addRaiseFunding,
   updateCompany,
   getDataRoomByCompanyId,
   deleteDataRoom,
   getCompanyRequestById,
+  getOneRecentFundingByCompanyId,
 } from "@/lib/db/index";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
@@ -94,7 +94,7 @@ export const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdit?: boolean, companyEditId?: number }) {
+export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: { canEdit?: boolean, companyEditId?: number, onRoleChange: () => void }) {
   const { handleStepChange } = useFormState();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -124,19 +124,21 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
   const { reset } = form;
   useEffect(() => {
     const fetchCompany = async () => {
-      const companyRequest = await getCompanyRequestById(companyEditId);
-      if (companyRequest) {
-        setHasPublish(true);
+      if (companyEditId !== undefined) {
+        const companyRequest = await getCompanyRequestById(companyEditId);
+        if ((companyRequest ?? []).length > 0) {
+          setHasPublish(true);
+        }
       }
       try {
         const response = await fetch('/api/company');
         if (response.ok) {
           const data = await response.json();
           if (companyEditId !== undefined) {
-            if (companyEditId != data.company.id) {
+            if (Object.keys(data).length === 0 || companyEditId != data.company.id) {
               window.location.href = `/company/${companyEditId}`;
             } else {
-              const funding = await getRecentRaiseFundingByCompanyId(companyEditId);
+              const funding = await getOneRecentFundingByCompanyId(companyEditId);
               const existingDocuments = await getDataRoomByCompanyId(companyEditId)
               setCompany(data.company);
               setRecentFunding(funding);
@@ -151,14 +153,14 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
                 maxInvest: funding.maxInvest ?? 0,
                 deadline: funding.deadline ? new Date(funding.deadline) : undefined,
                 priceShare: funding.priceShare ?? 0,
+                valuation: funding.valuation ?? 0,
                 pitch: data.company.pitch ?? "",
               });
-              setLoading(false);
               setInitialDocuments(existingDocuments ?? []);
             }
           }
         } else {
-          window.location.href = `/signup?callbackUrl=/role-register`;
+          window.location.href = `/company/${companyEditId}`;
         }
       } catch (error) {
         console.error("Error fetching company data:", error);
@@ -167,9 +169,8 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
 
     if (canEdit) {
       fetchCompany();
-    } else {
-      setLoading(false);
     }
+    setLoading(false);
   }, [canEdit, companyEditId, reset]);
 
   if (loading) {
@@ -183,7 +184,6 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
-    console.log("values", values);
     const companyData: Company = {
       id: companyEditId,
       logo: companyFormData.logo,
@@ -222,7 +222,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId }: { canEdi
               addDataRoom(dataRoomEntry);
             });
           }
-
+          onRoleChange();
           handleStepChange(1);
         })
         .catch((err) => console.error("Error adding company:", err));

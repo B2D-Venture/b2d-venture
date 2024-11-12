@@ -7,6 +7,7 @@ import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { useSearchParams } from "next/navigation";
 import { CompanyWithRaiseFunding } from "@/types/company";
 import CompanyPageLoading from "@/components/loading/CompanyPageLoading";
+import { BiSearch } from "react-icons/bi";
 
 const CompanyList = () => {
   const [allCompanies, setAllCompanies] = useState<CompanyWithRaiseFunding[]>(
@@ -87,7 +88,7 @@ const CompanyList = () => {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <SearchBar
         initialSearch={searchParams.get("search") || ""}
         classSearch="search-sort"
@@ -97,10 +98,15 @@ const CompanyList = () => {
       {loading && <CompanyPageLoading />}
       {error && <div className="flex flex-wrap m-10 text-white">{error}</div>}
       {filteredCompanies.length === 0 && !loading && (
-        <div className="flex justify-center items-center mt-40 text-white text-left text-3xl font-bold">
-          No companies found.
+        <div className="flex flex-col justify-center items-center mt-40 text-3xl font-bold space-y-4">
+          <div className="animate-pulse">
+            <BiSearch className="text-9xl" />
+          </div>
+          <p>No companies found.</p>
+          <p className="text-lg text-gray-400">Try adjusting your search.</p>
         </div>
       )}
+
       <div
         className="
         grid grid-cols-2 gap-4 

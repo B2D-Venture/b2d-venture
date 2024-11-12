@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import RejectShow from "@/components/profile/RejectShow";
 import { CgProfile } from "react-icons/cg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DataroomItemList from "@/components/profile/investor/DataroomItemList";
@@ -56,7 +57,7 @@ export default async function InvestorProfile() {
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user?.email) {
-    redirect(`/signup?callbackUrl=/investor-profile`);
+    redirect(`/signin?callbackUrl=/investor-profile`);
   }
 
   const userEmail = session.user.email;
@@ -82,9 +83,10 @@ export default async function InvestorProfile() {
   }
 
   return (
-    <div>
+    <div className="mb-20">
       <div className="flex flex-col items-center min-h-screen relative">
         {investorRequest?.approval === null && (<WaitingShow />)}
+        {investorRequest?.approval === false && (<RejectShow user={user} />)}
 
         <div className="flex justify-between w-11/12 h-9/10">
           <h1 className="flex flex-col justify-end text-black dark:text-white ml-70 text-[40px] font-bold mt-10">
@@ -98,10 +100,10 @@ export default async function InvestorProfile() {
           {investor && <InvestorProfileCard investor={investor} />}
         </div>
         <div className="flex flex-col w-11/12 h-9/10 justify-center items-center">
-          <Tabs defaultValue="investment" className="w-full h-full mt-10 text-2xl">
+          <Tabs defaultValue="investment" className="w-full h-full mt-8">
             <TabsList>
-              <TabsTrigger value="investment" className="text-2xl text-black">Investment</TabsTrigger>
-              <TabsTrigger value="request" className="text-2xl text-black">Dataroom</TabsTrigger>
+              <TabsTrigger value="investment" className="text-lg text-black">Investment</TabsTrigger>
+              <TabsTrigger value="request" className="text-lg text-black">Dataroom</TabsTrigger>
             </TabsList>
             <TabsContent value="investment">{investmentData && <InvestmentItemList investments={investmentData} />}</TabsContent>
             <TabsContent value="request">

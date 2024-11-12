@@ -2,12 +2,12 @@ import ShowStep from "@/components/ShowStepForm";
 import FormContent from "@/components/form/FormContent";
 import { InvestorRegisterForm } from "@/components/form/InvestorRegisterForm";
 
-export default function InvestorForm() {
+export default function InvestorForm({onRoleChange}: {onRoleChange: () => void }) {
   return (
     <FormContent 
       label="Investor Profile"
       showStepComponent={<ShowStep step={2} />}
-      formComponent={<InvestorRegisterForm />}
+      formComponent={<InvestorRegisterForm onRoleChange={onRoleChange} />}
     />
   );
 }

@@ -76,7 +76,7 @@ const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approve
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                message,
+                message: message,
                 status,
                 email: investor.email,
                 profileImage: investor.profileImage,
@@ -93,7 +93,6 @@ const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approve
             console.log("Email sent successfully!");
         } else {
             const errorData = await response.json();
-            console.error(`Error: ${errorData.message || "Failed to send email"}`);
         }
     } catch (error) {
         console.error("Error:", error);
@@ -139,9 +138,9 @@ const getRejectMessage = (type: string) => {
         ];
     } else if (type === "investor") {
         return [
-            { id: "message1", title: "Missing Identification", description: "The investor identification is incomplete or incorrect." },
-            { id: "message2", title: "Incorrect Financial Information", description: "The financial information does not match verified records." },
-            { id: "message3", title: "Missing Contact Details", description: "The investor contact details are incomplete." },
+            { id: "message1", title: "Incorrect Profile Image", description: "The uploaded profile image does not match the investor." },
+            { id: "message2", title: "Incorrect Name", description: "The name provided does not match the investor." },
+            { id: "message3", title: "Incorrect Nationality", description: "The Nationality provided is incorrect." },           
         ];
     } else if (type === "funding") {
         return [
@@ -176,14 +175,12 @@ export function RejectMessageForm({ className, type, request, handleReject, emai
 
         setErrorMessage(null);
 
-        console.log("Checked Messages: ", checkedMessages);
-
         if (type === "company") {
             const user = await getUserByCompanyId(request.companyId);
             await sendEmailCompanyStatus(request.company, user.email, "rejected", checkedMessages);
             handleReject();
         } else if (type === "investor") {
-            await sendEmailInvestorStatus(request, "rejected", checkedMessages);
+            await sendEmailInvestorStatus(request.investor, "rejected", checkedMessages);
             handleReject();
         } else if (type === "funding") {
             const investorProfile = request.investorProfile;

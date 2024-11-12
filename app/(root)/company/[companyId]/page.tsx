@@ -1,18 +1,20 @@
 import React from "react";
 import Image from "next/image";
 import Pitch from "@/components/profile/company/Pitch";
-import DealTerm from "@/components/DealTerm";
+import DealTerm from "@/components/profile/company/dealterm/DealTerm";
 import {
   getUser,
   getCompanyById,
   getCompanyRequestById,
   getRecentRaiseFundingByCompanyId,
   getInvesmentByFundingId,
+  getOneRecentFundingByCompanyId,
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import WaitingShow from "@/components/profile/WaitingShow";
+import RejectShow from "@/components/profile/RejectShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 import PublishForm from "@/components/profile/company/PublishForm";
 
@@ -63,7 +65,7 @@ export default async function CompanyProfile({
   const session = await getServerSession(authConfig);
   const companyRequest = await getCompanyRequestById(params.companyId);  
 
-  let user = null;
+  let user: User | undefined = undefined;
   let roleId = 1;
   let isApproval = null;
   if (session && session.user?.email) {
@@ -82,22 +84,26 @@ export default async function CompanyProfile({
     }
   } 
 
-  if (!isOwnCompany(params.companyId ?? 1, user)) {
-    if (!companyRequest || companyRequest[0]?.approval !== true) {
-      return notFound();
-    }
-  } 
-
   const company = await getCompanyById(params.companyId);
   const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
-  const allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
-  const totalInvestor = getTotalInvestor(allInvestmentFunding);
-  const totalInvestment = getTotalInvestment(allInvestmentFunding);
+  const oneFunding = await getOneRecentFundingByCompanyId(params.companyId);
+  let allInvestmentFunding = [];
+  let totalInvestor = 0;
+  let totalInvestment = 0;
+
+  if (recentFunding) {
+    allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+    totalInvestor = getTotalInvestor(allInvestmentFunding);
+    totalInvestment = getTotalInvestment(allInvestmentFunding);
+  }
 
   return (
-    <div className="flex flex-col items-center min-h-screen relative">
+    <div className="flex flex-col items-center min-h-screen relative mb-20">
       {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
         <WaitingShow />
+      )}
+      {(roleId === 3 && isApproval?.approval === false && user && await isOwnCompany(params.companyId ?? 1, user)) && (
+        <RejectShow user={user} />
       )}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
@@ -137,21 +143,22 @@ export default async function CompanyProfile({
           <Pitch pitchData={company?.pitch || ""} />
         </div>
         <div>
-          {recentFunding && (
-            <div className="sticky top-36">
+          {(recentFunding || oneFunding) && (
+            <div className="sticky top-28">
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
-                raiseId={recentFunding.id}
+                raiseId={recentFunding?.id || oneFunding.id}
               />}
               <DealTerm
-                recentFunding={recentFunding}
+                recentFunding={recentFunding || oneFunding}
                 currentInvestment={totalInvestment}
-                dayLeft={calculateDaysLeft(recentFunding.deadline)}
+                dayLeft={calculateDaysLeft(recentFunding?.deadline || oneFunding.deadline)}
                 totalInvestor={totalInvestor}
                 roleId={user?.roleId ?? null}
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
                 urlId={params.companyId}
                 investorId={user?.roleIdNumber ?? null}
+                user={user}
               />
             </div>
           )}

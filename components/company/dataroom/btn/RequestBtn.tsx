@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import {
   addDataRoomRequest,
   getCompanyDataRoomRequestsByCompanyAndInvestor,
-} from "@/lib/db/dataroom";
+  getInvestorRequestById,
+} from "@/lib/db/index";
 
 const RequestBtn = ({
   text,
@@ -16,6 +17,7 @@ const RequestBtn = ({
   hoverBorderColor,
   urlId,
   investorId,
+  user,
 }: {
   text: string;
   textColor: string;
@@ -26,29 +28,34 @@ const RequestBtn = ({
   hoverBorderColor: string;
   urlId: number;
   investorId: number;
+  user: User;
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const requestBtn = async () => {
-    try {
-      const requests = await getCompanyDataRoomRequestsByCompanyAndInvestor(
-        urlId,
-        investorId
-      );
-      const last_request = requests.at(-1);
+    if (user) {
+      const investorRequest = await getInvestorRequestById(investorId);
+      if (user.roleId === 2 && investorRequest?.approval) {
+        try {
+          const requests = await getCompanyDataRoomRequestsByCompanyAndInvestor(
+            urlId,
+            investorId
+          );
+          const last_request = requests.at(-1);
 
-      if (last_request && last_request.approval === null) {
-        setIsPopupVisible(true);
-        return;
-      } else {
-        await addDataRoomRequest(urlId, investorId);
-        console.log("Request added successfully");
-        setIsAlertVisible(true); // Show alert box
-        setTimeout(() => setIsAlertVisible(false), 3000); // Hide after 3 seconds
+          if (last_request && last_request.approval === null) {
+            setIsPopupVisible(true);
+            return;
+          } else {
+            await addDataRoomRequest(urlId, investorId);
+            setIsAlertVisible(true); // Show alert box
+            setTimeout(() => setIsAlertVisible(false), 3000); // Hide after 3 seconds
+          }
+        } catch (error) {
+          console.error("Failed to retrieve or add data room requests:", error);
+        }
       }
-    } catch (error) {
-      console.error("Failed to retrieve or add data room requests:", error);
     }
   };
 
