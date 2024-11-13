@@ -90,7 +90,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
 
     const totalInvestment = existingInvestment + enteredAmount;
 
-    if (enteredAmount && recentFunding.priceShare) {
+    if (enteredAmount && recentFunding.priceShare && enteredAmount > 0) {
       if (existingInvestment === 0 && enteredAmount < recentFunding.minInvest) {
         setError(
           `Amount must be at least $${recentFunding.minInvest} for the first investment.`
