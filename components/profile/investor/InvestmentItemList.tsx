@@ -1,7 +1,7 @@
 import React from "react";
 import InvestmentItem from "@/components/profile/investor/InvestmentItem";
 import { Company } from "@/types/company";
-
+import { RiHandCoinLine } from "react-icons/ri";
 
 const formatISODate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -24,7 +24,7 @@ type InvestmentItem = {
   request: InvestmentRequest;
   status: string;
   investments: Company[];
-}
+};
 
 interface InvestmentItemListProps {
   investments: InvestmentItem[];
@@ -39,16 +39,22 @@ const InvestmentItemList = ({ investments }: InvestmentItemListProps) => {
         <div className="col-span-1 text-black dark:text-white text-3xl font-bold">Status</div>
       </div>
       <div className="border-b-2 border-black dark:border-white mb-5" />
-      {Array.from({ length: 1 }, () => investments)
-        .flat()
-        .map((item) => (
+
+      {investments.length === 0 ? (
+        <div className="flex justify-center items-center text-center text-xl mt-8">
+          <RiHandCoinLine className="mr-3 text-4xl" /> 
+          <span>No Investments Request</span>
+        </div>
+      ) : (
+        investments.map((item) => (
           <InvestmentItem
             key={item.id}
             company={item.company}
             request={item.request}
             status={item.status}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 };

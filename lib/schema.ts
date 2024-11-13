@@ -11,7 +11,7 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-const roleEnum = pgEnum("role_type", ["viewer", "investor", "company"]);
+const roleEnum = pgEnum("role_type", ["viewer", "investor", "company", "admin"]);
 
 export const RoleTable = pgTable("role", {
   id: serial("id").primaryKey().notNull(),
