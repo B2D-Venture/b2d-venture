@@ -1,7 +1,7 @@
 import React from "react";
 
 const Pitch = ({ pitchData }: { pitchData: string }) => {
-  const formattedPitchData = pitchData.replace("<p></p>", "<br />");
+  const formattedPitchData = pitchData.replace(/<p><\/p>/g, "<br />");
 
   return (
     <div className="ml-8 md:ml-[80px]">

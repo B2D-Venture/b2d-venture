@@ -39,7 +39,7 @@ const Footer = () => {
     }
     return (
         <footer
-            className="flex flex-col items-center bg-zinc-100 dark:bg-neutral-600 text-center">
+            className="flex flex-col items-center bg-zinc-100 dark:bg-neutral-600 text-center mt-20">
             {!user && (
                 <div className="container p-3">
                     <div className="">
