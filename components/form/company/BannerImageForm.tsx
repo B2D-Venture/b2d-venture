@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { UploadDropzone } from '@/src/utils/uploadthing';
+import Image from 'next/image';
 
 export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBannerImage: (image: string) => void, defaultBanner?: string }) {
   const [imageSrc, setImageSrc] = useState<string>(defaultBanner);
@@ -14,9 +15,11 @@ export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBan
   return (
     <div className="relative">
       {imageSrc ? (
-        <img
+        <Image
           src={imageSrc}
           alt="Uploaded Banner"
+          width={1200}
+          height={300}
           className="w-full h-52 object-cover rounded-md shadow-md"
         />
       ) : (

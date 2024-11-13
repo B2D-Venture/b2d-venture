@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { BannerImageForm } from "@/components/BannerImageForm";
+import { ProfileImageForm } from "@/components/form/elements/ProfileImageForm";
+import { BannerImageForm } from "@/components/form/company/BannerImageForm";
 import { useFormState } from "../FormContext"
 import FormFields from '@/components/form/elements/FormFields';
 import {

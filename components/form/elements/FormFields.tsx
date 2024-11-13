@@ -98,4 +98,6 @@ const FormFields = React.memo(({
     );
 });
 
+FormFields.displayName = 'FormFields';
+
 export default FormFields;

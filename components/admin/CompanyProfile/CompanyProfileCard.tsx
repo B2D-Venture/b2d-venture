@@ -5,8 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import CompanyProfileBadge from "@/components/admin/CompanyProfile/CompanyProfileBadge";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
@@ -15,6 +13,8 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { CheckIcon } from "@radix-ui/react-icons";
 import { RejectButton } from "@/components/admin/reject/RejectButton";
+
+import Image from 'next/image';
 
 export function CompanyProfileCard({
   companyRequest,
@@ -32,9 +32,11 @@ export function CompanyProfileCard({
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
-            <img
+            <Image
               src={companyRequest.company.logo}
               alt="Company Logo"
+              width={90}
+              height={90}
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">

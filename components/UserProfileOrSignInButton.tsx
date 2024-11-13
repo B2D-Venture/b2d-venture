@@ -3,7 +3,7 @@
 import { useSession, signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { IoPeopleCircleOutline } from "react-icons/io5";
-import AvatarDropdown from "./AvatarDropdown";
+import AvatarDropdown from "./navbar/avatar/AvatarDropdown";
 import { Skeleton } from "@/components/ui/skeleton"
 
 const UserProfileOrSignInButton = () => {

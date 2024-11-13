@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProfileImageForm } from "@/components/ProfileImageForm";
+import { ProfileImageForm } from "@/components/form/elements/ProfileImageForm";
 import { CalendarForm } from "@/components/CalendarForm";
 import { useFormState } from "../FormContext";
 import {

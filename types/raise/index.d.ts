@@ -12,3 +12,10 @@ interface RaiseFunding {
 interface RaiseFundingRequest {
   raiseFundingId: number;
 }
+
+interface RaiseFundingRequestList {
+  id: number;
+  raiseFundingId: number;
+  requestDate: Date;
+  approval: boolean | null;
+}

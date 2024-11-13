@@ -1,5 +1,6 @@
 import { UploadButton } from '@/src/utils/uploadthing';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 export function ProfileImageForm({ setProfileImage, defaultImage = "/form/default-profile.png" }: { setProfileImage: (image: string) => void, defaultImage?: string }) {
   const [imageSrc, setImageSrc] = useState("");
@@ -8,9 +9,9 @@ export function ProfileImageForm({ setProfileImage, defaultImage = "/form/defaul
     <div className="relative flex flex-col items-center">
       <div className="w-40 h-40 max-sm:w-20 max-sm:h-20 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
         {imageSrc ? (
-          <img src={imageSrc} alt="Uploaded" className="w-full h-full object-cover" />
+          <Image src={imageSrc} alt="Uploaded" width={1000} height={100} className="w-full h-full object-cover" />
         ) : (
-          <img src={defaultImage} alt="Default" className="w-full h-full object-cover" />
+          <Image src={defaultImage} alt="Default" width={1000} height={100} className="w-full h-full object-cover" />
         )}
       </div>
 

@@ -16,6 +16,8 @@ import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
+import Image from "next/image";
+
 export function RaiseFundingCard({
   logo,
   companyName,
@@ -46,9 +48,11 @@ export function RaiseFundingCard({
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
-            <img
+            <Image
               src={logo}
               alt="Company Logo"
+              width={90}
+              height={90}
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">

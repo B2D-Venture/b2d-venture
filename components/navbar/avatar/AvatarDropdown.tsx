@@ -56,7 +56,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
     };
 
     fetchUserData();
-  }, [userEmail]);
+  }, [userEmail, session?.user?.name, session?.user?.image]);
 
   if (!userEmail) {
     return null;

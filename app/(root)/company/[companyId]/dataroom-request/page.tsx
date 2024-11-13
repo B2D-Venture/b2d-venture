@@ -68,11 +68,6 @@ async function getUserByEmail(email: string) {
   return user;
 }
 
-async function getCompany(companyId: number) {
-  const companyRequest = await getCompanyRequestById(companyId);
-  return companyRequest;
-}
-
 export default function DataroomRequestPage({
   params,
 }: {
@@ -82,6 +77,7 @@ export default function DataroomRequestPage({
 
   const [dataroomData, setDataroomData] = useState<dataroomRequest[]>([]);
   const [notfound, setNotfound] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = async () => {
     try {
@@ -90,44 +86,56 @@ export default function DataroomRequestPage({
       );
       const DataRoomDetails = await Promise.all(
         dataRoomRequests.map(async (request) => {
-          const inverstor = await getInvestorById(request.investorId);
+          const investor = await getInvestorById(request.investorId);
           return {
             ...request,
-            investor: inverstor,
+            investor: investor,
           };
         })
       );
-
       setDataroomData(DataRoomDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  useEffect(() => {
-    if (status === "authenticated" && session.user?.email) {
-      const fetchUser = async () => {
-        const user = await getUserByEmail(String(session?.user?.email));
+  useEffect(() => {  
+    const fetchUser = async () => {
+      if (status === "authenticated" && session?.user?.email) {
+        const user = await getUserByEmail(session?.user?.email);  
         const companyRequest = await getCompanyRequestById(params.companyId);
+
         if (
           !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
         ) {
           setNotfound(true);
-        } else {
+          setLoading(false);
+        } else {  
           if (!companyRequest || companyRequest[0]?.approval !== true) {
             setNotfound(true);
-          }
-          else {
+            setLoading(false);
+          } else {
             fetchData();
+            setLoading(false);
           }
         }
-      };
-      fetchUser();
-    }
+      } else {
+        setNotfound(true);
+        setLoading(false);
+      }
+    };
+  
+    fetchUser();
   }, [session, status, params.companyId]);
+  
+  if (loading) {
+    return <div></div>;
+  }
+
   if (notfound) {
     return notFound();
   }
+
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -157,13 +165,15 @@ export default function DataroomRequestPage({
                 const company = await getCompanyById(
                   dataRoomRequests.companyId
                 );
-                sendEmailDataroomRequestStatus(
-                  dataRoomRequests,
-                  dataRoomRequests.investor.email,
-                  "approved",
-                  company,
-                  dataRoomRequests.investor.profileImage
-                );
+                if (company) {
+                  sendEmailDataroomRequestStatus(
+                    dataRoomRequests,
+                    dataRoomRequests.investor.email,
+                    "approved",
+                    company,
+                    dataRoomRequests.investor.profileImage
+                  );
+                } 
                 fetchData();
               }}
               handleReject={async () => {

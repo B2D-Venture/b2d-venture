@@ -23,11 +23,11 @@ export default function ToolBar({ editor }: ToolbarProps) {
     if (!editor) return null;
 
     const addImage = useCallback(() => {
-        const url = window.prompt('URL')
+        const url = window.prompt('URL');
         if (url) {
-            editor.chain().focus().setImage({ src: url }).run()
+            editor.chain().focus().setImage({ src: url }).run();
         }
-    }, [editor])
+    }, [editor]);
 
     const addYoutube = useCallback(() => {
         const url = window.prompt('URL');

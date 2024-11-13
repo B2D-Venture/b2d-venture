@@ -34,8 +34,8 @@ const TermMessage = () => {
                     <strong>Prohibited Activities</strong>
                     <p>You agree not to:</p>
                     <p className='pl-5'>• Use our platform for unlawful or prohibited activities.</p>
-                    <p className='pl-5'>• Attempt to gain unauthorized access to any part of the platform or another user's account.</p>
-                    <p className='pl-5'>• Disrupt, interfere with, or abuse the platform's infrastructure or other users.</p>
+                    <p className='pl-5'>• Attempt to gain unauthorized access to any part of the platform or another user&apos;s account.</p>
+                    <p className='pl-5'>• Disrupt, interfere with, or abuse the platform&apos;s infrastructure or other users.</p>
                 </li>
                 <br />
                 <li>

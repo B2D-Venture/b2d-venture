@@ -34,10 +34,11 @@ import { notFound } from "next/navigation";
 
 interface CompanyRequest {
   id: number;
-  companyId: number;
-  requestDate: Date;
-  approval: boolean | null;
+  // companyId: number;
+  // requestDate: Date;
+  // approval: boolean | null;
   company: Company;
+  raiseFunding: RaiseFundingRequestList | null;
 }
 
 interface InvestorRequest {
@@ -48,22 +49,15 @@ interface InvestorRequest {
   investor: InvestorProps;
 }
 
-interface InvestmentRequest {
-  id: number;
-  investorId: number;
-  raiseFundingId: number;
-  amount: number;
-  getStock: number;
-  requestDate: Date;
-  approval: boolean | null;
-}
-
-interface RaiseFundingRequest {
-  id: number;
-  raiseFundingId: number;
-  requestDate: Date;
-  approval: boolean | null;
-}
+// interface InvestmentRequest {
+//   id: number;
+//   investorId: number;
+//   raiseFundingId: number;
+//   amount: number;
+//   getStock: number;
+//   requestDate: Date;
+//   approval: boolean | null;
+// }
 
 const sendEmailCompanyStatus = async (
   company: Company,
@@ -94,9 +88,7 @@ const sendEmailCompanyStatus = async (
       }),
     });
 
-    if (response.ok) {
-      console.log("Email sent successfully!");
-    } else {
+    if (!response.ok) {
       const errorData = await response.json();
       console.error(`Error: ${errorData.message || "Failed to send email"}`);
     }
@@ -134,9 +126,7 @@ const sendEmailInvestorStatus = async (
       }),
     });
 
-    if (response.ok) {
-      console.log("Email sent successfully!");
-    } else {
+    if (!response.ok) {
       const errorData = await response.json();
       console.error(`Error: ${errorData.message || "Failed to send email"}`);
     }
@@ -146,28 +136,164 @@ const sendEmailInvestorStatus = async (
 };
 
 const AdminPage = () => {
+  // const { data: session, status } = useSession();
+  // const [notfound, setNotfound] = useState<boolean>(false);
+  // const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
+  // const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
+  // const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
+  // const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestList[]>([]);
+  // const [data, setData] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   if (status === "authenticated" && session?.user?.email) {
+  //     const fetchUser = async () => {
+  //       const user = await getUser(String(session.user.email));
+  //       if (user.roleId !== 4) {
+  //         setNotfound(true);
+  //       } else {
+  //         setData(true);
+  //       }
+  //     };
+  //     fetchUser();
+  //   }
+  // }, [session, status]);
+
+  // if (status === "authenticated" && session.user?.email) {
+  //   const fetchUser = async () => {
+  //     const user = await getUser(String(session?.user?.email));
+  //     if (user.roleId !== 4) {
+  //       setNotfound(true);
+  //     } else {
+  //       setData(true);
+  //     }
+  //   };
+  //   fetchUser();
+  // }
+  // const fetchData = async () => {
+  //   try {
+  //     const companyRequests = await getCompanyRequest();
+  //     const investorRequests = await getInvestorRequest();
+  //     const investmentRequests = await getInvestmentRequest();
+  //     const raiseFundingRequests = await getRaiseFundingRequests();
+
+  //     const companyDetails = await Promise.all(
+  //       companyRequests.map(async (request) => {
+  //         const company = await getCompanyById(request.companyId);
+
+  //         if (company) {
+  //           company.logo = company.logo || "default_logo_url.png";
+  //         }
+
+  //         const raiseFunding = await getRaiseFundingByCompanyId(
+  //           request.companyId
+  //         );
+
+  //         console.log("request", request);
+
+  //         return {
+  //           id: request.id,
+  //           company: {
+  //             ...company,
+  //             raise_funding: raiseFunding[0] || null,
+  //           },
+  //         };
+  //       })
+  //     );
+
+  //     const investorDetails = await Promise.all(
+  //       investorRequests.map(async (request) => {
+  //         const investors = await getInvestorById(request.investorId);
+  //         return {
+  //           ...request,
+  //           investor: investors || null,
+  //         };
+  //       })
+  //     );
+
+  //     const investmentDetails = await Promise.all(
+  //       investmentRequests.map(async (request) => {
+  //         const investor = await getInvestorById(request.investorId);
+  //         const raiseFunding = await getRaiseFundingById(
+  //           request.raiseFundingId
+  //         );
+  //         const company = await getCompanyById(raiseFunding.companyId);
+  //         return {
+  //           ...request,
+  //           investor: investor || null,
+  //           raiseFunding: raiseFunding || null,
+  //           company: company || null,
+  //         };
+  //       })
+  //     );
+
+  //     const raiseFundingDetails = await Promise.all(
+  //       raiseFundingRequests.map(async (request) => {
+  //         const raiseFunding = await getRaiseFundingById(
+  //           request.raiseFundingId
+  //         );
+  //         const company = await getCompanyById(raiseFunding.companyId);
+  //         return {
+  //           ...request,
+  //           raiseFunding: raiseFunding || null,
+  //           company: company || null,
+  //         };
+  //       })
+  //     );
+
+
+  //     console.log("companyDetails", companyDetails);
+  //     setCompanyData(companyDetails);
+  //     setInvestorData(investorDetails);
+  //     setDealData(investmentDetails);
+  //     setRaiseFundingData(raiseFundingDetails);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // if (notfound) {
+  //   return notFound();
+  // }
+
+  // useEffect(() => {
+  //   if (data) {
+  //     fetchData();
+  //   }
+  // }, [data]);
+
+  // const delay = (ms: number) =>
+  //   new Promise((resolve) => setTimeout(resolve, ms));
   const { data: session, status } = useSession();
   const [notfound, setNotfound] = useState<boolean>(false);
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
   const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
-  const [raiseFundingData, setRaiseFundingData] = useState<
-    RaiseFundingRequest[]
-  >([]);
+  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestList[]>([]);
   const [data, setData] = useState<boolean>(false);
-  if (status === "authenticated" && session.user?.email) {
-    console.log("Fetching data...");
-    const fetchUser = async () => {
-      const user = await getUser(String(session?.user?.email));
-      console.log(user);
-      if (user.roleId !== 4) {
-        setNotfound(true);
-      } else {
-        setData(true);
-      }
-    };
-    fetchUser();
-  }
+
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (status === "authenticated" && session?.user?.email) {
+      const fetchUser = async () => {
+        if (session.user) {
+          const user = await getUser(String(session.user.email));
+          if (user.roleId !== 4) {
+            setNotfound(true);
+          } else {
+            setData(true);
+          }
+        }
+      };
+      fetchUser();
+    } else {
+      // Not signed in
+      setNotfound(true);
+    }
+  }, [session, status]);
+
   const fetchData = async () => {
     try {
       const companyRequests = await getCompanyRequest();
@@ -178,12 +304,15 @@ const AdminPage = () => {
       const companyDetails = await Promise.all(
         companyRequests.map(async (request) => {
           const company = await getCompanyById(request.companyId);
-          const raiseFunding = await getRaiseFundingByCompanyId(
-            request.companyId
-          );
+
+          if (company) {
+            company.logo = company.logo || "default_logo_url.png";
+          }
+
+          const raiseFunding = await getRaiseFundingByCompanyId(request.companyId);
 
           return {
-            ...request,
+            id: request.id,
             company: {
               ...company,
               raise_funding: raiseFunding[0] || null,
@@ -205,9 +334,7 @@ const AdminPage = () => {
       const investmentDetails = await Promise.all(
         investmentRequests.map(async (request) => {
           const investor = await getInvestorById(request.investorId);
-          const raiseFunding = await getRaiseFundingById(
-            request.raiseFundingId
-          );
+          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
           const company = await getCompanyById(raiseFunding.companyId);
           return {
             ...request,
@@ -220,9 +347,7 @@ const AdminPage = () => {
 
       const raiseFundingDetails = await Promise.all(
         raiseFundingRequests.map(async (request) => {
-          const raiseFunding = await getRaiseFundingById(
-            request.raiseFundingId
-          );
+          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
           const company = await getCompanyById(raiseFunding.companyId);
           return {
             ...request,
@@ -241,21 +366,18 @@ const AdminPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (data) {
-  //     fetchData();
-  //   }
-  // }, []);
-  if (notfound) {
-    return notFound();
-  }
+  // Fetch data only when the condition is met
   useEffect(() => {
     if (data) {
       fetchData();
     }
   }, [data]);
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+
+  if (notfound) {
+    return notFound();
+  }
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
@@ -274,7 +396,7 @@ const AdminPage = () => {
                   await delay(100);
                   fetchData();
                   const user = await getUserByCompanyId(
-                    companyRequest.companyId
+                    companyRequest.company.id!
                   );
                   sendEmailCompanyStatus(
                     companyRequest.company,
@@ -288,8 +410,8 @@ const AdminPage = () => {
               handleReject={async () => {
                 try {
                   await rejectCompanyRequest(companyRequest.id);
-                  await delay(100); // Small delay to ensure smooth UI update
-                  fetchData(); // Re-fetch data after rejection
+                  await delay(100);
+                  fetchData();
                 } catch (error) {
                   console.error("Error rejecting company request:", error);
                 }
@@ -317,7 +439,6 @@ const AdminPage = () => {
                 await rejectInvestorRequest(investorRequest.id);
                 await delay(100);
                 fetchData(); // Refresh data after rejection
-                console.log("Reject Investor Request");
               }}
             />
           </div>
@@ -332,7 +453,7 @@ const AdminPage = () => {
           >
             <Dealcard
               investorName={
-                deal.investor?.firstName + " " + deal.investor?.lastName ||
+                deal.investor.firstName + " " + deal.investor?.lastName ||
                 "Investor"
               }
               moneyReadyForInvestment={deal.investor?.investableAmount || 0}
@@ -347,7 +468,6 @@ const AdminPage = () => {
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);
                 await delay(100);
-                console.log("Approve Investment Request");
                 fetchData();
               }}
               handleReject={async () => {
@@ -357,7 +477,6 @@ const AdminPage = () => {
                   amount: deal.investor.investableAmount + deal.amount,
                 });
                 await delay(100);
-                console.log("Reject Investment Request");
                 fetchData();
               }}
             />
@@ -385,13 +504,11 @@ const AdminPage = () => {
               handleApprove={async () => {
                 await approveRaiseFundingRequest(raiseFunding.id);
                 await delay(100);
-                console.log("Approve Raise Funding Request");
                 fetchData();
               }}
               handleReject={async () => {
                 await rejectRaiseFundingRequest(raiseFunding.id);
                 await delay(100);
-                console.log("Reject Raise Funding Request");
                 fetchData();
               }}
             />
