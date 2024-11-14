@@ -1,1 +1,0 @@
-ALTER TABLE "data_room" ALTER COLUMN "upload_date" SET DEFAULT now();
