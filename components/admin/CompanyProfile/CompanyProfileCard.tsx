@@ -62,10 +62,10 @@ export function CompanyProfileCard({
                 <OutputTextBox label="Abbreviation" value={companyRequest.company.abbr} />
               </div>
               <div className="flex flex-row items-center space-x-[93px]">
-                <OutputTextBox label="Deadline" value={companyRequest.company.raise_funding.deadline} />
+                <OutputTextBox label="Deadline" value={companyRequest.company.raiseFunding.deadline} />
               </div>
               <div className="flex flex-row items-center space-x-[47px]">
-                <OutputTextBoxDollar label="Funding Target" value={companyRequest.company.raise_funding.fundingTarget} />
+                <OutputTextBoxDollar label="Funding Target" value={companyRequest.company.raiseFunding.fundingTarget} />
               </div>
               <div className="flex flex-row items-center space-x-[33px]">
                 <OutputTextBoxDollar label="Valuation" value={10000} />
@@ -73,13 +73,13 @@ export function CompanyProfileCard({
               <div className="flex flex-row items-center space-x-1">
                 <OutputTextBoxDollar
                   label="Minimum Investment"
-                  value={companyRequest.company.raise_funding.minInvest}
+                  value={companyRequest.company.raiseFunding.minInvest}
                 />
               </div>
               <div className="flex flex-row items-center space-x-1">
                 <OutputTextBoxDollar
                   label="Maximum Investment"
-                  value={companyRequest.company.raise_funding.maxInvest}
+                  value={companyRequest.company.raiseFunding.maxInvest}
                   classNameLabel=""
                 />
               </div>

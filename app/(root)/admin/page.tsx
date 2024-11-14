@@ -32,10 +32,23 @@ import {
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 
+
 interface CompanyRequest {
   id: number;
-  company: Company;
-  raiseFunding: RaiseFundingRequestList | null;
+  companyId: number;
+  requestDate: Date;
+  approval: boolean | null;
+  company: CompanyWithFunding | null;
+}
+
+interface CompanyWithFunding extends Company {
+  raiseFunding: RaiseFunding | null;
+}
+
+interface InvestmentDetail extends InvestmentRequest {
+  investor: InvestorProps | null;
+  raiseFunding: RaiseFunding | null;
+  company: Company | null;
 }
 
 interface InvestorRequest {
@@ -127,7 +140,7 @@ const AdminPage = () => {
   const [notfound, setNotfound] = useState<boolean>(false);
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
-  const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
+  const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
   const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestList[]>([]);
   const [data, setData] = useState<boolean>(false);
 
@@ -172,10 +185,10 @@ const AdminPage = () => {
           const raiseFunding = await getRaiseFundingByCompanyId(request.companyId);
 
           return {
-            id: request.id,
+            ...request,
             company: {
-              ...company,
-              raise_funding: raiseFunding[0] || null,
+              ...(company as Company),
+              raiseFunding: raiseFunding[0] || null,
             },
           };
         })
@@ -197,7 +210,7 @@ const AdminPage = () => {
           const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
           const company = await getCompanyById(raiseFunding.companyId);
           return {
-            ...request,
+            ...(request as unknown as InvestmentRequest),
             investor: investor || null,
             raiseFunding: raiseFunding || null,
             company: company || null,
@@ -256,10 +269,10 @@ const AdminPage = () => {
                   await delay(100);
                   fetchData();
                   const user = await getUserByCompanyId(
-                    companyRequest.company.id!
+                    companyRequest.company?.id!
                   );
                   sendEmailCompanyStatus(
-                    companyRequest.company,
+                    companyRequest.company!,
                     user.email,
                     "approved"
                   );
@@ -313,8 +326,9 @@ const AdminPage = () => {
           >
             <Dealcard
               investorName={
-                deal.investor.firstName + " " + deal.investor?.lastName ||
-                "Investor"
+                deal.investor
+                  ? deal.investor.firstName + " " + deal.investor.lastName
+                  : "Investor"
               }
               moneyReadyForInvestment={deal.investor?.investableAmount || 0}
               investAmount={deal.amount || 0}
@@ -322,7 +336,7 @@ const AdminPage = () => {
               companyName={deal.company?.name || "Company"}
               raiseTarget={deal.raiseFunding?.fundingTarget || 0}
               raisePercentage={
-                (deal.amount / deal.raiseFunding?.fundingTarget) * 100 || 0
+                (deal.amount / (deal.raiseFunding?.fundingTarget ?? 1)) * 100 || 0
               }
               valuation={(100 / deal.getStock) * deal.amount || 0}
               handleApprove={async () => {
@@ -334,7 +348,7 @@ const AdminPage = () => {
                 await rejectInvestmentRequest(deal.id);
                 await UpdateInvestorAmount({
                   investorId: deal.investorId,
-                  amount: deal.investor.investableAmount + deal.amount,
+                  amount: (deal.investor?.investableAmount || 0) + deal.amount,
                 });
                 await delay(100);
                 fetchData();
