@@ -94,7 +94,7 @@ export const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: { canEdit?: boolean, companyEditId?: number, onRoleChange: () => void }) {
+export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: { canEdit?: boolean, companyEditId?: number, onRoleChange?: () => void }) {
   const { handleStepChange } = useFormState();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);

@@ -5,7 +5,6 @@ import {
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
-  CompanyEditRequestTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
 import { sql, eq, ilike, or } from "drizzle-orm";
