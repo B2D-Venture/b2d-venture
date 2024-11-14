@@ -6,8 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 
 export const CalendarFormSchema = z.object({
   dob: z.date({
@@ -31,8 +30,11 @@ export function CalendarForm({ label, field, canSetMoreThanToday = false }: Cale
   const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
 
   useEffect(() => {
     if (
@@ -51,7 +53,6 @@ export function CalendarForm({ label, field, canSetMoreThanToday = false }: Cale
       }
     } else {
       field.onChange(undefined);
-      console.log("Date cleared");
     }
   }, [selectedDay, selectedMonth, selectedYear, canSetMoreThanToday, field, today]);
 

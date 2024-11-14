@@ -315,7 +315,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                                 <ReCAPTCHA sitekey={process.env.RECAPTCHA_PUBLIC_KEY!} onChange={handleCaptchaChange} className="flex justify-center items-center mx-auto" />
                                                 {captchaError && <p className="text-red-500 text-sm">{captchaError}</p>}
                                                 <p className="mt-6 text-xs text-gray-600 text-center">
-                                                    I agree to abide by b2d-venture's&nbsp;
+                                                    I agree to abide by b2d-venture&apos;s&nbsp;
                                                     <AbideAlert type="tos" />
                                                     &nbsp;and its&nbsp;
                                                     <AbideAlert type="privacy" />

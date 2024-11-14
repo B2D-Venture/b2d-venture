@@ -5,8 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import { OutputTextBox } from "@/components/admin/OutputTextBox";
 import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
@@ -16,6 +14,8 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { RejectButton } from "@/components/admin/reject/RejectButton";
 import { InvestorProps } from "@/types/investor";
+
+import Image from "next/image";
 
 export function DataRoomCard({
   investor,
@@ -33,9 +33,11 @@ export function DataRoomCard({
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
-            <img
+            <Image
               src={investor.profileImage}
               alt="Investor Profile"
+              width={500}
+              height={500}
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">

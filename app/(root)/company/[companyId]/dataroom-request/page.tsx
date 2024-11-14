@@ -126,7 +126,7 @@ export default function DataroomRequestPage({
     };
   
     fetchUser();
-  }, [session, status, params.companyId]);
+  }, [session, status, params.companyId, fetchData]);
   
   if (loading) {
     return <div></div>;

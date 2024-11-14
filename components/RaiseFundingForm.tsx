@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CalendarForm } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/form/elements/CalendarForm";
 import { addRaiseFunding, addRaiseFundingRequest } from "@/lib/db/index";
 
 import {

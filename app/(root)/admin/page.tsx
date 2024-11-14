@@ -34,9 +34,6 @@ import { notFound } from "next/navigation";
 
 interface CompanyRequest {
   id: number;
-  // companyId: number;
-  // requestDate: Date;
-  // approval: boolean | null;
   company: Company;
   raiseFunding: RaiseFundingRequestList | null;
 }
@@ -48,16 +45,6 @@ interface InvestorRequest {
   approval: boolean | null;
   investor: InvestorProps;
 }
-
-// interface InvestmentRequest {
-//   id: number;
-//   investorId: number;
-//   raiseFundingId: number;
-//   amount: number;
-//   getStock: number;
-//   requestDate: Date;
-//   approval: boolean | null;
-// }
 
 const sendEmailCompanyStatus = async (
   company: Company,
@@ -136,133 +123,6 @@ const sendEmailInvestorStatus = async (
 };
 
 const AdminPage = () => {
-  // const { data: session, status } = useSession();
-  // const [notfound, setNotfound] = useState<boolean>(false);
-  // const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
-  // const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
-  // const [dealData, setDealData] = useState<InvestmentRequest[]>([]);
-  // const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestList[]>([]);
-  // const [data, setData] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   if (status === "authenticated" && session?.user?.email) {
-  //     const fetchUser = async () => {
-  //       const user = await getUser(String(session.user.email));
-  //       if (user.roleId !== 4) {
-  //         setNotfound(true);
-  //       } else {
-  //         setData(true);
-  //       }
-  //     };
-  //     fetchUser();
-  //   }
-  // }, [session, status]);
-
-  // if (status === "authenticated" && session.user?.email) {
-  //   const fetchUser = async () => {
-  //     const user = await getUser(String(session?.user?.email));
-  //     if (user.roleId !== 4) {
-  //       setNotfound(true);
-  //     } else {
-  //       setData(true);
-  //     }
-  //   };
-  //   fetchUser();
-  // }
-  // const fetchData = async () => {
-  //   try {
-  //     const companyRequests = await getCompanyRequest();
-  //     const investorRequests = await getInvestorRequest();
-  //     const investmentRequests = await getInvestmentRequest();
-  //     const raiseFundingRequests = await getRaiseFundingRequests();
-
-  //     const companyDetails = await Promise.all(
-  //       companyRequests.map(async (request) => {
-  //         const company = await getCompanyById(request.companyId);
-
-  //         if (company) {
-  //           company.logo = company.logo || "default_logo_url.png";
-  //         }
-
-  //         const raiseFunding = await getRaiseFundingByCompanyId(
-  //           request.companyId
-  //         );
-
-  //         console.log("request", request);
-
-  //         return {
-  //           id: request.id,
-  //           company: {
-  //             ...company,
-  //             raise_funding: raiseFunding[0] || null,
-  //           },
-  //         };
-  //       })
-  //     );
-
-  //     const investorDetails = await Promise.all(
-  //       investorRequests.map(async (request) => {
-  //         const investors = await getInvestorById(request.investorId);
-  //         return {
-  //           ...request,
-  //           investor: investors || null,
-  //         };
-  //       })
-  //     );
-
-  //     const investmentDetails = await Promise.all(
-  //       investmentRequests.map(async (request) => {
-  //         const investor = await getInvestorById(request.investorId);
-  //         const raiseFunding = await getRaiseFundingById(
-  //           request.raiseFundingId
-  //         );
-  //         const company = await getCompanyById(raiseFunding.companyId);
-  //         return {
-  //           ...request,
-  //           investor: investor || null,
-  //           raiseFunding: raiseFunding || null,
-  //           company: company || null,
-  //         };
-  //       })
-  //     );
-
-  //     const raiseFundingDetails = await Promise.all(
-  //       raiseFundingRequests.map(async (request) => {
-  //         const raiseFunding = await getRaiseFundingById(
-  //           request.raiseFundingId
-  //         );
-  //         const company = await getCompanyById(raiseFunding.companyId);
-  //         return {
-  //           ...request,
-  //           raiseFunding: raiseFunding || null,
-  //           company: company || null,
-  //         };
-  //       })
-  //     );
-
-
-  //     console.log("companyDetails", companyDetails);
-  //     setCompanyData(companyDetails);
-  //     setInvestorData(investorDetails);
-  //     setDealData(investmentDetails);
-  //     setRaiseFundingData(raiseFundingDetails);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // if (notfound) {
-  //   return notFound();
-  // }
-
-  // useEffect(() => {
-  //   if (data) {
-  //     fetchData();
-  //   }
-  // }, [data]);
-
-  // const delay = (ms: number) =>
-  //   new Promise((resolve) => setTimeout(resolve, ms));
   const { data: session, status } = useSession();
   const [notfound, setNotfound] = useState<boolean>(false);
   const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);

@@ -9,7 +9,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { CalendarForm } from "@/components/CalendarForm";
+import { CalendarForm } from "@/components/form/elements/CalendarForm";
 import Tiptap from "@/components/form/company/Tiptap";
 import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
