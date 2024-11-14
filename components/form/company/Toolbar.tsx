@@ -125,7 +125,7 @@ export default function ToolBar({ editor }: ToolbarProps) {
         {
             icon: (
                 <span aria-hidden="true">
-                    <Image className="size-4" />
+                    <Image className="size-4" aria-label="Image icon" />
                 </span>
             ),
             onClick: () => addImage(),

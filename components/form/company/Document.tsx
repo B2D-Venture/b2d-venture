@@ -55,7 +55,7 @@ const Document = ({ canEdit, companyId }: DocumentProps) => {
             }
         };
         fetchDocuments();
-    }, [canEdit]);
+    }, [canEdit, companyId, setValue]);
 
     return (
         <div className="text-black">

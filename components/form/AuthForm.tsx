@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import SignInLoading from "@/components/loading/SignInLoading";
@@ -35,15 +35,7 @@ import {
 } from "@/components/ui/input-otp"
 import ReCAPTCHA from "react-google-recaptcha";
 import { AbideAlert } from "../registration/AbideAlert";
-
-
-interface AuthFormProps {
-    title: "Sign In" | "Sign Up";
-    apiPath: string;
-    redirectPath: string;
-    linkPath: string;
-    linkText: string;
-}
+import { AuthFormProps } from "@/types/form/index.d";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -114,7 +106,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const [captchaValid, setCaptchaValid] = useState(false);
     const [captchaError, setCaptchaError] = useState<string | null>(null);
 
-    let callbackUrl = searchParams.get('callbackUrl') || pathname;
+    const callbackUrlRef = useRef<string>(searchParams.get('callbackUrl') || pathname);
 
     const defaultValues = {
         email: "",
@@ -150,7 +142,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         if (status === "authenticated") {
             fetchUser();
         } else if (status === "unauthenticated" && pathname === "/signup") {
-            callbackUrl = "/role-register";
+            callbackUrlRef.current = "/role-register";
         } else {
             setLoading(false);
         }
@@ -169,7 +161,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         return () => clearInterval(timer);
     }, [showOTPModal, timeLeft]);
 
-    if ((callbackUrl === "/signup" || callbackUrl === "/signin") && user) {
+    if ((callbackUrlRef.current === "/signup" || callbackUrlRef.current === "/signin") && user) {
         if (user.roleId === 2) {
             window.location.href = `/investor-profile`;
         } else if (user.roleId === 3) {
@@ -200,7 +192,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                     alert("Error signing in after registration: " + signInRes.error);
                     setError("Error signing in: " + signInRes.error);
                 } else {
-                    router.push(callbackUrl === "/signin" ? "/" : callbackUrl);
+                    router.push(callbackUrlRef.current === "/signin" ? "/" : callbackUrlRef.current);
                 }
             } else {
                 setError("Incorrect email or password.");
@@ -256,7 +248,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                 if (signInRes?.error) {
                     alert("Error signing in after registration: " + signInRes.error);
                 } else {
-                    router.push(callbackUrl === "/signup" ? "/" : callbackUrl);
+                    router.push(callbackUrlRef.current === "/signup" ? "/" : callbackUrlRef.current);
                 }
             } else {
                 const error = await res.json();
@@ -280,7 +272,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                         <h1 className="text-2xl xl:text-3xl font-extrabold">{title}</h1>
                         <div className="w-full flex-1 mt-8">
                             <div className="flex flex-col items-center">
-                                <GoogleButton callbackUrl={callbackUrl} title={title} />
+                                <GoogleButton callbackUrl={callbackUrlRef.current} title={title} />
                             </div>
                             <div className="my-5 border-b text-center">
                                 <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">

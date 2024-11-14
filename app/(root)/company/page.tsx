@@ -34,7 +34,7 @@ const CompanyList = () => {
             priceShare: item.raiseFunding?.priceShare ?? null,
             valuation: item.raiseFunding?.valuation ?? null,
             investorCount: (
-              await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)
+              await getInvesmentByFundingId(Number(item.raiseFunding?.id))
             ).length,
           })),
         );

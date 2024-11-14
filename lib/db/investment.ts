@@ -51,7 +51,7 @@ export async function addInvestmentRequest(
 ) {
   await db
     .insert(InvestmentRequestTable)
-    .values({ investorId, raiseFundingId, amount, getStock })
+    .values({ investorId, raiseFundingId, amount, getStock, priceShare: 0 }) // Add appropriate value for priceShare
     .execute();
 }
 

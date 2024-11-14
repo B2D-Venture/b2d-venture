@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { getInvestorById, UpdateInvestorAmount } from "@/lib/db/investor";
 import {
@@ -50,23 +50,23 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     type: string;
   } | null>(null);
 
-  const fetchInvestor = async () => {
+  const fetchInvestor = useCallback(async () => {
     const data = await getInvestorById(investorId);
     setInvestor(data);
-  };
+  }, [investorId]);
 
-  const fetchExistingInvestment = async () => {
+  const fetchExistingInvestment = useCallback(async () => {
     const existingRequest = await getInvestorRequestByInvestorandRaiseFunding(
       investorId,
-      recentFunding.id
+      Number(recentFunding.id)
     );
     setExistingInvestment(existingRequest?.amount || 0);
-  };
+  }, [investorId, recentFunding.id]);
 
   useEffect(() => {
     fetchInvestor();
     fetchExistingInvestment();
-  }, [investorId, recentFunding.id]);
+  }, [fetchInvestor, fetchExistingInvestment]);
 
   const handleInvestClick = async () => {
     try {
@@ -131,6 +131,10 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
 
   const handleInvestment = async () => {
     if (typeof amount === "number" && typeof stock === "number") {
+      if (!investor) {
+        setError("Investor data is not available.");
+        return;
+      }
       const newAmount = investor.investableAmount - amount;
       try {
         const existingRequest =

@@ -21,8 +21,8 @@ import {
   UpdateInvestorAmount,
   getUser,
 } from "@/lib/db/index";
-import { Company } from "@/types/company";
-import { InvestorProps } from "@/types/investor";
+import { Company, CompanyRequestData } from "@/types/company";
+import { InvestorProps, InvestorRequest } from "@/types/investor";
 import { getCompanyById } from "@/lib/db/company";
 import { getInvestorById } from "@/lib/db/investor";
 import {
@@ -31,33 +31,6 @@ import {
 } from "@/lib/db/raise";
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
-
-
-interface CompanyRequest {
-  id: number;
-  companyId: number;
-  requestDate: Date;
-  approval: boolean | null;
-  company: CompanyWithFunding | null;
-}
-
-interface CompanyWithFunding extends Company {
-  raiseFunding: RaiseFunding | null;
-}
-
-interface InvestmentDetail extends InvestmentRequest {
-  investor: InvestorProps | null;
-  raiseFunding: RaiseFunding | null;
-  company: Company | null;
-}
-
-interface InvestorRequest {
-  id: number;
-  investorId: number;
-  requestDate: Date;
-  approval: boolean | null;
-  investor: InvestorProps;
-}
 
 const sendEmailCompanyStatus = async (
   company: Company,
@@ -138,10 +111,10 @@ const sendEmailInvestorStatus = async (
 const AdminPage = () => {
   const { data: session, status } = useSession();
   const [notfound, setNotfound] = useState<boolean>(false);
-  const [companyData, setCompanyData] = useState<CompanyRequest[]>([]);
+  const [companyData, setCompanyData] = useState<CompanyRequestData[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
   const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
-  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestList[]>([]);
+  const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestData[]>([]);
   const [data, setData] = useState<boolean>(false);
 
   useEffect(() => {
@@ -223,7 +196,7 @@ const AdminPage = () => {
           const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
           const company = await getCompanyById(raiseFunding.companyId);
           return {
-            ...request,
+            ...(request as RaiseFundingRequestList),
             raiseFunding: raiseFunding || null,
             company: company || null,
           };

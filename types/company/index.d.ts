@@ -31,3 +31,15 @@ export type DataRoomRequest = {
   requestDate: Date;
   approval: boolean;
 };
+
+interface CompanyRequestData {
+  id: number;
+  companyId: number;
+  requestDate: Date;
+  approval: boolean | null;
+  company: CompanyWithFunding | null;
+}
+
+interface CompanyWithFunding extends Company {
+  raiseFunding: RaiseFunding | null;
+}

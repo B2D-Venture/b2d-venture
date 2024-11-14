@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   getInvestorById,
   getCompanyById,
@@ -79,7 +79,7 @@ export default function DataroomRequestPage({
   const [notfound, setNotfound] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const dataRoomRequests = await getCompanyDataRoomRequestsByCompany(
         params.companyId
@@ -97,7 +97,7 @@ export default function DataroomRequestPage({
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [params.companyId]);
 
   useEffect(() => {  
     const fetchUser = async () => {

@@ -22,3 +22,11 @@ export interface SuccessFormProps {
     hasApproval: boolean | null;
     roleIdNumber?: number;
 }
+
+export interface AuthFormProps {
+    title: "Sign In" | "Sign Up";
+    apiPath: string;
+    redirectPath: string;
+    linkPath: string;
+    linkText: string;
+}

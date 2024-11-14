@@ -19,3 +19,8 @@ interface RaiseFundingRequestList {
   requestDate: Date;
   approval: boolean | null;
 }
+
+interface RaiseFundingRequestData extends RaiseFundingRequestList {
+  raiseFunding: RaiseFunding | null;
+  company: Company | null;
+}
