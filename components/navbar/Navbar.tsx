@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchCompany = async () => {

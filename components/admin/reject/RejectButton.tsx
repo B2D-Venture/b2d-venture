@@ -32,13 +32,12 @@ interface RejectButtonProps {
     companyId?: number;
 }
 
-export function RejectButton({ type, request, email, companyId, handleReject }: RejectButtonProps) {
+export function RejectButton({ type, request, email, companyId }: RejectButtonProps) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    let messagesForm: { id: string; title: string; description: string; }[] = [];
 
-    const handleRejectAndClose = () => {
-        handleReject();
+    const handleRejectAndClose = (callback: () => void) => {
+        callback();
         setOpen(false);
     };
 
@@ -69,7 +68,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                         request={request} 
                         email={email} 
                         companyId={companyId}
-                        handleReject={handleRejectAndClose} />
+                        handleReject={() => handleRejectAndClose(() => {/* your reject logic here */})} />
 
                 </DialogContent>
             </Dialog>
@@ -103,7 +102,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                     request={request} 
                     email={email} 
                     companyId={companyId}
-                    handleReject={handleRejectAndClose} />
+                    handleReject={() => handleRejectAndClose} />
 
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>

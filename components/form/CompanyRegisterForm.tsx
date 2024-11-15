@@ -30,6 +30,7 @@ import React, { useState, useEffect } from "react";
 import { Company } from '@/types/company';
 import FormLoading from "@/components/loading/FormLoading";
 import Link from "next/link";
+import { CompanyRegisterFormProps } from "@/types/form/index.d";
 
 const documentSchema = z.object({
   pdfs: z.array(z.object({
@@ -94,7 +95,7 @@ export const formSchema = z.object({
     path: ["priceShare"]
   });
 
-export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: { canEdit?: boolean, companyEditId?: number, onRoleChange?: () => void }) {
+export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChange }: CompanyRegisterFormProps) {
   const { handleStepChange } = useFormState();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +104,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
   const [hasPublish, setHasPublish] = useState<boolean>(false);
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? "";
+  const [fileName, setFileName] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -120,6 +122,11 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
       pitch: "",
     },
   });
+
+  useEffect(() => {
+    form.setValue("banner", fileName);
+    form.trigger("banner");
+  }, [fileName]);
 
   const { reset } = form;
   useEffect(() => {
@@ -177,11 +184,6 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
     return <FormLoading />
   }
 
-  const setBannerImage = (fileName: string) => {
-    form.setValue("banner", fileName);
-    form.trigger("banner");
-  };
-
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
     const companyData: Company = {
@@ -222,11 +224,15 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
               addDataRoom(dataRoomEntry);
             });
           }
-          onRoleChange();
+          onRoleChange?.();
           handleStepChange(1);
         })
         .catch((err) => console.error("Error adding company:", err));
     } else {
+      if (companyEditId === undefined) {
+        return;
+      }
+
       companyData.id = companyEditId
       updateCompany(companyData);
 
@@ -236,7 +242,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
         );
 
         const removedDocuments = initialDocuments.filter(
-          (initDoc) => !document.pdfs.some((doc) => doc.key === initDoc.id.toString())
+          (initDoc) => !(document.pdfs ?? []).some((doc) => doc.key === initDoc.id.toString())
         );
 
         for (const pdf of newDocuments) {
@@ -310,7 +316,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
                 </div>
                 <div className="grid grid-cols-3 gap-4 col-span-3">
                   <div className="col-span-3">
-                    <BannerImageForm setBannerImage={setBannerImage} defaultBanner={company?.banner} />
+                    <BannerImageForm defaultBanner={fileName} onChange={(newBanner) => setFileName(newBanner)} />
                     <div className="mt-3">
                       <FormField
                         control={form.control}

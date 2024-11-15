@@ -45,7 +45,7 @@ const InvestmentItem = ({ company, request, status }: InvestmentItemProps) => {
             </div>
             <div className={`col-span-1 ${statusColor} text-3xl font-bold`}>
               {status} <br />
-              <span className="text-gray-400 text-sm">{request.requestDate.toLocaleDateString()}</span>
+              <span className="text-gray-400 text-sm">{new Date(request.requestDate).toLocaleDateString()}</span>
             </div>
             <div className="col-span-1">
               <AccordionTrigger asChild className="hover:no-underline">

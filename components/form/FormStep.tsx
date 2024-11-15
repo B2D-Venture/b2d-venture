@@ -37,8 +37,10 @@ export default function FormStep() {
     const fetchApprovalStatus = async () => {
       if (user) {
         if (user.roleId === 2) {
-          const requestData = await getInvestorRequestById(user.roleIdNumber);
-          setHasApproval(requestData.approval);
+          if (user.roleIdNumber !== null) {
+            const requestData = await getInvestorRequestById(user.roleIdNumber);
+            setHasApproval(requestData.approval);
+          }
           setSuccessRole("Investor");
         } else if (user.roleId === 3) {
           setSuccessRole("Company");
@@ -60,10 +62,10 @@ export default function FormStep() {
   }
 
   if ((user && user.roleId !== 1) || step === 4) {
-    if (user.roleId === 2) {
+    if (user?.roleId === 2) {
       return <SuccessForm role={"Investor"} hasApproval={hasApproval} />;
-    } else if (user.roleId === 3) {
-      return <SuccessForm role={"Company"} hasApproval={hasApproval} roleIdNumber={user?.roleIdNumber} />;
+    } else if (user?.roleId === 3) {
+      return <SuccessForm role={"Company"} hasApproval={hasApproval} roleIdNumber={user.roleIdNumber ?? undefined} />;
     }
   }
 

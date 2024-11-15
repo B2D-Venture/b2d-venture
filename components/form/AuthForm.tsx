@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/input-otp"
 import ReCAPTCHA from "react-google-recaptcha";
 import { AbideAlert } from "../registration/AbideAlert";
-import { AuthFormProps } from "@/types/form/index.d";
+import { AuthFormProps, FormValues } from "@/types/form/index.d";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -108,16 +108,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
     const callbackUrlRef = useRef<string>(searchParams.get('callbackUrl') || pathname);
 
-    const defaultValues = {
-        email: "",
-        password: "",
-        ...(title === "Sign Up" && { confirmPassword: "" }),
-    };
-
-    const form = useForm({
+    const form = useForm<FormValues>({
         resolver: zodResolver(title === "Sign Up" ? signUpSchema : signInSchema),
-        defaultValues,
-    });
+        defaultValues: title === "Sign Up"
+          ? { email: "", password: "", confirmPassword: "" }
+          : { email: "", password: "" },
+      });
 
     const otpForm = useForm<z.infer<typeof otpFormSchema>>({
         resolver: zodResolver(otpFormSchema),

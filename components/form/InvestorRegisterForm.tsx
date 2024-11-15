@@ -54,7 +54,6 @@ const formSchema = z.object({
 
 export function InvestorRegisterForm({ onRoleChange }: { onRoleChange: () => void }) {
   const { handleStepChange } = useFormState();
-
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? "";
 

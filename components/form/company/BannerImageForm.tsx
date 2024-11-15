@@ -3,14 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { UploadDropzone } from '@/src/utils/uploadthing';
 import Image from 'next/image';
 
-export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBannerImage: (image: string) => void, defaultBanner?: string }) {
+export function BannerImageForm({
+  defaultBanner = "",
+  onChange,
+}: {
+  defaultBanner?: string;
+  onChange?: (image: string) => void;
+}) {
   const [imageSrc, setImageSrc] = useState<string>(defaultBanner);
 
   useEffect(() => {
-    if (defaultBanner) {
-      setImageSrc(defaultBanner);
-    }
+    setImageSrc(defaultBanner);
   }, [defaultBanner]);
+
+  const handleImageChange = (newImage: string) => {
+    setImageSrc(newImage);
+    if (onChange) {
+      onChange(newImage);
+    }
+  };
 
   return (
     <div className="relative">
@@ -35,7 +46,7 @@ export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBan
                 if (res && res.length > 0) {
                   const uploadedFile = res[0];
                   setImageSrc(uploadedFile.url);
-                  setBannerImage(uploadedFile.url);
+                  handleImageChange(uploadedFile.url);
                 }
               }}
               onUploadError={(error: Error) => {
@@ -50,10 +61,7 @@ export function BannerImageForm({ setBannerImage, defaultBanner = "" }: { setBan
         <div className="mt-4 flex justify-center">
           <button
             className="px-6 py-2 bg-[#d9b834] text-white font-semibold rounded-lg shadow-lg hover:bg-[#c6a329] hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-yellow-400"
-            onClick={() => {
-              setImageSrc("");
-              setBannerImage("");
-            }}
+            onClick={() => handleImageChange("")}
           >
             Remove Banner
           </button>

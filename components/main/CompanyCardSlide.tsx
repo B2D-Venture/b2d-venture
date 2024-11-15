@@ -24,7 +24,7 @@ const CompanyCardSlide = () => {
             maxInvest: item.raiseFunding?.maxInvest ?? null,
             deadline: item.raiseFunding?.deadline ?? null,
             priceShare: item.raiseFunding?.priceShare ?? null,
-            investorCount: (await getInvesmentByFundingId(item.raiseFunding?.id ?? 0)).length,
+            investorCount: (await getInvesmentByFundingId(Number(item.raiseFunding?.id))).length,
           }))
         );
 

@@ -181,25 +181,6 @@ export async function changeToCompanyRole({
     .execute();
 }
 
-export async function addCompanyEditRequest(company: Company) {
-  if (company.id === undefined) {
-    throw new Error("Company ID is undefined");
-  }
-
-  return await db
-    .insert(CompanyEditRequestTable)
-    .values({
-      companyId: company.id,
-      name: company.name,
-      logo: company.logo,
-      banner: company.banner,
-      abbr: company.abbr,
-      description: company.description,
-      pitch: company.pitch,
-    })
-    .execute();
-}
-
 export async function updateCompany(company: Company) {
   if (company.id === undefined) {
     throw new Error("Company ID is undefined");

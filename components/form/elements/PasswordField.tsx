@@ -2,14 +2,9 @@ import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/f
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Control } from "react-hook-form";
+// import { Control } from "react-hook-form";
+import { PasswordFieldProps } from "@/types/form/index.d";
 
-interface PasswordFieldProps {
-    form: {
-        control: Control;
-    };
-    name: string;
-}
 
 const PasswordField = ({ form, name }: PasswordFieldProps) => {
     const [showPassword, setShowPassword] = useState(false);

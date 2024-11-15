@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 
 export type FormContentProps = {
     label: string;
@@ -29,4 +30,28 @@ export interface AuthFormProps {
     redirectPath: string;
     linkPath: string;
     linkText: string;
+}
+
+export type SignUpFormValues = {
+    email: string;
+    password: string;
+    confirmPassword: string;
+};
+
+export type SignInFormValues = {
+    email: string;
+    password: string;
+};
+
+export type FormValues = SignUpFormValues | SignInFormValues;
+
+export interface PasswordFieldProps {
+    form: UseFormReturn<FormValues>;
+    name: "email" | "password" | "confirmPassword";
+}
+
+export interface CompanyRegisterFormProps {
+    canEdit?: boolean;
+    companyEditId?: number;
+    onRoleChange?: () => void;
 }

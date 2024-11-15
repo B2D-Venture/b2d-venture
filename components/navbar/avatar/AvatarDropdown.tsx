@@ -4,20 +4,41 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
-import { 
-  getInvestorById, 
-  getUser, 
-  getInvestorRequestById, 
-  getCompanyById, 
-  getCompanyRequestById 
+import {
+  getInvestorById,
+  getUser,
+  getInvestorRequestById,
+  getCompanyById,
+  getCompanyRequestById
 } from "@/lib/db/index";
 import { MdEmail } from "react-icons/md";
+
+// export type SignUpFormValues = {
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+// };
+
+// export type SignInFormValues = {
+//   email: string;
+//   password: string;
+// };
+
+// export type FormValues = SignUpFormValues | SignInFormValues;
+
+export type SessionUser = {
+  name: string;
+  email: string;
+  image: string;
+};
+
+type UserData = User | SessionUser;
 
 const AvatarDropdown = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(session?.user?.name);
   const [imageUrl, setImageUrl] = useState(session?.user?.image);
-  const [user, setUser] = useState(session?.user);
+  const [user, setUser] = useState<UserData>(session?.user as SessionUser);
   const userEmail = session?.user?.email;
 
   useEffect(() => {
@@ -25,7 +46,9 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
       if (!userEmail) return;
 
       try {
-        const userData = await getUser(userEmail);
+        // const userData: User = await getUser(userEmail);
+        const user = await getUser(userEmail);
+        const userData = { ...user, createdAt: user.createdAt.toISOString() };
         if (!userData || userData.roleIdNumber === null) {
           setName(session?.user?.name);
           setImageUrl(session?.user?.image);
@@ -91,26 +114,26 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
           <ul className="p-2">
             <li className="mb-2 flex items-center">
               <FaUserCircle className="mr-2 text-lg text-gray-700" />
-              {(user.roleId === 2) ? (
+              {('roleId' in user && user.roleId === 2) ? (
                 <Link href="/investor-profile">
                   <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
                     Investor Profile
                   </span>
                 </Link>
               ) :
-              (user.roleId === 3) ? (
-                <Link href={`/company/${user.roleIdNumber}`}>
-                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
-                    Company Profile
-                  </span>
-                </Link>
-              ) : (
-                <Link href="/role-register">
-                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
-                    Register Role
-                  </span>
-                </Link>
-              )}
+                ('roleId' in user && user.roleId === 3) ? (
+                  <Link href={`/company/${user.roleIdNumber}`}>
+                    <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                      Company Profile
+                    </span>
+                  </Link>
+                ) : (
+                  <Link href="/role-register">
+                    <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                      Register Role
+                    </span>
+                  </Link>
+                )}
             </li>
             <li className="flex items-center">
               <FaSignOutAlt className="mr-2 text-lg text-gray-700" />

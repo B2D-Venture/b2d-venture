@@ -15,7 +15,15 @@ const CompanyLogoBoxList = () => {
     const fetchCompanies = async () => {
       try {
         const companiesData = await getAllCompanies("", 12);
-        const companies = companiesData.map((item) => item.company);
+        const companies = companiesData.map((item) => ({
+          id: item.company.id as number,
+          abbr: item.company.abbr as string,
+          name: item.company.name as string,
+          logo: item.company.logo as string,
+          banner: item.company.banner as string,
+          description: item.company.description as string,
+          pitch: item.company.pitch as string,
+        }));
 
         setCompanies(companies);
       } catch (err) {
