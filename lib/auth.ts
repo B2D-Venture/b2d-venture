@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
@@ -14,6 +14,21 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
+
+declare module "next-auth" {
+  interface User {
+    id: string;
+    roleId: number;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      roleId: number;
+    };
+  }
+}
 
 export const authConfig: NextAuthOptions = {
   session: {
@@ -34,13 +49,16 @@ export const authConfig: NextAuthOptions = {
         const user = await db
           .select()
           .from(UserTable)
-          .where(eq(UserTable.email, credentials?.email))
+          .where(eq(UserTable.email, credentials?.email ?? ""))
           .execute();
 
         if (user.length === 0 || !user[0].password) {
           throw new Error("No user found with this email");
         }
 
+        if (!credentials) {
+          throw new Error("Credentials are not provided");
+        }
         const isPasswordValid = await bcrypt.compare(credentials.password, user[0].password);
         if (!isPasswordValid) {
           throw new Error("Invalid password");

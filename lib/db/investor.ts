@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../../types/index";
 import { InvestorTable, InvestorRequestTable, UserTable } from "../schema";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import dotenv from "dotenv";
 import path from "path";

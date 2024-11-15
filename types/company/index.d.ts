@@ -8,6 +8,7 @@ interface Company {
   abbr: string;
   description: string;
   pitch: string;
+  registrationNumber: string;
 }
 
 export type CompanyWithRaiseFunding = Company & RaiseFunding;

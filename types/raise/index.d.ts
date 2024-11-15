@@ -1,4 +1,5 @@
 interface RaiseFunding {
+  totalShare: number | SQL<unknown> | Placeholder<string, any>;
   id?: number;
   companyId?: number;
   fundingTarget: number;

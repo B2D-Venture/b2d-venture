@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import {
-  CompanyTable,
   RaiseFundingTable,
   RaiseFundingRequestTable,
 } from "../schema";
@@ -26,7 +25,7 @@ export async function addRaiseFunding(
 ) {
   const insertedFunding = await db
     .insert(RaiseFundingTable)
-    .values({ ...fundingData, companyId })
+    .values({ ...fundingData, companyId, totalShare: fundingData.totalShare })
     .returning({ raiseFundingId: RaiseFundingTable.id })
     .execute();
 

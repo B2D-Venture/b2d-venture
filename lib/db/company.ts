@@ -7,7 +7,7 @@ import {
   UserTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { sql, eq, ilike, or } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;
