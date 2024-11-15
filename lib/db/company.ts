@@ -111,6 +111,7 @@ export async function getAllCompanies(
         banner: row.banner,
         description: row.description,
         pitch: row.pitch,
+        registrationNumber: row.registration_number,
       },
       raiseFunding: {
         id: row.id,

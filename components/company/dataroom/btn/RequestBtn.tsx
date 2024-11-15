@@ -6,6 +6,7 @@ import {
   getCompanyDataRoomRequestsByCompanyAndInvestor,
   getInvestorRequestById,
 } from "@/lib/db/index";
+import { User } from "@/types/user";
 
 const RequestBtn = ({
   text,

@@ -10,6 +10,7 @@ import {
   getInvestorRequestById,
 } from "@/lib/db/index";
 import FormSubmitLoading from "@/components/loading/FormSubmitLoading";
+import { User } from "@/types/user";
 
 export default function FormStep() {
   const [user, setUser] = useState<User | null>(null);

@@ -194,6 +194,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
       abbr: companyFormData.abbr,
       description: companyFormData.description,
       pitch: companyFormData.pitch,
+      registrationNumber: ""
     };
 
     if (!canEdit) {
@@ -204,6 +205,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
         deadline: companyFormData.deadline.toISOString(),
         priceShare: companyFormData.priceShare,
         valuation: companyFormData.valuation,
+        totalShare: 0,
       }
 
       addCompany(companyData)

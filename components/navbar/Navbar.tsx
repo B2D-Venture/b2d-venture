@@ -11,6 +11,7 @@ import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton";
 import { SessionProvider } from "next-auth/react";
 import { ModeToggle } from "@/components/navbar/DarkMode";
 import { useEffect, useState } from "react";
+import { User } from "@/types/user";
 
 const Navbar = () => {
   const pathname = usePathname();

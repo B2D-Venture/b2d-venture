@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions, User } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
@@ -14,21 +14,6 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 const db = drizzle(sql);
-
-declare module "next-auth" {
-  interface User {
-    id: string;
-    roleId: number;
-  }
-
-  interface Session {
-    user: {
-      id: string;
-      email: string;
-      roleId: number;
-    };
-  }
-}
 
 export const authConfig: NextAuthOptions = {
   session: {
@@ -102,15 +87,12 @@ export const authConfig: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.roleId = user.roleId;
       }
       return token;
     },
     async session({ session, token }) {
       session.user = {
-        id: token.id as string,
         email: token.email as string,
-        roleId: token.roleId as number,
       };
       return session;
     },

@@ -8,6 +8,8 @@ import {
   getInvestorRequestByInvestorandRaiseFunding,
   addAmount,
 } from "@/lib/db/index";
+import { User } from "@/types/user";
+
 
 interface InvestBtnProps {
   text: string;

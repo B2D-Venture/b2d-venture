@@ -36,6 +36,7 @@ import {
 import ReCAPTCHA from "react-google-recaptcha";
 import { AbideAlert } from "../registration/AbideAlert";
 import { AuthFormProps, FormValues } from "@/types/form/index.d";
+import { User } from "@/types/user";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),

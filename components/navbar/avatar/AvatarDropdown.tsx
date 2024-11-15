@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "./Avatar";
-import { Session } from "next-auth";
+import { Session, User } from "next-auth";
 import Link from "next/link";
 import { FaChevronDown, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { signOut } from "next-auth/react";
@@ -13,18 +13,6 @@ import {
 } from "@/lib/db/index";
 import { MdEmail } from "react-icons/md";
 
-// export type SignUpFormValues = {
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-// };
-
-// export type SignInFormValues = {
-//   email: string;
-//   password: string;
-// };
-
-// export type FormValues = SignUpFormValues | SignInFormValues;
 
 export type SessionUser = {
   name: string;
@@ -48,7 +36,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
       try {
         // const userData: User = await getUser(userEmail);
         const user = await getUser(userEmail);
-        const userData = { ...user, createdAt: user.createdAt.toISOString() };
+        const userData = { ...user, id: user.id.toString(), createdAt: user.createdAt.toISOString() };
         if (!userData || userData.roleIdNumber === null) {
           setName(session?.user?.name);
           setImageUrl(session?.user?.image);
@@ -122,7 +110,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
                 </Link>
               ) :
                 ('roleId' in user && user.roleId === 3) ? (
-                  <Link href={`/company/${user.roleIdNumber}`}>
+                  <Link href={`/company/${'roleIdNumber' in user ? user.roleIdNumber : ''}`}>
                     <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
                       Company Profile
                     </span>

@@ -23,6 +23,7 @@ const CompanyLogoBoxList = () => {
           banner: item.company.banner as string,
           description: item.company.description as string,
           pitch: item.company.pitch as string,
+          registrationNumber: item.company.registrationNumber as string,
         }));
 
         setCompanies(companies);

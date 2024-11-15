@@ -19,6 +19,7 @@ import RejectShow from "@/components/profile/RejectShow";
 import { CgProfile } from "react-icons/cg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DataroomItemList from "@/components/profile/investor/DataroomItemList";
+import { User } from "@/types/user";
 
 
 const getAllInvestmentData = async (investmentRequest: any) => {

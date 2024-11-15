@@ -4,6 +4,7 @@ import React from 'react'
 import { Button } from "@/components/ui/button";
 import { MdErrorOutline } from "react-icons/md";
 import { changeToViewerRole } from '@/lib/db/index';
+import { User } from '@/types/user';
 
 interface RejectShowProps {
     user: User;

@@ -17,6 +17,7 @@ import WaitingShow from "@/components/profile/WaitingShow";
 import RejectShow from "@/components/profile/RejectShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 import PublishForm from "@/components/profile/company/PublishForm";
+import { User } from "@/types/user";
 
 const calculateDaysLeft = (deadline: string) => {
   const today: Date = new Date();
@@ -86,16 +87,18 @@ export default async function CompanyProfile({
   } 
 
   const company = await getCompanyById(params.companyId);
-  const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId);
-  const oneFunding = await getOneRecentFundingByCompanyId(params.companyId);
+  const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId) as RaiseFunding;
+  const oneFunding = await getOneRecentFundingByCompanyId(params.companyId) as RaiseFunding;
   let allInvestmentFunding = [];
   let totalInvestor = 0;
   let totalInvestment = 0;
 
   if (recentFunding) {
-    allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
-    totalInvestor = getTotalInvestor(allInvestmentFunding);
+    if (recentFunding.id !== undefined) {
+      allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+      totalInvestor = getTotalInvestor(allInvestmentFunding);
     totalInvestment = getTotalInvestment(allInvestmentFunding);
+    }
   }
 
   return (
@@ -148,7 +151,7 @@ export default async function CompanyProfile({
             <div className="sticky top-28">
               {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
                 companyId={params.companyId}
-                raiseId={recentFunding?.id || oneFunding.id}
+                raiseId={recentFunding?.id ?? oneFunding.id ?? 0}
               />}
               <DealTerm
                 recentFunding={recentFunding || oneFunding}
