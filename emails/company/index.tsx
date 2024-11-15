@@ -16,7 +16,7 @@ import {
 import * as React from "react";
 
 interface EmailCompanyStatusProps {
-  message: string;
+  message: { id: string; title: string; description: string }[];
   status: "approved" | "rejected";
   loginDate?: Date;
   logo: string;

@@ -17,7 +17,7 @@ import {
 import * as React from "react";
 
 interface EmailDataroomStatusProps {
-    message: string;
+    message: { id: string; title: string; description: string }[];
     status: "approved" | "rejected";
     loginDate?: Date;
     company: Company;

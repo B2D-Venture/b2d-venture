@@ -16,7 +16,7 @@ import {
 import * as React from "react";
 
 interface EmailInvestorStatusProps {
-  message: string;
+  message: { id: string; title: string; description: string }[];
   status: "approved" | "rejected";
   loginDate?: Date;
   profileImage: string;
