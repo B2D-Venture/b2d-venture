@@ -72,7 +72,7 @@ const DealTerm = async ({
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
             urlId={urlId}
-            investorId={investorId}
+            investorId={Number(investorId) ?? null}
             user={user}
             recentFunding={recentFunding}
           />
@@ -85,7 +85,7 @@ const DealTerm = async ({
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
             urlId={urlId}
-            investorId={investorId}
+            investorId={Number(investorId) ?? null}
             user={user}
           />
         </div>

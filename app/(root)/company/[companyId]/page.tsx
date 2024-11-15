@@ -65,16 +65,17 @@ export default async function CompanyProfile({
   const session = await getServerSession(authConfig);
   const companyRequest = await getCompanyRequestById(params.companyId);  
 
-  let user: User | undefined = undefined;
+  let user: User = {} as User;
   let roleId = 1;
   let isApproval = null;
   if (session && session.user?.email) {
     const userEmail = session.user.email;
-    user = await getUser(userEmail);
+    const userData = await getUser(userEmail);
+    user = { ...userData, createdAt: userData.createdAt.toISOString() };
     roleId = user.roleId;
     if (user.roleIdNumber !== null) {
       const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
-      isApproval = isApprovalObj[0];
+      isApproval = isApprovalObj ? isApprovalObj[0] : null;
     }
   }
 
@@ -157,7 +158,7 @@ export default async function CompanyProfile({
                 roleId={user?.roleId ?? null}
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
                 urlId={params.companyId}
-                investorId={user?.roleIdNumber ?? null}
+                investorId={Number(user?.roleIdNumber) ?? null}
                 user={user}
               />
             </div>

@@ -61,7 +61,8 @@ export default async function InvestorProfile() {
   }
 
   const userEmail = session.user.email;
-  const user = await getUserByEmail(2, userEmail); // get user role 2 = investor
+  const userResponse = await getUserByEmail(2, userEmail); // get user role 2 = investor
+  const user: User = { ...userResponse, createdAt: userResponse.createdAt.toISOString() };
 
   if (!user) {
     redirect("/role-register");

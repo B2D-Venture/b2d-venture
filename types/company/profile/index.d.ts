@@ -6,7 +6,7 @@ interface DealTermProps {
   roleId: number | null;
   isOwnCompany: boolean;
   urlId: number;
-  investorId: number;
+  investorId: number | null;
   user: User;
 }
 
