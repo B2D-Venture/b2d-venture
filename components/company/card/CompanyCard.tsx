@@ -20,6 +20,7 @@ const CompanyCard = ({
     setIsLoading(true);
     router.push("/company/" + company.id);
   };
+  console.log("company", company);
 
   return (
     <div className="flex justify-center items-center p-4">

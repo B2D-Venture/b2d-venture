@@ -126,7 +126,7 @@ export function CompanyRegisterForm({ canEdit = false, companyEditId, onRoleChan
   useEffect(() => {
     form.setValue("banner", fileName);
     form.trigger("banner");
-  }, [fileName]);
+  }, [fileName, form]);
 
   const { reset } = form;
   useEffect(() => {

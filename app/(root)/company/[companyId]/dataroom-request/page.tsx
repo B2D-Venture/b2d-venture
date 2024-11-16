@@ -86,23 +86,25 @@ export default function DataroomRequestPage({
       );
       const DataRoomDetails = await Promise.all(
         dataRoomRequests.map(async (request) => {
-          const investor = await getInvestorById(request.investorId);
-          return {
-            ...request,
-            investor: investor,
-          };
+          if (request.investorId !== null) {
+            const investor = await getInvestorById(request.investorId);
+            return {
+              ...request,
+              investor: investor,
+            };
+          }
         })
       );
-      setDataroomData(DataRoomDetails);
+      setDataroomData(DataRoomDetails.filter((detail) => detail !== undefined) as dataroomRequest[]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }, [params.companyId]);
 
-  useEffect(() => {  
+  useEffect(() => {
     const fetchUser = async () => {
       if (status === "authenticated" && session?.user?.email) {
-        const user = await getUserByEmail(session?.user?.email);  
+        const user = await getUserByEmail(session?.user?.email);
         const companyRequest = await getCompanyRequestById(params.companyId);
 
         if (
@@ -110,7 +112,7 @@ export default function DataroomRequestPage({
         ) {
           setNotfound(true);
           setLoading(false);
-        } else {  
+        } else {
           if (!companyRequest || companyRequest[0]?.approval !== true) {
             setNotfound(true);
             setLoading(false);
@@ -124,10 +126,10 @@ export default function DataroomRequestPage({
         setLoading(false);
       }
     };
-  
+
     fetchUser();
   }, [session, status, params.companyId, fetchData]);
-  
+
   if (loading) {
     return <div></div>;
   }
@@ -173,7 +175,7 @@ export default function DataroomRequestPage({
                     company,
                     dataRoomRequests.investor.profileImage
                   );
-                } 
+                }
                 fetchData();
               }}
               handleReject={async () => {

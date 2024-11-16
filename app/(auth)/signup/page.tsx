@@ -1,8 +1,12 @@
 "use client";
-import AuthForm from "@/components/form/AuthForm";
+import dynamic from "next/dynamic";
+
+const AuthFormDynamic = dynamic(() => import("@/components/form/AuthForm"), {
+  ssr: false,
+});
 
 const SignUp = () => (
-  <AuthForm
+  <AuthFormDynamic
     title="Sign Up"
     apiPath="/api/auth/signup"
     redirectPath="/welcome"

@@ -117,3 +117,5 @@ export default async function InvestorProfile() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

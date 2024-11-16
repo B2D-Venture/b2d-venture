@@ -53,11 +53,14 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
   } | null>(null);
 
   const fetchInvestor = useCallback(async () => {
+    if (!investorId) return;
     const data = await getInvestorById(investorId);
     setInvestor(data);
   }, [investorId]);
 
   const fetchExistingInvestment = useCallback(async () => {
+    if (!investorId || !recentFunding.id) return;
+
     const existingRequest = await getInvestorRequestByInvestorandRaiseFunding(
       investorId,
       Number(recentFunding.id)

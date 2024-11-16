@@ -142,7 +142,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         } else {
             setLoading(false);
         }
-    }, [status, pathname]);
+    }, [status, pathname, router]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
