@@ -64,3 +64,11 @@ export async function createUser(email: string, password: string, roleId: number
     })
     .execute();
 }
+
+export async function resetPassword(email: string, password: string) {
+  return await db
+    .update(UserTable)
+    .set({ password })
+    .where(eq(UserTable.email, email))
+    .execute();
+}

@@ -59,7 +59,7 @@ export const authConfig: NextAuthOptions = {
   
         const existingUser = await getUser(profile.email);
   
-        if (existingUser) {
+        if (!existingUser) {
           // If the user does not exist, create a new user
           // Role Id
           // 1 - Viewer

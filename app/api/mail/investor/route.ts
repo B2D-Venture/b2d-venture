@@ -20,8 +20,8 @@ export async function POST(request: Request) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "Acme <noreply@resend.dev>",
-      to: ["bosskingblack10@gmail.com"],
+      from: "B2D-Venture <noreply@resend.dev>",
+      to: email,
       subject: "Investor Register Creation",
       html: await render(
         EmailInvestorStatusProps({

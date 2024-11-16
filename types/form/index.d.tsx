@@ -25,7 +25,7 @@ export interface SuccessFormProps {
 }
 
 export interface AuthFormProps {
-    title: "Sign In" | "Sign Up";
+    title: "Sign In" | "Sign Up" | "Reset Password";
     apiPath: string;
     redirectPath: string;
     linkPath: string;
