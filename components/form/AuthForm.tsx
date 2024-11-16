@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
 import PasswordField from "./elements/PasswordField";
-import bcrypt from "bcryptjs";
 import { getUser } from "@/lib/db/index";
 import {
     Dialog,
@@ -112,9 +111,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const form = useForm<FormValues>({
         resolver: zodResolver(title === "Sign Up" ? signUpSchema : signInSchema),
         defaultValues: title === "Sign Up"
-          ? { email: "", password: "", confirmPassword: "" }
-          : { email: "", password: "" },
-      });
+            ? { email: "", password: "", confirmPassword: "" }
+            : { email: "", password: "" },
+    });
 
     const otpForm = useForm<z.infer<typeof otpFormSchema>>({
         resolver: zodResolver(otpFormSchema),
@@ -139,7 +138,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         if (status === "authenticated") {
             fetchUser();
         } else if (status === "unauthenticated" && pathname === "/signup") {
-            callbackUrlRef.current = "/role-register";
+            router.push("/role-register");
         } else {
             setLoading(false);
         }
@@ -160,9 +159,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
     if ((callbackUrlRef.current === "/signup" || callbackUrlRef.current === "/signin") && user) {
         if (user.roleId === 2) {
-            window.location.href = `/investor-profile`;
+            router.push(`/investor-profile`);
         } else if (user.roleId === 3) {
-            window.location.href = `/company/${user.roleIdNumber}`;
+            router.push(`/company/${user.roleIdNumber}`);
+        } else if (user.roleId === 1) {
+            router.push(`/`);
         }
     }
 
@@ -171,39 +172,59 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const handleAuth = async () => {
         const email = form.getValues("email");
         setError(null);
-        if (title === "Sign In") {
-            const passwordForm = form.getValues("password");
-            const existingUser = await getUser(email);
-            if (!existingUser) {
-                setError("Incorrect email or password.");
-                return;
-            }
-            const isMatch = await bcrypt.compare(passwordForm, existingUser.password);
-            if (isMatch) {
-                const signInRes = await signIn("credentials", {
-                    redirect: false,
-                    email: email,
-                    password: passwordForm,
+
+        try {
+            if (title === "Sign In") {
+                const password = form.getValues("password");
+
+                const res = await fetch("/api/auth/signin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
                 });
-                if (signInRes?.error) {
-                    alert("Error signing in after registration: " + signInRes.error);
-                    setError("Error signing in: " + signInRes.error);
-                } else {
-                    router.push(callbackUrlRef.current === "/signin" ? "/" : callbackUrlRef.current);
+
+                const data = await res.json();
+                if (!res.ok) {
+                    setError(data.error || "Sign-in failed.");
+                    return;
                 }
-            } else {
-                setError("Incorrect email or password.");
+
+                if (res.ok) {
+                    const signInRes = await signIn("credentials", {
+                        redirect: false,
+                        email: form.getValues("email"),
+                        password: form.getValues("password"),
+                    });
+    
+                    if (signInRes?.error) {
+                        alert("Error signing in after registration: " + signInRes.error);
+                    }
+                    else {
+                        router.push(callbackUrlRef.current === "/signin" ? "/" : callbackUrlRef.current);
+                    }
+                } else {
+                    setError(data.error || "Sign-in failed.");
+                    return;
+                }   
             }
-        }
-        else if (title === "Sign Up") {
-            if (!captchaValid) {
-                setCaptchaError("Please complete the reCAPTCHA.");
-                return;
+            else if (title === "Sign Up") {
+                const user = await getUser(email);
+                if (user) {
+                    setError("User already exists");
+                    return;
+                }
+
+                if (!captchaValid) {
+                    setCaptchaError("Please complete the reCAPTCHA.");
+                    return;
+                }
+                setShowOTPModal(true);
+                const otp = generateOTP();
+                sendOtpCode(otp);
+                setOtp(otp);
             }
-            setShowOTPModal(true);
-            const otp = generateOTP();
-            sendOtpCode(otp);
-            setOtp(otp);
+        } catch (err) {
+            setError("An unexpected error occurred.");
         }
     };
 
@@ -225,13 +246,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
     async function handleVerifyOTP(data: z.infer<typeof otpFormSchema>) {
         if (data.pin === otp) {
-            const hashedPassword = await bcrypt.hash(form.getValues("password"), 10);
             const res = await fetch(apiPath, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: form.getValues("email"),
-                    password: hashedPassword,
+                    password: form.getValues("password"),
                 }),
             });
 
@@ -244,7 +264,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
                 if (signInRes?.error) {
                     alert("Error signing in after registration: " + signInRes.error);
-                } else {
+                }
+                else {
                     router.push(callbackUrlRef.current === "/signup" ? "/" : callbackUrlRef.current);
                 }
             } else {
@@ -417,3 +438,4 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 };
 
 export default AuthForm;
+export const dynamic = "force-dynamic";
