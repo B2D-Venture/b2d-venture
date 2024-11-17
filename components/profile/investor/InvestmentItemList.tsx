@@ -42,7 +42,7 @@ const InvestmentItemList = ({ investments }: InvestmentItemListProps) => {
 
       {investments.length === 0 ? (
         <div className="flex justify-center items-center text-center text-xl mt-8">
-          <RiHandCoinLine className="mr-3 text-4xl" /> 
+          <RiHandCoinLine className="mr-3 text-4xl" />
           <span>No Investments Request</span>
         </div>
       ) : (

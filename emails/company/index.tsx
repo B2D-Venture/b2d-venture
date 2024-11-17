@@ -177,7 +177,7 @@ export const YelpRecentLoginEmail = ({
             <div>
               <Img
                 style={image}
-                width="100%"
+                width="700px"
                 src={banner}
                 alt="Company Banner"
               />

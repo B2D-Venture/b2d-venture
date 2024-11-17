@@ -1,8 +1,6 @@
 import { render } from "@react-email/render";
 import EmailDataroomStatusProps from "@/emails/dataroom";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { sendEmail } from "@/src/utils/mail.utils";
 
 export async function POST(request: Request) {
   const { 
@@ -11,30 +9,32 @@ export async function POST(request: Request) {
     status,
     company,
     investorProfile,
-} = await request.json();
+  } = await request.json();
 
   try {
-    const { error } = await resend.emails.send({
-      from: "Acme <noreply@resend.dev>",
-      to: ["bosskingblack10@gmail.com"],
-      subject: "Dataroom Request Status",
-      html: await render(EmailDataroomStatusProps({ 
+    const htmlContent = await render(
+      EmailDataroomStatusProps({
         message,
         status,
         loginDate: new Date(),
         company,
         investorProfile,
-      })),
-    });
+      })
+    );
 
-    if (error) {
-      return new Response(JSON.stringify({ error }), { status: 500 });
-    }
-
-    return new Response(JSON.stringify({ message: "Email sent successfully" }), {
-      status: 200,
+    await sendEmail({
+      sender: "B2D-Venture <noreply@b2d-venture.com>",
+      receiver: email,
+      subject: "Dataroom Request Status",
+      html: htmlContent,
     });
+      
+    return new Response(
+      JSON.stringify({ message: "Email sent successfully" }),
+      { status: 200 }
+    );
   } catch (error) {
+    console.error("Error sending email:", error);
     return new Response(JSON.stringify({ error: "Failed to send email" }), {
       status: 500,
     });

@@ -98,7 +98,7 @@ export const DataroomEmail = ({
                                             </Column>
                                             <Column align="center">
                                                 <Img
-                                                    src="https://static.thenounproject.com/png/1277516-200.png"
+                                                    src="https://media.istockphoto.com/id/1423112183/es/vector/icono-del-bot%C3%B3n-cerrar.jpg?s=612x612&w=0&k=20&c=gaJRJNav4LR5IpKpM-xgWFX0AA1V3wLStEny7tIxcos="
                                                     width="20"
                                                     height="20"
                                                     alt="invited you to"
@@ -158,7 +158,7 @@ export const DataroomEmail = ({
                                                 </Column>
                                                 <Column align="center">
                                                     <Img
-                                                        src="https://www.iconninja.com/files/79/410/532/yes-right-correct-check-complete-ok-accept-icon.svg"
+                                                        src="https://static.thenounproject.com/png/3092173-200.png"
                                                         width="20"
                                                         height="20"
                                                         alt="invited you to"
