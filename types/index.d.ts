@@ -50,6 +50,7 @@ interface InvestmentItemProps {
   company: Company;
   request: InvestmentRequest;
   status: string;
+  lastraisedFunding: RaiseFunding;
 }
 
 interface OutputTextBoxProps {
