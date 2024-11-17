@@ -1,0 +1,154 @@
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  getInvestorById,
+  getCompanyById,
+  getUser,
+  getCompanyRequestById,
+  getInvesmentByCompanyId,
+  getRaiseFundingById,
+  approveInvestmentRequest,
+  rejectInvestmentRequest,
+  UpdateInvestorAmount,
+} from "@/lib/db/index";
+import { Dealcard } from "@/components/admin/Deal/DealCard";
+import { useSession } from "next-auth/react";
+import { notFound } from "next/navigation";
+
+const isOwnCompany = (urlId: number, roleIdNumber: number) => {
+  if (Number(roleIdNumber) == urlId) {
+    return true;
+  }
+  return false;
+};
+
+async function getUserByEmail(email: string) {
+  const user = await getUser(email);
+  return user;
+}
+
+export default function InvestorRequestPage({
+  params,
+}: {
+  params: { companyId: number };
+}) {
+  const { data: session, status } = useSession();
+
+  const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
+  const [notfound, setNotfound] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const investmentRequests = await getInvesmentByCompanyId(
+        params.companyId
+      );
+      console.log("investmentRequests", investmentRequests);
+      if (investmentRequests) {
+        const investmentDetails = await Promise.all(
+          investmentRequests.map(async (request) => {
+            const investor = await getInvestorById(request.investorId);
+            const raiseFunding = await getRaiseFundingById(
+              request.raiseFundingId
+            );
+            const company = await getCompanyById(raiseFunding.companyId);
+            return {
+              ...(request as unknown as InvestmentRequest),
+              investor: investor || null,
+              raiseFunding: raiseFunding || null,
+              company: company || null,
+            };
+          })
+        );
+        setDealData(investmentDetails);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [params.companyId]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (status === "authenticated" && session?.user?.email) {
+        const user = await getUserByEmail(session?.user?.email);
+        const companyRequest = await getCompanyRequestById(params.companyId);
+
+        if (
+          !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
+        ) {
+          setNotfound(true);
+          setLoading(false);
+        } else {
+          if (!companyRequest || companyRequest[0]?.approval !== true) {
+            setNotfound(true);
+            setLoading(false);
+          } else {
+            fetchData();
+            console.log("fetchData");
+            setLoading(false);
+          }
+        }
+      } else {
+        setNotfound(true);
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [session, status, params.companyId, fetchData]);
+
+  if (loading) {
+    return <div></div>;
+  }
+
+  if (notfound) {
+    return notFound();
+  }
+
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  return (
+    <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
+      {dealData.length > 0 &&
+        dealData.map((deal, index) => (
+          <div
+            key={index}
+            className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
+          >
+            <Dealcard
+              investorName={
+                deal.investor
+                  ? deal.investor.firstName + " " + deal.investor.lastName
+                  : "Investor"
+              }
+              moneyReadyForInvestment={deal.investor?.investableAmount || 0}
+              investAmount={deal.amount || 0}
+              stockPercentage={deal.getStock || 0}
+              companyName={deal.company?.name || "Company"}
+              raiseTarget={deal.raiseFunding?.fundingTarget || 0}
+              raisePercentage={
+                (deal.amount / (deal.raiseFunding?.fundingTarget ?? 1)) * 100 ||
+                0
+              }
+              valuation={(100 / deal.getStock) * deal.amount || 0}
+              handleApprove={async () => {
+                await approveInvestmentRequest(deal.id);
+                await delay(100);
+                fetchData();
+              }}
+              handleReject={async () => {
+                await rejectInvestmentRequest(deal.id);
+                await UpdateInvestorAmount({
+                  investorId: deal.investorId,
+                  amount: (deal.investor?.investableAmount || 0) + deal.amount,
+                });
+                await delay(100);
+                fetchData();
+              }}
+            />
+          </div>
+        ))}
+    </div>
+  );
+}
