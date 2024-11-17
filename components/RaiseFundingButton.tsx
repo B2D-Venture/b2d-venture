@@ -48,7 +48,7 @@ export function RaiseFundingButton({
       <Dialog open={open} onOpenChange={setOpen}>
         {canRaiseFunding === true ? (
           <DialogTrigger asChild>
-            <div className="my-2 flex items-center justify-center">
+            <div className="py-2 w-[170px] md:w-[100px] lg:w-[140px] xl:w-[180px] text-[#423F3F] bg-[#AFAB9A] border-transparent text-center md:text-[8px] lg:text-xs xl:text-lg font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#807D71] hover:text-white hover:border-transparent shadow-md hover:shadow-lg">
               <Button className={buttonClasses}>Raise Funding</Button>
             </div>
           </DialogTrigger>

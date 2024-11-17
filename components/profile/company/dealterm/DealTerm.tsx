@@ -7,6 +7,7 @@ import { RaiseFundingButton } from "@/components/RaiseFundingButton";
 import RequestBtn from "../../../company/dataroom/btn/RequestBtn";
 import InvestBtn from "../../../company/dataroom/btn/InvestBtn";
 import { getLastRaiseFundingRequestByCompanyId } from "@/lib/db";
+import PrivateOfferBtn from "@/components/company/dataroom/btn/privateOfferBtn";
 
 const canRaiseFunding = async (
   dayLeft: number,
@@ -118,6 +119,21 @@ const DealTerm = ({
             investorId={Number(investorId) ?? null}
             user={user}
           />
+          {/* <div className="sm:col-span-2">
+            <PrivateOfferBtn
+              text="Private Offer"
+              textColor="text-white"
+              hoverTextColor="hover:text-white"
+              bgColor="bg-[#76ABAE] dark:bg-[#FF8A00]"
+              hoverBgColor="hover:bg-[#639093] dark:hover:bg-[#FF8A00]"
+              borderColor="border-transparent"
+              hoverBorderColor="border-transparent"
+              urlId={urlId}
+              investorId={investorId}
+              user={user}
+              recentFunding={recentFunding}
+            />
+          </div> */}
         </div>
       )}
       {roleId === 3 && isOwnCompany && (
@@ -132,6 +148,16 @@ const DealTerm = ({
             borderColor="border-transparent"
             hoverBorderColor="border-transparent"
             link={`/company/${urlId}/dataroom-request`}
+          />
+          <DealTermBtn
+            text="Investor Request"
+            textColor="text-[#423F3F]"
+            hoverTextColor="hover:text-white"
+            bgColor="bg-[#AFAB9A]"
+            hoverBgColor="hover:bg-[#807D71]"
+            borderColor="border-transparent"
+            hoverBorderColor="border-transparent"
+            link={`/company/${urlId}/Investor-request`}
           />
         </div>
       )}
