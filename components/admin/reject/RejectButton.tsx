@@ -32,12 +32,13 @@ interface RejectButtonProps {
     companyId?: number;
 }
 
-export function RejectButton({ type, request, email, companyId }: RejectButtonProps) {
+export function RejectButton({ type, request, email, companyId, handleReject }: RejectButtonProps) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
     const handleRejectAndClose = (callback: () => void) => {
         callback();
+        handleReject();
         setOpen(false);
     };
 
@@ -68,8 +69,7 @@ export function RejectButton({ type, request, email, companyId }: RejectButtonPr
                         request={request} 
                         email={email} 
                         companyId={companyId}
-                        handleReject={() => handleRejectAndClose(() => {/* your reject logic here */})} />
-
+                        handleReject={() => handleRejectAndClose(() => { })} />
                 </DialogContent>
             </Dialog>
         );
