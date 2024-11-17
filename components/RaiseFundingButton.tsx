@@ -33,7 +33,7 @@ export function RaiseFundingButton({
   canRaiseFunding,
   companyId,
 }: {
-  canRaiseFunding: boolean;
+  canRaiseFunding: boolean | null; // null indicates a pending raise request
   companyId: number;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -46,13 +46,13 @@ export function RaiseFundingButton({
     // Desktop: Use Dialog
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        {canRaiseFunding ? (
+        {canRaiseFunding === true ? (
           <DialogTrigger asChild>
             <div className="my-2 flex items-center justify-center">
               <Button className={buttonClasses}>Raise Funding</Button>
             </div>
           </DialogTrigger>
-        ) : (
+        ) : canRaiseFunding === false ? (
           <div className="my-2 flex items-center justify-center">
             <TooltipProvider>
               <Tooltip>
@@ -78,7 +78,32 @@ export function RaiseFundingButton({
               </Tooltip>
             </TooltipProvider>
           </div>
-        )}
+        ) : canRaiseFunding === null ? (
+          <div className="my-2 flex items-center justify-center">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className={`${buttonClasses} cursor-not-allowed`}>
+                    Raise Funding
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="flex flex-col items-center p-2 border border-yellow-500 bg-yellow-50 text-yellow-700 rounded-lg shadow-md">
+                    <div className="flex items-center">
+                      <IoWarning className="text-xl mr-2" />
+                      <p className="font-semibold">
+                        The request is pending approval.
+                      </p>
+                    </div>
+                    <p className="text-sm text-center">
+                      Your raise funding request is in progress.
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        ) : null}
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Raise Funding</DialogTitle>
@@ -95,13 +120,13 @@ export function RaiseFundingButton({
   // Mobile: Use Drawer
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      {canRaiseFunding ? (
+      {canRaiseFunding === true ? (
         <DialogTrigger asChild>
           <div className="my-2 flex items-center justify-center">
             <Button className={buttonClasses}>Raise Funding</Button>
           </div>
         </DialogTrigger>
-      ) : (
+      ) : canRaiseFunding === false ? (
         <div className="my-2 flex items-center justify-center">
           <TooltipProvider>
             <Tooltip>
@@ -127,7 +152,32 @@ export function RaiseFundingButton({
             </Tooltip>
           </TooltipProvider>
         </div>
-      )}
+      ) : canRaiseFunding === null ? (
+        <div className="my-2 flex items-center justify-center">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button className={`${buttonClasses} cursor-not-allowed`}>
+                  Raise Funding
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="flex flex-col items-center p-2 border border-yellow-500 bg-yellow-50 text-yellow-700 rounded-lg shadow-md">
+                  <div className="flex items-center">
+                    <IoWarning className="text-xl mr-2" />
+                    <p className="font-semibold">
+                      The request is pending approval.
+                    </p>
+                  </div>
+                  <p className="text-sm text-center">
+                    Your raise funding request is in progress.
+                  </p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      ) : null}
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Raise Funding</DrawerTitle>

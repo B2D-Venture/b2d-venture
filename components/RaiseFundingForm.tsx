@@ -25,12 +25,12 @@ interface RaiseFundingFormProps extends React.ComponentProps<"form"> {
 // Combine schemas
 const formSchema = z
   .object({
-    valuation: z
+    totalShare: z
       .number({
-        required_error: "Valuation is required.",
+        required_error: "Total Shares is required.",
       })
-      .min(0, { message: "Valuation cannot be negative" })
-      .max(1000000000, "Valuation cannot be more than 1 billion"),
+      .min(0, { message: "Total Shares cannot be negative" })
+      .max(1000000000, "Total Shares cannot be more than 1 billion"),
     fundingTarget: z
       .number({
         required_error: "Funding Target is required.",
@@ -66,20 +66,19 @@ const formSchema = z
     message: "Maximum investment cannot be greater than the funding target.",
     path: ["maxInvest"],
   })
-  .refine((data) => data.priceShare <= data.fundingTarget, {
-    message: "Price per share cannot be more than the funding target",
-    path: ["priceShare"],
+  .refine((data) => data.fundingTarget <= data.totalShare, {
+    message: "Funding target cannot be more than the Total Shares",
+    path: ["fundingTarget"],
   });
 
 export function RaiseFundingForm({
   className,
   companyId,
 }: RaiseFundingFormProps) {
-  console.log("Company Id Raise:", companyId);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      valuation: undefined,
+      totalShare: undefined,
       fundingTarget: undefined,
       priceShare: undefined,
       minInvest: undefined,
@@ -89,14 +88,20 @@ export function RaiseFundingForm({
   });
 
   function onSubmit(values: any) {
-    console.log("RaiseFunding Value:", values);
-    if (values.deadline) {
-      values.deadline = new Date(values.deadline).toISOString();
-    }
+    const valuation = values.totalShare * values.priceShare;
 
-    addRaiseFunding(values, companyId)
+    const submissionData = {
+      ...values,
+      valuation,
+      deadline: values.deadline
+        ? new Date(values.deadline).toISOString()
+        : undefined,
+    };
+
+    addRaiseFunding(submissionData, companyId)
       .then((raiseFundingId) => {
         addRaiseFundingRequest({ raiseFundingId });
+        window.location.reload();
       })
       .catch((err) => console.error("Error Raise Funding:", err));
   }
@@ -108,14 +113,14 @@ export function RaiseFundingForm({
         className={`grid gap-4 ${className}`}
       >
         <div className="grid gap-4">
-          {/* Valuation */}
+          {/* Total Shares */}
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="valuation"
+              name="totalShare"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[17px]">Valuation</FormLabel>
+                  <FormLabel className="text-[17px]">Total Shares</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#bfbfbf] text-black"

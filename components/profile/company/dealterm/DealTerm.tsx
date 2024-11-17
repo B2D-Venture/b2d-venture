@@ -1,18 +1,34 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
 import { RaiseFundingButton } from "@/components/RaiseFundingButton";
 import RequestBtn from "../../../company/dataroom/btn/RequestBtn";
 import InvestBtn from "../../../company/dataroom/btn/InvestBtn";
+import { getLastRaiseFundingRequestByCompanyId } from "@/lib/db";
 
-const canRaiseFunding = (dayLeft: number, current: number, target: number) => {
+const canRaiseFunding = async (
+  dayLeft: number,
+  current: number,
+  target: number,
+  companyId: number,
+) => {
+  const raiseFundingRequest =
+    await getLastRaiseFundingRequestByCompanyId(companyId);
+
+  if (!raiseFundingRequest || raiseFundingRequest.approval === null) {
+    return null;
+  }
+
   if (dayLeft <= 0 || current >= target) {
     return true;
   }
+
   return false;
 };
 
-const DealTerm = async ({
+const DealTerm = ({
   recentFunding,
   dayLeft,
   totalInvestor,
@@ -23,6 +39,22 @@ const DealTerm = async ({
   investorId,
   user,
 }: DealTermProps) => {
+  const [canRaise, setCanRaise] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkRaiseFunding = async () => {
+      const result = await canRaiseFunding(
+        dayLeft,
+        currentInvestment,
+        recentFunding.fundingTarget,
+        urlId,
+      );
+      setCanRaise(result);
+    };
+
+    checkRaiseFunding();
+  }, [urlId, dayLeft, currentInvestment, recentFunding.fundingTarget]);
+
   return (
     <div className="m-5 sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4 md:p-1 lg:p-2 xl:p-3">
       <div className="mb-4 md:mb-2 lg:mb-4 xl:mb-5">
@@ -53,9 +85,7 @@ const DealTerm = async ({
           label="Price per Share"
         />
         <DealTermElement
-          data={`${(
-            recentFunding.fundingTarget / recentFunding.priceShare
-          ).toLocaleString()}`}
+          data={`${recentFunding.totalShare.toLocaleString()} $`}
           label="Total Shares"
         />
       </div>
@@ -92,14 +122,7 @@ const DealTerm = async ({
       )}
       {roleId === 3 && isOwnCompany && (
         <div className="mt-2 md:mt-2 lg:mt-4 xl:mt-5 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2">
-          <RaiseFundingButton
-            canRaiseFunding={canRaiseFunding(
-              dayLeft,
-              currentInvestment,
-              recentFunding.fundingTarget
-            )}
-            companyId={urlId}
-          />
+          <RaiseFundingButton canRaiseFunding={canRaise} companyId={urlId} />
           <DealTermBtn
             text="Data Room Request"
             textColor="text-[#423F3F]"
