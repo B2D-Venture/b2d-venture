@@ -96,7 +96,6 @@ export async function getOneRecentFundingByCompanyId(companyId: number) {
 }
 
 export const getRaiseFundingByCompanyId = async (companyId: number) => {
-  try {
     const raiseFundingRecord = await db
       .select()
       .from(RaiseFundingTable)
@@ -104,10 +103,6 @@ export const getRaiseFundingByCompanyId = async (companyId: number) => {
       .execute();
 
     return raiseFundingRecord;
-  } catch (error) {
-    console.error("Error fetching raise funding record:", error);
-    throw error;
-  }
 };
 
 export async function getRaiseFundingById(raiseFundingId: number) {
