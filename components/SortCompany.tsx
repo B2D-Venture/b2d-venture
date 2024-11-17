@@ -58,6 +58,26 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
 
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
+              <span>Total Shares</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("totalShare", "asc")}
+                >
+                  Low to High
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleSortClick("totalShare", "desc")}
+                >
+                  High to Low
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
               <span>Funding Target</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>

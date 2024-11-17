@@ -29,6 +29,7 @@ const CompanyList = () => {
                 const companies = await Promise.all(
                     companiesData.map(async (item) => ({
                         ...item.company,
+                        totalShare: item.raiseFunding?.totalShare ?? 0,
                         fundingTarget: item.raiseFunding?.fundingTarget ?? 0,
                         minInvest: item.raiseFunding?.minInvest ?? null,
                         maxInvest: item.raiseFunding?.maxInvest ?? null,
