@@ -37,6 +37,7 @@ import { AbideAlert } from "../registration/AbideAlert";
 import { AuthFormProps, FormValues } from "@/types/form/index.d";
 import { User } from "@/types/user";
 import { Checkbox } from "../ui/checkbox";
+import Image from "next/image";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -223,7 +224,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                 }
                 setShowOTPModal(true);
                 const otp = generateOTP();
-                sendOtpCode(otp, email);
+                // sendOtpCode(otp, email);
                 setOtp(otp);
             }
             else if (title === "Reset Password") {
@@ -417,10 +418,22 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                 <Dialog open={showOTPModal} onOpenChange={setShowOTPModal}>
                                     <DialogContent className="sm:max-w-[425px]">
                                         <DialogHeader>
-                                            <DialogTitle>Enter OTP Code</DialogTitle>
-                                            <DialogDescription>
-                                                Please enter the code sent to your email.
+                                            <DialogTitle className="text-2xl font-bold text-center">Enter OTP Code</DialogTitle>
+                                            <DialogDescription className="text-gray-600 text-center">
+                                                Please enter the code sent to your email address to verify your identity.
                                             </DialogDescription>
+                                            <div className="flex flex-col items-center mt-4">
+                                                <Image
+                                                    src="/email-sender-animated/email.gif"
+                                                    width={60}
+                                                    height={60}
+                                                    alt="Email Animated Icon"
+                                                    className="mb-3"
+                                                />
+                                                <DialogDescription className="text-gray-600 text-center">
+                                                    An OTP has been sent to <span className="font-semibold">{form.getValues("email")}</span>.
+                                                </DialogDescription>
+                                            </div>
                                         </DialogHeader>
                                         <div className="flex justify-center items-center w-full">
                                             <Form {...otpForm}>
