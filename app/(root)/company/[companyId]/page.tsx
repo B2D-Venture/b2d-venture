@@ -47,7 +47,7 @@ const hasPublish = (request: any) => {
     return false;
   }
   return true;
-}
+};
 
 const isOwnCompany = (urlId: number, user: User) => {
   if (user) {
@@ -56,7 +56,7 @@ const isOwnCompany = (urlId: number, user: User) => {
     }
   }
   return false;
-}
+};
 
 export default async function CompanyProfile({
   params,
@@ -64,7 +64,7 @@ export default async function CompanyProfile({
   params: { companyId: number };
 }) {
   const session = await getServerSession(authConfig);
-  const companyRequest = await getCompanyRequestById(params.companyId);  
+  const companyRequest = await getCompanyRequestById(params.companyId);
 
   let user: User = {} as User;
   let roleId = 1;
@@ -84,11 +84,15 @@ export default async function CompanyProfile({
     if (!companyRequest || companyRequest[0]?.approval !== true) {
       return notFound();
     }
-  } 
+  }
 
   const company = await getCompanyById(params.companyId);
-  const recentFunding = await getRecentRaiseFundingByCompanyId(params.companyId) as RaiseFunding;
-  const oneFunding = await getOneRecentFundingByCompanyId(params.companyId) as RaiseFunding;
+  const recentFunding = (await getRecentRaiseFundingByCompanyId(
+    params.companyId,
+  )) as RaiseFunding;
+  const oneFunding = (await getOneRecentFundingByCompanyId(
+    params.companyId,
+  )) as RaiseFunding;
   let allInvestmentFunding = [];
   let totalInvestor = 0;
   let totalInvestment = 0;
@@ -97,18 +101,22 @@ export default async function CompanyProfile({
     if (recentFunding.id !== undefined) {
       allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
       totalInvestor = getTotalInvestor(allInvestmentFunding);
-    totalInvestment = getTotalInvestment(allInvestmentFunding);
+      totalInvestment = getTotalInvestment(allInvestmentFunding);
     }
   }
 
   return (
     <div className="flex flex-col items-center min-h-screen relative mb-20">
-      {(roleId === 3 && isApproval?.approval === null && user && await isOwnCompany(params.companyId ?? 1, user)) && (
-        <WaitingShow />
-      )}
-      {(roleId === 3 && isApproval?.approval === false && user && await isOwnCompany(params.companyId ?? 1, user)) && (
-        <RejectShow user={user} />
-      )}
+      {roleId === 3 &&
+        isApproval?.approval === null &&
+        user &&
+        (await isOwnCompany(params.companyId ?? 1, user)) && <WaitingShow />}
+      {roleId === 3 &&
+        isApproval?.approval === false &&
+        user &&
+        (await isOwnCompany(params.companyId ?? 1, user)) && (
+          <RejectShow user={user} />
+        )}
       <div className="banner relative w-full h-[438px] bg-blue">
         <Image
           src={company?.banner || "/default-banner.png"}
@@ -131,6 +139,9 @@ export default async function CompanyProfile({
       <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
         {company?.name}
       </p>
+      {/* <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-2 md:text-2xl"> */}
+      {/*   #{company?.registrationNumber} */}
+      {/* </p> */}
       <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>
@@ -149,14 +160,19 @@ export default async function CompanyProfile({
         <div>
           {(recentFunding || oneFunding) && (
             <div className="sticky top-28">
-              {(isOwnCompany(params.companyId ?? 1, user) && !hasPublish(companyRequest)) && <PublishForm
-                companyId={params.companyId}
-                raiseId={recentFunding?.id ?? oneFunding.id ?? 0}
-              />}
+              {isOwnCompany(params.companyId ?? 1, user) &&
+                !hasPublish(companyRequest) && (
+                  <PublishForm
+                    companyId={params.companyId}
+                    raiseId={recentFunding?.id ?? oneFunding.id ?? 0}
+                  />
+                )}
               <DealTerm
                 recentFunding={recentFunding || oneFunding}
                 currentInvestment={totalInvestment}
-                dayLeft={calculateDaysLeft(recentFunding?.deadline || oneFunding.deadline)}
+                dayLeft={calculateDaysLeft(
+                  recentFunding?.deadline || oneFunding.deadline,
+                )}
                 totalInvestor={totalInvestor}
                 roleId={user?.roleId ?? null}
                 isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}

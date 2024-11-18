@@ -57,12 +57,18 @@ export const formSchema = z
     banner: z.string().min(1, "Banner is required"),
     name: z.string().min(1, "Company name is required"),
     abbr: z.string().min(1, "Abbreviation is required"),
+    registrationNumber: z
+      .number({
+        required_error: "Registration Number is required.",
+      })
+      .min(1, "Registration Number must be at least 1")
+      .max(999999, "Registration Number cannot exceed 999999"),
     description: z.string().min(1, "Description is required"),
     totalShare: z
       .number({
         required_error: "Total Shares is required.",
       })
-      .min(0, { message: "Total Shares cannot be negative" })
+      .min(0, "Total Shares cannot be negative")
       .max(1000000000, "Total Shares cannot be more than 1 billion"),
     fundingTarget: z
       .number({
@@ -141,6 +147,7 @@ export function CompanyRegisterForm({
       banner: company?.banner ?? "",
       name: company?.name ?? "",
       abbr: company?.abbr ?? "",
+      registrationNumber: undefined,
       description: company?.description ?? "",
       totalShare: undefined,
       fundingTarget: undefined,
@@ -188,6 +195,7 @@ export function CompanyRegisterForm({
                 banner: data.company.banner ?? "",
                 name: data.company.name ?? "",
                 abbr: data.company.abbr ?? "",
+                registrationNumber: Number(data.company.registrationNumber) ?? 0,
                 description: data.company.description ?? "",
                 totalShare: funding.totalShare ?? 0,
                 fundingTarget: funding.fundingTarget ?? 0,
@@ -230,7 +238,7 @@ export function CompanyRegisterForm({
       abbr: companyFormData.abbr,
       description: companyFormData.description,
       pitch: companyFormData.pitch,
-      registrationNumber: "",
+      registrationNumber: companyFormData.registrationNumber.toString(),
     };
 
     if (!canEdit) {
@@ -376,7 +384,7 @@ export function CompanyRegisterForm({
                       />
                     </div>
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <FormFields
                       control={form.control}
                       name="name"
@@ -392,6 +400,16 @@ export function CompanyRegisterForm({
                       label="Company Abbreviation"
                       dataId="abbr-input"
                       placeholder="XXXX"
+                    />
+                  </div>
+                  {/* registration number */}
+                  <div className="col-span-1">
+                    <FormFields
+                      control={form.control}
+                      name="registrationNumber"
+                      label="Registration Number"
+                      dataId="registrationNumber-input"
+                      type="number"
                     />
                   </div>
                   {/* description */}
