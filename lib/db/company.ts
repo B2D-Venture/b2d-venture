@@ -85,11 +85,11 @@ export async function getAllCompanies(
       const sortColumn = {
         valuation: "rf.valuation",
         totalShare: "rf.total_share",
-        fundingTarget: "rf.funding_target",
-        pricePerShare: "rf.price_share",
-        investmentDeadline: "rf.deadline",
-        minInvestment: "rf.min_invest",
-        maxInvestment: "rf.max_invest",
+        fundingTarget: "rf.funding_target * rf.price_share",
+        priceShare: "rf.price_share",
+        deadline: "rf.deadline",
+        minInvest: "rf.min_invest * rf.price_share",
+        maxInvest: "rf.max_invest * rf.price_share",
       }[sortBy];
 
       if (sortColumn) {
@@ -102,7 +102,6 @@ export async function getAllCompanies(
     }
 
     const result = await db.execute(sql.raw(baseQuery));
-    console.log(result);
 
     const companiesWithFunding = result.rows.map((row) => ({
       company: {
@@ -128,7 +127,6 @@ export async function getAllCompanies(
         approval: row.approval,
       },
     }));
-    console.log(companiesWithFunding);
 
     return companiesWithFunding;
   } catch (error) {

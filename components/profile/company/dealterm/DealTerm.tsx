@@ -70,15 +70,15 @@ const DealTerm = ({
           label="Valuation"
         />
         <DealTermElement
-          data={`${recentFunding.fundingTarget.toLocaleString()} $`}
+          data={`${(recentFunding.fundingTarget * recentFunding.priceShare).toLocaleString()} $`}
           label="Funding Target"
         />
         <DealTermElement
-          data={`${recentFunding.maxInvest.toLocaleString()} $`}
+          data={`${(recentFunding.maxInvest * recentFunding.priceShare).toLocaleString()} $`}
           label="Maximum Investment"
         />
         <DealTermElement
-          data={`${recentFunding.minInvest.toLocaleString()} $`}
+          data={`${(recentFunding.minInvest * recentFunding.priceShare).toLocaleString()} $`}
           label="Minimum Investment"
         />
         <DealTermElement
@@ -86,7 +86,7 @@ const DealTerm = ({
           label="Price per Share"
         />
         <DealTermElement
-          data={`${recentFunding.totalShare.toLocaleString()} $`}
+          data={`${recentFunding.totalShare.toLocaleString()}`}
           label="Total Shares"
         />
       </div>
