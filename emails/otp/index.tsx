@@ -11,7 +11,7 @@ import {
 import * as React from "react";
 
 interface PlaidVerifyIdentityEmailProps {
-    validationCode?: string;
+    validationCode: string;
 }
 
 const baseUrl = process.env.VERCEL_URL

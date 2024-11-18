@@ -8,7 +8,6 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "../api/uploadthing/core";
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { type ThemeProviderProps } from "next-themes/dist/types"
-import { SessionProvider, useSession } from "next-auth/react";
 import Footer from "@/components/navbar/Footer";
 
 const inter = Inter({ subsets: ["latin"] });

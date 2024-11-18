@@ -69,7 +69,7 @@ const generateOTP = () => {
     return otp;
 };
 
-const sendOtpCode = async (otp: string) => {
+const sendOtpCode = async (otp: string, email: string) => {
     try {
         const response = await fetch("/api/mail/otp", {
             method: "POST",
@@ -78,6 +78,7 @@ const sendOtpCode = async (otp: string) => {
             },
             body: JSON.stringify({
                 validationCode: otp,
+                email: email,
             }),
         });
 
@@ -220,7 +221,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                 }
                 setShowOTPModal(true);
                 const otp = generateOTP();
-                sendOtpCode(otp);
+                sendOtpCode(otp, email);
                 setOtp(otp);
             }
             else if (title === "Reset Password") {
@@ -229,10 +230,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                     return;
                 }
                 
-                console.log("Reset password");
                 setShowOTPModal(true);
                 const otp = generateOTP();
-                sendOtpCode(otp);
+                sendOtpCode(otp, email);
                 setOtp(otp);
             }
         } catch (err) {
@@ -244,7 +244,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         setTimeLeft(60);
         setCanResendOTP(false);
         const otp = generateOTP();
-        sendOtpCode(otp);
+        sendOtpCode(otp, form.getValues("email"));
         setOtp(otp);
     };
 
