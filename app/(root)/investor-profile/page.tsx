@@ -1,4 +1,4 @@
-import InvestableAmount from "@/components/InvestableAmount";
+import InvestableAmount from "@/components/profile/investor/InvestableAmount";
 import InvestmentItemList from "@/components/profile/investor/InvestmentItemList";
 import { InvestorProfileCard } from "@/components/InvestorProfileCard";
 import {
@@ -96,7 +96,7 @@ export default async function InvestorProfile() {
               <CgProfile className="mr-2" /> My Portfolio
             </div>
           </h1>
-          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} />
+          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} email={user.email} />
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#d2d3db] bg-opacity-50 dark:bg-[#FFFDF3] dark:bg-opacity-30 rounded-[20px] justify-center items-center p-[27px]">
           {investor && <InvestorProfileCard investor={investor} />}

@@ -24,3 +24,9 @@ interface InvestorRequest {
   approval: boolean | null;
   investor: InvestorProps;
 }
+
+interface InvestableAmountProps {
+  initialAmount: number;
+  investorId: number;
+  email: string;
+}

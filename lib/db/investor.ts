@@ -76,3 +76,9 @@ export async function UpdateInvestorAmount({ investorId, amount }: { investorId:
     .where(eq(InvestorTable.id, investorId))
     .execute();
 }
+
+export async function increaseInvestorAmount({ investorId, amount }: { investorId: number, amount: number }) {
+  const investor = await getInvestorById(investorId);
+  const newAmount = investor.investableAmount + amount;
+  return await UpdateInvestorAmount({ investorId, amount: newAmount });
+}

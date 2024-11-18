@@ -56,3 +56,19 @@ export interface CompanyRegisterFormProps {
     companyEditId?: number;
     onRoleChange?: () => void;
 }
+
+export interface TopUpFieldProps {
+    control: any;
+    name: string;
+    label: string;
+    dataId: string;
+    placeholder?: string;
+    type: string;
+    disabled?: boolean;
+}
+
+export interface TopUpFormProps {
+    investorId: number;
+    email: string;
+    closeDialog: () => void;
+}
