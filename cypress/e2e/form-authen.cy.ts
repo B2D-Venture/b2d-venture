@@ -33,6 +33,7 @@ describe('Form Authentication', () => {
     cy.get('[data-id="company-input"]').type("Test Company")
     cy.get('[data-id="abbr-input"]').type("TST")
     cy.get('[data-id="desc-input"]').type("Description of Company")
+    cy.get('[data-id="totalShare-input"]').type("10000000")
     cy.get('[data-id="funding-input"]').type("10000000")
     cy.get('[data-id="min-input"]').type("1000")
     cy.get('[data-id="max-input"]').type("10000")
