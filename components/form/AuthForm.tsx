@@ -36,6 +36,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { AbideAlert } from "../registration/AbideAlert";
 import { AuthFormProps, FormValues } from "@/types/form/index.d";
 import { User } from "@/types/user";
+import { Checkbox } from "../ui/checkbox";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -48,6 +49,9 @@ const signInSchema = z.object({
 });
 
 const signUpSchema = signInSchema.extend({
+    checkboxAbide: z.boolean().refine((value) => value === true, {
+        message: "Please agree to the terms of service and privacy policy",
+    }),
     confirmPassword: z.string().min(1, "Password confirmation is required"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -112,7 +116,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const form = useForm<FormValues>({
         resolver: zodResolver(title === "Sign In" ? signInSchema : signUpSchema),
         defaultValues: title === "Sign Up"
-            ? { email: "", password: "", confirmPassword: "" }
+            ? { email: "", password: "", confirmPassword: "", checkboxAbide: false }
             : { email: "", password: "" },
     });
 
@@ -138,8 +142,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     useEffect(() => {
         if (status === "authenticated") {
             fetchUser();
-        } else if (status === "unauthenticated" && pathname === "/signup") {
-            router.push("/role-register");
         } else {
             setLoading(false);
         }
@@ -229,7 +231,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                     setCaptchaError("Please complete the reCAPTCHA.");
                     return;
                 }
-                
+
                 setShowOTPModal(true);
                 const otp = generateOTP();
                 sendOtpCode(otp, email);
@@ -298,7 +300,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     }
 
     return (
-        <div className="h-screen flex items-center justify-center bg-[#c9c9c9]">
+        <div className="h-screen flex justify-center bg-[#c9c9c9]">
             <div className="flex h-full w-full lg:w-3/5">
                 <div className="hidden lg:flex items-center justify-center flex-1 bg-gray-100 text-black">
                     <SideImage />
@@ -311,13 +313,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                 Enter your username and a new password.
                             </p>
                         )}
-                        <div className="w-full flex-1 mt-8">
+                        <div className="w-full flex-1 mt-4">
                             {title !== "Reset Password" && (
                                 <div>
                                     <div className="flex flex-col items-center">
                                         <GoogleButton callbackUrl={callbackUrlRef.current} title={title} />
                                     </div>
-                                    <div className="my-5 border-b text-center">
+                                    <div className="my-3 border-b text-center">
                                         <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                                             Or {title.toLowerCase()} with email
                                         </div>
@@ -328,7 +330,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                             <div className="w-72 max-w-xs">
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(handleAuth) as any}
-                                        className="space-y-4">
+                                        className="space-y-3">
                                         <FormField
                                             control={form.control}
                                             name="email"
@@ -362,12 +364,33 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                             </div>
                                         )}
                                         {title === "Sign Up" && (
-                                            <p className="mt-6 text-xs text-gray-600 text-center">
-                                                I agree to abide by b2d-venture&apos;s&nbsp;
-                                                <AbideAlert type="tos" />
-                                                &nbsp;and its&nbsp;
-                                                <AbideAlert type="privacy" />
-                                            </p>
+                                            <FormField
+                                                key={title}
+                                                control={form.control}
+                                                name="checkboxAbide"
+                                                render={({ field }) => (
+                                                    <FormItem className="space-x-3 space-y-0 rounded-md border p-4">
+                                                        <div className="flex space-x-3">
+                                                            <FormControl>
+                                                                <Checkbox
+                                                                    id="checkboxAbide"
+                                                                    checked={field.value}
+                                                                    onCheckedChange={field.onChange}
+                                                                />
+                                                            </FormControl>
+                                                            <p className="text-sm text-gray-600">
+                                                                <label htmlFor="checkboxAbide">
+                                                                    I agree to&nbsp;
+                                                                    <AbideAlert type="tos" /> and&nbsp;
+                                                                    <AbideAlert type="privacy" />
+                                                                </label>
+                                                            </p>
+                                                        </div>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
                                         )}
                                         <Button
                                             className="mt-5 h-30 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"

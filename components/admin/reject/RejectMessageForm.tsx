@@ -89,10 +89,9 @@ const sendEmailInvestorStatus = async (investor: InvestorProps, status: "approve
             }),
         });
 
-        if (response.ok) {
-            console.log("Email sent successfully!");
-        } else {
+        if (!response.ok) {
             const errorData = await response.json();
+            console.error(`Error: ${errorData.message || "Failed to send email"}`);
         }
     } catch (error) {
         console.error("Error:", error);
@@ -115,9 +114,7 @@ const sendEmailDataroomRequestStatus = async (dataroom: any, email: string, stat
             }),
         });
 
-        if (response.ok) {
-            console.log("Email sent successfully!");
-        } else {
+        if (!response.ok) {
             const errorData = await response.json();
             console.error(`Error: ${errorData.message || "Failed to send email"}`);
         }
