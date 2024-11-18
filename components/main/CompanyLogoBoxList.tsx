@@ -14,7 +14,7 @@ const CompanyLogoBoxList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companiesData = await getAllCompanies("", 12);
+        const companiesData = await getAllCompanies("", 12, "companyId", "desc");
         const companies = companiesData.map((item) => ({
           id: item.company.id as number,
           abbr: item.company.abbr as string,

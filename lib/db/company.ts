@@ -83,6 +83,7 @@ export async function getAllCompanies(
 
     if (sortBy) {
       const sortColumn = {
+        companyId: "c.id",
         valuation: "rf.valuation",
         totalShare: "rf.total_share",
         fundingTarget: "rf.funding_target * rf.price_share",

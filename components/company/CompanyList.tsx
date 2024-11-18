@@ -25,7 +25,7 @@ const CompanyList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companiesData = await getAllCompanies();
+        const companiesData = await getAllCompanies("", 100, "companyId", "desc");
         const companies = await Promise.all(
           companiesData.map(async (item) => ({
             ...item.company,
@@ -77,7 +77,7 @@ const CompanyList = () => {
 
   const handleSort = async (field: string, order: "asc" | "desc") => {
     try {
-      const defaultLimit = 50;
+      const defaultLimit = 100;
 
       const sortedCompanies = await getAllCompanies(
         "",
