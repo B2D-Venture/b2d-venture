@@ -124,7 +124,7 @@ const PrivateOfferBtn: React.FC<PrivateOfferBtnProps> = ({
           await addAmount(investorId, Number(recentFunding.id), amount + existingRequest.amount, Number(stockPercentage) + existingRequest.getStock);
           setAlertMessage({ text: "Investment amount updated successfully!", type: "existing" });
         } else {
-          await addInvestmentRequest(investorId, Number(recentFunding.id), amount, Number(stockPercentage));
+          await addInvestmentRequest(investorId, Number(recentFunding.id), amount, Number(stockPercentage), Number(pricePerShare));
           setAlertMessage({ text: "New investment request added successfully!", type: "new" });
         }
 
