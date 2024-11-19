@@ -14,6 +14,7 @@ import {
 import { Dealcard } from "@/components/admin/Deal/DealCard";
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
+import { NoRequestCard } from "@/components/admin/NoRequestCard";
 
 const isOwnCompany = (urlId: number, roleIdNumber: number) => {
   if (Number(roleIdNumber) == urlId) {
@@ -70,32 +71,36 @@ export default function InvestorRequestPage({
   useEffect(() => {
     const fetchUser = async () => {
       if (status === "authenticated" && session?.user?.email) {
-        const user = await getUserByEmail(session?.user?.email);
-        const companyRequest = await getCompanyRequestById(params.companyId);
+        try {
+          const user = await getUserByEmail(session.user.email);
+          const companyRequest = await getCompanyRequestById(params.companyId);
 
-        if (
-          !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
-        ) {
-          setNotfound(true);
-          setLoading(false);
-        } else {
-          if (!companyRequest || companyRequest[0]?.approval !== true) {
+          if (
+            !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
+          ) {
             setNotfound(true);
-            setLoading(false);
+          } else if (!companyRequest || companyRequest[0]?.approval !== true) {
+            setNotfound(true);
           } else {
-            fetchData();
-            console.log("fetchData");
-            setLoading(false);
+            await fetchData();
           }
+        } catch (error) {
+          console.error("Error during user fetch:", error);
+          setNotfound(true);
         }
       } else {
         setNotfound(true);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
-    fetchUser();
-  }, [session, status, params.companyId, fetchData]);
+    if (status === "authenticated") {
+      fetchUser();
+    } else if (status === "unauthenticated") {
+      setNotfound(true);
+      setLoading(false);
+    }
+  }, [status, session, params.companyId, fetchData]);
 
   if (loading) {
     return <div></div>;
@@ -110,7 +115,13 @@ export default function InvestorRequestPage({
 
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
-      {dealData.length > 0 &&
+      {dealData.length === 0 ? (
+        <NoRequestCard
+          title="No Investment Requests"
+          description="You currently have no pending requests. Any new requests will appear here."
+        />
+      ) : (
+        dealData.length > 0 &&
         dealData.map((deal, index) => (
           <div
             key={index}
@@ -148,7 +159,8 @@ export default function InvestorRequestPage({
               }}
             />
           </div>
-        ))}
+        ))
+      )}
     </div>
   );
 }

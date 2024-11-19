@@ -15,6 +15,7 @@ import { Company } from "@/types/company";
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import { FaList } from "react-icons/fa";
+import { NoRequestCard } from "@/components/admin/NoRequestCard";
 
 interface dataroomRequest {
   investor: InvestorProps;
@@ -95,7 +96,11 @@ export default function DataroomRequestPage({
           }
         })
       );
-      setDataroomData(DataRoomDetails.filter((detail) => detail !== undefined) as dataroomRequest[]);
+      setDataroomData(
+        DataRoomDetails.filter(
+          (detail) => detail !== undefined
+        ) as dataroomRequest[]
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -104,31 +109,38 @@ export default function DataroomRequestPage({
   useEffect(() => {
     const fetchUser = async () => {
       if (status === "authenticated" && session?.user?.email) {
-        const user = await getUserByEmail(session?.user?.email);
-        const companyRequest = await getCompanyRequestById(params.companyId);
+        try {
+          const user = await getUserByEmail(session.user.email);
+          const companyRequest = await getCompanyRequestById(params.companyId);
 
-        if (
-          !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
-        ) {
-          setNotfound(true);
-          setLoading(false);
-        } else {
-          if (!companyRequest || companyRequest[0]?.approval !== true) {
+          if (
+            !isOwnCompany(Number(params.companyId), Number(user.roleIdNumber))
+          ) {
             setNotfound(true);
-            setLoading(false);
+          } else if (!companyRequest || companyRequest[0]?.approval !== true) {
+            console.log("Not approved");
+            setNotfound(true);
           } else {
-            fetchData();
-            setLoading(false);
+            await fetchData();
           }
+        } catch (error) {
+          console.error("Error during user fetch:", error);
+          setNotfound(true);
         }
       } else {
+        console.log("Not authenticated");
         setNotfound(true);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
-    fetchUser();
-  }, [session, status, params.companyId, fetchData]);
+    if (status === "authenticated") {
+      fetchUser();
+    } else if (status === "unauthenticated") {
+      setNotfound(true);
+      setLoading(false);
+    }
+  }, [status, session, params.companyId, fetchData]);
 
   if (loading) {
     return <div></div>;
@@ -144,13 +156,10 @@ export default function DataroomRequestPage({
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
       {dataroomData.length === 0 ? (
-        <div className="flex flex-col justify-center items-center text-center bg-gray-100 dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md text-gray-700 dark:text-gray-300">
-          <FaList className="mb-4 text-5xl text-gray-400 dark:text-gray-500" />
-          <span className="text-2xl font-semibold mb-2">No Data Room Requests</span>
-          <p className="text-gray-500 dark:text-gray-400">
-            You currently have no pending requests. Any new requests will appear here.
-          </p>
-        </div>
+        <NoRequestCard
+          title="No Data Room Requests"
+          description="You currently have no pending requests. Any new requests will appear here."
+        />
       ) : (
         dataroomData.length > 0 &&
         dataroomData.map((dataRoomRequests, index) => (
@@ -187,7 +196,6 @@ export default function DataroomRequestPage({
           </div>
         ))
       )}
-
     </div>
   );
 }
