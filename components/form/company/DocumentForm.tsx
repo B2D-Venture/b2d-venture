@@ -2,27 +2,19 @@
 import { Label } from "@/components/ui/label";
 import { UploadDropzone } from '@/src/utils/uploadthing';
 import { useState, useEffect } from 'react';
-import { FaRegFileLines, FaEye } from "react-icons/fa6";
 import { CiCircleRemove } from "react-icons/ci";
 import { useFormContext } from "react-hook-form";
 import { getDataRoomByCompanyId } from "@/lib/db/index";
+import DocumentBox from "../elements/DocumentBox";
+import { PdfFile } from "@/types/form/index.d";
 
-interface PdfFile {
-    id?: number;
-    name: string;
-    size: number;
-    key: string;
-    lastModified: number;
-    serverData: any;
-    url: string;
-}
 
 interface DocumentProps {
     canEdit: boolean;
     companyId: number;
 }
 
-const Document = ({ canEdit, companyId }: DocumentProps) => {
+const DocumentForm = ({ canEdit, companyId }: DocumentProps) => {
     const { setValue } = useFormContext();
     const [pdfSrc, setPdfSrc] = useState<PdfFile[]>([]);
 
@@ -67,29 +59,20 @@ const Document = ({ canEdit, companyId }: DocumentProps) => {
 
             <div>
                 {pdfSrc.length > 0 ? (
-                    pdfSrc.map((pdf) => (
-                        <div key={pdf.key} className="flex bg-[#eeee] border-2 border-dotted border-black rounded-lg my-2">
-                            <div className="text-2xl w-16 h-14 flex items-center justify-center">
-                                <FaRegFileLines />
-                            </div>
-                            <div className="flex-1 my-2">
-                                <p className="font-semibold">{pdf.name}</p>
-                                {pdf.size > 0 && <p className="text-gray-500 text-sm">{(pdf.size / 1024).toFixed(2)} KB</p>}
-                            </div>
-                            <a
-                                href={`${pdf.url}`}
-                                target="_blank"
-                                className="text-xl hover:underline flex items-center justify-center mx-6"
-                            >
-                                <FaEye />
-                            </a>
-                            <div className="flex items-center justify-center mx-5">
-                                <CiCircleRemove
-                                    className="text-3xl cursor-pointer"
-                                    onClick={() => handleRemovePdf(pdf.key)}
-                                />
-                            </div>
-                        </div>
+                    pdfSrc.map((pdf, index) => (
+                        <DocumentBox
+                            key={index}
+                            doc={pdf}
+                            canRemoved={
+                                <div className="flex items-center justify-center mx-5">
+                                    <CiCircleRemove
+                                        className="text-3xl cursor-pointer"
+                                        onClick={() => handleRemovePdf(pdf.key)}
+                                    />
+                                </div>
+                            }
+                        />
+
                     ))
                 ) : (
                     <p>No PDF files uploaded</p>
@@ -117,7 +100,6 @@ const Document = ({ canEdit, companyId }: DocumentProps) => {
                         }
                     }}
                     onUploadError={(error: Error) => {
-                        console.log("error", error);
                         alert(`ERROR! ${error.message}`);
                     }}
                 />
@@ -126,4 +108,4 @@ const Document = ({ canEdit, companyId }: DocumentProps) => {
     );
 };
 
-export default Document;
+export default DocumentForm;

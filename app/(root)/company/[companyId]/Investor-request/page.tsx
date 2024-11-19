@@ -15,6 +15,7 @@ import { Dealcard } from "@/components/admin/Deal/DealCard";
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import { NoRequestCard } from "@/components/admin/NoRequestCard";
+import { InvestmentDetail, InvestmentRequest } from "@/types/investment";
 
 const isOwnCompany = (urlId: number, roleIdNumber: number) => {
   if (Number(roleIdNumber) == urlId) {
@@ -44,7 +45,6 @@ export default function InvestorRequestPage({
       const investmentRequests = await getInvesmentByCompanyId(
         params.companyId
       );
-      console.log("investmentRequests", investmentRequests);
       if (investmentRequests) {
         const investmentDetails = await Promise.all(
           investmentRequests.map(async (request) => {
@@ -128,20 +128,11 @@ export default function InvestorRequestPage({
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
           >
             <Dealcard
-              investorName={
-                deal.investor
-                  ? deal.investor.firstName + " " + deal.investor.lastName
-                  : "Investor"
-              }
-              moneyReadyForInvestment={deal.investor?.investableAmount || 0}
+              investor={deal.investor}
+              company={deal.company}
+              raiseFunding={deal.raiseFunding}
               investAmount={deal.amount || 0}
               stockPercentage={deal.getStock || 0}
-              companyName={deal.company?.name || "Company"}
-              raiseTarget={deal.raiseFunding?.fundingTarget || 0}
-              raisePercentage={
-                (deal.amount / (deal.raiseFunding?.fundingTarget ?? 1)) * 100 ||
-                0
-              }
               valuation={(100 / deal.getStock) * deal.amount || 0}
               handleApprove={async () => {
                 await approveInvestmentRequest(deal.id);

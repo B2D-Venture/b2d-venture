@@ -139,9 +139,6 @@ export default async function CompanyProfile({
       <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
         {company?.name}
       </p>
-      {/* <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-2 md:text-2xl"> */}
-      {/*   #{company?.registrationNumber} */}
-      {/* </p> */}
       <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>

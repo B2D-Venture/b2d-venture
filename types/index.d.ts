@@ -58,6 +58,8 @@ interface OutputTextBoxProps {
   value: string | number;
   classNameLabel?: string;
   classNameValue?: string;
+  iconSideLeft?: React.ReactNode;
+  iconSideRight?: React.ReactNode;
 }
 
 interface OutputTextBoxDollarProps {

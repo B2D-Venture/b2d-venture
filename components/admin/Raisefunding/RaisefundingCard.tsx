@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import RaisefundingBadge from "./RaisefundingBadge";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { OutputTextBox } from "@/components/admin/OutputTextBox";
-import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Cross2Icon } from "@radix-ui/react-icons";
@@ -74,29 +73,30 @@ export function RaiseFundingCard({
           </p>
           <AccordionContent>
             <div className="grid grid-cols-3 text-black justify-start w-full space-y-2">
-              <div className="flex flex-row items-center space-x-[45px]">
+              <div>
                 <OutputTextBox label="Deadline" value={deadline} />
               </div>
-              <div className="flex flex-row items-center space-x-[40px]">
-                <OutputTextBoxDollar label="Price Per Share" value={PricePerShare} />
+              <div>
+                <OutputTextBox label="Price Per Share" value={PricePerShare} iconSideLeft="$" />
               </div>
-              <div className="flex flex-row items-center space-x-[47px]">
-                <OutputTextBoxDollar label="Funding Target" value={target} />
+              <div>
+                <OutputTextBox label="Funding Target" value={target} iconSideLeft="$" />
               </div>
-              <div className="flex flex-row items-center space-x-[33px]">
-                <OutputTextBoxDollar label="Valuation" value={valuation} />
+              <div>
+                <OutputTextBox label="Valuation" value={valuation} iconSideLeft="$" />
               </div>
-              <div className="flex flex-row items-center space-x-1">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Minimum Investment"
                   value={minimumInvestment}
+                  iconSideLeft="$"
                 />
               </div>
-              <div className="flex flex-row items-center space-x-1">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Maximum Investment"
                   value={maximumInvestment}
-                  classNameLabel=""
+                  iconSideLeft="$"
                 />
               </div>
             </div>

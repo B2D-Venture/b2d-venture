@@ -118,7 +118,6 @@ export default function DataroomRequestPage({
           ) {
             setNotfound(true);
           } else if (!companyRequest || companyRequest[0]?.approval !== true) {
-            console.log("Not approved");
             setNotfound(true);
           } else {
             await fetchData();
@@ -128,7 +127,6 @@ export default function DataroomRequestPage({
           setNotfound(true);
         }
       } else {
-        console.log("Not authenticated");
         setNotfound(true);
       }
       setLoading(false);

@@ -72,3 +72,13 @@ export interface TopUpFormProps {
     email: string;
     closeDialog: () => void;
 }
+
+export interface PdfFile {
+    id?: number;
+    name: string;
+    size: number;
+    key: string;
+    lastModified: number;
+    serverData: any;
+    url: string;
+}

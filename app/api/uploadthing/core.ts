@@ -37,7 +37,7 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
     }),
-  pdfUploader: f({ pdf: { maxFileSize: "16MB", maxFileCount: 10 } })
+  pdfUploader: f({ pdf: { maxFileSize: "4MB", maxFileCount: 10 } })
     .middleware(async ({ req }) => {
       const user = await auth(req);
       if (!user) throw new UploadThingError("Unauthorized");

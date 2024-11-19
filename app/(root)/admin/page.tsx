@@ -113,7 +113,7 @@ const AdminPage = () => {
   const [notfound, setNotfound] = useState<boolean>(false);
   const [companyData, setCompanyData] = useState<CompanyRequestData[]>([]);
   const [investorData, setInvestorData] = useState<InvestorRequest[]>([]);
-  const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
+  // const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
   const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestData[]>([]);
   const [data, setData] = useState<boolean>(false);
 
@@ -144,7 +144,7 @@ const AdminPage = () => {
     try {
       const companyRequests = await getCompanyRequest();
       const investorRequests = await getInvestorRequest();
-      const investmentRequests = await getInvestmentRequest();
+      // const investmentRequests = await getInvestmentRequest();
       const raiseFundingRequests = await getRaiseFundingRequests();
 
       const companyDetails = await Promise.all(
@@ -177,19 +177,19 @@ const AdminPage = () => {
         })
       );
 
-      const investmentDetails = await Promise.all(
-        investmentRequests.map(async (request) => {
-          const investor = await getInvestorById(request.investorId);
-          const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
-          const company = await getCompanyById(raiseFunding.companyId);
-          return {
-            ...(request as unknown as InvestmentRequest),
-            investor: investor || null,
-            raiseFunding: raiseFunding || null,
-            company: company || null,
-          };
-        })
-      );
+      // const investmentDetails = await Promise.all(
+      //   investmentRequests.map(async (request) => {
+      //     const investor = await getInvestorById(request.investorId);
+      //     const raiseFunding = await getRaiseFundingById(request.raiseFundingId);
+      //     const company = await getCompanyById(raiseFunding.companyId);
+      //     return {
+      //       ...(request as unknown as InvestmentRequest),
+      //       investor: investor || null,
+      //       raiseFunding: raiseFunding || null,
+      //       company: company || null,
+      //     };
+      //   })
+      // );
 
       const raiseFundingDetails = await Promise.all(
         raiseFundingRequests.map(async (request) => {
@@ -205,7 +205,7 @@ const AdminPage = () => {
 
       setCompanyData(companyDetails);
       setInvestorData(investorDetails);
-      setDealData(investmentDetails);
+      // setDealData(investmentDetails);
       setRaiseFundingData(raiseFundingDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -291,7 +291,7 @@ const AdminPage = () => {
         ))}
 
       {/* Render Deal Cards */}
-      {dealData.length > 0 &&
+      {/* {dealData.length > 0 &&
         dealData.map((deal, index) => (
           <div
             key={index}
@@ -328,7 +328,7 @@ const AdminPage = () => {
               }}
             />
           </div>
-        ))}
+        ))} */}
       {/* Render Raise Funding Cards */}
       {raiseFundingData.length > 0 &&
         raiseFundingData.map((raiseFunding, index) => (

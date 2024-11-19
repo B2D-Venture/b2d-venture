@@ -1,3 +1,5 @@
+import { InvestorProps } from "../investor";
+
 interface InvestmentRequest {
   id: number;
   investorId: number;
@@ -10,7 +12,7 @@ interface InvestmentRequest {
 }
 
 interface InvestmentDetail extends InvestmentRequest {
-  investor: InvestorProps | null;
-  raiseFunding: RaiseFunding | null;
-  company: Company | null;
+  investor: InvestorProps;
+  raiseFunding: RaiseFunding;
+  company: Company;
 }

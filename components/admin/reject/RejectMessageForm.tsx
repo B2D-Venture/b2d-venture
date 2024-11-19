@@ -131,7 +131,9 @@ const getRejectMessage = (type: string) => {
             { id: "message3", title: "Incorrect Company Name", description: "The company name is misspelled or incorrect." },
             { id: "message4", title: "Incorrect Company Abbreviation", description: "The company abbreviation is incorrect." },
             { id: "message5", title: "Inaccurate Company Description", description: "The description does not accurately represent the company profile." },
-            { id: "message6", title: "Inaccurate Pitch Information", description: "The pitch does not reflect the correct product details." },
+            { id: "message6", title: "Incorrect Company Registration Number", description: "The registration number provided is incorrect." },
+            { id: "message7", title: "Inaccurate Pitch Information", description: "The pitch does not reflect the correct product details." },
+            { id: "message8", title: "Incorrect Data Room Documents", description: "The uploaded documents do not match the company profile." },
         ];
     } else if (type === "investor") {
         return [

@@ -2,6 +2,7 @@ import React from "react";
 import InvestmentItem from "@/components/profile/investor/InvestmentItem";
 import { Company } from "@/types/company";
 import { RiHandCoinLine } from "react-icons/ri";
+import { InvestmentRequest } from "@/types/investment";
 
 const formatISODate = (isoDate: string): string => {
   const date = new Date(isoDate);

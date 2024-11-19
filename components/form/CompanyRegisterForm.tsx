@@ -9,7 +9,7 @@ import { BannerImageForm } from "@/components/form/company/BannerImageForm";
 import { useFormState } from "../FormContext";
 import FormFields from "@/components/form/elements/FormFields";
 import { Form, FormField, FormMessage } from "@/components/ui/form";
-import Document from "./company/Document";
+import DocumentForm from "./company/DocumentForm";
 import {
   addCompany,
   addDataRoom,
@@ -500,7 +500,7 @@ export function CompanyRegisterForm({
                   <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
 
                   <div className="col-span-3 flex items-center">
-                    <Document
+                    <DocumentForm
                       canEdit={canEdit}
                       companyId={companyEditId ?? 0}
                     />

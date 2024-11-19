@@ -5,12 +5,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import * as React from "react";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
 import InvestorProfileBadge from "@/components/admin/InvestorProfile/InvestorProfileBadge";
 import { OutputTextBox } from "@/components/admin/OutputTextBox";
-import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
@@ -56,47 +55,39 @@ export function InvestorProfileCard({
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
           <div className="grid grid-cols-3 text-black justify-start w-full my-2">
-            <div className="flex flex-row items-center space-x-[80px]">
+            <div>
               <OutputTextBox
                 label="Email"
                 value={investorRequest.investor?.email}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
-            <div className="flex flex-row items-center space-x-[63px]">
+            <div>
               <OutputTextBox
                 label="Nationality"
                 value={investorRequest.investor?.nationality}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
-            <div className="flex flex-row items-center space-x-5">
+            <div>
               <OutputTextBox
                 label="BirthDate"
                 value={investorRequest.investor?.birthDate}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
           </div>
           <AccordionContent>
             <div className="grid grid-cols-3 text-black justify-start w-full my-2">
-              <div className="flex flex-row items-center space-x-[40px]">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Net Worth"
                   value={investorRequest.investor?.networth}
-                  classNameLabel=""
-                  classNameValue=""
+                  iconSideLeft="$"
                 />
               </div>
-              <div className="flex flex-row items-center space-x-[10px]">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Investable Money"
                   value={investorRequest.investor?.investableAmount}
-                  classNameLabel=""
-                  classNameValue=""
+                  iconSideLeft="$"
                 />
               </div>
             </div>
