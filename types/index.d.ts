@@ -79,3 +79,8 @@ declare namespace NodeJS {
     DATABASE_URL: string;
   }
 }
+
+interface NoRequestCardProps {
+  title: string;
+  description: string;
+}
