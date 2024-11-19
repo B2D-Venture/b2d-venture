@@ -14,7 +14,12 @@ const CompanyCardSlide = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companiesData = await getAllCompanies("", 10);
+        const companiesData = await getAllCompanies(
+          "",
+          10,
+          "investorCount",
+          "desc",
+        );
 
         const companies = await Promise.all(
           companiesData.map(async (item) => ({
@@ -24,8 +29,10 @@ const CompanyCardSlide = () => {
             maxInvest: item.raiseFunding?.maxInvest ?? null,
             deadline: item.raiseFunding?.deadline ?? null,
             priceShare: item.raiseFunding?.priceShare ?? null,
-            investorCount: (await getInvesmentByFundingId(Number(item.raiseFunding?.id))).length,
-          }))
+            investorCount: (
+              await getInvesmentByFundingId(Number(item.raiseFunding?.id))
+            ).length,
+          })),
         );
 
         setCompanies(companies);

@@ -20,7 +20,7 @@ const CompanyCard = ({
     setIsLoading(true);
     router.push("/company/" + company.id);
   };
-  console.log("company", company);
+  // console.log("company", company);
 
   return (
     <div className="flex justify-center items-center p-4">
@@ -59,7 +59,7 @@ const CompanyCard = ({
                   $<b>{((company.fundingTarget * company.priceShare) ?? 0).toLocaleString()}</b> raised
                 </div>
                 <div className="flex items-center space-x-2">
-                  <b>{((company.investorCount * company.priceShare) ?? 0).toLocaleString()}</b>
+                  <b>{((company.investorCount) ?? 0).toLocaleString()}</b>
                   <span>Investors</span>
                   <MdPeopleAlt />
                 </div>

@@ -57,18 +57,32 @@ export async function getAllCompanies(
           raise_funding rf ON rfr.raise_funding_id = rf.id
         WHERE 
           rfr.approval = true
+      ),
+      InvestorCount AS (
+        SELECT
+          ir.raise_funding_id,
+          COUNT(ir.id)::integer AS investor_count
+        FROM
+          investment_request ir
+        WHERE
+          ir.approval = true
+        GROUP BY
+          ir.raise_funding_id
       )
       SELECT 
         c.*, 
         rf.*, 
         LatestApproved.raise_funding_id AS latest_approved_raise_funding_id,
-        LatestApproved.approval
+        LatestApproved.approval,
+        COALESCE(InvestorCount.investor_count, 0) AS investor_count
       FROM 
         company c
       LEFT JOIN 
         raise_funding rf ON c.id = rf.company_id
       LEFT JOIN 
         LatestApproved ON rf.id = LatestApproved.raise_funding_id
+      LEFT JOIN 
+        InvestorCount ON rf.id = InvestorCount.raise_funding_id
       WHERE 
         LatestApproved.rn = 1`;
 
@@ -91,6 +105,7 @@ export async function getAllCompanies(
         deadline: "rf.deadline",
         minInvest: "rf.min_invest * rf.price_share",
         maxInvest: "rf.max_invest * rf.price_share",
+        investorCount: "investor_count",
       }[sortBy];
 
       if (sortColumn) {
