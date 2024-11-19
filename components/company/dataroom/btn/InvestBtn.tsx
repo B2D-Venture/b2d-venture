@@ -10,7 +10,6 @@ import {
 } from "@/lib/db/index";
 import { User } from "@/types/user";
 
-
 interface InvestBtnProps {
   text: string;
   textColor: string;
@@ -43,8 +42,8 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     null
   );
   const [existingInvestment, setExistingInvestment] = useState<number>(0);
-  const [amount, setAmount] = useState<number | "">("");
-  const [stock, setStock] = useState<number | "">("");
+  const [shareAmount, setShareAmount] = useState<number | "">("");
+  const [moneyAmount, setMoneyAmount] = useState<number | "">("");
   const [stockPercentage, setStockPercentage] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<{
@@ -89,58 +88,74 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     setError(null);
   };
 
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const enteredAmount = parseFloat(event.target.value);
-    setAmount(enteredAmount);
+  const handleShareChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const enteredValue = event.target.value;
+    const enteredShares = parseInt(enteredValue, 10);
 
-    const totalInvestment = existingInvestment + enteredAmount;
+    if (isNaN(enteredShares) || enteredShares < 0) {
+      setError("Please enter a valid positive integer.");
+      setShareAmount("");
+      setMoneyAmount("");
+      setStockPercentage("");
+      return;
+    }
 
-    if (enteredAmount && recentFunding.priceShare && enteredAmount > 0) {
-      if (existingInvestment === 0 && enteredAmount < recentFunding.minInvest) {
+    setShareAmount(enteredShares);
+
+    if (recentFunding.priceShare && enteredShares > 0) {
+      const calculatedMoneyAmount = enteredShares * recentFunding.priceShare;
+      const totalInvestment = existingInvestment + calculatedMoneyAmount;
+
+      if (investor && calculatedMoneyAmount > investor.investableAmount) {
         setError(
-          `Amount must be at least $${recentFunding.minInvest} for the first investment.`
+          `You only have $${investor.investableAmount.toLocaleString()} available to invest.`
         );
-        setStock("");
+        setMoneyAmount("");
+        setStockPercentage("");
+        return;
+      } else if (totalInvestment < recentFunding.minInvest) {
+        setError(
+          `Total investment must be more than ${
+            recentFunding.minInvest
+          } shares ($${(
+            recentFunding.minInvest * recentFunding.priceShare
+          ).toLocaleString()}).`
+        );
+        setMoneyAmount("");
         setStockPercentage("");
         return;
       } else if (totalInvestment > recentFunding.maxInvest) {
         setError(
-          `Total investment must not exceed $${recentFunding.maxInvest}.`
+          `Total investment must not exceed ${
+            recentFunding.maxInvest
+          } shares ($${(
+            recentFunding.maxInvest * recentFunding.priceShare
+          ).toLocaleString()}).`
         );
-        setStock("");
-        setStockPercentage("");
-        return;
-      } else if (investor && enteredAmount > investor.investableAmount) {
-        setError(
-          `You only have $${investor.investableAmount.toLocaleString()} available to invest.`
-        );
-        setStock("");
+        setMoneyAmount("");
         setStockPercentage("");
         return;
       } else {
         setError(null);
-        const calculatedStock = enteredAmount / recentFunding.priceShare;
-        setStock(calculatedStock);
+        setMoneyAmount(calculatedMoneyAmount);
 
         const calculatedPercentage =
-          (calculatedStock /
-            (recentFunding.valuation / recentFunding.priceShare)) *
-          100;
+          (enteredShares / recentFunding.totalShare) * 100;
         setStockPercentage(calculatedPercentage);
       }
     } else {
-      setStock("");
+      setMoneyAmount("");
       setStockPercentage("");
     }
   };
 
   const handleInvestment = async () => {
-    if (typeof amount === "number" && typeof stock === "number") {
+    if (typeof moneyAmount === "number" && typeof shareAmount === "number") {
       if (!investor) {
         setError("Investor data is not available.");
         return;
       }
-      const newAmount = investor.investableAmount - amount;
+      const newAmount = investor.investableAmount - moneyAmount;
       try {
         const existingRequest =
           await getInvestorRequestByInvestorandRaiseFunding(
@@ -152,7 +167,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
           await addAmount(
             investorId,
             Number(recentFunding.id),
-            amount + existingRequest.amount,
+            moneyAmount + existingRequest.amount,
             Number(stockPercentage) + existingRequest.getStock
           );
           setAlertMessage({
@@ -163,8 +178,9 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
           await addInvestmentRequest(
             investorId,
             Number(recentFunding.id),
-            amount,
-            Number(stockPercentage)
+            moneyAmount,
+            Number(stockPercentage),
+            Number(recentFunding.priceShare)
           );
           setAlertMessage({
             text: "New investment request added successfully!",
@@ -177,16 +193,16 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
         await fetchExistingInvestment();
         closeModal();
 
-        // Reset the amount, stock, and stockPercentage fields
-        setAmount("");
-        setStock("");
+        // Reset fields
+        setShareAmount("");
+        setMoneyAmount("");
         setStockPercentage("");
       } catch (err) {
         console.error(err);
         setError("Failed to process the investment request. Please try again.");
       }
     } else {
-      setError("Please enter a valid amount.");
+      setError("Please enter a valid number of shares.");
     }
   };
 
@@ -194,9 +210,9 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     if (alertMessage) {
       const timer = setTimeout(() => {
         setAlertMessage(null);
-      }, 3000); // Hide after 3 seconds
+      }, 3000);
 
-      return () => clearTimeout(timer); // Clear timeout if alertMessage changes
+      return () => clearTimeout(timer);
     }
   }, [alertMessage]);
 
@@ -223,27 +239,26 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
               <div className="mb-4">
                 <label className="block text-gray-700">Price Per Share:</label>
                 <input
-                  type="number"
                   disabled
-                  value={recentFunding.priceShare}
+                  value={`${recentFunding.priceShare.toLocaleString()} $`}
                   className="w-full border-2 border-[#ffffff] rounded px-3 py-2 mt-1 bg-[#BFBFBF]"
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Money Amount:</label>
+                <label className="block text-gray-700">Share Amount:</label>
                 <input
                   type="number"
-                  value={amount}
-                  onChange={handleAmountChange}
+                  value={shareAmount}
+                  onChange={handleShareChange}
                   className="w-full border-2 border-[#000000] rounded px-3 py-2 mt-1 bg-[#898989]"
                 />
               </div>
               {error && <p className="text-red-600 mb-4">{error}</p>}
               <div className="mb-4">
-                <label className="block text-gray-700">Share Amount:</label>
+                <label className="block text-gray-700">Money Amount:</label>
                 <input
                   disabled
-                  value={stock.toLocaleString() || ""}
+                  value={moneyAmount ? `${moneyAmount.toLocaleString()} $` : ""}
                   className="w-full border-2 border-[#ffffff] rounded px-3 py-2 mt-1 bg-[#BFBFBF]"
                 />
               </div>
@@ -252,7 +267,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
                 <input
                   disabled
                   value={
-                    stockPercentage ? `${stockPercentage.toFixed(3)}%` : ""
+                    stockPercentage ? `${stockPercentage.toFixed(3)} %` : ""
                   }
                   className="w-full border-2 border-[#ffffff] rounded px-3 py-2 mt-1 bg-[#BFBFBF]"
                 />
@@ -268,43 +283,12 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
                 <button
                   type="button"
                   onClick={handleInvestment}
-                  className="w-[120px] h-[50px] items-center justify-center text-[#ffffff] bg-[#181A20] border-transparent text-center py-2 px-6 font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#080809] hover:text-[#F7ECDC] hover:border-transparent shadow-md hover:shadow-lg"
+                  className="w-[100px] h-[50px] items-center justify-center text-[#423F3F] bg-[#AFAB9A] border-transparent text-center py-2 px-6 font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#807D71] hover:text-white hover:border-transparent shadow-md hover:shadow-lg"
                 >
                   Invest
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {alertMessage && (
-        <div
-          className={`fixed top-32 right-4 px-4 py-3 rounded-lg text-white shadow-md z-50 ${
-            alertMessage.type === "new"
-              ? "bg-yellow-400 border-t-4 border-yellow-500"
-              : "bg-green-400 border-t-4 border-green-500"
-          }`}
-          role="alert"
-        >
-          <div className="flex">
-            <div className="py-1">
-              <svg
-                className="fill-current h-6 w-6 text-white mr-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-bold">
-                {alertMessage.type === "new"
-                  ? "New Request Added!"
-                  : "Request Updated!"}
-              </p>
-              <p className="text-sm">{alertMessage.text}</p>
-            </div>
           </div>
         </div>
       )}
