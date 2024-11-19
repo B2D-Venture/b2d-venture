@@ -137,7 +137,8 @@ const DealTerm = ({
         </div>
       )}
       {roleId === 3 && isOwnCompany && (
-        <div className="mt-2 md:mt-2 lg:mt-4 xl:mt-5 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2">
+        // <div className="mt-2 md:mt-2 lg:mt-4 xl:mt-5 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2">
+        <div className="mt-5 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <RaiseFundingButton canRaiseFunding={canRaise} companyId={urlId} />
           <DealTermBtn
             text="Data Room Request"
