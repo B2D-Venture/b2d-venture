@@ -77,9 +77,20 @@ export function CompanyProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <CompanyProfileBadge />
-          <p className="w-full text-black pt-2">
-            <b>Description:</b> {companyRequest.company.description}
-          </p>
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <b>Request Date:</b> {companyRequest.requestDate
+                ? new Date(companyRequest.requestDate).toLocaleDateString('en-GB')
+                : "N/A"}
+            </p>
+          </div>
+
+          <div className="mb-4">
+            <p className="text-gray-700">
+              <b>Description:</b> {companyRequest.company.description}
+            </p>
+          </div>
+
           <div className="grid grid-cols-3 text-black justify-start w-full">
             <div>
               <OutputTextBox label="Abbreviation" value={companyRequest.company.abbr} />

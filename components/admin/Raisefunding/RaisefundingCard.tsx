@@ -16,29 +16,18 @@ import { CheckIcon } from "@radix-ui/react-icons";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 import Image from "next/image";
+import { Company } from "@/types/company";
 
 export function RaiseFundingCard({
-  logo,
-  companyName,
-  description,
-  PricePerShare,
-  valuation,
-  minimumInvestment,
-  maximumInvestment,
-  deadline,
-  target,
+  company,
+  raiseFunding,
+  requestDate,
   handleApprove,
   handleReject,
 }: {
-  logo: string;
-  companyName: string;
-  description: string;
-  PricePerShare: number;
-  valuation: number;
-  minimumInvestment: number;
-  maximumInvestment: number;
-  deadline: string;
-  target: number;
+  company: Company;
+  raiseFunding: RaiseFunding;
+  requestDate: Date;
   handleApprove: () => void;
   handleReject: () => void;
 }) {
@@ -48,7 +37,7 @@ export function RaiseFundingCard({
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
             <Image
-              src={logo}
+              src={company.logo}
               alt="Company Logo"
               width={90}
               height={90}
@@ -56,7 +45,7 @@ export function RaiseFundingCard({
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{companyName}</span>
+                <span className="flex-1">{company.name}</span>
                 <ChevronDownIcon
                   className="AccordionChevron text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -68,34 +57,42 @@ export function RaiseFundingCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <RaisefundingBadge />
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <b>Request Date:</b> {
+                new Date(requestDate).toLocaleDateString('en-GB')
+                ? new Date(requestDate).toLocaleDateString('en-GB')
+                : "N/A"}
+            </p>
+          </div>
           <p className="w-full text-black pt-2">
-            <b>Description:</b> {description}
+            <b>Description:</b> {company.description}
           </p>
           <AccordionContent>
             <div className="grid grid-cols-3 text-black justify-start w-full space-y-2">
               <div>
-                <OutputTextBox label="Deadline" value={deadline} />
+                <OutputTextBox label="Deadline" value={raiseFunding.deadline} />
               </div>
               <div>
-                <OutputTextBox label="Price Per Share" value={PricePerShare} iconSideLeft="$" />
+                <OutputTextBox label="Price Per Share" value={raiseFunding.priceShare} iconSideLeft="$" />
               </div>
               <div>
-                <OutputTextBox label="Funding Target" value={target} iconSideLeft="$" />
+                <OutputTextBox label="Funding Target" value={raiseFunding.fundingTarget} iconSideLeft="$" />
               </div>
               <div>
-                <OutputTextBox label="Valuation" value={valuation} iconSideLeft="$" />
+                <OutputTextBox label="Valuation" value={raiseFunding.valuation} iconSideLeft="$" />
               </div>
               <div>
                 <OutputTextBox
                   label="Minimum Investment"
-                  value={minimumInvestment}
+                  value={raiseFunding.minInvest}
                   iconSideLeft="$"
                 />
               </div>
               <div>
                 <OutputTextBox
                   label="Maximum Investment"
-                  value={maximumInvestment}
+                  value={raiseFunding.maxInvest}
                   iconSideLeft="$"
                 />
               </div>

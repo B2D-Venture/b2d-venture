@@ -8,7 +8,6 @@ import { useSearchParams } from "next/navigation";
 import { CompanyWithRaiseFunding } from "@/types/company";
 import CompanyPageLoading from "@/components/loading/CompanyPageLoading";
 import { BiSearch } from "react-icons/bi";
-import { useRouter } from "next/navigation";
 
 const CompanyList = () => {
   const [allCompanies, setAllCompanies] = useState<CompanyWithRaiseFunding[]>(
@@ -20,7 +19,6 @@ const CompanyList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   useEffect(() => {
     const fetchCompanies = async () => {

@@ -224,7 +224,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                 }
                 setShowOTPModal(true);
                 const otp = generateOTP();
-                // sendOtpCode(otp, email);
+                sendOtpCode(otp, email);
                 setOtp(otp);
             }
             else if (title === "Reset Password") {

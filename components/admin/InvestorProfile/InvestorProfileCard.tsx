@@ -54,6 +54,13 @@ export function InvestorProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <b>Request Date:</b> {investorRequest.requestDate
+                ? new Date(investorRequest.requestDate).toLocaleDateString('en-GB')
+                : "N/A"}
+            </p>
+          </div>
           <div className="grid grid-cols-3 text-black justify-start w-full my-2">
             <div>
               <OutputTextBox
