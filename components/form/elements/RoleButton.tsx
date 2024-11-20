@@ -5,7 +5,7 @@ import {
   PiUserListBold,
   PiUserListFill,
 } from "react-icons/pi";
-import "../styles/RoleRegister.css";
+import "../../../styles/RoleRegister.css";
 
 interface RoleButtonProps {
   role: string;

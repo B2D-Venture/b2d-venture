@@ -214,6 +214,7 @@ export async function updateCompany(company: Company) {
       abbr: company.abbr,
       description: company.description,
       pitch: company.pitch,
+      registrationNumber: company.registrationNumber,
     })
     .where(eq(CompanyTable.id, company.id))
     .execute();

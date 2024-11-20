@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import DealTermElement from "./DealTermElement";
 import DealTermBtn from "./DealTermBtn";
-import { RaiseFundingButton } from "@/components/RaiseFundingButton";
+import { RaiseFundingButton } from "@/components/form/elements/RaiseFundingButton";
 import RequestBtn from "../../../company/dataroom/btn/RequestBtn";
 import InvestBtn from "../../../company/dataroom/btn/InvestBtn";
 import { getLastRaiseFundingRequestByCompanyId } from "@/lib/db";
@@ -57,7 +57,7 @@ const DealTerm = ({
   }, [urlId, dayLeft, currentInvestment, recentFunding.fundingTarget]);
 
   return (
-    <div className="m-5 sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4 md:p-1 lg:p-2 xl:p-3">
+    <div className="m-5 sticky top-36 bg-[#e9e9e9] dark:bg-gradient-to-br dark:from-[#1f1f1f] dark:to-[#2b2b2b] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4 md:p-1 lg:p-2 xl:p-3 z-20">
       <div className="mb-4 md:mb-2 lg:mb-4 xl:mb-5">
         <h2 className="text-black dark:text-white text-3xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center">
           Deal Terms

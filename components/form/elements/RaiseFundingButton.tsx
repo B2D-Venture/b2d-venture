@@ -21,7 +21,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { RaiseFundingForm } from "@/components/RaiseFundingForm";
+import { RaiseFundingForm } from "@/components/form/RaiseFundingForm";
 import {
   Tooltip,
   TooltipContent,

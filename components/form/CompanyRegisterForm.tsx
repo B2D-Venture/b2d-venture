@@ -373,7 +373,7 @@ export function CompanyRegisterForm({
                 <div className="grid grid-cols-3 gap-4 col-span-3">
                   <div className="col-span-3">
                     <BannerImageForm
-                      defaultBanner={fileName}
+                      defaultBanner={company?.banner}
                       onChange={(newBanner) => setFileName(newBanner)}
                     />
                     <div className="mt-3">

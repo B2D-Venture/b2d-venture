@@ -22,18 +22,6 @@ export const FundingTabContent: React.FC<FundingTabProps> = ({ raiseFundingData,
                             company={raiseFunding.company}
                             raiseFunding={raiseFunding.raiseFunding!}
                             requestDate={raiseFunding.requestDate}
-                            // logo={raiseFunding.company?.logo || "default_logo_url.png"}
-                            // companyName={raiseFunding.company?.name || "Company Name"}
-                            // description={
-                            //     raiseFunding.company?.description || "Company Description"
-                            // }
-
-                            // PricePerShare={raiseFunding.raiseFunding?.priceShare || 100}
-                            // valuation={raiseFunding.raiseFunding?.valuation || 10000000}
-                            // minimumInvestment={raiseFunding.raiseFunding?.minInvest || 1000}
-                            // maximumInvestment={raiseFunding.raiseFunding?.maxInvest || 10000}
-                            // deadline={raiseFunding.raiseFunding?.deadline || "Stock"}
-                            // target={raiseFunding.raiseFunding?.fundingTarget || 10000000}
                             handleApprove={() => handleApprove(raiseFunding)}
                             handleReject={() => handleReject(raiseFunding.id)}
                         />

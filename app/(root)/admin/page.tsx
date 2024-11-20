@@ -34,8 +34,6 @@ import { InvestorTabContent } from "@/components/admin/tab-content/InvestorTabCo
 import { FundingTabContent } from "@/components/admin/tab-content/FundingTabContent";
 import { NoRequestCard } from "@/components/admin/NoRequestCard";
 import SortRequestButton from "@/components/admin/SortRequestButton";
-// import { Button } from "@/components/ui/button";
-// import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 
 const sendEmailCompanyStatus = async (
   company: Company,
@@ -122,6 +120,7 @@ const AdminPage = () => {
   const [raiseFundingData, setRaiseFundingData] = useState<RaiseFundingRequestData[]>([]);
   const [data, setData] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (status === "loading") {
@@ -197,6 +196,7 @@ const AdminPage = () => {
       setCompanyData(companyDetails);
       setInvestorData(investorDetails);
       setRaiseFundingData(raiseFundingDetails);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -211,6 +211,14 @@ const AdminPage = () => {
 
   if (notfound) {
     return notFound();
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   const sortRequests = (data: any[], order: "asc" | "desc") => {

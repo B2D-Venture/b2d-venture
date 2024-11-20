@@ -1,6 +1,6 @@
 "use client";
 
-import RoleButton from "@/components/RoleButton";
+import RoleButton from "@/components/form/elements/RoleButton";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFormState } from "../FormContext";
