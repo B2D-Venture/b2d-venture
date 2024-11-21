@@ -9,7 +9,6 @@ const ResetPasswordPage = () => (
   <AuthFormDynamic
     title="Reset Password"
     apiPath="/api/auth/reset-password"
-    redirectPath="/dashboard"
     linkPath="/signup"
     linkText="Don't have an account yet? Sign up"
   />

@@ -22,6 +22,7 @@ const PasswordField = ({ form, name }: PasswordFieldProps) => {
                     <FormControl>
                         <div className="relative">
                             <Input
+                                data-id={`${name}-input`}
                                 placeholder={name === "password" ? "Password" : "Confirm Password"}
                                 className="w-full px-8 py-6 rounded-lg bg-gray-100 border text-sm focus:outline-none"
                                 {...field}

@@ -9,7 +9,6 @@ const SignUp = () => (
   <AuthFormDynamic
     title="Sign Up"
     apiPath="/api/auth/signup"
-    redirectPath="/welcome"
     linkPath="/signin"
     linkText="Already have an account? Sign in"
   />

@@ -59,6 +59,13 @@ const signUpSchema = signInSchema.extend({
     path: ["confirmPassword"],
 });
 
+const resetPasswordSchema = signInSchema.extend({
+    confirmPassword: z.string().min(1, "Password confirmation is required"),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+});
+
 const otpFormSchema = z.object({
     pin: z
         .string()
@@ -96,7 +103,7 @@ const sendOtpCode = async (otp: string, email: string) => {
     }
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkPath, linkText }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, linkPath, linkText }) => {
     const { data: session, status } = useSession();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -115,10 +122,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const callbackUrlRef = useRef<string>(searchParams.get('callbackUrl') || pathname);
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(title === "Sign In" ? signInSchema : signUpSchema),
+        resolver: zodResolver(title === "Sign In" ? signInSchema : (title === "Sign Up") ? signUpSchema : resetPasswordSchema),
         defaultValues: title === "Sign Up"
             ? { email: "", password: "", confirmPassword: "", checkboxAbide: false }
-            : { email: "", password: "" },
+            : title === "Sign In" 
+                ? { email: "", password: "" } 
+                : { email: "", password: "", confirmPassword: "" },
     });
 
     const otpForm = useForm<z.infer<typeof otpFormSchema>>({
@@ -232,7 +241,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                     setCaptchaError("Please complete the reCAPTCHA.");
                     return;
                 }
-
+                
                 setShowOTPModal(true);
                 const otp = generateOTP();
                 sendOtpCode(otp, email);
@@ -338,7 +347,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input placeholder="Email" className="w-full px-8 py-6 rounded-lg bg-gray-100 border text-sm focus:outline-none" {...field} />
+                                                        <Input data-id="email-input" placeholder="Email" className="w-full px-8 py-6 rounded-lg bg-gray-100 border text-sm focus:outline-none" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -394,6 +403,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
                                         )}
                                         <Button
+                                            data-id="submit"
                                             className="mt-5 h-30 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                                             type="submit"
                                         >

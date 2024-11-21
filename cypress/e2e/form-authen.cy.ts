@@ -1,8 +1,15 @@
 describe('Form Authentication', () => {
+  beforeEach(() => {
+    cy.visit('/signin')
+    cy.get('[data-id="email-input"]').type("tcgcardpk001@gmail.com")
+    cy.get('[data-id="password-input"]').type("ABCDa4321#")
+    cy.get('[data-id="submit"]').click()
+    cy.wait(3000)
+  });
+
   it('Investor Form Testing', () => {
     cy.visit('/role-register')
     cy.get('[data-id="Investor-role"]').click()
-    cy.wait(1000)
     cy.get('[data-id="submit-role"]').click()
     cy.wait(1000)
 
