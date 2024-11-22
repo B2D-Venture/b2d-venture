@@ -106,6 +106,7 @@ const DealTerm = ({
             investorId={Number(investorId) ?? null}
             user={user}
             recentFunding={recentFunding}
+            currentInvestment={currentInvestment}
           />
           <RequestBtn
             text="Request Data Room"
