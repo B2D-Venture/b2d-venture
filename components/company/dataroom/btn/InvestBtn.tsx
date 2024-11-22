@@ -112,7 +112,6 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     setShareAmount(enteredShares);
 
     let maxInvest = 0;
-    console.log(currentInvestment);
 
     const currentMoreThanTarget =
       recentFunding.maxInvest * recentFunding.priceShare <

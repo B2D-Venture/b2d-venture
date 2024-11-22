@@ -6,7 +6,7 @@ import { eq, and, isNull, or } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import dotenv from "dotenv";
 import path from "path";
-import { getRaiseFundingByCompanyId, getRecentRaiseFundingByCompanyId } from "./raise";
+import { getRecentRaiseFundingByCompanyId } from "./raise";
 
 dotenv.config({ path: path.resolve(__dirname, "./.env.local") });
 
@@ -96,7 +96,6 @@ export async function addAmount(
 
 export async function getInvesmentByCompanyId(id: number) {
   const funding = await getRecentRaiseFundingByCompanyId(id)
-  console.log("funding", funding);
   if (funding){
   const investment = await db
     .select()
@@ -108,7 +107,6 @@ export async function getInvesmentByCompanyId(id: number) {
       )
     )
     .execute();
-    console.log("investment", investment);
   return investment;
   } else {
     return null;
