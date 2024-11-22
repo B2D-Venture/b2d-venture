@@ -167,7 +167,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
           await addAmount(
             investorId,
             Number(recentFunding.id),
-            moneyAmount + existingRequest.amount,
+            shareAmount + existingRequest.amount,
             Number(stockPercentage) + existingRequest.getStock
           );
           setAlertMessage({
@@ -178,7 +178,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
           await addInvestmentRequest(
             investorId,
             Number(recentFunding.id),
-            moneyAmount,
+            shareAmount,
             Number(stockPercentage),
             Number(recentFunding.priceShare)
           );

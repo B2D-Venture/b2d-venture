@@ -3,6 +3,7 @@ import InvestmentItem from "@/components/profile/investor/InvestmentItem";
 import { Company } from "@/types/company";
 import { RiHandCoinLine } from "react-icons/ri";
 import { InvestmentRequest } from "@/types/investment";
+import { getRecentRaiseFundingByCompanyId, getRaiseFundingById } from "@/lib/db";
 
 const formatISODate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -31,6 +32,29 @@ interface InvestmentItemListProps {
   investments: InvestmentItem[];
 }
 
+async function getRaiseFunding(raiseFundingId: number): Promise<RaiseFunding | null> {
+  const raiseFunding = await getRaiseFundingById(raiseFundingId);
+  if (!raiseFunding) {
+    return null;
+  }
+  return {
+    id: raiseFunding.id,
+    totalShare: raiseFunding.totalShare,
+    fundingTarget: raiseFunding.fundingTarget,
+    minInvest: raiseFunding.minInvest,
+    maxInvest: raiseFunding.maxInvest,
+    deadline: raiseFunding.deadline,
+    priceShare: raiseFunding.priceShare,
+    valuation: raiseFunding.valuation,
+  };
+}
+
+function getLastRaiseFundingRequest(companyId: number){
+  const raiseFunding = getRecentRaiseFundingByCompanyId(companyId);
+  return raiseFunding;
+}
+  
+
 const InvestmentItemList = ({ investments }: InvestmentItemListProps) => {
   return (
     <div className="w-full">
@@ -47,12 +71,14 @@ const InvestmentItemList = ({ investments }: InvestmentItemListProps) => {
           <span>No Investments Request</span>
         </div>
       ) : (
-        investments.map((item) => (
+        investments.map(async (item) => (
           <InvestmentItem
             key={item.id}
             company={item.company}
             request={item.request}
             status={item.status}
+            raiseFunding={await getRaiseFunding(item.request.raiseFundingId)}
+            lastraisedFunding={await getLastRaiseFundingRequest(Number(item.company.id))}
           />
         ))
       )}
