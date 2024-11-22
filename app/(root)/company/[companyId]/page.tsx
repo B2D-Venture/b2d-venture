@@ -9,6 +9,7 @@ import {
   getRecentRaiseFundingByCompanyId,
   getInvesmentByFundingId,
   getOneRecentFundingByCompanyId,
+  getCategoriesByCompanyId,
 } from "@/lib/db/index";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
@@ -18,6 +19,7 @@ import RejectShow from "@/components/profile/RejectShow";
 import ProgressBar from "@/components/profile/company/ProgressBar";
 import PublishForm from "@/components/profile/company/PublishForm";
 import { User } from "@/types/user";
+import CategoryList from "@/components/company/CategoryList";
 
 const calculateDaysLeft = (deadline: string) => {
   const today: Date = new Date();
@@ -87,6 +89,7 @@ export default async function CompanyProfile({
   }
 
   const company = await getCompanyById(params.companyId);
+  const categories = await getCategoriesByCompanyId(params.companyId);
   const recentFunding = (await getRecentRaiseFundingByCompanyId(
     params.companyId,
   )) as RaiseFunding;
@@ -139,6 +142,7 @@ export default async function CompanyProfile({
       <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
         {company?.name}
       </p>
+      <CategoryList categories={categories} />
       <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
         {company?.description}
       </div>

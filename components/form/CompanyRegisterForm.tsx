@@ -20,6 +20,9 @@ import {
   deleteDataRoom,
   getCompanyRequestById,
   getOneRecentFundingByCompanyId,
+  assignCategoriesToCompany,
+  getCategoryIdsByCompanyId,
+  updateCategoriesForCompany,
 } from "@/lib/db/index";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
@@ -27,6 +30,7 @@ import { Company } from "@/types/company";
 import FormLoading from "@/components/loading/FormLoading";
 import Link from "next/link";
 import { CompanyRegisterFormProps } from "@/types/form/index.d";
+import CategorySelect from "./elements/CategorySelect";
 
 const documentSchema = z.object({
   pdfs: z
@@ -139,6 +143,10 @@ export function CompanyRegisterForm({
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? "";
   const [fileName, setFileName] = useState<string>("");
+  const [initialCategories, setInitialCategories] = useState<string[]>();
+  const [selectedCategories, setSelectedCategories] = useState<string[] | null>(
+    null,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -188,6 +196,9 @@ export function CompanyRegisterForm({
                 await getOneRecentFundingByCompanyId(companyEditId);
               const existingDocuments =
                 await getDataRoomByCompanyId(companyEditId);
+              const existingCategories =
+                await getCategoryIdsByCompanyId(companyEditId);
+              setInitialCategories(existingCategories ?? []);
               setCompany(data.company);
               setRecentFunding(funding);
               reset({
@@ -195,7 +206,8 @@ export function CompanyRegisterForm({
                 banner: data.company.banner ?? "",
                 name: data.company.name ?? "",
                 abbr: data.company.abbr ?? "",
-                registrationNumber: Number(data.company.registrationNumber) ?? 0,
+                registrationNumber:
+                  Number(data.company.registrationNumber) ?? 0,
                 description: data.company.description ?? "",
                 totalShare: funding.totalShare ?? 0,
                 fundingTarget: funding.fundingTarget ?? 0,
@@ -221,6 +233,10 @@ export function CompanyRegisterForm({
     if (canEdit) {
       fetchCompany();
     }
+
+    if (!canEdit) {
+      setInitialCategories(["0"]);
+    }
     setLoading(false);
   }, [canEdit, companyEditId, reset]);
 
@@ -228,8 +244,15 @@ export function CompanyRegisterForm({
     return <FormLoading />;
   }
 
+  const handleCategoryChange = (categories: string[]) => {
+    setSelectedCategories(categories);
+  };
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { document, ...companyFormData } = values;
+    const categories = selectedCategories
+      ? selectedCategories.map((category) => Number(category))
+      : null;
     const companyData: Company = {
       id: companyEditId,
       logo: companyFormData.logo,
@@ -254,6 +277,9 @@ export function CompanyRegisterForm({
 
       addCompany(companyData)
         .then((companyId) => {
+          if (categories && categories.length > 0) {
+            assignCategoriesToCompany(companyId, categories);
+          }
           addRaiseFunding(raiseFundingData, companyId);
           changeToCompanyRole({
             email: userEmail,
@@ -281,6 +307,12 @@ export function CompanyRegisterForm({
 
       companyData.id = companyEditId;
       updateCompany(companyData);
+      const updatedcategories = selectedCategories
+        ? selectedCategories.map((category) => Number(category))
+        : null;
+      if (categories && categories.length > 0) {
+        updateCategoriesForCompany(companyEditId, updatedcategories ?? []);
+      }
 
       if (document && Array.isArray(document.pdfs)) {
         const newDocuments = document.pdfs.filter(
@@ -496,6 +528,13 @@ export function CompanyRegisterForm({
                       disabled={canEdit}
                     />
                   </div>
+
+                  <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
+
+                  <CategorySelect
+                    onCategoryChange={handleCategoryChange}
+                    initialSelectedCategories={initialCategories}
+                  />
 
                   <hr className="col-span-3 border-[1px] border-[#b3b2b2ee]"></hr>
 
