@@ -105,6 +105,8 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     if (recentFunding.priceShare && enteredShares > 0) {
       const calculatedMoneyAmount = enteredShares * recentFunding.priceShare;
       const totalInvestment = existingInvestment + calculatedMoneyAmount;
+      const minInvest = recentFunding.minInvest * recentFunding.priceShare;
+      const maxInvest = recentFunding.maxInvest * recentFunding.priceShare;
 
       if (investor && calculatedMoneyAmount > investor.investableAmount) {
         setError(
@@ -113,7 +115,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
         setMoneyAmount("");
         setStockPercentage("");
         return;
-      } else if (totalInvestment < recentFunding.minInvest) {
+      } else if (totalInvestment < minInvest) {
         setError(
           `Total investment must be more than ${
             recentFunding.minInvest
@@ -124,7 +126,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
         setMoneyAmount("");
         setStockPercentage("");
         return;
-      } else if (totalInvestment > recentFunding.maxInvest) {
+      } else if (totalInvestment > maxInvest) {
         setError(
           `Total investment must not exceed ${
             recentFunding.maxInvest
