@@ -5,6 +5,8 @@ import {
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
+  CategoryTable,
+  CompanyCategoryTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
 import { sql, eq } from "drizzle-orm";
@@ -218,4 +220,90 @@ export async function updateCompany(company: Company) {
     })
     .where(eq(CompanyTable.id, company.id))
     .execute();
+}
+
+export async function getAllCategories() {
+  return await db
+    .select({
+      id: CategoryTable.id,
+      name: CategoryTable.name,
+    })
+    .from(CategoryTable)
+    .execute();
+}
+
+export async function assignCategoriesToCompany(
+  companyId: number,
+  categoryIds: number[],
+) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  const values = categoryIds.map((categoryId) => ({
+    companyId,
+    categoryId,
+  }));
+
+  return await db.insert(CompanyCategoryTable).values(values).execute();
+}
+
+export async function getCategoriesByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  return await db
+    .select({
+      id: CategoryTable.id,
+      name: CategoryTable.name,
+    })
+    .from(CompanyCategoryTable)
+    .leftJoin(
+      CategoryTable,
+      eq(CompanyCategoryTable.categoryId, CategoryTable.id),
+    )
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+}
+
+export async function getCategoryIdsByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  const categoryIds = await db
+    .select({
+      id: CategoryTable.id,
+    })
+    .from(CompanyCategoryTable)
+    .leftJoin(
+      CategoryTable,
+      eq(CompanyCategoryTable.categoryId, CategoryTable.id),
+    )
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+
+  return categoryIds.map((categoryId) => String(categoryId.id));
+}
+
+export async function updateCategoriesForCompany(
+  companyId: number,
+  categoryIds: number[],
+) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  await db
+    .delete(CompanyCategoryTable)
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+
+  const values = categoryIds.map((categoryId) => ({
+    companyId,
+    categoryId,
+  }));
+
+  return await db.insert(CompanyCategoryTable).values(values).execute();
 }
