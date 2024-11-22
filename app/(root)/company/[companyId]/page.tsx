@@ -149,8 +149,8 @@ export default async function CompanyProfile({
       {recentFunding && (
         <ProgressBar
           dayLeft={calculateDaysLeft(recentFunding.deadline)}
-          currentInvestAmount={totalInvestment}
-          fundingTarget={recentFunding.fundingTarget}
+          currentInvestAmount={totalInvestment*recentFunding.priceShare}
+          fundingTarget={recentFunding.fundingTarget*recentFunding.priceShare}
         />
       )}
 

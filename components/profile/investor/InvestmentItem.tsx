@@ -30,9 +30,6 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
   const changedValue = request.amount * lastraisedFunding.priceShare - request.amount * raiseFunding.priceShare;
   const changedPrice =  lastraisedFunding.priceShare - raiseFunding.priceShare;
   const changedValuationPercentage = (lastraisedFunding.valuation - raiseFunding.valuation) / raiseFunding.valuation * 100;
-  console.log("raiseFunding", raiseFunding);
-  console.log("lastraisedFunding", lastraisedFunding);
-  console.log("request", request);
   return (
     <div>
       <Accordion type="single" collapsible>
@@ -48,7 +45,7 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
               />
             </div>
             <div className="col-span-1 text-black dark:text-white text-3xl font-bold">
-              $ {formatAmount(request.amount)}
+              $ {formatAmount(request.amount*raiseFunding.priceShare)}
             </div>
             <div className={`col-span-1 ${statusColor} text-3xl font-bold`}>
               {status} <br />
