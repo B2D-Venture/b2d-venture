@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import { FaList } from "react-icons/fa";
 import { NoRequestCard } from "@/components/admin/NoRequestCard";
+import SortRequestButton from "@/components/admin/SortRequestButton";
 
 interface dataroomRequest {
   investor: InvestorProps;
@@ -79,6 +80,7 @@ export default function DataroomRequestPage({
   const [dataroomData, setDataroomData] = useState<dataroomRequest[]>([]);
   const [notfound, setNotfound] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const fetchData = useCallback(async () => {
     try {
@@ -151,16 +153,31 @@ export default function DataroomRequestPage({
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
+  const sortRequests = (data: any[], order: "asc" | "desc") => {
+    return [...data].sort((a, b) => {
+      const dateA = new Date(a.requestDate).getTime();
+      const dateB = new Date(b.requestDate).getTime();
+      return order === "asc" ? dateA - dateB : dateB - dateA;
+    });
+  };
+
+  const handleSortChange = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const sortedData = sortRequests(dataroomData, sortOrder);
+
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
-      {dataroomData.length === 0 ? (
+      <SortRequestButton sortOrder={sortOrder} onSortChange={handleSortChange} />
+      {sortedData.length === 0 ? (
         <NoRequestCard
           title="No Data Room Requests"
           description="You currently have no pending requests. Any new requests will appear here."
         />
       ) : (
-        dataroomData.length > 0 &&
-        dataroomData.map((dataRoomRequests, index) => (
+        sortedData.length > 0 &&
+        sortedData.map((dataRoomRequests, index) => (
           <div
             key={index}
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
