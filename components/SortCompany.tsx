@@ -27,7 +27,7 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="cursor-pointer text-black">
+        <div data-id="sort" className="cursor-pointer text-black">
           <IoFilter className="ml-3" />
         </div>
       </DropdownMenuTrigger>
@@ -43,11 +43,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-valuation-asc"
                   onClick={() => handleSortClick("valuation", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-valuation-desc"
                   onClick={() => handleSortClick("valuation", "desc")}
                 >
                   High to Low
@@ -63,11 +65,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-total-share-asc"
                   onClick={() => handleSortClick("totalShare", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-total-share-desc"
                   onClick={() => handleSortClick("totalShare", "desc")}
                 >
                   High to Low
@@ -83,11 +87,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-funding-target-asc"
                   onClick={() => handleSortClick("fundingTarget", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-funding-target-desc"
                   onClick={() => handleSortClick("fundingTarget", "desc")}
                 >
                   High to Low
@@ -103,11 +109,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-price-share-asc"
                   onClick={() => handleSortClick("priceShare", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-price-share-desc"
                   onClick={() => handleSortClick("priceShare", "desc")}
                 >
                   High to Low
@@ -123,11 +131,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-deadline-asc"
                   onClick={() => handleSortClick("deadline", "asc")}
                 >
                   Sooner to Later
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-deadline-desc"
                   onClick={() => handleSortClick("deadline", "desc")}
                 >
                   Later to Sooner
@@ -143,11 +153,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-min-invest-asc"
                   onClick={() => handleSortClick("minInvest", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-min-invest-desc"
                   onClick={() => handleSortClick("minInvest", "desc")}
                 >
                   High to Low
@@ -163,11 +175,13 @@ const SortCompany: React.FC<SortCompanyProps> = ({ onSortChange }) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
+                  data-id="sort-max-invest-asc"
                   onClick={() => handleSortClick("maxInvest", "asc")}
                 >
                   Low to High
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  data-id="sort-max-invest-desc"
                   onClick={() => handleSortClick("maxInvest", "desc")}
                 >
                   High to Low

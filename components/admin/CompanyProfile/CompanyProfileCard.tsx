@@ -65,7 +65,7 @@ export function CompanyProfileCard({
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{companyRequest.company.name}</span>
+                <span data-id="company-card-name" className="flex-1">{companyRequest.company.name}</span>
                 <ChevronDownIcon
                   className="AccordionChevron text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -161,6 +161,7 @@ export function CompanyProfileCard({
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
         <Button
+          data-id="approve-button"
           variant="ghost"
           size="icon"
           className="bg-green-500"

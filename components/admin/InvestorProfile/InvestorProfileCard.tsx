@@ -40,7 +40,7 @@ export function InvestorProfileCard({
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">
+                <span data-id="investor-card-name" className="flex-1">
                   {investorRequest.investor?.firstName + " " + investorRequest.investor?.lastName}
                 </span>
                 <ChevronDownIcon
@@ -103,6 +103,7 @@ export function InvestorProfileCard({
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
         <Button
+          data-id="approve-button"
           variant="ghost"
           size="icon"
           className="bg-green-500"

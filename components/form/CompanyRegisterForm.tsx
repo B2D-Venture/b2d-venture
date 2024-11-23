@@ -594,7 +594,7 @@ export function CompanyRegisterForm({
                     )}
                   </div>
                   <div className="col-start-3">
-                    <Button type="submit" className="w-full">
+                    <Button data-id="submit" type="submit" className="w-full">
                       Submit
                     </Button>
                   </div>

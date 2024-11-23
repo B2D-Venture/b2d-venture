@@ -76,6 +76,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
   return (
     <div className="relative">
       <button
+        data-id="avatar-dropdown"
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center focus:outline-none"
       >
@@ -103,15 +104,15 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
             <li className="mb-2 flex items-center">
               <FaUserCircle className="mr-2 text-lg text-gray-700" />
               {('roleId' in user && user.roleId === 2) ? (
-                <Link href="/investor-profile">
-                  <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                <Link data-id="profile" href="/investor-profile">
+                  <span data-id="profile-label" className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
                     Investor Profile
                   </span>
                 </Link>
               ) :
                 ('roleId' in user && user.roleId === 3) ? (
-                  <Link href={`/company/${'roleIdNumber' in user ? user.roleIdNumber : ''}`}>
-                    <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
+                  <Link data-id="profile" href={`/company/${'roleIdNumber' in user ? user.roleIdNumber : ''}`}>
+                    <span data-id="profile-label" className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-[#c3a21ff4] transition-transform duration-200 ease-out">
                       Company Profile
                     </span>
                   </Link>
@@ -125,7 +126,7 @@ const AvatarDropdown = ({ session }: { session: Session }) => {
             </li>
             <li className="flex items-center">
               <FaSignOutAlt className="mr-2 text-lg text-gray-700" />
-              <button onClick={() => signOut()} className="focus:outline-none">
+              <button onClick={() => signOut()} className="focus:outline-none" data-id="signout">
                 <span className="block text-gray-700 text-lg font-semibold hover:scale-105 hover:text-red-600 transition-transform duration-200 ease-out">
                   Sign Out
                 </span>

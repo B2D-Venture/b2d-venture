@@ -139,7 +139,7 @@ export default async function CompanyProfile({
           />
         </div>
       </div>
-      <p className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
+      <p data-id="company-label" className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
         {company?.name}
       </p>
       <CategoryList categories={categories} />

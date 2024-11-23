@@ -123,6 +123,7 @@ export function RaiseFundingForm({
                   <FormLabel className="text-[17px]">Total Shares</FormLabel>
                   <FormControl>
                     <Input
+                      data-id="total-share-input"
                       className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
@@ -148,6 +149,7 @@ export function RaiseFundingForm({
                   <FormLabel className="text-[17px]">Funding Target</FormLabel>
                   <FormControl>
                     <Input
+                      data-id="funding-target-input"
                       className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
@@ -173,6 +175,7 @@ export function RaiseFundingForm({
                   <FormLabel className="text-[17px]">Price per Share</FormLabel>
                   <FormControl>
                     <Input
+                      data-id="price-share-input"
                       className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
@@ -214,6 +217,7 @@ export function RaiseFundingForm({
                   </FormLabel>
                   <FormControl>
                     <Input
+                      data-id="min-invest-input"
                       className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"
@@ -241,6 +245,7 @@ export function RaiseFundingForm({
                   </FormLabel>
                   <FormControl>
                     <Input
+                      data-id="max-invest-input"
                       className="bg-[#bfbfbf] text-black"
                       placeholder="$"
                       type="number"

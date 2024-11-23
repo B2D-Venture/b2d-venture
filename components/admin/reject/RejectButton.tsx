@@ -48,6 +48,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                 <DialogTrigger asChild>
                     <div className="flex flex-row space-x-2 justify-end">
                         <Button
+                            data-id="reject-button"
                             variant="ghost"
                             size="icon"
                             className="bg-red-500"

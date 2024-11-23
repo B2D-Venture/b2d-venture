@@ -35,6 +35,7 @@ const ProgressBar = ({ currentInvestAmount, dayLeft, fundingTarget }: ProgressBa
             </div>
             <div className="w-full bg-gray-200 rounded-lg dark:bg-gray-700">
                 <div
+                    data-id="progress-bar-invest"
                     className="flex bg-[#a2dfdb] dark:bg-yellow-400 h-6 text-sm font-medium text-black text-center p-0.5 leading-none rounded-lg justify-center items-center transition-all duration-1000 ease-out"
                     style={{ width: `${percentageBar}%` }}
                 >

@@ -38,6 +38,7 @@ const InvestableAmount = ({ initialAmount, investorId, email }: InvestableAmount
       </p>
       <div className="flex justify-end items-center space-x-2 group">
         <button
+          data-id="top-up"
           onClick={popup}
           className="flex items-center space-x-2 group-hover:text-yellow-400 group-hover:scale-110 active:text-yellow-600 active:scale-100 transition duration-200 ease-in-out transform"
         >

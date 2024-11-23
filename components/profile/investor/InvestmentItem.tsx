@@ -28,7 +28,7 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
   };
 
   const changedValue = request.amount * lastraisedFunding.priceShare - request.amount * raiseFunding.priceShare;
-  const changedPrice =  lastraisedFunding.priceShare - raiseFunding.priceShare;
+  const changedPrice = lastraisedFunding.priceShare - raiseFunding.priceShare;
   const changedValuationPercentage = (lastraisedFunding.valuation - raiseFunding.valuation) / raiseFunding.valuation * 100;
   return (
     <div>
@@ -44,11 +44,11 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
                 companyId={company.id ?? 0}
               />
             </div>
-            <div className="col-span-1 text-black dark:text-white text-3xl font-bold">
+            <div data-id="invest-amount" className="col-span-1 text-black dark:text-white text-3xl font-bold">
               $ {formatAmount(request.amount*raiseFunding.priceShare)}
             </div>
             <div className={`col-span-1 ${statusColor} text-3xl font-bold`}>
-              {status} <br />
+              <span data-id="status">{status}</span> <br />
               <span className="text-gray-400 text-sm">{new Date(request.requestDate).toLocaleDateString()}</span>
             </div>
             <div className="col-span-1">
@@ -70,10 +70,10 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
 
           <AccordionContent>
             <div className="grid grid-cols-3 gap-y-1 gap-x-5 justify-center items-center w-full space-y-2 pl-4 pr-4">
-            <div className="flex text-black dark:text-white text-lg font-bold">
+              <div className="flex text-black dark:text-white text-lg font-bold">
                 <span>Invest Value:</span>
                 <span className="mx-1">
-                  {formatAmount(request.amount*raiseFunding.priceShare)} $
+                  {formatAmount(request.amount * raiseFunding.priceShare)} $
                 </span>
               </div>
               <div className="flex text-black dark:text-white text-lg font-bold">
@@ -91,7 +91,7 @@ const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFund
               <div className="flex text-black dark:text-white text-lg font-bold">
                 <span>Market Value:</span>
                 <span className="mx-1">
-                  {formatAmount(request.amount*lastraisedFunding.priceShare)} $
+                  {formatAmount(request.amount * lastraisedFunding.priceShare)} $
                 </span>
                 <p className={changedValue < 0 ? `text-red-500` : `text-green-500`}>
                   ({formatAmount(changedValue)} $)

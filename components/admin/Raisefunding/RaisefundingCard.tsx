@@ -45,7 +45,7 @@ export function RaiseFundingCard({
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">{company.name}</span>
+                <span data-id="funding-card-name" className="flex-1">{company.name}</span>
                 <ChevronDownIcon
                   className="AccordionChevron text-muted-foreground transition-transform duration-200"
                   aria-hidden
@@ -102,6 +102,7 @@ export function RaiseFundingCard({
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
         <Button
+          data-id="approve-button"
           variant="ghost"
           size="icon"
           className="bg-green-500"

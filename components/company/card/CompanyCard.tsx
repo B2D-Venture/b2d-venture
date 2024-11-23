@@ -49,7 +49,7 @@ const CompanyCard = ({
             {/* Card Inside */}
             <div className="card-inside transition-all ease-in-out duration-300">
               <div>
-                <div className="card-name">{company.name}</div>
+                <div data-id="company-card" className="card-name">{company.name}</div>
                 <div className="card-description">{company.description}</div>
               </div>
 

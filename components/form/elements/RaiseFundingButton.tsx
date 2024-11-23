@@ -49,7 +49,7 @@ export function RaiseFundingButton({
         {canRaiseFunding === true ? (
           <DialogTrigger asChild>
             <div className="my-2 flex items-center justify-center">
-              <Button className={buttonClasses}>Raise Funding</Button>
+              <Button data-id="funding-btn" className={buttonClasses}>Raise Funding</Button>
             </div>
           </DialogTrigger>
         ) : canRaiseFunding === false ? (

@@ -49,7 +49,7 @@ const PublishForm = ({
             {isLoading && <RedirectLoading />}
             <div className="sticky bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#1f1f1f] dark:to-[#2b2b2b] m-5 rounded-xl shadow-xl p-8 md:p-3 lg:p-6 xl:p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out">
                 <div className="mb-3">
-                    <h2 className="text-gray-800 dark:text-white text-3xl md:text-lg lg:text-xl xl:text-3xl font-extrabold text-center">
+                    <h2 data-id="publish-label" className="text-gray-800 dark:text-white text-3xl md:text-lg lg:text-xl xl:text-3xl font-extrabold text-center">
                         Publish on Website
                     </h2>
                     <p className="text-center text-gray-600 dark:text-gray-400 mt-2 md:mt-1 text-md md:text-[8px] lg:text-sm xl:text-lg">
@@ -68,6 +68,7 @@ const PublishForm = ({
                                     <Link href={`/company/${companyId}/edit`} className='text-md md:text-[8px] lg:text-sm xl:text-md'>Edit Details</Link>
                                 </Button>
                                 <Button
+                                    data-id="publish-button"
                                     className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold xl:px-6 lg:px-4 md:px-1 py-5 md:py-0 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300"
                                 >
                                     <FaPaperPlane className="mr-2 text-md md:text-xs xl:text-md animate-bounce" />
@@ -87,6 +88,7 @@ const PublishForm = ({
                             </DialogHeader>
                             <DialogFooter className="flex justify-center">
                                 <Button
+                                    data-id="publish-confirm"
                                     type="submit"
                                     className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300"
                                     onClick={publishCompany}

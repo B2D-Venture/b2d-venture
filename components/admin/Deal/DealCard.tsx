@@ -121,6 +121,7 @@ export function Dealcard({
       </div>
       <div className="flex flex-row space-x-2 justify-end">
         <Button
+          data-id="approve"
           variant="ghost"
           size="icon"
           className="bg-green-500"
@@ -129,6 +130,7 @@ export function Dealcard({
           <CheckIcon className="h-4 w-4" />
         </Button>
         <Button
+          data-id="reject"
           variant="ghost"
           size="icon"
           className="bg-red-500"

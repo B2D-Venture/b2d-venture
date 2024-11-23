@@ -272,6 +272,7 @@ export function InvestorRegisterForm({ onRoleChange }: { onRoleChange: () => voi
               </Button>
 
               <Button
+                data-id="submit"
                 type="submit"
                 className="w-[211px] h-[45px] bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 ease-in-out font-bold"
               >

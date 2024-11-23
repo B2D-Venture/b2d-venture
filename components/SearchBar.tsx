@@ -36,6 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     >
       <FaSearch className="mr-3 text-black" />
       <input
+        data-id="search-input"
         type="text"
         className="flex-1 focus:outline-none focus:ring-0 bg-white text-black"
         placeholder="Search for companies"

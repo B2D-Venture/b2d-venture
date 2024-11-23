@@ -245,9 +245,9 @@ const AdminPage = () => {
         <div className="flex w-full justify-center items-center mb-4 space-x-2">
           <TabsList className="flex w-[40%]">
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="company">Company Request</TabsTrigger>
-            <TabsTrigger value="investor">Investor Request</TabsTrigger>
-            <TabsTrigger value="funding">Raise Funding Request</TabsTrigger>
+            <TabsTrigger data-id="company-tab" value="company">Company Request</TabsTrigger>
+            <TabsTrigger data-id="investor-tab" value="investor">Investor Request</TabsTrigger>
+            <TabsTrigger data-id="funding-tab" value="funding">Raise Funding Request</TabsTrigger>
           </TabsList>
           <SortRequestButton sortOrder={sortOrder} onSortChange={handleSortChange} />
         </div>

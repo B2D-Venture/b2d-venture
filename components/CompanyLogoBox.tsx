@@ -39,7 +39,7 @@ const CompanyLogoBox = ({
             <div className="text-black dark:text-white text-2xl font-extrabold tracking-wide max-lg:text-lg max-sm:text-base">
               {companyAbbr}
             </div>
-            <div className="text-[#141414] dark:text-gray-200 text-base font-semibold max-lg:text-sm max-sm:text-xs">
+            <div data-id="company-name-logo-box" className="text-[#141414] dark:text-gray-200 text-base font-semibold max-lg:text-sm max-sm:text-xs">
               {companyName}
             </div>
           </div>

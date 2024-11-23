@@ -10,7 +10,7 @@ const WaitingShow = () => {
                     <AiOutlineClockCircle className="text-[#FFAD60] text-[80px]" />
                 </div>
 
-                <h1 className="text-[42px] font-bold text-[#FFAD60] mb-2">Not Approved Yet</h1>
+                <h1 data-id="request-label" className="text-[42px] font-bold text-[#FFAD60] mb-2">Not Approved Yet</h1>
 
                 <p className="text-[28px] text-[#A66E38]">
                     Waiting for admin to approve your information...

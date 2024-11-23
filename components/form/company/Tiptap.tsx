@@ -67,7 +67,7 @@ const Tiptap = React.memo(({ pitch, onChange }: {
     return (
         <div className="flex flex-col justify-stretch min-h-[300px]">
             <ToolBar editor={editor} />
-            <EditorContent editor={editor} />
+            <EditorContent data-id="editor" editor={editor} />
         </div>
     );
 });

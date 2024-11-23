@@ -116,7 +116,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     const currentMoreThanTarget =
       recentFunding.maxInvest * recentFunding.priceShare <
       recentFunding.fundingTarget * recentFunding.priceShare -
-        currentInvestment*recentFunding.priceShare;
+      currentInvestment * recentFunding.priceShare;
 
     if (recentFunding.priceShare && enteredShares > 0) {
       const calculatedMoneyAmount = enteredShares * recentFunding.priceShare;
@@ -125,7 +125,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
       if (currentMoreThanTarget) {
         maxInvest = recentFunding.maxInvest * recentFunding.priceShare;
       } else {
-        maxInvest = (recentFunding.fundingTarget - currentInvestment)*recentFunding.priceShare;
+        maxInvest = (recentFunding.fundingTarget - currentInvestment) * recentFunding.priceShare;
       }
 
       if (investor && calculatedMoneyAmount > investor.investableAmount) {
@@ -137,8 +137,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
         return;
       } else if (totalInvestment < minInvest) {
         setError(
-          `Total investment must be more than ${
-            recentFunding.minInvest
+          `Total investment must be more than ${recentFunding.minInvest
           } shares ($ ${(
             recentFunding.minInvest * recentFunding.priceShare
           ).toLocaleString()}).`
@@ -149,17 +148,15 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
       } else if (totalInvestment > maxInvest) {
         if (!currentMoreThanTarget) {
           setError(
-            `Total investment must not exceed ${
-              (recentFunding.fundingTarget -
+            `Total investment must not exceed ${(recentFunding.fundingTarget -
               currentInvestment)
             } shares ($ ${(
-              (recentFunding.fundingTarget - currentInvestment)*recentFunding.priceShare
+              (recentFunding.fundingTarget - currentInvestment) * recentFunding.priceShare
             ).toLocaleString()}).`
           );
         } else {
           setError(
-            `Total investment must not exceed ${
-              recentFunding.maxInvest
+            `Total investment must not exceed ${recentFunding.maxInvest
             } shares ($ ${(
               recentFunding.maxInvest * recentFunding.priceShare
             ).toLocaleString()}).`
@@ -249,11 +246,12 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
     }
   }, [alertMessage]);
 
-  const canInvest = new Date(recentFunding.deadline) < new Date();
+  const canInvest = new Date(recentFunding.deadline) > new Date();
   return (
     <div className="my-2 flex items-center justify-center">
       {canInvest ? (
         <Button
+          data-id="invest-btn"
           onClick={handleInvestClick}
           className={`py-2 w-[170px] ${textColor} ${bgColor} ${borderColor} text-center py-5 px-6 font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 ${hoverBgColor} ${hoverTextColor} hover:${hoverBorderColor} shadow-md hover:shadow-lg`}
         >
@@ -292,7 +290,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
             <h2 className="text-lg text-black font-bold mb-4">
               Investment Form
             </h2>
-            <p className="text-gray-700 mb-4">
+            <p data-id="investable-invest-amount" className="text-gray-700 mb-4">
               Available: $
               {investor?.investableAmount.toLocaleString() ?? "Loading..."}
             </p>
@@ -308,6 +306,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
               <div className="mb-4">
                 <label className="block text-gray-700">Share Amount:</label>
                 <input
+                  data-id="share-amount-input"
                   type="number"
                   value={shareAmount}
                   onChange={handleShareChange}
@@ -342,6 +341,7 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
                   Cancel
                 </button>
                 <button
+                  data-id="submit-investment"
                   type="button"
                   onClick={handleInvestment}
                   className="w-[100px] h-[50px] items-center justify-center text-[#423F3F] bg-[#AFAB9A] border-transparent text-center py-2 px-6 font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#807D71] hover:text-white hover:border-transparent shadow-md hover:shadow-lg"
@@ -355,11 +355,10 @@ const InvestBtn: React.FC<InvestBtnProps> = ({
       )}
       {alertMessage && (
         <div
-          className={`fixed top-32 right-4 px-4 py-3 rounded-lg text-white shadow-md z-50 ${
-            alertMessage.type === "new"
+          className={`fixed top-32 right-4 px-4 py-3 rounded-lg text-white shadow-md z-50 ${alertMessage.type === "new"
               ? "bg-yellow-400 border-t-4 border-yellow-500"
               : "bg-green-400 border-t-4 border-green-500"
-          }`}
+            }`}
           role="alert"
         >
           <div className="flex items-start">

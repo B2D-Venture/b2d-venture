@@ -30,6 +30,7 @@ const DealTermBtn = ({
     <div className="my-2 flex items-center justify-center" onClick={handleRedirectPage}>
       {isLoading && <RedirectLoading />}
       <Button
+        data-id={text}
         className={`py-2 w-[170px] md:w-[100px] lg:w-[140px] xl:w-[180px] ${textColor} ${bgColor} ${borderColor} text-center md:text-[8px] lg:text-xs xl:text-lg py-2 font-semibold rounded-full border-2 transition-all duration-300 ease-in-out transform hover:scale-105 ${hoverBgColor} ${hoverTextColor} hover:${hoverBorderColor} shadow-md hover:shadow-lg`}
       >
         <Link href={link} className="">{text}</Link>

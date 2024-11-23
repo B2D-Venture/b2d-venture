@@ -28,21 +28,21 @@ const SuccessForm = ({ role, hasApproval, roleIdNumber }: SuccessFormProps) => {
           />
           <VerifyAnimation progress={progress} />
         </div>
-        <div className="text-center text-black text-4xl font-bold mb-4">
+        <div data-id="label" className="text-center text-black text-4xl font-bold mb-4">
           {role === "Investor" ? "Submit Success" : "Created Success"}
         </div>
 
         {role === "Investor" ? (
           hasApproval === true ? (
-            <div className="text-center text-[#939191] text-2xl mb-8">
+            <div data-id="desc" className="text-center text-[#939191] text-2xl mb-8">
               Your information has been <span className="text-green-500">approved</span> successfully
             </div>
           ) : hasApproval === false ? (
-            <div className="text-center text-[#939191] text-2xl mb-8">
+            <div data-id="desc" className="text-center text-[#939191] text-2xl mb-8">
               Your information has been <span className="text-red-400">rejected</span> by admin
             </div>
           ) : (
-            <div className="text-center text-[#939191] text-2xl mb-8">
+            <div data-id="desc" className="text-center text-[#939191] text-2xl mb-8">
               <span className="text-yellow-600">Waiting</span> for admin approval of your information
             </div>
           )
@@ -50,6 +50,7 @@ const SuccessForm = ({ role, hasApproval, roleIdNumber }: SuccessFormProps) => {
 
         <div className="w-full flex justify-center mt-8">
           <Link
+            data-id="go-to-profile"
             href={(role === "Investor") ? "/investor-profile" : (role === "Company") ? `/company/${roleIdNumber}` : "/"}
             className="w-[211px] h-[51px] bg-black text-white text-xl font-bold rounded-full text-center transition duration-300 hover:bg-gray-800 flex items-center justify-center"
           >
