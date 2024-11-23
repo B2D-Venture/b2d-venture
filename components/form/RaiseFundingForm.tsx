@@ -125,7 +125,6 @@ export function RaiseFundingForm({
                     <Input
                       data-id="total-share-input"
                       className="bg-[#bfbfbf] text-black"
-                      placeholder="$"
                       type="number"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
@@ -151,7 +150,6 @@ export function RaiseFundingForm({
                     <Input
                       data-id="funding-target-input"
                       className="bg-[#bfbfbf] text-black"
-                      placeholder="$"
                       type="number"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
@@ -219,7 +217,6 @@ export function RaiseFundingForm({
                     <Input
                       data-id="min-invest-input"
                       className="bg-[#bfbfbf] text-black"
-                      placeholder="$"
                       type="number"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
@@ -247,7 +244,6 @@ export function RaiseFundingForm({
                     <Input
                       data-id="max-invest-input"
                       className="bg-[#bfbfbf] text-black"
-                      placeholder="$"
                       type="number"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
