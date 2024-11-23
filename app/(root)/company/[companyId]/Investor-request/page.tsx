@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import { NoRequestCard } from "@/components/admin/NoRequestCard";
 import { InvestmentDetail, InvestmentRequest } from "@/types/investment";
+import SortRequestButton from "@/components/admin/SortRequestButton";
 
 const isOwnCompany = (urlId: number, roleIdNumber: number) => {
   if (Number(roleIdNumber) == urlId) {
@@ -39,6 +40,7 @@ export default function InvestorRequestPage({
   const [dealData, setDealData] = useState<InvestmentDetail[]>([]);
   const [notfound, setNotfound] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const fetchData = useCallback(async () => {
     try {
@@ -113,16 +115,31 @@ export default function InvestorRequestPage({
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
+  const sortRequests = (data: any[], order: "asc" | "desc") => {
+    return [...data].sort((a, b) => {
+      const dateA = new Date(a.requestDate).getTime();
+      const dateB = new Date(b.requestDate).getTime();
+      return order === "asc" ? dateA - dateB : dateB - dateA;
+    });
+  };
+
+  const handleSortChange = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const sortedData = sortRequests(dealData, sortOrder);
+
   return (
     <div className="text-white flex flex-col items-center mt-10 space-y-4 mb-10">
-      {dealData.length === 0 ? (
+      <SortRequestButton sortOrder={sortOrder} onSortChange={handleSortChange} />
+      {sortedData.length === 0 ? (
         <NoRequestCard
           title="No Investment Requests"
           description="You currently have no pending requests. Any new requests will appear here."
         />
       ) : (
-        dealData.length > 0 &&
-        dealData.map((deal, index) => (
+        sortedData.length > 0 &&
+        sortedData.map((deal, index) => (
           <div
             key={index}
             className="flex w-11/12 h-11/12 bg-[#D9D9D9] rounded-[10px] justify-center items-center p-[40px]"
