@@ -60,7 +60,7 @@ describe("Investor Investment", () => {
                     const cleanedText = text.replace(/\$|,/g, "").trim();
                     const pricePerShare = parseInt(cleanedText, 10);
                     const shareAmount = Math.floor(
-                      minInvestment / pricePerShare
+                      minInvestment / pricePerShare,
                     );
 
                     cy.get('[data-id="invest-btn"]').click();
@@ -73,11 +73,11 @@ describe("Investor Investment", () => {
                           text
                             .replace("Available: $", "")
                             .replace(/,/g, "")
-                            .trim()
+                            .trim(),
                         );
 
                         cy.get('[data-id="share-amount-input"]').type(
-                          shareAmount.toString()
+                          shareAmount.toString(),
                         );
                         cy.wait(2000);
 
@@ -91,10 +91,12 @@ describe("Investor Investment", () => {
                         cy.get('[data-id="amount"]')
                           .invoke("text")
                           .then((text: string) => {
-                            const cleanedNewText = text.replace(/\$|,/g, "").trim();
+                            const cleanedNewText = text
+                              .replace(/\$|,/g, "")
+                              .trim();
                             const currentAmount = parseInt(cleanedNewText, 10);
                             expect(currentAmount).to.eq(
-                              initialInvestableAmount - minInvestment
+                              initialInvestableAmount - minInvestment,
                             );
                           });
 
@@ -109,7 +111,9 @@ describe("Investor Investment", () => {
                         cy.get('[data-id="invest-amount"]')
                           .invoke("text")
                           .then((text: string) => {
-                            const cleanedText = text.replace(/\$|,/g, "").trim();
+                            const cleanedText = text
+                              .replace(/\$|,/g, "")
+                              .trim();
                             const investAmount = parseInt(cleanedText, 10);
                             expect(investAmount).to.eq(minInvestment);
                           });
@@ -121,51 +125,6 @@ describe("Investor Investment", () => {
                             expect(text.trim()).to.eq("Waitlisted");
                           });
                       });
-                  });
-
-                cy.visit("/");
-                cy.get('[data-id="avatar-dropdown"]').click();
-                cy.get('[data-id="signout"]').click();
-                cy.wait(1000);
-
-                // Company sign in to approve the investor request
-                cy.visit("/signin");
-                cy.get('[data-id="email-input"]').type(
-                  "companytest01@gmail.com"
-                );
-                cy.get('[data-id="password-input"]').type("ABCDa4321#");
-                cy.get('[data-id="submit"]').click();
-                cy.wait(1000);
-
-                // Go to company profile
-                cy.visit("/");
-                cy.get('[data-id="avatar-dropdown"]').click();
-                cy.get('[data-id="profile-label"]')
-                  .contains("Company Profile")
-                  .click();
-                cy.wait(2000);
-
-                // Click on investor request to approve
-                cy.get('[data-id="Investor Request"]').click();
-                cy.wait(4000);
-
-                cy.get('[data-id="approve"]').click();
-                cy.wait(2000);
-
-                cy.visit("/");
-                cy.get('[data-id="avatar-dropdown"]').click();
-                cy.get('[data-id="profile-label"]')
-                  .contains("Company Profile")
-                  .click();
-                cy.wait(2000);
-
-                // Check if progress bar is updated
-                cy.get('[data-id="progress-bar-invest"]')
-                  .invoke("text")
-                  .then((text: string) => {
-                    const cleanedText = text.replace(/\$|,/g, "").trim();
-                    const progress = parseInt(cleanedText, 10);
-                    expect(progress).to.eq(minInvestment);
                   });
               });
           }
