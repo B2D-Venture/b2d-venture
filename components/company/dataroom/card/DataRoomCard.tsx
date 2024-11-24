@@ -72,6 +72,7 @@ export function DataRoomCard({
           size="icon"
           className="bg-green-500"
           onClick={handleApprove}
+          data-id="approve-button"
         >
           <CheckIcon className="h-4 w-4" />
         </Button>

@@ -36,7 +36,7 @@ const DataroomItemList = ({ dataroomItems }: { dataroomItems: DataRoomItemsProps
                 <div className="col-span-2 text-black dark:text-white text-3xl font-bold">Status</div>
             </div>
             <div className="border-b-2 border-black dark:border-white mb-5" />
-            {dataroomItems.length >= 0 ? (
+            {dataroomItems.length <= 0 ? (
                 <div className="flex justify-center items-center text-center text-xl mt-8">
                     <FaRegFileAlt className="mr-3 text-4xl" />
                     <span>No Data Room Request</span>
@@ -58,7 +58,7 @@ const DataroomItemList = ({ dataroomItems }: { dataroomItems: DataRoomItemsProps
                                     </div>
                                     <div></div>
                                     <div className={`col-span-1 ${getStatusColor(item.status)} text-3xl font-bold`}>
-                                        {item.status} <br />
+                                        <span data-id="status">{item.status}</span><br />
                                         <span className="text-gray-400 text-sm">{item.request.requestDate.toLocaleDateString()}</span>
                                     </div>
                                     <div className="col-span-1">
