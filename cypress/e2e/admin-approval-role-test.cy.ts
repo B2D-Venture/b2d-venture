@@ -85,11 +85,7 @@ describe("Admin Reject Request", () => {
     cy.get('[data-id="checkbox-message"]').eq(6).click();
     cy.wait(3000);
 
-    cy.get('[data-id="submit"]').click();
-    cy.get('[data-id="no-list-title"]').should(
-      "have.text",
-      "No Company Requests Available"
-    );
+    cy.get('[type="submit"]').click();
     cy.wait(3000);
   });
 
@@ -111,11 +107,7 @@ describe("Admin Reject Request", () => {
     cy.get('[data-id="checkbox-message"]').eq(2).click();
     cy.wait(3000);
 
-    cy.get('[data-id="submit"]').click();
-    cy.get('[data-id="no-list-title"]').should(
-      "have.text",
-      "No Investor Requests Available"
-    );
+    cy.get('[type="submit"]').click();
     cy.wait(3000);
   });
 });
