@@ -45,15 +45,11 @@ describe("DataRoom Request Approval", () => {
         });
 
       cy.get('[data-id="request-data-room"]').click();
-      cy.wait(1000);
-      // cy.get('[data-id="request-data-room"]').click();
-      // cy.get('[data-id="alert-label"]').should(
-      //   "have.text",
-      //   "Request already sent"
-      // );
-      // cy.get('[data-id="close-alert-btn"]').click();
 
-      cy.wait(1000);
+      // Check if alert is shown
+      cy.get('[role="alert"]').should("be.visible");
+      cy.wait(4000);
+
       cy.visit("/");
       cy.get('[data-id="avatar-dropdown"]').click();
       cy.get('[data-id="signout"]').click();
@@ -76,6 +72,8 @@ describe("DataRoom Request Approval", () => {
       cy.wait(2000);
 
       cy.get('[data-id="approve-button"]').eq(0).click();
+      cy.wait(3000);
+
       cy.visit("/");
       cy.wait(2000);
 
