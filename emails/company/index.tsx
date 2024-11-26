@@ -134,6 +134,7 @@ export const YelpRecentLoginEmail = ({
                         textDecoration: 'none',
                         borderRadius: '4px',
                       }}
+                      href={`${baseUrl}/role-register`}
                     >
                       Create Your Company Again
                     </Button>
@@ -164,6 +165,7 @@ export const YelpRecentLoginEmail = ({
                           textDecoration: 'none',
                           borderRadius: '4px',
                         }}
+                        href={`${baseUrl}/company`}
                       >
                         See Company Profile
                       </Button>
@@ -227,7 +229,7 @@ export const YelpRecentLoginEmail = ({
               marginTop: '20px',
             }}
           >
-            © 2024 | B2D Venture, Bangkok | www.b2d-venture.com
+            © 2024 | B2D Venture, Bangkok | <a href="${baseUrl}">Go to B2D Venture</a>
           </Text>
         </Container>
       </Body >

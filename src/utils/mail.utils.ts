@@ -27,7 +27,7 @@ export async function sendEmail({
   } as SMTPTransport.Options);
 
   try {
-    transporter.sendMail({
+    await transporter.sendMail({
       from: sender,
       to: receiver,
       subject,
