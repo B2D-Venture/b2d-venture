@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import CompanyLogoBox from "@/components/CompanyLogoBox";
+import CompanyLogoBox from "@/components/company/CompanyLogoBox";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { FaRegFileLines, FaEye } from "react-icons/fa6";

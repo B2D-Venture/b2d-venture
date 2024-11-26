@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
-import SortCompany from "@/components/SortCompany";
+import SortCompany from "@/components/company/SortCompany";
 
 interface SearchBarProps {
   initialSearch: string;

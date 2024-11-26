@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { CompanyLogoBoxProps } from "@/types";
-import { Company } from "@/types/company";
-import RedirectLoading from "./loading/RedirectLoading";
+import RedirectLoading from "../loading/RedirectLoading";
 
 const CompanyLogoBox = ({
   companyId,

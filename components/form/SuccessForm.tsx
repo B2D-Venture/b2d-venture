@@ -1,8 +1,8 @@
 import React from "react";
 import { motion, useMotionValue } from "framer-motion";
-import VerifyAnimation from "./VerifyAnimation";
+import VerifyAnimation from "../animation/VerifyAnimation";
 import Link from "next/link";
-import ShowStep from "@/components/ShowStepForm";
+import ShowStep from "@/components/form/ShowStepForm";
 import { SuccessFormProps } from "@/types/form/index.d";
 
 

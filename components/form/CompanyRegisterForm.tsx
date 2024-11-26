@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { ProfileImageForm } from "@/components/form/elements/ProfileImageForm";
 import { BannerImageForm } from "@/components/form/company/BannerImageForm";
-import { useFormState } from "../FormContext";
+import { useFormState } from "./FormContext";
 import FormFields from "@/components/form/elements/FormFields";
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import DocumentForm from "./company/DocumentForm";

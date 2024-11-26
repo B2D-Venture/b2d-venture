@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { useFormState } from "../FormContext";
+import { useFormState } from "./FormContext";
 import RoleSelectForm from "./RoleSelectForm";
 import InvestorForm from "./InvestorForm";
 import CompanyForm from "./CompanyForm";
-import SuccessForm from "../SuccessForm";
+import SuccessForm from "./SuccessForm";
 import {
   getInvestorRequestById,
 } from "@/lib/db/index";

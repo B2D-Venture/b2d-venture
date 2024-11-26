@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CompanyCard from "@/components/company/card/CompanyCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/company/SearchBar";
 import { getAllCompanies, getInvesmentByFundingId } from "@/lib/db/index";
 import { useSearchParams } from "next/navigation";
 import { CompanyWithRaiseFunding } from "@/types/company";

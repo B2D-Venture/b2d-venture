@@ -3,8 +3,8 @@
 import RoleButton from "@/components/form/elements/RoleButton";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useFormState } from "../FormContext";
-import ShowStep from "@/components/ShowStepForm";
+import { useFormState } from "./FormContext";
+import ShowStep from "@/components/form/ShowStepForm";
 
 type TFormValues = {
   username: string;

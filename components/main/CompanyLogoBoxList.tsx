@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CompanyLogoBox from "@/components/CompanyLogoBox";
+import CompanyLogoBox from "@/components/company/CompanyLogoBox";
 import { getAllCompanies } from "@/lib/db/company";
 import { Company } from "@/types/company";
 import CompanyLogoBoxLoading from "@/components/loading/main/CompanyLogoBoxLoading";

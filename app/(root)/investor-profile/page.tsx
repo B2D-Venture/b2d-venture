@@ -1,6 +1,6 @@
 import InvestableAmount from "@/components/profile/investor/InvestableAmount";
 import InvestmentItemList from "@/components/profile/investor/InvestmentItemList";
-import { InvestorProfileCard } from "@/components/InvestorProfileCard";
+import { InvestorProfileCard } from "@/components/profile/investor/InvestorProfileCard";
 import {
   getUserByEmail,
   getInvestorById,

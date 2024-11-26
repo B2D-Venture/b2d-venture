@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProfileImageForm } from "@/components/form/elements/ProfileImageForm";
 import { CalendarForm } from "@/components/form/elements/CalendarForm";
-import { useFormState } from "../FormContext";
+import { useFormState } from "./FormContext";
 import {
   addInvestor,
   addInvestorRequest,
