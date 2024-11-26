@@ -137,6 +137,7 @@ export const EmailInvestorStatus = ({
                         textDecoration: 'none',
                         borderRadius: '4px',
                       }}
+                      href={`${baseUrl}/role-register`}
                     >
                       Create Your Investor Again
                     </Button>
@@ -167,6 +168,7 @@ export const EmailInvestorStatus = ({
                           textDecoration: 'none',
                           borderRadius: '4px',
                         }}
+                        href={`${baseUrl}/investor-profile`}
                       >
                         See Investor Profile
                       </Button>
@@ -287,7 +289,7 @@ export const EmailInvestorStatus = ({
               marginTop: '20px',
             }}
           >
-            © 2024 | B2D Venture, Bangkok | www.b2d-venture.com
+            © 2024 | B2D Venture, Bangkok | <a href="${baseUrl}">Go to B2D Venture</a>
           </Text>
         </Container>
       </Body >
