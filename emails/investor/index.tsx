@@ -16,7 +16,7 @@ import {
 import * as React from "react";
 
 interface EmailInvestorStatusProps {
-  message: string;
+  message: { id: string; title: string; description: string }[];
   status: "approved" | "rejected";
   loginDate?: Date;
   profileImage: string;
@@ -63,7 +63,7 @@ export const EmailInvestorStatus = ({
               <Img
                 style={image}
                 width={100}
-                src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671b3929&is=6719e7a9&hm=91ab0a3fbfe7afe1f6ffb99549ec3dc1e7fcd5b00448db652cbb5af3ff5b3fa1&"
+                src="https://raw.githubusercontent.com/B2D-Venture/b2d-venture/refs/heads/iteration-7/app/favicon.ico"
                 alt="B2D Logo Content"
                 className="flex justify-center items-center"
               />

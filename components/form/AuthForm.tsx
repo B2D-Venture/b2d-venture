@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import SignInLoading from "@/components/loading/SignInLoading";
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
 import PasswordField from "./elements/PasswordField";
-import bcrypt from "bcryptjs";
 import { getUser } from "@/lib/db/index";
 import {
     Dialog,
@@ -35,15 +34,10 @@ import {
 } from "@/components/ui/input-otp"
 import ReCAPTCHA from "react-google-recaptcha";
 import { AbideAlert } from "../registration/AbideAlert";
-
-
-interface AuthFormProps {
-    title: "Sign In" | "Sign Up";
-    apiPath: string;
-    redirectPath: string;
-    linkPath: string;
-    linkText: string;
-}
+import { AuthFormProps, FormValues } from "@/types/form/index.d";
+import { User } from "@/types/user";
+import { Checkbox } from "../ui/checkbox";
+import Image from "next/image";
 
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -56,6 +50,16 @@ const signInSchema = z.object({
 });
 
 const signUpSchema = signInSchema.extend({
+    checkboxAbide: z.boolean().refine((value) => value === true, {
+        message: "Please agree to the terms of service and privacy policy",
+    }),
+    confirmPassword: z.string().min(1, "Password confirmation is required"),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+});
+
+const resetPasswordSchema = signInSchema.extend({
     confirmPassword: z.string().min(1, "Password confirmation is required"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -77,7 +81,7 @@ const generateOTP = () => {
     return otp;
 };
 
-const sendOtpCode = async (otp: string) => {
+const sendOtpCode = async (otp: string, email: string) => {
     try {
         const response = await fetch("/api/mail/otp", {
             method: "POST",
@@ -86,6 +90,7 @@ const sendOtpCode = async (otp: string) => {
             },
             body: JSON.stringify({
                 validationCode: otp,
+                email: email,
             }),
         });
 
@@ -98,7 +103,7 @@ const sendOtpCode = async (otp: string) => {
     }
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkPath, linkText }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, linkPath, linkText }) => {
     const { data: session, status } = useSession();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -114,17 +119,15 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const [captchaValid, setCaptchaValid] = useState(false);
     const [captchaError, setCaptchaError] = useState<string | null>(null);
 
-    let callbackUrl = searchParams.get('callbackUrl') || pathname;
+    const callbackUrlRef = useRef<string>(searchParams.get('callbackUrl') || pathname);
 
-    const defaultValues = {
-        email: "",
-        password: "",
-        ...(title === "Sign Up" && { confirmPassword: "" }),
-    };
-
-    const form = useForm({
-        resolver: zodResolver(title === "Sign Up" ? signUpSchema : signInSchema),
-        defaultValues,
+    const form = useForm<FormValues>({
+        resolver: zodResolver(title === "Sign In" ? signInSchema : (title === "Sign Up") ? signUpSchema : resetPasswordSchema),
+        defaultValues: title === "Sign Up"
+            ? { email: "", password: "", confirmPassword: "", checkboxAbide: false }
+            : title === "Sign In" 
+                ? { email: "", password: "" } 
+                : { email: "", password: "", confirmPassword: "" },
     });
 
     const otpForm = useForm<z.infer<typeof otpFormSchema>>({
@@ -149,12 +152,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     useEffect(() => {
         if (status === "authenticated") {
             fetchUser();
-        } else if (status === "unauthenticated" && pathname === "/signup") {
-            callbackUrl = "/role-register";
         } else {
             setLoading(false);
         }
-    }, [status]);
+    }, [status, pathname, router]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
@@ -169,11 +170,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         return () => clearInterval(timer);
     }, [showOTPModal, timeLeft]);
 
-    if ((callbackUrl === "/signup" || callbackUrl === "/signin") && user) {
+    if ((callbackUrlRef.current === "/signup" || callbackUrlRef.current === "/signin") && user) {
         if (user.roleId === 2) {
-            window.location.href = `/investor-profile`;
+            router.push(`/investor-profile`);
         } else if (user.roleId === 3) {
-            window.location.href = `/company/${user.roleIdNumber}`;
+            router.push(`/company/${user.roleIdNumber}`);
+        } else if (user.roleId === 1) {
+            router.push(`/`);
         }
     }
 
@@ -182,39 +185,70 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     const handleAuth = async () => {
         const email = form.getValues("email");
         setError(null);
-        if (title === "Sign In") {
-            const passwordForm = form.getValues("password");
-            const existingUser = await getUser(email);
-            if (!existingUser) {
-                setError("Incorrect email or password.");
-                return;
-            }
-            const isMatch = await bcrypt.compare(passwordForm, existingUser.password);
-            if (isMatch) {
-                const signInRes = await signIn("credentials", {
-                    redirect: false,
-                    email: email,
-                    password: passwordForm,
+
+        try {
+            if (title === "Sign In") {
+                const password = form.getValues("password");
+
+                const res = await fetch("/api/auth/signin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
                 });
-                if (signInRes?.error) {
-                    alert("Error signing in after registration: " + signInRes.error);
-                    setError("Error signing in: " + signInRes.error);
-                } else {
-                    router.push(callbackUrl === "/signin" ? "/" : callbackUrl);
+
+                const data = await res.json();
+                if (!res.ok) {
+                    setError(data.error || "Sign-in failed.");
+                    return;
                 }
-            } else {
-                setError("Incorrect email or password.");
+
+                if (res.ok) {
+                    const signInRes = await signIn("credentials", {
+                        redirect: false,
+                        email: form.getValues("email"),
+                        password: form.getValues("password"),
+                    });
+
+                    if (signInRes?.error) {
+                        alert("Error signing in after registration: " + signInRes.error);
+                    }
+                    else {
+                        router.push(callbackUrlRef.current === "/signin" ? "/" : callbackUrlRef.current);
+                    }
+                } else {
+                    setError(data.error || "Sign-in failed.");
+                    return;
+                }
             }
-        }
-        else if (title === "Sign Up") {
-            if (!captchaValid) {
-                setCaptchaError("Please complete the reCAPTCHA.");
-                return;
+            else if (title === "Sign Up") {
+                const user = await getUser(email);
+                if (user) {
+                    setError("User already exists");
+                    return;
+                }
+
+                if (!captchaValid) {
+                    setCaptchaError("Please complete the reCAPTCHA.");
+                    return;
+                }
+                setShowOTPModal(true);
+                const otp = generateOTP();
+                sendOtpCode(otp, email);
+                setOtp(otp);
             }
-            setShowOTPModal(true);
-            const otp = generateOTP();
-            sendOtpCode(otp);
-            setOtp(otp);
+            else if (title === "Reset Password") {
+                if (!captchaValid) {
+                    setCaptchaError("Please complete the reCAPTCHA.");
+                    return;
+                }
+                
+                setShowOTPModal(true);
+                const otp = generateOTP();
+                sendOtpCode(otp, email);
+                setOtp(otp);
+            }
+        } catch (err) {
+            setError("An unexpected error occurred.");
         }
     };
 
@@ -222,7 +256,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
         setTimeLeft(60);
         setCanResendOTP(false);
         const otp = generateOTP();
-        sendOtpCode(otp);
+        sendOtpCode(otp, form.getValues("email"));
         setOtp(otp);
     };
 
@@ -236,31 +270,37 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 
     async function handleVerifyOTP(data: z.infer<typeof otpFormSchema>) {
         if (data.pin === otp) {
-            const hashedPassword = await bcrypt.hash(form.getValues("password"), 10);
             const res = await fetch(apiPath, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: form.getValues("email"),
-                    password: hashedPassword,
+                    password: form.getValues("password"),
                 }),
             });
 
-            if (res.ok) {
-                const signInRes = await signIn("credentials", {
-                    redirect: false,
-                    email: form.getValues("email"),
-                    password: form.getValues("password"),
-                });
+            if (title === "Sign Up") {
+                if (res.ok) {
+                    const signInRes = await signIn("credentials", {
+                        redirect: false,
+                        email: form.getValues("email"),
+                        password: form.getValues("password"),
+                    });
 
-                if (signInRes?.error) {
-                    alert("Error signing in after registration: " + signInRes.error);
+                    if (signInRes?.error) {
+                        alert("Error signing in after registration: " + signInRes.error);
+                    }
+                    else {
+                        router.push(callbackUrlRef.current === "/signup" ? "/" : callbackUrlRef.current);
+                    }
                 } else {
-                    router.push(callbackUrl === "/signup" ? "/" : callbackUrl);
+                    const error = await res.json();
+                    alert(error.error);
                 }
-            } else {
-                const error = await res.json();
-                alert(error.error);
+            } else if (title === "Reset Password") {
+                if (res.ok) {
+                    router.push("/signin");
+                }
             }
 
             setShowOTPModal(false);
@@ -270,7 +310,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
     }
 
     return (
-        <div className="h-screen flex items-center justify-center bg-[#c9c9c9]">
+        <div className="h-screen flex justify-center bg-[#c9c9c9]">
             <div className="flex h-full w-full lg:w-3/5">
                 <div className="hidden lg:flex items-center justify-center flex-1 bg-gray-100 text-black">
                     <SideImage />
@@ -278,51 +318,92 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                 <div className="w-full bg-white lg:w-1/2 flex items-center justify-center">
                     <div className="mt-12 flex flex-col items-center">
                         <h1 className="text-2xl xl:text-3xl font-extrabold">{title}</h1>
-                        <div className="w-full flex-1 mt-8">
-                            <div className="flex flex-col items-center">
-                                <GoogleButton callbackUrl={callbackUrl} title={title} />
-                            </div>
-                            <div className="my-5 border-b text-center">
-                                <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                                    Or {title.toLowerCase()} with email
+                        {title === "Reset Password" && (
+                            <p className="text-sm text-gray-500 mt-2">
+                                Enter your username and a new password.
+                            </p>
+                        )}
+                        <div className="w-full flex-1 mt-4">
+                            {title !== "Reset Password" && (
+                                <div>
+                                    <div className="flex flex-col items-center">
+                                        <GoogleButton callbackUrl={callbackUrlRef.current} title={title} />
+                                    </div>
+                                    <div className="my-3 border-b text-center">
+                                        <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+                                            Or {title.toLowerCase()} with email
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             <div className="w-72 max-w-xs">
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(handleAuth) as any}
-                                        className="space-y-4">
+                                        className="space-y-3">
                                         <FormField
                                             control={form.control}
                                             name="email"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input placeholder="Email" className="w-full px-8 py-6 rounded-lg bg-gray-100 border text-sm focus:outline-none" {...field} />
+                                                        <Input data-id="email-input" placeholder="Email" className="w-full px-8 py-6 rounded-lg bg-gray-100 border text-sm focus:outline-none" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
+
                                         <PasswordField form={form} name="password" />
-                                        {title === "Sign Up" && (<PasswordField form={form} name="confirmPassword" />)}
+
+                                        {title === "Sign In" && (
+                                            <div className="flex justify-end">
+                                                <Link href="/reset-password">
+                                                    <span className="text-xs text-gray-500 hover:underline">Reset password?</span>
+                                                </Link>
+                                            </div>
+                                        )}
+                                        {title !== "Sign In" && (<PasswordField form={form} name="confirmPassword" />)}
                                         {error && (
                                             <p className="text-red-500 text-sm text-center mt-2">{error}</p>
                                         )}
-
-                                        {title === "Sign Up" && (
+                                        {title !== "Sign In" && (
                                             <div>
                                                 <ReCAPTCHA sitekey={process.env.RECAPTCHA_PUBLIC_KEY!} onChange={handleCaptchaChange} className="flex justify-center items-center mx-auto" />
                                                 {captchaError && <p className="text-red-500 text-sm">{captchaError}</p>}
-                                                <p className="mt-6 text-xs text-gray-600 text-center">
-                                                    I agree to abide by b2d-venture's&nbsp;
-                                                    <AbideAlert type="tos" />
-                                                    &nbsp;and its&nbsp;
-                                                    <AbideAlert type="privacy" />
-                                                </p>
                                             </div>
                                         )}
+                                        {title === "Sign Up" && (
+                                            <FormField
+                                                key={title}
+                                                control={form.control}
+                                                name="checkboxAbide"
+                                                render={({ field }) => (
+                                                    <FormItem className="space-x-3 space-y-0 rounded-md border p-4">
+                                                        <div className="flex space-x-3">
+                                                            <FormControl>
+                                                                <Checkbox
+                                                                    id="checkboxAbide"
+                                                                    checked={field.value}
+                                                                    onCheckedChange={field.onChange}
+                                                                />
+                                                            </FormControl>
+                                                            <p className="text-sm text-gray-600">
+                                                                <label htmlFor="checkboxAbide">
+                                                                    I agree to&nbsp;
+                                                                    <AbideAlert type="tos" /> and&nbsp;
+                                                                    <AbideAlert type="privacy" />
+                                                                </label>
+                                                            </p>
+                                                        </div>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                        )}
                                         <Button
+                                            data-id="submit"
                                             className="mt-5 h-30 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                                             type="submit"
                                         >
@@ -343,14 +424,26 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
                                     </form>
                                 </Form >
                             </div>
-                            {showOTPModal && (title === "Sign Up") && (
+                            {showOTPModal && (title !== "Sign In") && (
                                 <Dialog open={showOTPModal} onOpenChange={setShowOTPModal}>
                                     <DialogContent className="sm:max-w-[425px]">
                                         <DialogHeader>
-                                            <DialogTitle>Enter OTP Code</DialogTitle>
-                                            <DialogDescription>
-                                                Please enter the code sent to your email.
+                                            <DialogTitle className="text-2xl font-bold text-center">Enter OTP Code</DialogTitle>
+                                            <DialogDescription className="text-gray-600 text-center">
+                                                Please enter the code sent to your email address to verify your identity.
                                             </DialogDescription>
+                                            <div className="flex flex-col items-center mt-4">
+                                                <Image
+                                                    src="/email-sender-animated/email.gif"
+                                                    width={60}
+                                                    height={60}
+                                                    alt="Email Animated Icon"
+                                                    className="mb-3"
+                                                />
+                                                <DialogDescription className="text-gray-600 text-center">
+                                                    An OTP has been sent to <span className="font-semibold">{form.getValues("email")}</span>.
+                                                </DialogDescription>
+                                            </div>
                                         </DialogHeader>
                                         <div className="flex justify-center items-center w-full">
                                             <Form {...otpForm}>
@@ -428,3 +521,4 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, apiPath, redirectPath, linkP
 };
 
 export default AuthForm;
+export const dynamic = "force-dynamic";

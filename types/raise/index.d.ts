@@ -1,7 +1,9 @@
 interface RaiseFunding {
+  totalShare: number | SQL<unknown> | Placeholder<string, any>;
   id?: number;
   companyId?: number;
   fundingTarget: number;
+  totalShare: number;
   minInvest: number;
   maxInvest: number;
   deadline: string;
@@ -11,4 +13,16 @@ interface RaiseFunding {
 
 interface RaiseFundingRequest {
   raiseFundingId: number;
+}
+
+interface RaiseFundingRequestList {
+  id: number;
+  raiseFundingId: number;
+  requestDate: Date;
+  approval: boolean | null;
+}
+
+interface RaiseFundingRequestData extends RaiseFundingRequestList {
+  raiseFunding: RaiseFunding | null;
+  company: Company | null;
 }

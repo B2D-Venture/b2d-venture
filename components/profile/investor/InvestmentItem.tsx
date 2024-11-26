@@ -7,12 +7,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import CompanyLogoBox from "@/components/CompanyLogoBox";
+import CompanyLogoBox from "@/components/company/CompanyLogoBox";
 import { Button } from "@/components/ui/button";
 import { InvestmentItemProps } from "@/types";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { color } from "framer-motion";
 
-const InvestmentItem = ({ company, request, status }: InvestmentItemProps) => {
+const InvestmentItem = ({ company, request, status, raiseFunding, lastraisedFunding }: InvestmentItemProps) => {
   const statusColor =
     status === "Waitlisted"
       ? "text-[#d5c642] dark:text-[#E4DEA8]"
@@ -26,6 +27,9 @@ const InvestmentItem = ({ company, request, status }: InvestmentItemProps) => {
     return new Intl.NumberFormat().format(amount);
   };
 
+  const changedValue = request.amount * lastraisedFunding.priceShare - request.amount * raiseFunding.priceShare;
+  const changedPrice = lastraisedFunding.priceShare - raiseFunding.priceShare;
+  const changedValuationPercentage = (lastraisedFunding.valuation - raiseFunding.valuation) / raiseFunding.valuation * 100;
   return (
     <div>
       <Accordion type="single" collapsible>
@@ -40,12 +44,12 @@ const InvestmentItem = ({ company, request, status }: InvestmentItemProps) => {
                 companyId={company.id ?? 0}
               />
             </div>
-            <div className="col-span-1 text-black dark:text-white text-3xl font-bold">
-              $ {formatAmount(request.amount)}
+            <div data-id="invest-amount" className="col-span-1 text-black dark:text-white text-3xl font-bold">
+              $ {formatAmount(request.amount*raiseFunding.priceShare)}
             </div>
             <div className={`col-span-1 ${statusColor} text-3xl font-bold`}>
-              {status} <br />
-              <span className="text-gray-400 text-sm">{request.requestDate.toLocaleDateString()}</span>
+              <span data-id="status">{status}</span> <br />
+              <span className="text-gray-400 text-sm">{new Date(request.requestDate).toLocaleDateString()}</span>
             </div>
             <div className="col-span-1">
               <AccordionTrigger asChild className="hover:no-underline">
@@ -67,25 +71,49 @@ const InvestmentItem = ({ company, request, status }: InvestmentItemProps) => {
           <AccordionContent>
             <div className="grid grid-cols-3 gap-y-1 gap-x-5 justify-center items-center w-full space-y-2 pl-4 pr-4">
               <div className="flex text-black dark:text-white text-lg font-bold">
-                <span>Market Price:</span>
+                <span>Invest Value:</span>
                 <span className="mx-1">
-                  {formatAmount(1000)}$
+                  {formatAmount(request.amount * raiseFunding.priceShare)} $
                 </span>
-                <p className="text-[#319f43]">
-                  (+10.0$)
+              </div>
+              <div className="flex text-black dark:text-white text-lg font-bold">
+                <span>Invest Price:</span>
+                <span className="mx-1">
+                  {formatAmount(raiseFunding.priceShare)} $
+                </span>
+              </div>
+              <div className="flex text-black dark:text-white text-lg font-bold">
+                <span>Invest Valuation:</span>
+                <span className="mx-1">
+                  {formatAmount(raiseFunding.valuation)} $
+                </span>
+              </div>
+              <div className="flex text-black dark:text-white text-lg font-bold">
+                <span>Market Value:</span>
+                <span className="mx-1">
+                  {formatAmount(request.amount * lastraisedFunding.priceShare)} $
+                </span>
+                <p className={changedValue < 0 ? `text-red-500` : `text-green-500`}>
+                  ({formatAmount(changedValue)} $)
                 </p>
               </div>
               <div className="flex text-black dark:text-white text-lg font-bold">
-                <span>Valuation:</span>
+                <span>Market Price:</span>
                 <span className="mx-1">
-                  {formatAmount(request.valuation)}$
+                  {formatAmount(lastraisedFunding.priceShare)} $
                 </span>
+                <p className={changedPrice < 0 ? `text-red-500` : `text-green-500`}>
+                  ({formatAmount(changedPrice)} $)
+                </p>
               </div>
               <div className="flex text-black dark:text-white text-lg font-bold">
-                <span>Stock:</span>
+                <span>Market Valuation:</span>
                 <span className="mx-1">
-                  3%
+                  {formatAmount(lastraisedFunding.valuation)} $
                 </span>
+                <p className={changedValuationPercentage < 0 ? `text-red-500` : `text-green-500`}>
+                  ({formatAmount(changedValuationPercentage)} %)
+                </p>
               </div>
             </div>
           </AccordionContent>

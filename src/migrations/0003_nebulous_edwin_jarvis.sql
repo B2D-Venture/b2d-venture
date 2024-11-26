@@ -1,1 +1,0 @@
-ALTER TABLE "investor_request" ALTER COLUMN "request_date" SET DEFAULT now();

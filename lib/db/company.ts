@@ -5,10 +5,11 @@ import {
   CompanyRequestTable,
   DataRoomTable,
   UserTable,
-  CompanyEditRequestTable,
+  CategoryTable,
+  CompanyCategoryTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { sql, eq, ilike, or } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -58,18 +59,32 @@ export async function getAllCompanies(
           raise_funding rf ON rfr.raise_funding_id = rf.id
         WHERE 
           rfr.approval = true
+      ),
+      InvestorCount AS (
+        SELECT
+          ir.raise_funding_id,
+          COUNT(ir.id)::integer AS investor_count
+        FROM
+          investment_request ir
+        WHERE
+          ir.approval = true
+        GROUP BY
+          ir.raise_funding_id
       )
       SELECT 
         c.*, 
         rf.*, 
         LatestApproved.raise_funding_id AS latest_approved_raise_funding_id,
-        LatestApproved.approval
+        LatestApproved.approval,
+        COALESCE(InvestorCount.investor_count, 0) AS investor_count
       FROM 
         company c
       LEFT JOIN 
         raise_funding rf ON c.id = rf.company_id
       LEFT JOIN 
         LatestApproved ON rf.id = LatestApproved.raise_funding_id
+      LEFT JOIN 
+        InvestorCount ON rf.id = InvestorCount.raise_funding_id
       WHERE 
         LatestApproved.rn = 1`;
 
@@ -84,12 +99,15 @@ export async function getAllCompanies(
 
     if (sortBy) {
       const sortColumn = {
+        companyId: "c.id",
         valuation: "rf.valuation",
-        fundingTarget: "rf.funding_target",
-        pricePerShare: "rf.price_per_share",
-        investmentDeadline: "rf.deadline",
-        minInvestment: "rf.min_invest",
-        maxInvestment: "rf.max_invest",
+        totalShare: "rf.total_share",
+        fundingTarget: "rf.funding_target * rf.price_share",
+        priceShare: "rf.price_share",
+        deadline: "rf.deadline",
+        minInvest: "rf.min_invest * rf.price_share",
+        maxInvest: "rf.max_invest * rf.price_share",
+        investorCount: "investor_count",
       }[sortBy];
 
       if (sortColumn) {
@@ -112,14 +130,16 @@ export async function getAllCompanies(
         banner: row.banner,
         description: row.description,
         pitch: row.pitch,
+        registrationNumber: row.registration_number,
       },
       raiseFunding: {
         id: row.id,
         companyId: row.company_id,
+        totalShare: row.total_share,
         fundingTarget: row.funding_target,
         minInvest: row.min_invest,
         maxInvest: row.max_invest,
-        priceShare: row.price_per_share,
+        priceShare: row.price_share,
         valuation: row.valuation,
         deadline: row.deadline,
         approval: row.approval,
@@ -182,25 +202,6 @@ export async function changeToCompanyRole({
     .execute();
 }
 
-export async function addCompanyEditRequest(company: Company) {
-  if (company.id === undefined) {
-    throw new Error("Company ID is undefined");
-  }
-
-  return await db
-    .insert(CompanyEditRequestTable)
-    .values({
-      companyId: company.id,
-      name: company.name,
-      logo: company.logo,
-      banner: company.banner,
-      abbr: company.abbr,
-      description: company.description,
-      pitch: company.pitch,
-    })
-    .execute();
-}
-
 export async function updateCompany(company: Company) {
   if (company.id === undefined) {
     throw new Error("Company ID is undefined");
@@ -215,7 +216,94 @@ export async function updateCompany(company: Company) {
       abbr: company.abbr,
       description: company.description,
       pitch: company.pitch,
+      registrationNumber: company.registrationNumber,
     })
     .where(eq(CompanyTable.id, company.id))
     .execute();
+}
+
+export async function getAllCategories() {
+  return await db
+    .select({
+      id: CategoryTable.id,
+      name: CategoryTable.name,
+    })
+    .from(CategoryTable)
+    .execute();
+}
+
+export async function assignCategoriesToCompany(
+  companyId: number,
+  categoryIds: number[],
+) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  const values = categoryIds.map((categoryId) => ({
+    companyId,
+    categoryId,
+  }));
+
+  return await db.insert(CompanyCategoryTable).values(values).execute();
+}
+
+export async function getCategoriesByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  return await db
+    .select({
+      id: CategoryTable.id,
+      name: CategoryTable.name,
+    })
+    .from(CompanyCategoryTable)
+    .leftJoin(
+      CategoryTable,
+      eq(CompanyCategoryTable.categoryId, CategoryTable.id),
+    )
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+}
+
+export async function getCategoryIdsByCompanyId(companyId: number) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  const categoryIds = await db
+    .select({
+      id: CategoryTable.id,
+    })
+    .from(CompanyCategoryTable)
+    .leftJoin(
+      CategoryTable,
+      eq(CompanyCategoryTable.categoryId, CategoryTable.id),
+    )
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+
+  return categoryIds.map((categoryId) => String(categoryId.id));
+}
+
+export async function updateCategoriesForCompany(
+  companyId: number,
+  categoryIds: number[],
+) {
+  if (!validateIntegerId(companyId)) {
+    throw new Error("Invalid company ID");
+  }
+
+  await db
+    .delete(CompanyCategoryTable)
+    .where(eq(CompanyCategoryTable.companyId, companyId))
+    .execute();
+
+  const values = categoryIds.map((categoryId) => ({
+    companyId,
+    categoryId,
+  }));
+
+  return await db.insert(CompanyCategoryTable).values(values).execute();
 }

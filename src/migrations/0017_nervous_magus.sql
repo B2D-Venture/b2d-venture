@@ -1,1 +1,0 @@
-ALTER TABLE "raise_funding" ADD COLUMN "valuation" real DEFAULT 0 NOT NULL;

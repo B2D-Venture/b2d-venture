@@ -1,7 +1,7 @@
-type User = {
+export type User = {
   id: number;
   email: string;
   roleId: number;
-  roleIdNumber: number;
+  roleIdNumber: number | null;
   createdAt: string;
 };

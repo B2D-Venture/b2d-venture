@@ -17,7 +17,7 @@ import {
 import * as React from "react";
 
 interface EmailDataroomStatusProps {
-    message: string;
+    message: { id: string; title: string; description: string }[];
     status: "approved" | "rejected";
     loginDate?: Date;
     company: Company;
@@ -53,7 +53,7 @@ export const DataroomEmail = ({
                                 <Img
                                     style={image}
                                     width={100}
-                                    src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671c8aa9&is=671b3929&hm=9a7ad43bb20aa4b1dede9a39d3470ba4253153892ff30cd4e2e8575feda87f44&"
+                                    src="https://raw.githubusercontent.com/B2D-Venture/b2d-venture/refs/heads/iteration-7/app/favicon.ico"
                                     alt="B2D Logo Content"
                                     className="flex justify-center items-center"
                                 />
@@ -98,7 +98,7 @@ export const DataroomEmail = ({
                                             </Column>
                                             <Column align="center">
                                                 <Img
-                                                    src="https://static.thenounproject.com/png/1277516-200.png"
+                                                    src="https://media.istockphoto.com/id/1423112183/es/vector/icono-del-bot%C3%B3n-cerrar.jpg?s=612x612&w=0&k=20&c=gaJRJNav4LR5IpKpM-xgWFX0AA1V3wLStEny7tIxcos="
                                                     width="20"
                                                     height="20"
                                                     alt="invited you to"
@@ -158,7 +158,7 @@ export const DataroomEmail = ({
                                                 </Column>
                                                 <Column align="center">
                                                     <Img
-                                                        src="https://www.iconninja.com/files/79/410/532/yes-right-correct-check-complete-ok-accept-icon.svg"
+                                                        src="https://static.thenounproject.com/png/3092173-200.png"
                                                         width="20"
                                                         height="20"
                                                         alt="invited you to"

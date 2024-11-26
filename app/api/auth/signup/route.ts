@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/neon-http";
-import { UserTable } from "../../../../lib/schema";
-import { eq } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
+import { getUser, createUser } from "@/lib/db/index";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -20,19 +19,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
   }
 
-  const existingUser = await db.select().from(UserTable).where(eq(UserTable.email, email)).execute();
+  const existingUser = await getUser(email);
 
-  if (existingUser.length > 0) {
+  if (existingUser) {
     return NextResponse.json({ error: "User already exists" }, { status: 409 });
   }
-  // const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await createUser(email, hashedPassword, 1);
 
-  await db.insert(UserTable).values({
-    email,
-    password: password,
-    roleId: 1,
-  }).execute();
-
-  // console.log("User created successfully");
   return NextResponse.json({ error: "User created successfully" }, { status: 200 });
 }

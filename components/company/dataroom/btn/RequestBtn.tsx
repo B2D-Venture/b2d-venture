@@ -6,6 +6,7 @@ import {
   getCompanyDataRoomRequestsByCompanyAndInvestor,
   getInvestorRequestById,
 } from "@/lib/db/index";
+import { User } from "@/types/user";
 
 const RequestBtn = ({
   text,
@@ -62,6 +63,7 @@ const RequestBtn = ({
   return (
     <div className="my-2 flex items-center justify-center">
       <Button
+        data-id="request-data-room"
         onClick={() => {
           requestBtn();
         }}
@@ -74,8 +76,8 @@ const RequestBtn = ({
       {isPopupVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-md shadow-lg text-center text-black">
-            <p>Request already sent</p>
-            <Button onClick={() => setIsPopupVisible(false)} className="mt-2">
+            <p data-id="alert-label">Request already sent</p>
+            <Button onClick={() => setIsPopupVisible(false)} data-id="close-alert-btn" className="mt-2">
               Close
             </Button>
           </div>

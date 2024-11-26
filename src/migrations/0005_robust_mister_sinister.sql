@@ -1,1 +1,0 @@
-ALTER TABLE "company" RENAME COLUMN "prince_share" TO "price_share";

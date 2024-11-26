@@ -6,9 +6,9 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProfileImageForm } from "@/components/ProfileImageForm";
-import { CalendarForm } from "@/components/CalendarForm";
-import { useFormState } from "../FormContext";
+import { ProfileImageForm } from "@/components/form/elements/ProfileImageForm";
+import { CalendarForm } from "@/components/form/elements/CalendarForm";
+import { useFormState } from "./FormContext";
 import {
   addInvestor,
   addInvestorRequest,
@@ -54,7 +54,6 @@ const formSchema = z.object({
 
 export function InvestorRegisterForm({ onRoleChange }: { onRoleChange: () => void }) {
   const { handleStepChange } = useFormState();
-
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? "";
 
@@ -273,6 +272,7 @@ export function InvestorRegisterForm({ onRoleChange }: { onRoleChange: () => voi
               </Button>
 
               <Button
+                data-id="submit"
                 type="submit"
                 className="w-[211px] h-[45px] bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 ease-in-out font-bold"
               >

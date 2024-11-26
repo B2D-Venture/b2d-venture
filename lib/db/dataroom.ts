@@ -1,14 +1,11 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { Company, CompanyRequest, DataRoom } from "../../types/company/index";
+import { DataRoom } from "../../types/company/index";
 import {
-  CompanyTable,
-  CompanyRequestTable,
   DataRoomTable,
   DataRoomRequestTable,
-  UserTable,
 } from "../schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, ilike, isNull, or, and } from "drizzle-orm";
+import { eq, isNull, and } from "drizzle-orm";
 import { validateIntegerId } from "../utils";
 
 const databaseUrl = process.env.DATABASE_URL;

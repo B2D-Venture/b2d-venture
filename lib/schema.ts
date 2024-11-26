@@ -11,11 +11,26 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-const roleEnum = pgEnum("role_type", ["viewer", "investor", "company"]);
+const roleEnum = pgEnum("role_type", ["viewer", "investor", "company", "admin"]);
 
 export const RoleTable = pgTable("role", {
   id: serial("id").primaryKey().notNull(),
   name: roleEnum("name").default("viewer").notNull(),
+});
+
+export const CategoryTable = pgTable("category", {
+  id: serial("id").primaryKey().notNull(),
+  name: varchar("name").notNull(),
+});
+
+export const CompanyCategoryTable = pgTable("company_category", {
+  id: serial("id").primaryKey().notNull(),
+  companyId: integer("company_id")
+    .references(() => CompanyTable.id)
+    .notNull(),
+  categoryId: integer("category_id")
+    .references(() => CategoryTable.id)
+    .notNull(),
 });
 
 export const UserTable = pgTable("user", {
@@ -27,11 +42,6 @@ export const UserTable = pgTable("user", {
     .notNull(),
   roleIdNumber: integer("role_id_number"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const AdminTable = pgTable("admin", {
-  id: serial("id").primaryKey().notNull(),
-  email: text("email").notNull(),
 });
 
 export const InvestorTable = pgTable("investor", {
@@ -55,6 +65,7 @@ export const CompanyTable = pgTable("company", {
   abbr: varchar("abbr", { length: 10 }).notNull(),
   description: text("description").notNull(),
   pitch: text("pitch").notNull(),
+  registrationNumber: varchar("registration_number").notNull(),
 });
 
 export const DataRoomTable = pgTable("data_room", {
@@ -80,6 +91,8 @@ export const InvestmentRequestTable = pgTable("investment_request", {
   getStock: real("get_stock").notNull(),
   requestDate: timestamp("request_date").defaultNow().notNull(),
   approval: boolean("approval"),
+  privateOffer: boolean("private_offer").default(false).notNull(),
+  priceShare: integer("price_share").notNull(),
 });
 
 export const CompanyRequestTable = pgTable("company_request", {
@@ -87,21 +100,6 @@ export const CompanyRequestTable = pgTable("company_request", {
   companyId: integer("company_id")
     .references(() => CompanyTable.id)
     .notNull(),
-  approval: boolean("approval"),
-  requestDate: timestamp("request_date").defaultNow().notNull(),
-});
-
-export const CompanyEditRequestTable = pgTable("company_edit_request", {
-  id: serial("id").primaryKey().notNull(),
-  companyId: integer("company_id")
-    .references(() => CompanyTable.id)
-    .notNull(),
-  logo: varchar("logo").notNull(),
-  banner: varchar("banner").notNull(),
-  name: varchar("name").notNull(),
-  abbr: varchar("abbr", { length: 10 }).notNull(),
-  description: text("description").notNull(),
-  pitch: text("pitch").notNull(),
   approval: boolean("approval"),
   requestDate: timestamp("request_date").defaultNow().notNull(),
 });
@@ -124,8 +122,9 @@ export const RaiseFundingTable = pgTable("raise_funding", {
   minInvest: integer("min_invest").notNull(),
   maxInvest: integer("max_invest").notNull(),
   deadline: date("deadline").notNull(),
-  priceShare: real("price_share").notNull(),
+  priceShare: integer("price_share").notNull(),
   valuation: real("valuation").default(0).notNull(),
+  totalShare: integer("total_share").notNull(),
 });
 
 export const RaiseFundingRequestTable = pgTable("raise_funding_request", {

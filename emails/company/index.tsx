@@ -16,7 +16,7 @@ import {
 import * as React from "react";
 
 interface EmailCompanyStatusProps {
-  message: string;
+  message: { id: string; title: string; description: string }[];
   status: "approved" | "rejected";
   loginDate?: Date;
   logo: string;
@@ -59,7 +59,7 @@ export const YelpRecentLoginEmail = ({
               <Img
                 style={image}
                 width={100}
-                src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671c8aa9&is=671b3929&hm=9a7ad43bb20aa4b1dede9a39d3470ba4253153892ff30cd4e2e8575feda87f44&"
+                src="https://raw.githubusercontent.com/B2D-Venture/b2d-venture/refs/heads/iteration-7/app/favicon.ico"
                 alt="B2D Logo Content"
                 className="flex justify-center items-center"
               />
@@ -177,7 +177,7 @@ export const YelpRecentLoginEmail = ({
             <div>
               <Img
                 style={image}
-                width="100%"
+                width="700px"
                 src={banner}
                 alt="Company Banner"
               />
@@ -247,8 +247,8 @@ YelpRecentLoginEmail.PreviewProps = {
   // status: "approved",
   status: "rejected",
   name: "Alan",
-  logo: "https://utfs.io/f/EDwc07VFqTZJhmd9HKMFNCBQjAuL6IGXUMqVeOptDxTdaHyo",
-  banner: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/corporate-business-banner-template-design-a1bfc99717878c32d065d97fa71faaf3_screen.jpg?ts=1573704599",
+  logo: "https://raw.githubusercontent.com/B2D-Venture/b2d-venture/refs/heads/iteration-7/app/favicon.ico",
+  banner: "https://raw.githubusercontent.com/B2D-Venture/b2d-venture/61104d50e4ece18784cf037700a37613e9062190/public/img-main/background-img-main.png",
   abbr: "CPL",
   description: "Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses",
   pitch: "Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses. Connecting people with great local businesses",

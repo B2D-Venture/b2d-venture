@@ -5,16 +5,17 @@ import Image from "next/image";
 import { navbarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/company/SearchBar";
 import MobileNav from "@/components/navbar/MobileNav";
-import UserProfileOrSignInButton from "@/components/UserProfileOrSignInButton";
+import UserProfile from "@/components/navbar/UserProfileOrSignInButton";
 import { SessionProvider } from "next-auth/react";
 import { ModeToggle } from "@/components/navbar/DarkMode";
 import { useEffect, useState } from "react";
+import { User } from "@/types/user";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchCompany = async () => {
@@ -61,7 +62,11 @@ const Navbar = () => {
 
               if (
                 link.route === "/role-register" &&
-                (user?.roleId === 2 || user?.roleId === 3)
+                (user?.roleId === 2 || user?.roleId === 3 || user?.roleId === 4)
+              ) {
+                return null;
+              } else if (
+                link.route === "/signin" && (user?.roleId)
               ) {
                 return null;
               }
@@ -81,7 +86,7 @@ const Navbar = () => {
             })}
             <SearchBar initialSearch="" classSearch="search-bar" />
             <SessionProvider>
-              <UserProfileOrSignInButton />
+              <UserProfile />
             </SessionProvider>
             <div>
               <ModeToggle />

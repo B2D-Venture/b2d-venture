@@ -1,8 +1,8 @@
-import ShowStep from "@/components/ShowStepForm";
+import ShowStep from "@/components/form/ShowStepForm";
 import { CompanyRegisterForm } from "@/components/form/CompanyRegisterForm";
 import FormContent from "@/components/form/FormContent";
 
-export default function CompanyForm({onRoleChange}: {onRoleChange: () => void }) {
+export default function CompanyForm({ onRoleChange }: { onRoleChange: () => void }) {
   return (
     <FormContent
       label="Company Profile"

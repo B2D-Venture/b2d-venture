@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { InvestorFormData, InvestorRequestData } from "../../types/index";
 import { InvestorTable, InvestorRequestTable, UserTable } from "../schema";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import dotenv from "dotenv";
 import path from "path";
@@ -75,4 +75,10 @@ export async function UpdateInvestorAmount({ investorId, amount }: { investorId:
     .set({ investableAmount: amount })
     .where(eq(InvestorTable.id, investorId))
     .execute();
+}
+
+export async function increaseInvestorAmount({ investorId, amount }: { investorId: number, amount: number }) {
+  const investor = await getInvestorById(investorId);
+  const newAmount = investor.investableAmount + amount;
+  return await UpdateInvestorAmount({ investorId, amount: newAmount });
 }

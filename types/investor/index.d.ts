@@ -16,3 +16,17 @@ interface InvestorProps {
 interface InvestorProfileCardProps {
   investor: InvestorProps;
 }
+
+interface InvestorRequest {
+  id: number;
+  investorId: number;
+  requestDate: Date;
+  approval: boolean | null;
+  investor: InvestorProps;
+}
+
+interface InvestableAmountProps {
+  initialAmount: number;
+  investorId: number;
+  email: string;
+}

@@ -1,1 +1,0 @@
-ALTER TABLE "data_room" ADD COLUMN "document_size" integer DEFAULT 0 NOT NULL;

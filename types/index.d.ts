@@ -50,6 +50,8 @@ interface InvestmentItemProps {
   company: Company;
   request: InvestmentRequest;
   status: string;
+  raiseFunding: any;
+  lastraisedFunding: any;
 }
 
 interface OutputTextBoxProps {
@@ -57,6 +59,8 @@ interface OutputTextBoxProps {
   value: string | number;
   classNameLabel?: string;
   classNameValue?: string;
+  iconSideLeft?: React.ReactNode;
+  iconSideRight?: React.ReactNode;
 }
 
 interface OutputTextBoxDollarProps {
@@ -77,4 +81,9 @@ declare namespace NodeJS {
   interface ProcessEnv {
     DATABASE_URL: string;
   }
+}
+
+interface NoRequestCardProps {
+  title: string;
+  description: string;
 }

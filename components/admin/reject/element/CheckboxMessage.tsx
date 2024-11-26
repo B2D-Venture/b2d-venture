@@ -20,6 +20,7 @@ const CheckboxMessage = ({
     return (
         <div className="items-top flex space-x-2 m-2">
             <Checkbox id="terms1" 
+                data-id="checkbox-message"
                 checked={checked}
                 onCheckedChange={onCheckedChange}
             />

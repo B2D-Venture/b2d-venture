@@ -8,7 +8,6 @@ export async function getData() {
         }
         const sql = neon(process.env.DATABASE_URL);
         const data = await sql`SELECT * FROM "Admin"`;
-        console.log("Database response:", data);
         return data;
     } catch (error) {
         console.error("Database query failed:", error);

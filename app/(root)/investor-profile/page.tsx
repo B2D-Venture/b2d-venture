@@ -1,6 +1,6 @@
-import InvestableAmount from "@/components/InvestableAmount";
+import InvestableAmount from "@/components/profile/investor/InvestableAmount";
 import InvestmentItemList from "@/components/profile/investor/InvestmentItemList";
-import { InvestorProfileCard } from "@/components/InvestorProfileCard";
+import { InvestorProfileCard } from "@/components/profile/investor/InvestorProfileCard";
 import {
   getUserByEmail,
   getInvestorById,
@@ -19,6 +19,7 @@ import RejectShow from "@/components/profile/RejectShow";
 import { CgProfile } from "react-icons/cg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DataroomItemList from "@/components/profile/investor/DataroomItemList";
+import { User } from "@/types/user";
 
 
 const getAllInvestmentData = async (investmentRequest: any) => {
@@ -61,7 +62,8 @@ export default async function InvestorProfile() {
   }
 
   const userEmail = session.user.email;
-  const user = await getUserByEmail(2, userEmail); // get user role 2 = investor
+  const userResponse = await getUserByEmail(2, userEmail); // get user role 2 = investor
+  const user: User = { ...userResponse, createdAt: userResponse.createdAt.toISOString() };
 
   if (!user) {
     redirect("/role-register");
@@ -94,7 +96,7 @@ export default async function InvestorProfile() {
               <CgProfile className="mr-2" /> My Portfolio
             </div>
           </h1>
-          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} />
+          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} email={user.email} />
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#d2d3db] bg-opacity-50 dark:bg-[#FFFDF3] dark:bg-opacity-30 rounded-[20px] justify-center items-center p-[27px]">
           {investor && <InvestorProfileCard investor={investor} />}
@@ -115,3 +117,5 @@ export default async function InvestorProfile() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

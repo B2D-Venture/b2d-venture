@@ -53,3 +53,22 @@ export async function changeToViewerRole(email: string) {
     .where(eq(UserTable.email, email))
     .execute();
 }
+
+export async function createUser(email: string, password: string, roleId: number) {
+  return await db
+    .insert(UserTable)
+    .values({
+      email,
+      password,
+      roleId,
+    })
+    .execute();
+}
+
+export async function resetPassword(email: string, password: string) {
+  return await db
+    .update(UserTable)
+    .set({ password })
+    .where(eq(UserTable.email, email))
+    .execute();
+}

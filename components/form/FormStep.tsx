@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { useFormState } from "../FormContext";
+import { useFormState } from "./FormContext";
 import RoleSelectForm from "./RoleSelectForm";
 import InvestorForm from "./InvestorForm";
 import CompanyForm from "./CompanyForm";
-import SuccessForm from "../SuccessForm";
+import SuccessForm from "./SuccessForm";
 import {
   getInvestorRequestById,
 } from "@/lib/db/index";
 import FormSubmitLoading from "@/components/loading/FormSubmitLoading";
+import { User } from "@/types/user";
 
 export default function FormStep() {
   const [user, setUser] = useState<User | null>(null);
@@ -37,8 +38,10 @@ export default function FormStep() {
     const fetchApprovalStatus = async () => {
       if (user) {
         if (user.roleId === 2) {
-          const requestData = await getInvestorRequestById(user.roleIdNumber);
-          setHasApproval(requestData.approval);
+          if (user.roleIdNumber !== null) {
+            const requestData = await getInvestorRequestById(user.roleIdNumber);
+            setHasApproval(requestData.approval);
+          }
           setSuccessRole("Investor");
         } else if (user.roleId === 3) {
           setSuccessRole("Company");
@@ -60,10 +63,10 @@ export default function FormStep() {
   }
 
   if ((user && user.roleId !== 1) || step === 4) {
-    if (user.roleId === 2) {
+    if (user?.roleId === 2) {
       return <SuccessForm role={"Investor"} hasApproval={hasApproval} />;
-    } else if (user.roleId === 3) {
-      return <SuccessForm role={"Company"} hasApproval={hasApproval} roleIdNumber={user?.roleIdNumber} />;
+    } else if (user?.roleId === 3) {
+      return <SuccessForm role={"Company"} hasApproval={hasApproval} roleIdNumber={user.roleIdNumber ?? undefined} />;
     }
   }
 

@@ -7,6 +7,10 @@ export const navbarLinks = [
     route: "/company",
     label: "Company list",
   },
+  {
+    route: "/signin",
+    label: "Sign In",
+  }
 ];
 
 export const companyExample = [

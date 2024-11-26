@@ -6,6 +6,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { UserTable } from "./schema";
 import { eq } from "drizzle-orm";
+import { getUser, createUser } from "@/lib/db/index";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -25,74 +26,61 @@ export const authConfig: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await db
-          .select()
-          .from(UserTable)
-          .where(eq(UserTable.email, credentials?.email))
-          .execute();
-
-        if (user.length === 0 || !user[0].password) {
-          throw new Error("No user found with this email");
+        const { email, password } = credentials as { email: string; password: string };
+        const user = await getUser(email);
+        if (!user) {
+          throw new Error("No user found with the provided email");
         }
 
-        const isPasswordValid = await bcrypt.compare(credentials.password, user[0].password);
-        if (!isPasswordValid) {
-          throw new Error("Invalid password");
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
+          throw new Error("Invalid credentials");
         }
-
-        return { id: user[0].id.toString(), email: user[0].email, roleId: user[0].roleId };
+        
+        return {
+          id: user.id.toString(),
+          email: user.email,
+        };
       },
     }),
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      if (!profile?.email) {
-        throw new Error("No email returned from Google");
+      if (account && account.provider === "google") {
+        if (!profile?.email) {
+          throw new Error("No email returned from Google");
+        }
+  
+        const existingUser = await getUser(profile.email);
+  
+        if (!existingUser) {
+          // If the user does not exist, create a new user
+          // Role Id
+          // 1 - Viewer
+          // 2 - Investor
+          // 3 - Company
+          await createUser(profile.email, "", 1);
+        }
       }
-
-      const existingUser = await db
-        .select()
-        .from(UserTable)
-        .where(eq(UserTable.email, profile.email))
-        .execute();
-
-      if (existingUser.length === 0) {
-        // If the user does not exist, create a new user
-        // Role Id
-        // 1 - Viewer
-        // 2 - Investor
-        // 3 - Company
-        await db
-          .insert(UserTable)
-          .values({
-            email: profile.email,
-            password: "",
-            roleId: 1,
-          })
-          .execute();
-      }
-
+      
       return true;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.roleId = user.roleId;
       }
       return token;
     },
     async session({ session, token }) {
       session.user = {
-        id: token.id as string,
         email: token.email as string,
-        roleId: token.roleId as number,
       };
       return session;
     },

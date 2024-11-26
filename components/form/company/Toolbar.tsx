@@ -20,16 +20,18 @@ import {
 import React, { useCallback } from 'react'
 
 export default function ToolBar({ editor }: ToolbarProps) {
-    if (!editor) return null;
-
     const addImage = useCallback(() => {
-        const url = window.prompt('URL')
+        if (!editor) return;
+
+        const url = window.prompt('URL');
         if (url) {
-            editor.chain().focus().setImage({ src: url }).run()
+            editor.chain().focus().setImage({ src: url }).run();
         }
-    }, [editor])
+    }, [editor]);
 
     const addYoutube = useCallback(() => {
+        if (!editor) return;
+
         const url = window.prompt('URL');
         if (!url) return;
 
@@ -65,6 +67,8 @@ export default function ToolBar({ editor }: ToolbarProps) {
             height: finalHeight,
         });
     }, [editor]);
+
+    if (!editor) return;
 
 
     const Options = [
@@ -119,7 +123,11 @@ export default function ToolBar({ editor }: ToolbarProps) {
             preesed: editor.isActive({ textAlign: "right" }),
         },
         {
-            icon: <Image className="size-4" />,
+            icon: (
+                <span aria-hidden="true">
+                    <Image className="size-4" aria-label="Image icon" />
+                </span>
+            ),
             onClick: () => addImage(),
             preesed: editor.isActive("image"),
         },

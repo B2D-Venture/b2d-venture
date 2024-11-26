@@ -5,16 +5,17 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import * as React from "react";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
 import InvestorProfileBadge from "@/components/admin/InvestorProfile/InvestorProfileBadge";
 import { OutputTextBox } from "@/components/admin/OutputTextBox";
-import { OutputTextBoxDollar } from "@/components/admin/OutputTextBoxDollar";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { RejectButton } from "@/components/admin/reject/RejectButton";
+
+import Image from "next/image";
 
 export function InvestorProfileCard({
   investorRequest,
@@ -30,14 +31,16 @@ export function InvestorProfileCard({
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <div className="grid grid-cols-10">
-            <img
+            <Image
               src={investorRequest.investor?.profileImage}
               alt="Investor Profile"
+              width={90}
+              height={90}
               className="w-14 h-14 rounded-full col-span-1"
             />
             <div className="col-span-9">
               <AccordionTrigger className="text-lg text-black flex w-full justify-between text-left">
-                <span className="flex-1">
+                <span data-id="investor-card-name" className="flex-1">
                   {investorRequest.investor?.firstName + " " + investorRequest.investor?.lastName}
                 </span>
                 <ChevronDownIcon
@@ -51,48 +54,47 @@ export function InvestorProfileCard({
           </div>
           <div className="border-b-2 border-black mt-2 mb-2" />
           <InvestorProfileBadge />
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <b>Request Date:</b> {investorRequest.requestDate
+                ? new Date(investorRequest.requestDate).toLocaleDateString('en-GB')
+                : "N/A"}
+            </p>
+          </div>
           <div className="grid grid-cols-3 text-black justify-start w-full my-2">
-            <div className="flex flex-row items-center space-x-[80px]">
+            <div>
               <OutputTextBox
                 label="Email"
                 value={investorRequest.investor?.email}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
-            <div className="flex flex-row items-center space-x-[63px]">
+            <div>
               <OutputTextBox
                 label="Nationality"
                 value={investorRequest.investor?.nationality}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
-            <div className="flex flex-row items-center space-x-5">
+            <div>
               <OutputTextBox
                 label="BirthDate"
                 value={investorRequest.investor?.birthDate}
-                classNameLabel=""
-                classNameValue=""
               />
             </div>
           </div>
           <AccordionContent>
             <div className="grid grid-cols-3 text-black justify-start w-full my-2">
-              <div className="flex flex-row items-center space-x-[40px]">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Net Worth"
                   value={investorRequest.investor?.networth}
-                  classNameLabel=""
-                  classNameValue=""
+                  iconSideLeft="$"
                 />
               </div>
-              <div className="flex flex-row items-center space-x-[10px]">
-                <OutputTextBoxDollar
+              <div>
+                <OutputTextBox
                   label="Investable Money"
                   value={investorRequest.investor?.investableAmount}
-                  classNameLabel=""
-                  classNameValue=""
+                  iconSideLeft="$"
                 />
               </div>
             </div>
@@ -101,6 +103,7 @@ export function InvestorProfileCard({
       </Accordion>
       <div className="flex flex-row space-x-2 justify-end">
         <Button
+          data-id="approve-button"
           variant="ghost"
           size="icon"
           className="bg-green-500"

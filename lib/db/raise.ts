@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import {
-  CompanyTable,
   RaiseFundingTable,
   RaiseFundingRequestTable,
 } from "../schema";
@@ -26,7 +25,7 @@ export async function addRaiseFunding(
 ) {
   const insertedFunding = await db
     .insert(RaiseFundingTable)
-    .values({ ...fundingData, companyId })
+    .values({ ...fundingData, companyId, totalShare: fundingData.totalShare })
     .returning({ raiseFundingId: RaiseFundingTable.id })
     .execute();
 
@@ -75,6 +74,7 @@ export async function getRecentRaiseFundingByCompanyId(companyId: number) {
         priceShare: row.priceShare,
         valuation: row.valuation,
         deadline: row.deadline,
+        totalShare: row.totalShare,
       };
     }
 
@@ -96,7 +96,6 @@ export async function getOneRecentFundingByCompanyId(companyId: number) {
 }
 
 export const getRaiseFundingByCompanyId = async (companyId: number) => {
-  try {
     const raiseFundingRecord = await db
       .select()
       .from(RaiseFundingTable)
@@ -104,10 +103,6 @@ export const getRaiseFundingByCompanyId = async (companyId: number) => {
       .execute();
 
     return raiseFundingRecord;
-  } catch (error) {
-    console.error("Error fetching raise funding record:", error);
-    throw error;
-  }
 };
 
 export async function getRaiseFundingById(raiseFundingId: number) {
@@ -128,3 +123,31 @@ export async function getRaiseFundingRequestById(raiseFundingId: number) {
   return raiseFundingRequest[0];
 }
 
+export async function getLastRaiseFundingRequestByCompanyId(companyId: number) {
+  try {
+    const lastRequest = await db
+      .select()
+      .from(RaiseFundingRequestTable)
+      .innerJoin(
+        RaiseFundingTable,
+        eq(RaiseFundingRequestTable.raiseFundingId, RaiseFundingTable.id)
+      )
+      .where(
+        and(
+          eq(RaiseFundingTable.companyId, companyId),
+        )
+      )
+      .orderBy(desc(RaiseFundingRequestTable.requestDate))
+      .limit(1)
+      .execute();
+
+    if (lastRequest.length === 0) {
+      return null;
+    }
+
+    return lastRequest[0]['raise_funding_request'];
+  } catch (error) {
+    console.error("Error retrieving the last raise funding request:", error);
+    throw error;
+  }
+}

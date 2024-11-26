@@ -35,9 +35,9 @@ interface RejectButtonProps {
 export function RejectButton({ type, request, email, companyId, handleReject }: RejectButtonProps) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    let messagesForm: { id: string; title: string; description: string; }[] = [];
 
-    const handleRejectAndClose = () => {
+    const handleRejectAndClose = (callback: () => void) => {
+        callback();
         handleReject();
         setOpen(false);
     };
@@ -48,6 +48,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                 <DialogTrigger asChild>
                     <div className="flex flex-row space-x-2 justify-end">
                         <Button
+                            data-id="reject-button"
                             variant="ghost"
                             size="icon"
                             className="bg-red-500"
@@ -69,8 +70,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                         request={request} 
                         email={email} 
                         companyId={companyId}
-                        handleReject={handleRejectAndClose} />
-
+                        handleReject={() => handleRejectAndClose(() => { })} />
                 </DialogContent>
             </Dialog>
         );
@@ -103,7 +103,7 @@ export function RejectButton({ type, request, email, companyId, handleReject }: 
                     request={request} 
                     email={email} 
                     companyId={companyId}
-                    handleReject={handleRejectAndClose} />
+                    handleReject={() => handleRejectAndClose} />
 
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FormProvider } from "@/components/FormContext";
+import { FormProvider } from "@/components/form/FormContext";
 import FormStep from "@/components/form/FormStep";
 
 const RoleRegister = () => {
