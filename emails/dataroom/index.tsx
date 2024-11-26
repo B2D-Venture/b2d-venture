@@ -53,7 +53,7 @@ export const DataroomEmail = ({
                                 <Img
                                     style={image}
                                     width={100}
-                                    src="https://cdn.discordapp.com/attachments/1270611997393817683/1298894385928339476/b2d-logo.png?ex=671c8aa9&is=671b3929&hm=9a7ad43bb20aa4b1dede9a39d3470ba4253153892ff30cd4e2e8575feda87f44&"
+                                    src="https://raw.githubusercontent.com/B2D-Venture/b2d-venture/refs/heads/iteration-7/app/favicon.ico"
                                     alt="B2D Logo Content"
                                     className="flex justify-center items-center"
                                 />
