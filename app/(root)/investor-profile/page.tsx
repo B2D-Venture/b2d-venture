@@ -55,40 +55,63 @@ const getAllDataroomData = async (dataroomRequest: any) => {
 
 
 export default async function InvestorProfile() {
-  const session = await getServerSession(authConfig);
-
-  if (!session || !session.user?.email) {
-    redirect(`/signin?callbackUrl=/investor-profile`);
-  }
-
-  const userEmail = session.user.email;
-  const userResponse = await getUserByEmail(2, userEmail); // get user role 2 = investor
-  const user: User = { ...userResponse, createdAt: userResponse.createdAt.toISOString() };
-
-  if (!user) {
-    redirect("/role-register");
-  }
-
   let investor = null;
   let investorRequest = null;
   let investmentRequest = null;
   let investmentData = null;
   let dataroomRequest = null;
   let dataroomItems = null;
-  if (user.roleIdNumber !== null) {
-    investor = await getInvestorById(user.roleIdNumber);
-    investorRequest = await getInvestorRequestById(user.roleIdNumber);
-    investmentRequest = await getAllInvestmentRequestByInvestorId(user.roleIdNumber);
-    investmentData = await getAllInvestmentData(investmentRequest);
-    dataroomRequest = await getCompanyDataRoomRequestsByInvestor(user.roleIdNumber);
-    dataroomItems = await getAllDataroomData(dataroomRequest);
+  let user: User | null = null;
+
+  try {
+    const session = await getServerSession(authConfig);
+
+    if (!session || !session.user?.email) {
+      redirect(`/signin?callbackUrl=/investor-profile`);
+    }
+
+    const userEmail = session.user.email;
+    const userResponse = await getUserByEmail(2, userEmail); // get user role 2 = investor
+
+    if (!userResponse) {
+      redirect("/role-register");
+    }
+
+    user = { ...userResponse, createdAt: userResponse.createdAt.toISOString() };
+
+    if (user.roleIdNumber !== null) {
+      [
+        investor,
+        investorRequest,
+        investmentRequest,
+        investmentData,
+        dataroomRequest,
+        dataroomItems
+      ] = await Promise.all([
+        getInvestorById(user.roleIdNumber),
+        getInvestorRequestById(user.roleIdNumber),
+        getAllInvestmentRequestByInvestorId(user.roleIdNumber),
+        getAllInvestmentData(
+          await getAllInvestmentRequestByInvestorId(user.roleIdNumber)
+        ),
+        getCompanyDataRoomRequestsByInvestor(user.roleIdNumber),
+        getAllDataroomData(
+          await getCompanyDataRoomRequestsByInvestor(user.roleIdNumber)
+        )
+      ]);
+    }
+  } catch (error) {
+    console.error("Error loading investor profile: ", error);
+    redirect("/error"); // Or handle error gracefully
   }
 
   return (
     <div className="mb-20">
       <div className="flex flex-col items-center min-h-screen relative">
         {investorRequest?.approval === null && (<WaitingShow />)}
-        {investorRequest?.approval === false && (<RejectShow user={user} />)}
+        {investorRequest?.approval === false && user && (<RejectShow user={user} />)}
+        {investorRequest?.approval === null && (<WaitingShow />)}
+        {investorRequest?.approval === false && user && (<RejectShow user={user} />)}
 
         <div className="flex justify-between w-11/12 h-9/10">
           <h1 className="flex flex-col justify-end text-black dark:text-white ml-70 text-[40px] font-bold mt-10">
@@ -96,7 +119,7 @@ export default async function InvestorProfile() {
               <CgProfile className="mr-2" /> My Portfolio
             </div>
           </h1>
-          <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} email={user.email} />
+          {user && <InvestableAmount initialAmount={investor?.investableAmount ?? 0} investorId={investor?.id ?? 0} email={user.email} />}
         </div>
         <div className="flex w-11/12 h-9/10 bg-[#d2d3db] bg-opacity-50 dark:bg-[#FFFDF3] dark:bg-opacity-30 rounded-[20px] justify-center items-center p-[27px]">
           {investor && <InvestorProfileCard investor={investor} />}
