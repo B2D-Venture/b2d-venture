@@ -60,131 +60,128 @@ const isOwnCompany = (urlId: number, user: User) => {
   return false;
 };
 
-export default async function CompanyProfile({
-  params,
-}: {
-  params: { companyId: number };
-}) {
-  const session = await getServerSession(authConfig);
-  const companyRequest = await getCompanyRequestById(params.companyId);
+export default async function CompanyProfile({ params }: { params: { companyId: number } }) {
+  try {
+    const session = await getServerSession(authConfig);
+    const companyRequest = await getCompanyRequestById(params.companyId);
 
-  let user: User = {} as User;
-  let roleId = 1;
-  let isApproval = null;
-  if (session && session.user?.email) {
-    const userEmail = session.user.email;
-    const userData = await getUser(userEmail);
-    user = { ...userData, createdAt: userData.createdAt.toISOString() };
-    roleId = user.roleId;
-    if (user.roleIdNumber !== null) {
-      const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
-      isApproval = isApprovalObj ? isApprovalObj[0] : null;
+    let user: User = {} as User;
+    let roleId = 1;
+    let isApproval = null;
+    if (session && session.user?.email) {
+      const userEmail = session.user.email;
+      const userData = await getUser(userEmail);
+      user = { ...userData, createdAt: userData.createdAt.toISOString() };
+      roleId = user.roleId;
+      if (user.roleIdNumber !== null) {
+        const isApprovalObj = await getCompanyRequestById(user.roleIdNumber);
+        isApproval = isApprovalObj ? isApprovalObj[0] : null;
+      }
     }
-  }
 
-  if (!isOwnCompany(params.companyId ?? 1, user)) {
-    if (!companyRequest || companyRequest[0]?.approval !== true) {
+    if (!isOwnCompany(params.companyId ?? 1, user) && (!companyRequest || !companyRequest[0]?.approval)) {
       return notFound();
     }
-  }
 
-  const company = await getCompanyById(params.companyId);
-  const categories = await getCategoriesByCompanyId(params.companyId);
-  const recentFunding = (await getRecentRaiseFundingByCompanyId(
-    params.companyId,
-  )) as RaiseFunding;
-  const oneFunding = (await getOneRecentFundingByCompanyId(
-    params.companyId,
-  )) as RaiseFunding;
-  let allInvestmentFunding = [];
-  let totalInvestor = 0;
-  let totalInvestment = 0;
+    const [company, categories, recentFunding, oneFunding] = await Promise.all([
+      getCompanyById(params.companyId),
+      getCategoriesByCompanyId(params.companyId),
+      getRecentRaiseFundingByCompanyId(params.companyId),
+      getOneRecentFundingByCompanyId(params.companyId),
+    ]);
 
-  if (recentFunding) {
-    if (recentFunding.id !== undefined) {
-      allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
-      totalInvestor = getTotalInvestor(allInvestmentFunding);
-      totalInvestment = getTotalInvestment(allInvestmentFunding);
+    let allInvestmentFunding = [];
+    let totalInvestor = 0;
+    let totalInvestment = 0;
+
+    if (recentFunding) {
+      if (recentFunding.id !== undefined) {
+        allInvestmentFunding = await getInvesmentByFundingId(recentFunding.id);
+        totalInvestor = getTotalInvestor(allInvestmentFunding);
+        totalInvestment = getTotalInvestment(allInvestmentFunding);
+      }
     }
-  }
 
-  return (
-    <div className="flex flex-col items-center min-h-screen relative mb-20">
-      {roleId === 3 &&
-        isApproval?.approval === null &&
-        user &&
-        (await isOwnCompany(params.companyId ?? 1, user)) && <WaitingShow />}
-      {roleId === 3 &&
-        isApproval?.approval === false &&
-        user &&
-        (await isOwnCompany(params.companyId ?? 1, user)) && (
-          <RejectShow user={user} />
-        )}
-      <div className="banner relative w-full h-[438px] bg-blue">
-        <Image
-          src={company?.banner || "/default-banner.png"}
-          alt="banner"
-          layout="fill"
-          objectFit="cover"
-          className="rounded-[5px]"
-        />
-      </div>
-      <div className="w-full h-[70px] md:h-[100px] lg:h-[80px]">
-        <div className="logo relative w-[120px] h-[120px] top-40% left-1/2 transform -translate-x-1/2 -translate-y-1/2 xl:w-[200px] xl:h-[200px] lg:w-[170px] lg:h-[170px] md:w-[150px] md:h-[150px]">
+    return (
+      <div className="flex flex-col items-center min-h-screen relative mb-20">
+        {roleId === 3 &&
+          isApproval?.approval === null &&
+          user &&
+          (await isOwnCompany(params.companyId ?? 1, user)) && <WaitingShow />}
+        {roleId === 3 &&
+          isApproval?.approval === false &&
+          user &&
+          (await isOwnCompany(params.companyId ?? 1, user)) && (
+            <RejectShow user={user} />
+          )}
+        <div className="banner relative w-full h-[438px] bg-blue">
           <Image
-            src={company?.logo || "/default-logo.png"}
-            alt="logo"
+            src={company?.banner || "/default-banner.png"}
+            alt="banner"
             layout="fill"
+            objectFit="cover"
             className="rounded-[5px]"
           />
         </div>
-      </div>
-      <p data-id="company-label" className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
-        {company?.name}
-      </p>
-      <CategoryList categories={categories} />
-      <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
-        {company?.description}
-      </div>
-      {recentFunding && (
-        <ProgressBar
-          dayLeft={calculateDaysLeft(recentFunding.deadline)}
-          currentInvestAmount={totalInvestment*recentFunding.priceShare}
-          fundingTarget={recentFunding.fundingTarget*recentFunding.priceShare}
-        />
-      )}
+        <div className="w-full h-[70px] md:h-[100px] lg:h-[80px]">
+          <div className="logo relative w-[120px] h-[120px] top-40% left-1/2 transform -translate-x-1/2 -translate-y-1/2 xl:w-[200px] xl:h-[200px] lg:w-[170px] lg:h-[170px] md:w-[150px] md:h-[150px]">
+            <Image
+              src={company?.logo || "/default-logo.png"}
+              alt="logo"
+              layout="fill"
+              className="rounded-[5px]"
+            />
+          </div>
+        </div>
+        <p data-id="company-label" className="name text-2xl text-black dark:text-white left-1/2 text-center md:mt-8 md:text-5xl">
+          {company?.name}
+        </p>
+        <CategoryList categories={categories} />
+        <div className="detail text-center text-black dark:text-white text-sm mt-3 md:text-xl">
+          {company?.description}
+        </div>
+        {recentFunding && (
+          <ProgressBar
+            dayLeft={calculateDaysLeft(recentFunding.deadline)}
+            currentInvestAmount={totalInvestment * recentFunding.priceShare}
+            fundingTarget={recentFunding.fundingTarget * recentFunding.priceShare}
+          />
+        )}
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-black dark:text-white">
-        <div className="col-span-2 bg-[#f7f7f7] dark:bg-[#1a1c22] rounded-sm">
-          <Pitch pitchData={company?.pitch || ""} />
-        </div>
-        <div>
-          {(recentFunding || oneFunding) && (
-            <div className="sticky top-28">
-              {isOwnCompany(params.companyId ?? 1, user) &&
-                !hasPublish(companyRequest) && (
-                  <PublishForm
-                    companyId={params.companyId}
-                    raiseId={recentFunding?.id ?? oneFunding.id ?? 0}
-                  />
-                )}
-              <DealTerm
-                recentFunding={recentFunding || oneFunding}
-                currentInvestment={totalInvestment}
-                dayLeft={calculateDaysLeft(
-                  recentFunding?.deadline || oneFunding.deadline,
-                )}
-                totalInvestor={totalInvestor}
-                roleId={user?.roleId ?? null}
-                isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
-                urlId={params.companyId}
-                investorId={Number(user?.roleIdNumber) ?? null}
-                user={user}
-              />
-            </div>
-          )}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 text-black dark:text-white">
+          <div className="col-span-2 bg-[#f7f7f7] dark:bg-[#1a1c22] rounded-sm">
+            <Pitch pitchData={company?.pitch || ""} />
+          </div>
+          <div>
+            {(recentFunding || oneFunding) && (
+              <div className="sticky top-28">
+                {isOwnCompany(params.companyId ?? 1, user) &&
+                  !hasPublish(companyRequest) && (
+                    <PublishForm
+                      companyId={params.companyId}
+                      raiseId={recentFunding?.id ?? oneFunding.id ?? 0}
+                    />
+                  )}
+                <DealTerm
+                  recentFunding={recentFunding || oneFunding}
+                  currentInvestment={totalInvestment}
+                  dayLeft={calculateDaysLeft(
+                    recentFunding?.deadline || oneFunding.deadline,
+                  )}
+                  totalInvestor={totalInvestor}
+                  roleId={user?.roleId ?? null}
+                  isOwnCompany={await isOwnCompany(params.companyId ?? 1, user)}
+                  urlId={params.companyId}
+                  investorId={Number(user?.roleIdNumber) ?? null}
+                  user={user}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error("Error loading company profile");
+  }
 }
