@@ -5,29 +5,35 @@ const PrivacyMessage = () => {
         <div>
             <h2>B2D Venture Privacy Policy</h2>
 
-            <p><strong>Last Updated:</strong> November 6, 2024</p>
+            <p><strong>Last Updated:</strong> November 14, 2024</p>
             <br />
 
-            <p>B2D Venture is committed to safeguarding your privacy. This Privacy Policy outlines how we collect, use, and protect your information in compliance with GDPR and PDPA requirements. By using our services, you agree to the collection and use of your information as described here.</p>
+            <p>At B2D Venture, we prioritize the protection of your personal data and are fully committed to complying with the General Data Protection Regulation (GDPR) and the Personal Data Protection Act (PDPA). This Privacy Policy explains in detail how we collect, use, protect, and manage your personal information in compliance with these legal frameworks. By accessing or using our services, you agree to the practices described in this policy.</p>
             <br />
 
             <ol>
                 <strong>Information We Collect</strong>
-                <p className='pl-5'><strong>• Account Data:</strong> When you sign up, we collect your Google account information, including your name, email address, and profile image.</p>
-                <p className='pl-5'><strong>• Investment Data:</strong> We may collect information about your transactions, holdings, and investment preferences.</p>
-                <p className='pl-5'><strong>• Usage Data:</strong> We collect data on how you interact with our platform, such as IP addresses, device type, and browsing behavior.</p>
+                <p>To provide you with the best experience and deliver our services effectively, B2D Venture collects the following types of data:</p>
+                <p className='pl-5'><strong>• Account Data:</strong> Information from your Google account (name, email address, profile picture) when you register or sign in and additional account details, such as your preferences and settings.</p>
+                <p className='pl-5'><strong>• Investment Data:</strong> Information about your transactions, investment holdings, preferences, and financial activities on the platform.</p>
+                <p className='pl-5'><strong>• Usage Data:</strong> Technical information, such as your email address and profile.</p>
                 <br />
-                <strong>How We Use Your Information</strong>
-                <p className='pl-5'><strong>• Account Management:</strong> To verify your identity and manage your account.</p>
-                <p className='pl-5'><strong>• Service Delivery:</strong> To deliver investment-related services and manage your transactions.</p>
-                <p className='pl-5'><strong>• Personalization:</strong> To customize your user experience and provide relevant information and recommendations.</p>
-                <p className='pl-5'><strong>• Marketing and Updates:</strong> With your consent, we may send you updates, newsletters, or promotional materials. You can opt out at any time.</p>
-                <p className='pl-5'><strong>• Legal Compliance:</strong> To fulfill legal obligations, prevent fraud, and respond to legal inquiries.</p>
+                <strong>Purpose of Collecting Personal Data</strong>
+                <p>B2D Venture ensures that your personal data is collected and processed only for specific, explicit, and legitimate purposes, in compliance with GDPR Article 5 and PDPA Section 23. These purposes include:</p>
+                <p className='pl-5'><strong>• Account Management:</strong> To verify your identity, create and manage your account, and provide a seamless user experience.</p>
+                <p className='pl-5'><strong>• Service Delivery:</strong> To provide investment-related services, process transactions, and fulfill your requests effectively.</p>
+                <p className='pl-5'><strong>• Personalization:</strong> To customize content, recommendations, and features based on your preferences and activities.</p>
+                <p className='pl-5'><strong>• Marketing and Communications:</strong> With your explicit consent, send newsletters, promotional offers, and updates regarding our services. You may withdraw consent at any time.</p>
+                <p className='pl-5'><strong>• Legal Compliance:</strong> To comply with applicable laws, prevent fraud, and respond to regulatory or legal inquiries.</p>
 
                 <br />
                 <li>
                     <strong>Consent and Privacy Notification</strong>
-                    <p>To comply with GDPR and PDPA, we will display a privacy notification and consent form at sign-up. You have the right to give or withhold consent, and you may withdraw it at any time. Your consent choice will be recorded and stored securely in our database.</p>
+                    <p>Following GDPR and PDPA, we ensure that:</p>
+                    <p className='pl-5'><strong>• Transparent Consent:</strong> You will be presented with a clear and easily understandable privacy notification and consent form at the time of sign-up or data collection.</p>
+                    <p className='pl-5'><strong>• Opt-in Consent:</strong> You must explicitly agree to the collection and use of your data for specified purposes. We will not process your personal data without your consent unless a legal basis under GDPR or PDPA applies.</p>
+                    <p className='pl-5'><strong>• Right to Withdraw Consent:</strong> You may withdraw your consent at any time without affecting the legality of prior processing.</p>
+                    <p>Your consent preferences will be securely recorded, and you will be notified of any significant changes in data processing activities.</p>
                 </li>
                 <br />
                 <li>
