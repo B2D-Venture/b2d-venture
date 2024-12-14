@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { getUser, resetPassword } from "@/lib/db/index";
+import logger from "@/lib/logger";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await resetPassword(email, hashedPassword);
   }
+
+  logger.info("Email: " + email + " reset password successfully.");
 
   return NextResponse.json(
     { error: "User created successfully" },

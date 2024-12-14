@@ -1,6 +1,7 @@
 import { render } from "@react-email/render";
 import EmailDataroomStatusProps from "@/emails/dataroom";
 import { sendEmail } from "@/src/utils/mail.utils";
+import logger from "@/lib/logger";
 
 export async function POST(request: Request) {
   const { 
@@ -28,7 +29,10 @@ export async function POST(request: Request) {
       subject: "Dataroom Request Status",
       html: htmlContent,
     });
-      
+    logger.info(`Server sent Dataroom Request Status to ${email} successfully`, {
+      email,
+      service: 'server-service',
+    });
     return new Response(
       JSON.stringify({ message: "Email sent successfully" }),
       { status: 200 }
