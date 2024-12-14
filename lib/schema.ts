@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   timestamp,
   text,
@@ -11,7 +12,13 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-const roleEnum = pgEnum("role_type", ["viewer", "investor", "company", "admin"]);
+const roleEnum = pgEnum("role_type", [
+  "viewer",
+  "investor",
+  "company",
+  "admin",
+]);
+const uuid = sql`uuid_generate_v4()`;
 
 export const RoleTable = pgTable("role", {
   id: serial("id").primaryKey().notNull(),
@@ -34,7 +41,7 @@ export const CompanyCategoryTable = pgTable("company_category", {
 });
 
 export const UserTable = pgTable("user", {
-  id: serial("id").primaryKey().notNull(),
+  id: text('id').primaryKey().default(uuid).notNull(),
   email: varchar("email").notNull(),
   password: varchar("password").notNull(),
   roleId: integer("role_id")
@@ -147,3 +154,4 @@ export const DataRoomRequestTable = pgTable("data_room_request", {
   requestDate: timestamp("request_date").defaultNow().notNull(),
   approval: boolean("approval"),
 });
+

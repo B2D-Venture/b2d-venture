@@ -7,6 +7,7 @@ import { neon } from "@neondatabase/serverless";
 import { UserTable } from "./schema";
 import { eq } from "drizzle-orm";
 import { getUser, createUser } from "@/lib/db/index";
+import logger from "@/lib/logger";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -68,7 +69,7 @@ export const authConfig: NextAuthOptions = {
           await createUser(profile.email, "", 1);
         }
       }
-      
+      logger.info("Email: " + profile?.email + " signed in successfully.");
       return true;
     },
     async jwt({ token, user }) {

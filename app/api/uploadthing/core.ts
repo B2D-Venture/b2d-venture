@@ -1,6 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { getServerSession } from "next-auth";
+import logger from "@/lib/logger";
 const f = createUploadthing();
 
 // const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
@@ -21,26 +22,32 @@ export const ourFileRouter = {
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
       const user = await auth(req);
-
       // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user) {
+        logger.error("User is not authorized to upload images");
+        throw new UploadThingError("Unauthorized");
+      }
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+      logger.info(`Image uploaded by ${metadata.userId}`);
       return { uploadedBy: metadata.userId };
     }),
   pdfUploader: f({ pdf: { maxFileSize: "4MB", maxFileCount: 10 } })
     .middleware(async ({ req }) => {
       const user = await auth(req);
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user) {
+        logger.error("User is not authorized to upload PDFs");
+        throw new UploadThingError("Unauthorized");
+      }
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      logger.info(`PDF uploaded by ${metadata.userId}`);
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;

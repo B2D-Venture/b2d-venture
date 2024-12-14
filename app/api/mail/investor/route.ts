@@ -1,6 +1,7 @@
 import { render } from "@react-email/render";
 import EmailInvestorStatusProps from "@/emails/investor";
 import { sendEmail } from "@/src/utils/mail.utils";
+import logger from "@/lib/logger";
 
 export async function POST(request: Request) {
   const {
@@ -38,6 +39,10 @@ export async function POST(request: Request) {
       receiver: email,
       subject: "Investor Register Creation",
       html: htmlContent,
+    });
+    logger.info(`Server sent Investor Register Creation to ${email} successfully`, {
+      email,
+      service: 'server-service',
     });
 
     return new Response(
