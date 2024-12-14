@@ -1,3 +1,4 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c0949a3f06ec4ba2b82b76f425a776e4)](https://app.codacy.com/gh/B2D-Venture/b2d-venture/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 # B2D Venture
 
 ## Overview
